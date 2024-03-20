@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`multiple values should be verified 1`] = `
+Array [
+  Object {
+    "id": "MULTIPLE_CHOICE",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "choices": Array [
+        Object {
+          "id": "id_a",
+          "label": "A",
+        },
+        Object {
+          "id": "id_b",
+          "label": "B",
+        },
+        Object {
+          "id": "id_c",
+          "label": "C",
+        },
+      ],
+    },
+    "title": "multiple-choice.test",
+    "value": Object {
+      "value": Array [
+        "id_a",
+        "id_b",
+      ],
+    },
+  },
+]
+`;
+
+exports[`single value should be verified 1`] = `
+Array [
+  Object {
+    "id": "MULTIPLE_CHOICE",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "id_a",
+          "label": "A",
+        },
+        Object {
+          "id": "id_b",
+          "label": "B",
+        },
+        Object {
+          "id": "id_c",
+          "label": "C",
+        },
+      ],
+    },
+    "title": "multiple-choice.test",
+    "value": Object {
+      "value": Array [
+        "id_a",
+      ],
+    },
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "MULTIPLE_CHOICE",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "id_a",
+          "label": "A",
+        },
+        Object {
+          "id": "id_b",
+          "label": "B",
+        },
+        Object {
+          "id": "id_c",
+          "label": "C",
+        },
+      ],
+    },
+    "title": "multiple-choice.test",
+    "value": Object {
+      "value": Array [],
+    },
+  },
+]
+`;

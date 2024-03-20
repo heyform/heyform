@@ -1,0 +1,26 @@
+.checkbox-wrapper {
+  @apply relative flex items-start;
+}
+
+.checkbox {
+  @apply flex items-center h-5;
+}
+
+.checkbox-input {
+  @apply focus:ring-blue-600 h-4 w-4 text-blue-700 border-gray-300;
+
+  &[type=checkbox] {
+    @apply rounded;
+  }
+}
+
+.checkbox-input-checked {
+}
+
+.checkbox-description {
+  @apply ml-3 sm:text-sm font-medium text-slate-700;
+}
+
+.checkbox-group {
+  @apply space-y-4;
+}

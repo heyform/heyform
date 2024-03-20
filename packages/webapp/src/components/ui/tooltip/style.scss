@@ -1,0 +1,8 @@
+.tooltip {
+  @apply px-2.5 py-1.5 z-50 text-center text-xs text-white break-words whitespace-pre pointer-events-none rounded;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  background: #1f1f1f;
+}

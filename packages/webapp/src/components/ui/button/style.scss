@@ -1,0 +1,173 @@
+button.button {
+  @apply relative border border-gray-300 px-4 py-2 sm:text-sm font-medium text-slate-700;
+
+  &,
+  .button-loader {
+    @apply inline-flex items-center justify-center rounded-md bg-white;
+  }
+
+  .button-loader {
+    @apply absolute inset-0;
+  }
+
+  &[disabled] {
+    @apply pointer-events-none;
+
+    &:not(.button-loading) {
+      @apply opacity-50;
+    }
+  }
+}
+
+button.button {
+  &:not(:disabled) {
+    @apply hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 active:bg-slate-100;
+  }
+
+  .spin {
+    @apply h-5 w-5 text-slate-400;
+  }
+
+  .button-leading,
+  .button-trailing {
+    @apply flex items-center justify-center text-slate-400;
+
+    &,
+    svg {
+      @apply h-5 w-5;
+    }
+  }
+
+  .button-leading {
+    @apply -ml-1 mr-2;
+  }
+
+  .button-trailing {
+    @apply ml-2 -mr-1;
+  }
+}
+
+.button-content {
+  @apply sm:truncate;
+}
+
+button.button-primary,
+button.button-success,
+button.button-danger {
+  @apply border-transparent;
+
+  &,
+  .button-loader,
+  .button-leading,
+  .button-trailing {
+    @apply text-white;
+  }
+}
+
+button.button-primary {
+  &,
+  .button-loader {
+    @apply bg-blue-700;
+  }
+
+  &:not(:disabled) {
+    @apply hover:bg-blue-800 focus:ring-blue-700 active:bg-blue-800;
+  }
+}
+
+button.button-success {
+  &,
+  .button-loader {
+    @apply bg-green-500;
+  }
+
+  &:not(:disabled) {
+    @apply hover:bg-green-600 focus:ring-green-500 active:bg-green-600;
+  }
+}
+
+button.button-danger {
+  &,
+  .button-loader {
+    @apply bg-red-500;
+  }
+
+  &:not(:disabled) {
+    @apply hover:bg-red-600 focus:ring-red-500 active:bg-red-600;
+  }
+}
+
+button.button-link {
+  &,
+  .button-loader {
+    @apply p-0 bg-transparent border-none shadow-none hover:text-slate-800 hover:bg-transparent;
+  }
+
+  &.button-primary {
+    &,
+    .button-loader {
+      @apply text-blue-700;
+    }
+
+    &:not(:disabled) {
+      @apply hover:text-blue-700 hover:bg-transparent;
+    }
+  }
+
+  &.button-success {
+    &,
+    .button-loader {
+      @apply text-green-600;
+    }
+
+    &:not(:disabled) {
+      @apply hover:text-green-700 hover:bg-transparent;
+    }
+  }
+
+  &.button-danger {
+    &,
+    .button-loader {
+      @apply text-red-600;
+    }
+
+    &:not(:disabled) {
+      @apply hover:text-red-700 hover:bg-transparent;
+    }
+  }
+}
+
+button.button-block {
+  @apply w-full;
+}
+
+button.button-rounded {
+  &,
+  .button-loader {
+    @apply rounded-full;
+  }
+}
+
+button.button-icon-only {
+  @apply p-2.5 sm:p-2;
+
+  .button-leading {
+    @apply m-0;
+  }
+}
+
+.button-group {
+  @apply relative z-0 inline-flex rounded-md;
+
+  & > button.button {
+    @apply relative rounded-none shadow-none focus:z-10 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:border-blue-600 -ml-px;
+
+    &:nth-of-type(1) {
+      @apply ml-0 rounded-l-md;
+    }
+
+    &:nth-last-of-type(1) {
+      @apply rounded-r-md;
+    }
+  }
+}

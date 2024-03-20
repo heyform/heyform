@@ -1,0 +1,81 @@
+.scrollbar {
+  overflow-y: auto;
+
+  @media (min-width: 768px) {
+    &::-webkit-scrollbar {
+      height: 12px;
+      width: 12px
+    }
+
+    &::-webkit-scrollbar-thumb:vertical {
+      background-color: transparent;
+      border-radius: 6px
+    }
+
+    &:hover::-webkit-scrollbar-thumb:vertical {
+      border: 3px solid transparent;
+      background-color: rgba(0, 0, 0, .2);
+      background-clip: content-box;
+    }
+
+    &::-webkit-scrollbar-button:vertical {
+      display: block
+    }
+
+    &::-webkit-scrollbar-button:start:decrement {
+      display: block
+    }
+
+    &::-webkit-scrollbar-button:end:increment {
+      display: block
+    }
+
+    &::-webkit-scrollbar-button:vertical:start:increment {
+      display: none
+    }
+
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+      display: none
+    }
+
+    &::-webkit-scrollbar-button:vertical:increment {
+      display: none
+    }
+
+    &::-webkit-scrollbar-button:vertical:decrement {
+      display: none
+    }
+
+    &::-webkit-scrollbar-track:vertical {
+      display: none
+    }
+
+    &::-webkit-scrollbar-track-piece {
+      background-color: transparent
+    }
+
+    &::-webkit-scrollbar-corner:vertical {
+      background-color: transparent
+    }
+
+    &::-webkit-scrollbar-resizer:vertical {
+      background-color: transparent
+    }
+  }
+}
+
+@keyframes skeleton {
+  from {
+    background-position: 100% 50%
+  }
+
+  to {
+    background-position: 0 50%
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+}

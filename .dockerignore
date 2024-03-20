@@ -1,0 +1,23 @@
+# IDE
+/.idea
+/.awcache
+/.cache
+/.vscode
+
+# tests
+**/coverage
+**/coverage-e2e
+**/logs
+.nyc_output
+
+**/node_modules
+.git
+.github
+.DS_Store
+
+# production
+docker.env
+**/.env.local
+**/.env.*.local
+**/.env.example
+docker-compose.yml

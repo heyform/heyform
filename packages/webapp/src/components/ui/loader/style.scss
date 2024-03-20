@@ -1,0 +1,26 @@
+@keyframes loader-blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.loader-span {
+  animation-name: loader-blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+  
+  &:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+}

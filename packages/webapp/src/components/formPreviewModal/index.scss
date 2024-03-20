@@ -1,0 +1,59 @@
+.form-preview-modal {
+  .modal-container {
+    @apply p-0;
+  }
+
+  .modal-content {
+    @apply p-0 w-full max-w-full h-full bg-slate-50 rounded-none;
+  }
+
+  .modal-body {
+    @apply p-0 w-full h-full;
+  }
+
+  .modal-close-button {
+    @apply fixed top-16 right-16 z-50;
+  }
+}
+
+
+.form-preview-header {
+  @apply flex items-center border-b border-gray-200 bg-white;
+  height: 3.75rem;
+}
+
+.form-preview-body {
+  @apply relative;
+  height: calc(100vh - 3.75rem);
+
+  .heyform-theme-background {
+    @apply rounded-none;
+  }
+}
+
+.form-preview-mobile {
+  @apply mx-auto py-16;
+  max-width: 22.5rem;
+
+  .heyform-root {
+    @apply shadow-lg;
+  }
+
+  .heyform-layout,
+  .heyform-theme-background {
+    @apply overflow-hidden;
+  }
+
+  .heyform-root,
+  .heyform-layout,
+  .heyform-theme-background {
+    @apply rounded-xl;
+  }
+
+  .heyform-layout-float_left,
+  .heyform-layout-split_left,
+  .heyform-layout-float_right,
+  .heyform-layout-split_right {
+    @apply rounded-b-none;
+  }
+}

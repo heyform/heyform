@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correct value should be verified 1`] = `
+Array [
+  Object {
+    "id": "PHONE_NUMBER",
+    "kind": "phone_number",
+    "properties": Object {},
+    "title": "phone-number.test",
+    "value": "+12015550123",
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "PHONE_NUMBER",
+    "kind": "phone_number",
+    "properties": Object {},
+    "title": "phone-number.test",
+    "value": "",
+  },
+]
+`;

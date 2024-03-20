@@ -1,0 +1,22 @@
+.radio-wrapper {
+  @apply relative flex items-start;
+}
+
+.radio {
+  @apply flex items-center h-5;
+}
+
+.radio-input {
+  @apply h-4 w-4 text-blue-700 border-gray-300 focus:ring-blue-600;
+}
+
+.radio-input-checked {
+}
+
+.radio-description {
+  @apply ml-3 sm:text-sm font-medium text-slate-700;
+}
+
+.radio-group {
+  @apply space-y-4;
+}

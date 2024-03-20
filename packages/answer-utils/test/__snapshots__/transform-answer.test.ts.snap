@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should convert value to api object 1`] = `
+Object {
+  "(ID: EF9tbsJj3CNZ) 🐶 Choose the dog ": "Choice 3",
+  "(ID: MVlZfnmjZlye) 👋 Just choose one": "🍍 Pineapple",
+  "(ID: NteSqF9g5cOa6) Input table": "Ivan, 16
+Jack Smith, 24",
+  "(ID: X9F47wrnJImk) 👍 Do you agree with us ": "No",
+  "(ID: bcFvi1syrp66) ☎️  Your MobilePhone ": "+12015551023",
+  "(ID: g6Oayu81jkdqcte) Full name": "Ivan Woods",
+  "(ID: qCpteNRi2SiO) 🈴️ Upload you avatar ": "avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)",
+  "(ID: qFN5cteg6SOa) 🪐 Rate here ": 5,
+  "(ID: vyLu2NkN70xkS) Group Multiple Choose ": "Group Choice 1, Group Choice 2",
+  "(ID: yLxkSvkN7u2N) 🧱 Multiple Choose ": "Choice 2",
+}
+`;
+
+exports[`should convert value to flat json 1`] = `
+Object {
+  "EF9tbsJj3CNZ": "Choice 3",
+  "MVlZfnmjZlye": "🍍 Pineapple",
+  "NteSqF9g5cOa6": "Ivan, 16
+Jack Smith, 24",
+  "X9F47wrnJImk": "No",
+  "bcFvi1syrp66": "+12015551023",
+  "g6Oayu81jkdqcte": "Ivan Woods",
+  "qCpteNRi2SiO": "avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)",
+  "qFN5cteg6SOa": 5,
+  "vyLu2NkN70xkS": "Group Choice 1, Group Choice 2",
+  "yLxkSvkN7u2N": "Choice 2",
+}
+`;
+
+exports[`should convert value to html 1`] = `
+"<ol>
+<li>
+  <h3>Group Multiple Choose </h3>
+  <p>Group Choice 1, Group Choice 2</p>
+</li>
+
+<li>
+  <h3>☎️  Your MobilePhone </h3>
+  <p>+12015551023</p>
+</li>
+
+<li>
+  <h3>🧱 Multiple Choose </h3>
+  <p>Choice 2</p>
+</li>
+
+<li>
+  <h3>👋 Just choose one</h3>
+  <p>🍍 Pineapple</p>
+</li>
+
+<li>
+  <h3>👍 Do you agree with us </h3>
+  <p>No</p>
+</li>
+
+<li>
+  <h3>🐶 Choose the dog </h3>
+  <p>Choice 3</p>
+</li>
+
+<li>
+  <h3>🈴️ Upload you avatar </h3>
+  <p>avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)</p>
+</li>
+
+<li>
+  <h3>🪐 Rate here </h3>
+  <p>5</p>
+</li>
+
+<li>
+  <h3>Full name</h3>
+  <p>Ivan Woods</p>
+</li>
+
+<li>
+  <h3>Input table</h3>
+  <p>Ivan, 16
+Jack Smith, 24</p>
+</li>
+</ol>"
+`;
+
+exports[`should convert value to json 1`] = `
+Object {
+  "EF9tbsJj3CNZ": "Choice 3",
+  "MVlZfnmjZlye": "🍍 Pineapple",
+  "NteSqF9g5cOa6": Array [
+    Object {
+      "age": "16",
+      "name": "Ivan",
+    },
+    Object {
+      "age": "24",
+      "name": "Jack Smith",
+    },
+  ],
+  "X9F47wrnJImk": "No",
+  "bcFvi1syrp66": "+12015551023",
+  "g6Oayu81jkdqcte": Object {
+    "firstName": "Ivan",
+    "lastName": "Woods",
+  },
+  "qCpteNRi2SiO": Object {
+    "filename": "avatar.jpg",
+    "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
+  },
+  "qFN5cteg6SOa": 5,
+  "vyLu2NkN70xkS": "Group Choice 1, Group Choice 2",
+  "yLxkSvkN7u2N": "Choice 2",
+}
+`;
+
+exports[`should convert value to text 1`] = `
+"Group Multiple Choose 
+Group Choice 1, Group Choice 2
+
+☎️  Your MobilePhone 
++12015551023
+
+🧱 Multiple Choose 
+Choice 2
+
+👋 Just choose one
+🍍 Pineapple
+
+👍 Do you agree with us 
+No
+
+🐶 Choose the dog 
+Choice 3
+
+🈴️ Upload you avatar 
+avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)
+
+🪐 Rate here 
+5
+
+Full name
+Ivan Woods
+
+Input table
+Ivan, 16
+Jack Smith, 24"
+`;

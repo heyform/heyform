@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HeyForm</title>
+  <link href="https://cdnjs.cloudflare.com" rel="dns-prefetch" />
+  <link href="https://js.stripe.com" rel="dns-prefetch" />
+  <link href="https://fonts.gstatic.com" rel="dns-prefetch" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href="/static/favicon.ico" rel="shortcut icon" />
+  <link href="/static/favicon.svg" rel="mask-icon" />
+  <link href="/static/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+  <meta content="HeyForm" name="application-name" />
+  <meta content="yes" name="mobile-web-app-capable" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="white" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="#fff" name="theme-color" />
+  <meta content="HeyForm" name="apple-mobile-web-app-title" />
+  <meta content="telephone=no,email=no" name="format-detection" />
+  <meta content="on" http-equiv="x-dns-prefetch-control" />
+  <link href="/static/initial.css" rel="stylesheet" />
+  <link href="/static/manifest.webmanifest" rel="manifest" />
+  <link
+    defer
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+  <link defer href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/css/flag-icons.min.css" rel="stylesheet" />
+	<script>
+		;(function () {
+			const userAgent = window.navigator.userAgent;
+			const heyform = {};
+
+			heyform.device = {
+				ios: /iPad|iPhone|iPod/i.test(userAgent),
+				android: /Android/i.test(userAgent),
+				mobile: /Android|iPad|iPhone|iPod/i.test(userAgent),
+				windowHeight: window.innerHeight,
+				screenHeight: window.screen.height
+			};
+
+			window.heyform = heyform;
+		})()
+	</script>
+</head>
+<body>
+<div id="root"></div>
+<div id="loading">
+  <svg class="loading-icon" fill="none" style="width:1.25rem; height:1.25rem;" viewBox="0 0 24 24"
+       xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      fill="currentColor"></path>
+  </svg>
+</div>
+<script src="./src/main.tsx" type="module"></script>
+</body>
+</html>

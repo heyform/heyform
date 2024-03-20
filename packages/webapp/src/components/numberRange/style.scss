@@ -1,0 +1,25 @@
+.number-range {
+  @apply flex items-center w-full;
+
+  .select {
+    @apply w-auto;
+  }
+
+  &.number-range-unlimited {
+    .select {
+      @apply w-full;
+    }
+  }
+
+  .select-button {
+    @apply pr-7;
+  }
+
+  .input {
+    @apply px-2;
+  }
+}
+
+.number-range-popup {
+  @apply w-56 #{!important};
+}

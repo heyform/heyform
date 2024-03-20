@@ -1,0 +1,135 @@
+.modal-mask {
+  @apply fixed inset-0 z-20 bg-slate-500 bg-opacity-75 transition ease-in-out;
+}
+
+.modal-container {
+  @apply fixed inset-0 z-20 flex items-center justify-center p-4 sm:p-8;
+}
+
+.modal-content {
+  @apply flex flex-col relative bg-white rounded-lg shadow-xl w-full max-h-full transition ease-in-out;
+
+  @media (min-width: 768px) {
+    max-width: 40rem;
+  }
+
+  .form-submit-button {
+    @apply w-full sm:w-auto;
+  }
+}
+
+.modal-body {
+  @apply flex-1 w-full h-full px-4 pt-5 pb-4 sm:p-8 text-left overflow-y-auto;
+}
+
+.modal-close-button {
+  position: absolute !important;
+  @apply p-1 top-2 right-4 -mr-0.5 bg-white z-10;
+
+  .button-leading {
+    @apply w-6 h-6 text-slate-500;
+  }
+
+  &:hover {
+    @apply rounded-full;
+    .button-leading {
+      @apply text-slate-700;
+    }
+  }
+}
+
+.modal-confirm {
+  .modal-content {
+    @apply h-auto;
+  }
+
+  .modal-body,
+  .modal-content {
+    @apply sm:max-w-lg;
+  }
+}
+
+.modal-icon {
+  @apply mx-auto flex items-center justify-center h-12 w-12 rounded-full;
+
+  svg {
+    @apply h-6 w-6;
+  }
+}
+
+.modal-icon-primary {
+  @apply bg-blue-100;
+
+  svg {
+    @apply text-blue-700;
+  }
+}
+
+.modal-icon-success {
+  @apply bg-green-100;
+
+  svg {
+    @apply text-green-600;
+  }
+}
+
+.modal-icon-danger {
+  @apply bg-red-100;
+
+  svg {
+    @apply text-red-600;
+  }
+}
+
+.modal-confirm-body {
+  @apply mt-3 sm:mt-5;
+
+  .modal-title {
+    @apply text-center;
+  }
+}
+
+.modal-title {
+  @apply text-lg leading-6 font-medium text-slate-900;
+}
+
+.modal-description {
+  @apply mt-2 text-sm text-slate-500;
+}
+
+.modal-actions {
+  @apply mt-5 sm:mt-6 flex flex-col-reverse sm:flex-row sm:justify-between;
+
+  .button {
+    @apply w-full;
+
+    &:nth-of-type(2) {
+      @apply ml-0 mb-3 sm:ml-3 sm:mb-0;
+    }
+  }
+}
+
+.modal-transition-entering,
+.modal-transition-preExit {
+  .modal-mask,
+  .modal-content {
+    @apply opacity-100;
+  }
+
+  .modal-content {
+    @apply transform scale-100;
+  }
+}
+
+.modal-transition-preEnter,
+.modal-transition-exiting,
+.modal-transition-exited {
+  .modal-mask,
+  .modal-content {
+    @apply opacity-0;
+  }
+
+  .modal-content {
+    @apply transform scale-95;
+  }
+}

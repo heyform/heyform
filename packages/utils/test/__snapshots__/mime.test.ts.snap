@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common file mime type 1`] = `
+Array [
+  "image/jpeg",
+  "image/png",
+  "image/bmp",
+  "image/gif",
+  "text/plain",
+  "text/x-markdown",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "text/csv",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/pdf",
+  "video/mp4",
+  "video/x-ms-wmv",
+]
+`;
+
+exports[`common image mime type 1`] = `
+Array [
+  "image/jpeg",
+  "image/png",
+  "image/bmp",
+  "image/gif",
+]
+`;

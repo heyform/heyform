@@ -1,0 +1,358 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should convert partial submission value to answer 1`] = `
+Array [
+  Object {
+    "id": "vyLu2NkN70xkS",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "choices": Array [
+        Object {
+          "id": "F7XrAjByBk2w",
+          "label": "Group Choice 1",
+        },
+        Object {
+          "id": "cFEkKnnXmBP6",
+          "label": "Group Choice 2",
+        },
+      ],
+    },
+    "title": "Group Multiple Choose ",
+    "value": Object {
+      "value": Array [
+        "F7XrAjByBk2w",
+        "cFEkKnnXmBP6",
+      ],
+    },
+  },
+  Object {
+    "id": "bcFvi1syrp66",
+    "kind": "phone_number",
+    "properties": Object {
+      "choices": Array [],
+      "defaultCountry": "US",
+    },
+    "title": "☎️  Your MobilePhone ",
+    "value": "+12015551023",
+  },
+  Object {
+    "id": "yLxkSvkN7u2N",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "choices": Array [
+        Object {
+          "id": "kF7XrAjByB2w",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "BP6cFEkKnnXm",
+          "label": "Choice 2",
+        },
+      ],
+    },
+    "title": "🧱 Multiple Choose ",
+    "value": Object {
+      "value": Array [
+        "BP6cFEkKnnXm",
+      ],
+    },
+  },
+  Object {
+    "id": "X9F47wrnJImk",
+    "kind": "yes_no",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "adUm2Hhr1OOW",
+          "label": "Yes",
+        },
+        Object {
+          "id": "QMR1nZV0u84M",
+          "label": "No",
+        },
+      ],
+    },
+    "title": "👍 Do you agree with us ",
+    "value": "QMR1nZV0u84M",
+  },
+  Object {
+    "id": "EF9tbsJj3CNZ",
+    "kind": "picture_choice",
+    "properties": Object {
+      "allowMultiple": false,
+      "choices": Array [
+        Object {
+          "id": "XKV4vls1pkAX",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679926__0-I_F2_OBINdzLx39o3nvZfzXwepkYO9mey0__doge.jpeg",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "FN5cCteg6SOa",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679934__iAGYraz-j8J7gIxaC8GDJi017YJWUS16EzU7__p640.jpg",
+          "label": "Choice 2",
+        },
+        Object {
+          "id": "1Fl7MP9Nv2TM",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679940__IKke45HeAlbu-v_yqOvbUjQHffRQRFSdl8OJ__p225-2.jpeg",
+          "label": "Choice 3",
+        },
+      ],
+    },
+    "title": "🐶 Choose the dog ",
+    "value": Object {
+      "value": Array [
+        "1Fl7MP9Nv2TM",
+      ],
+    },
+  },
+  Object {
+    "id": "qCpteNRi2SiO",
+    "kind": "file_upload",
+    "properties": Object {},
+    "title": "🈴️ Upload you avatar ",
+    "value": Object {
+      "cdnKey": "qCpteNRi2SiO_avatar.jpg",
+      "cdnUrlPrefix": "https://heyformhq.com",
+      "filename": "avatar.jpg",
+    },
+  },
+  Object {
+    "id": "qFN5cteg6SOa",
+    "kind": "rating",
+    "properties": Object {
+      "total": 10,
+    },
+    "title": "🪐 Rate here ",
+    "value": 5,
+  },
+  Object {
+    "id": "g6Oayu81jkdqcte",
+    "kind": "full_name",
+    "properties": Object {},
+    "title": "Full name",
+    "value": Object {
+      "firstName": "Ivan",
+      "lastName": "Woods",
+    },
+  },
+  Object {
+    "id": "NteSqF9g5cOa6",
+    "kind": "input_table",
+    "properties": Object {
+      "tableColumns": Array [
+        Object {
+          "id": "name",
+          "title": "Name",
+        },
+        Object {
+          "id": "age",
+          "title": "Age",
+        },
+      ],
+    },
+    "title": "Input table",
+    "value": Array [
+      Object {
+        "age": "16",
+        "name": "Ivan",
+      },
+      Object {
+        "age": "24",
+        "name": "Jack Smith",
+      },
+    ],
+  },
+]
+`;
+
+exports[`should convert value to answer 1`] = `
+Array [
+  Object {
+    "id": "vyLu2NkN70xkS",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "choices": Array [
+        Object {
+          "id": "F7XrAjByBk2w",
+          "label": "Group Choice 1",
+        },
+        Object {
+          "id": "cFEkKnnXmBP6",
+          "label": "Group Choice 2",
+        },
+      ],
+    },
+    "title": "Group Multiple Choose ",
+    "value": Object {
+      "value": Array [
+        "F7XrAjByBk2w",
+        "cFEkKnnXmBP6",
+      ],
+    },
+  },
+  Object {
+    "id": "bcFvi1syrp66",
+    "kind": "phone_number",
+    "properties": Object {
+      "choices": Array [],
+      "defaultCountry": "US",
+    },
+    "title": "☎️  Your MobilePhone ",
+    "value": "+12015551023",
+  },
+  Object {
+    "id": "yLxkSvkN7u2N",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "choices": Array [
+        Object {
+          "id": "kF7XrAjByB2w",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "BP6cFEkKnnXm",
+          "label": "Choice 2",
+        },
+      ],
+    },
+    "title": "🧱 Multiple Choose ",
+    "value": Object {
+      "value": Array [
+        "BP6cFEkKnnXm",
+      ],
+    },
+  },
+  Object {
+    "id": "MVlZfnmjZlye",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": false,
+      "choices": Array [
+        Object {
+          "id": "14wZu5EyC73q",
+          "label": "🍫 Chocolate",
+        },
+        Object {
+          "id": "MesZoaRCdR5Y",
+          "label": "🍍 Pineapple",
+        },
+      ],
+    },
+    "title": "👋 Just choose one",
+    "value": Object {
+      "value": Array [
+        "MesZoaRCdR5Y",
+      ],
+    },
+  },
+  Object {
+    "id": "X9F47wrnJImk",
+    "kind": "yes_no",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "adUm2Hhr1OOW",
+          "label": "Yes",
+        },
+        Object {
+          "id": "QMR1nZV0u84M",
+          "label": "No",
+        },
+      ],
+    },
+    "title": "👍 Do you agree with us ",
+    "value": "QMR1nZV0u84M",
+  },
+  Object {
+    "id": "EF9tbsJj3CNZ",
+    "kind": "picture_choice",
+    "properties": Object {
+      "allowMultiple": false,
+      "choices": Array [
+        Object {
+          "id": "XKV4vls1pkAX",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679926__0-I_F2_OBINdzLx39o3nvZfzXwepkYO9mey0__doge.jpeg",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "FN5cCteg6SOa",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679934__iAGYraz-j8J7gIxaC8GDJi017YJWUS16EzU7__p640.jpg",
+          "label": "Choice 2",
+        },
+        Object {
+          "id": "1Fl7MP9Nv2TM",
+          "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679940__IKke45HeAlbu-v_yqOvbUjQHffRQRFSdl8OJ__p225-2.jpeg",
+          "label": "Choice 3",
+        },
+      ],
+    },
+    "title": "🐶 Choose the dog ",
+    "value": Object {
+      "value": Array [
+        "1Fl7MP9Nv2TM",
+      ],
+    },
+  },
+  Object {
+    "id": "qCpteNRi2SiO",
+    "kind": "file_upload",
+    "properties": Object {},
+    "title": "🈴️ Upload you avatar ",
+    "value": Object {
+      "cdnKey": "qCpteNRi2SiO_avatar.jpg",
+      "cdnUrlPrefix": "https://heyformhq.com",
+      "filename": "avatar.jpg",
+    },
+  },
+  Object {
+    "id": "qFN5cteg6SOa",
+    "kind": "rating",
+    "properties": Object {
+      "total": 10,
+    },
+    "title": "🪐 Rate here ",
+    "value": 5,
+  },
+  Object {
+    "id": "g6Oayu81jkdqcte",
+    "kind": "full_name",
+    "properties": Object {},
+    "title": "Full name",
+    "value": Object {
+      "firstName": "Ivan",
+      "lastName": "Woods",
+    },
+  },
+  Object {
+    "id": "NteSqF9g5cOa6",
+    "kind": "input_table",
+    "properties": Object {
+      "tableColumns": Array [
+        Object {
+          "id": "name",
+          "title": "Name",
+        },
+        Object {
+          "id": "age",
+          "title": "Age",
+        },
+      ],
+    },
+    "title": "Input table",
+    "value": Array [
+      Object {
+        "age": "16",
+        "name": "Ivan",
+      },
+      Object {
+        "age": "24",
+        "name": "Jack Smith",
+      },
+    ],
+  },
+]
+`;

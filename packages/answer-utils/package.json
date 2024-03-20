@@ -1,0 +1,74 @@
+{
+  "name": "@heyform-inc/answer-utils",
+  "description": "HeyForm Answer Utils",
+  "version": "1.0.1",
+  "homepage": "https://heyform.net",
+  "author": "Heyooo, Inc.",
+  "license": "GPL-3.0",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"./dist"
+	],
+	"scripts": {
+		"build": "tsup",
+    "test": "jest",
+    "cov": "jest --coverage",
+    "lint": "eslint . --ext .ts --quiet --fix",
+    "type-check": "tsc --pretty --noEmit",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean"
+  },
+  "peerDependencies": {
+    "@heyform-inc/shared-types-enums": "^1.0.0",
+    "@heyform-inc/utils": "^1.0.1",
+    "big.js": "^6.2.1",
+    "dayjs": "^1.11.3",
+    "html5parser": "^2.0.2",
+    "libphonenumber-js": "^1.10.7",
+    "validator": "^13.7.0"
+  },
+  "dependencies": {
+    "@heyform-inc/shared-types-enums": "^1.0.0",
+    "@heyform-inc/utils": "^1.0.1",
+    "big.js": "^6.2.1",
+    "dayjs": "^1.11.3",
+    "html5parser": "^2.0.2",
+    "libphonenumber-js": "^1.10.7",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.6",
+    "@types/jest": "^26.0.3",
+    "@types/markdown-it": "^12.2.3",
+    "@types/validator": "^13.7.3",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^26.1.0",
+		"tsup": "^8.0.2",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.1.0",
+    "tslib": "^2.4.0",
+		"typescript": "4.9.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "(/tests/.*|(\\.|/)test)\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correct value should be verified 1`] = `
+Array [
+  Object {
+    "id": "ADDRESS",
+    "kind": "address",
+    "properties": Object {},
+    "title": "address.test",
+    "value": Object {
+      "address1": "address1",
+      "city": "city",
+      "country": "country",
+      "state": "state",
+      "zip": "zip",
+    },
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "ADDRESS",
+    "kind": "address",
+    "properties": Object {},
+    "title": "address.test",
+    "value": "",
+  },
+]
+`;

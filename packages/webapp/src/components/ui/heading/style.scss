@@ -1,0 +1,28 @@
+.heading {
+  @apply lg:flex lg:items-center lg:justify-between;
+}
+
+.heading-flex-auto {
+  @apply flex-1 min-w-0;
+}
+
+.heading-left,
+.heading-icon {
+  @apply flex items-center;
+}
+
+.heading-icon {
+  @apply mr-5;
+}
+
+.heading-title {
+  @apply text-3xl font-bold text-slate-900;
+}
+
+.heading-description {
+  @apply text-sm font-medium text-slate-500 mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6;
+}
+
+.heading-actions {
+  @apply mt-6 flex flex-col-reverse justify-items-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3;
+}

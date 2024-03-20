@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correct value should be verified 1`] = `
+Array [
+  Object {
+    "id": "SHORT_TEXT",
+    "kind": "short_text",
+    "properties": Object {},
+    "title": "short-text.test",
+    "value": "hello world",
+  },
+]
+`;
+
+exports[`empty value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "SHORT_TEXT",
+    "kind": "short_text",
+    "properties": Object {},
+    "title": "short-text.test",
+    "value": "",
+  },
+]
+`;
+
+exports[`should be verified if value length greater then 5 1`] = `
+Array [
+  Object {
+    "id": "SHORT_TEXT",
+    "kind": "short_text",
+    "properties": Object {},
+    "title": "short-text.test",
+    "value": "hello world",
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "SHORT_TEXT",
+    "kind": "short_text",
+    "properties": Object {},
+    "title": "short-text.test",
+    "value": "",
+  },
+]
+`;

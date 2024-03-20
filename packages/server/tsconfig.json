@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@decorator": ["src/common/decorator"],
+      "@graphql": ["src/common/graphql"],
+      "@guard": ["src/common/guard"],
+      "@dto": ["src/common/dto"],
+      "@interceptor": ["src/common/interceptor"],
+      "@middleware": ["src/common/middleware"],
+      "@config": ["src/config"],
+      "@environments": ["src/environments"],
+      "@controller": ["src/controller"],
+      "@model": ["src/model"],
+      "@resolver": ["src/resolver"],
+      "@service": ["src/service"],
+      "@schedule": ["src/schedule"],
+      "@utils": ["src/utils"]
+    },
+    "incremental": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmitOnError": false,
+    "noUnusedLocals": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false
+  },
+	"exclude": [
+		"view",
+		"node_modules",
+		"dist"
+	]
+}

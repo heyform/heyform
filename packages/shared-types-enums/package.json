@@ -1,0 +1,56 @@
+{
+  "name": "@heyform-inc/shared-types-enums",
+  "description": "HeyForm shared types and enums",
+  "version": "1.0.0",
+  "homepage": "https://heyform.net",
+  "author": "Heyooo, Inc.",
+  "license": "GPL-3.0",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"./dist"
+	],
+	"scripts": {
+		"build": "tsup",
+    "test": "jest",
+    "cov": "jest --coverage",
+    "lint": "eslint . --ext .ts --quiet --fix",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.31",
+    "@typescript-eslint/eslint-plugin": "4.14.1",
+    "@typescript-eslint/parser": "4.14.1",
+    "coveralls": "^3.0.9",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+		"tsup": "^8.0.2",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.5.2",
+    "tslib": "^2.1.0",
+		"typescript": "4.9.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "(/tests/.*|(\\.|/)test)\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ]
+  }
+}

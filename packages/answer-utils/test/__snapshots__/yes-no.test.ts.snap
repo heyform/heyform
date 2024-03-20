@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correct value should be verified 1`] = `
+Array [
+  Object {
+    "id": "YES_NO",
+    "kind": "yes_no",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "id_yes",
+          "label": "Yes",
+        },
+        Object {
+          "id": "id_no",
+          "label": "No",
+        },
+      ],
+    },
+    "title": "yes-no.test",
+    "value": "id_yes",
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "YES_NO",
+    "kind": "yes_no",
+    "properties": Object {
+      "choices": Array [
+        Object {
+          "id": "id_yes",
+          "label": "Yes",
+        },
+        Object {
+          "id": "id_no",
+          "label": "No",
+        },
+      ],
+    },
+    "title": "yes-no.test",
+    "value": "",
+  },
+]
+`;

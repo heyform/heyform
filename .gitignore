@@ -1,0 +1,38 @@
+# dependencies
+node_modules
+package-lock.json
+
+# IDE
+/.idea
+/.awcache
+/.cache
+/.vscode
+
+# misc
+npm-debug.log
+yarn-error.log
+.DS_Store
+*.swp
+*.tar
+*.tar.gz
+*.zip
+*.p8
+
+# tests
+coverage
+coverage-e2e
+logs
+.nyc_output
+
+# environment
+.env
+.env.*
+docker.env
+!.env.example
+
+# production
+dist
+lib
+packages/server/static
+*.tsbuildinfo
+

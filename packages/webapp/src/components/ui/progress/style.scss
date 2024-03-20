@@ -1,0 +1,56 @@
+.progress,
+.progress-background {
+  @apply h-2 rounded-[0.25rem];
+}
+
+.progress {
+  @apply bg-slate-100;
+}
+
+.progress-gray {
+  .progress-background {
+    @apply bg-slate-500;
+  }
+}
+
+.progress-red {
+  .progress-background {
+    @apply bg-red-500;
+  }
+}
+
+.progress-yellow {
+  .progress-background {
+    @apply bg-yellow-500;
+  }
+}
+
+.progress-green {
+  .progress-background {
+    @apply bg-green-500;
+  }
+}
+
+.progress-blue {
+  .progress-background {
+    @apply bg-blue-500;
+  }
+}
+
+.progress-indigo {
+  .progress-background {
+    @apply bg-indigo-500;
+  }
+}
+
+.progress-purple {
+  .progress-background {
+    @apply bg-purple-500;
+  }
+}
+
+.progress-pink {
+  .progress-background {
+    @apply bg-pink-500;
+  }
+}

@@ -1,0 +1,60 @@
+.timepicker-options {
+  @extend .scrollbar;
+}
+
+.time-input {
+  @apply inline w-auto;
+
+  .input {
+    @apply inline-flex;
+  }
+
+  input {
+    @apply w-12;
+  }
+
+  .select-button {
+    @apply pl-0;
+    padding-right: 1.25rem;
+  }
+
+  .select-button {
+    @apply border-none py-0;
+    box-shadow: none;
+  }
+
+  .select-arrow-icon {
+    @apply pr-0;
+  }
+}
+
+.time-input-trailing {
+  width: auto !important;
+}
+
+.timezone-select {
+  .select-button {
+    @apply p-0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .select-arrow-icon {
+    @apply hidden;
+  }
+
+  .input input {
+    @apply text-blue-700 pointer-events-none cursor-pointer;
+  }
+
+  .select-value {
+    @apply text-blue-700;
+  }
+}
+
+.locale-select {
+  .popup-content,
+  .select-popup-content {
+    width: 125px !important;
+  }
+}

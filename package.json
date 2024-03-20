@@ -1,0 +1,33 @@
+{
+  "name": "heyform",
+  "homepage": "https://heyform.net",
+  "author": "Heyooo, Inc.",
+  "license": "GPL-3.0",
+  "private": true,
+  "engines": {
+    "pnpm": ">=8",
+    "node": ">=16"
+  },
+	"scripts": {
+		"dev": "run-p dev:webapp dev:server",
+		"dev:webapp": "pnpm --filter ./packages/webapp dev",
+		"dev:server": "pnpm --filter ./packages/server dev",
+		"build": "run-p build:server build:webapp",
+		"build:server": "pnpm --filter ./packages/server build",
+		"build:webapp": "pnpm --filter ./packages/webapp build",
+		"build:deps": "pnpm --filter ./packages/utils build && pnpm --filter ./packages/shared-types-enums build && pnpm --filter ./packages/answer-utils build"
+	},
+  "packageManager": "pnpm@8.15.4",
+	"pnpm": {
+		"overrides": {
+			"apollo-upload-client": "17.0.0",
+			"fs-capacitor": "6.2.0",
+			"dayjs": "^1.11.3",
+			"i18next": "^21.9.1",
+			"react-i18next": "^11.18.6"
+		}
+	},
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

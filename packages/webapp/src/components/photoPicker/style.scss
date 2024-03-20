@@ -1,0 +1,30 @@
+.photo-picker {
+  .modal-body {
+    @apply p-0 overflow-hidden;
+  }
+
+  .modal-close-button {
+    @apply top-3 right-5;
+  }
+
+  .tabs-wrapper {
+    @apply flex flex-col;
+  }
+
+  .tabs-nav-list {
+    @apply px-4;
+  }
+
+  .tabs-pane-group {
+    @apply h-96;
+    @extend .scrollbar;
+  }
+
+  .tabs-pane {
+    @apply h-full p-4;
+  }
+
+  .drag-uploader {
+    @apply h-full;
+  }
+}

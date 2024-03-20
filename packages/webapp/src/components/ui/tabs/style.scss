@@ -1,0 +1,60 @@
+.tabs-navbar {
+  @apply border-b border-gray-200;
+}
+
+.tabs-nav-list {
+  @apply -mb-px flex space-x-8;
+}
+
+.tabs-nav {
+  @apply border-transparent font-medium text-slate-500 hover:text-slate-700 hover:border-gray-200 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer;
+}
+
+.tabs-nav-active {
+  &,
+  &:hover {
+    @apply border-blue-700 text-blue-700;
+  }
+}
+
+.tabs-pane {
+  @apply hidden;
+
+  &.tabs-pane-active {
+    @apply block;
+  }
+}
+
+.tabs-segment {
+  .tabs-nav-list {
+    @apply mb-0 space-x-0 inline-flex p-0.5 rounded-lg bg-slate-100 hover:bg-slate-200;
+
+    &:hover {
+      .tabs-nav {
+        @apply text-slate-900;
+      }
+    }
+  }
+
+  .tabs-nav {
+    @apply inline-flex items-center justify-center px-4 py-1.5 text-slate-600 ring-1 ring-black ring-opacity-0 sm:text-sm font-medium rounded-md bg-white;
+
+    &,
+    &:hover {
+      @apply bg-transparent;
+    }
+
+    &:hover {
+      @apply text-slate-900;
+    }
+  }
+
+  .tabs-nav-active {
+    @apply border-none ring-opacity-5 text-slate-900;
+
+    &,
+    &:hover {
+      @apply bg-white;
+    }
+  }
+}

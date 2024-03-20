@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#root:not(:empty) + #loading {
+  display: none;
+}
+
+@-webkit-keyframes loading-spin {
+  to {
+    -webkit-transform: rotate(1turn);
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+#loading {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#loading .loading-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #0252D7;
+  -webkit-animation: loading-spin 1s linear infinite;
+  animation: loading-spin 1s linear infinite;
+}
+
+#loading .loading-icon circle {
+  opacity: 0.25;
+}
+
+#loading .loading-icon path {
+  opacity: 0.75;
+}

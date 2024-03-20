@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correct value should be verified 1`] = `
+Array [
+  Object {
+    "id": "NUMBER",
+    "kind": "number",
+    "properties": Object {},
+    "title": "number.test",
+    "value": 5,
+  },
+]
+`;
+
+exports[`should be verified if value greater then 5 1`] = `
+Array [
+  Object {
+    "id": "NUMBER",
+    "kind": "number",
+    "properties": Object {},
+    "title": "number.test",
+    "value": 7,
+  },
+]
+`;
+
+exports[`undefined value should be verified if not required 1`] = `
+Array [
+  Object {
+    "id": "NUMBER",
+    "kind": "number",
+    "properties": Object {},
+    "title": "number.test",
+    "value": "",
+  },
+]
+`;

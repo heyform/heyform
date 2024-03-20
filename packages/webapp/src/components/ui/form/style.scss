@@ -1,0 +1,61 @@
+.form-item {
+  @apply mb-6;
+}
+
+.form-inline {
+  @apply flex items-start;
+
+  .form-item {
+    @apply flex-1 mb-0;
+
+    &.form-item-error {
+      @apply mt-0;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+    }
+  }
+}
+
+.form-item-label {
+  @apply block text-sm font-medium text-slate-700
+}
+
+.form-switch-item-container {
+  @apply flex items-center justify-between;
+
+  .switch {
+    @apply ml-4;
+  }
+}
+
+.form-switch-item-left {
+  @apply flex flex-col;
+}
+
+.form-item-description {
+  @apply text-sm text-slate-500;
+}
+
+.form-item-content {
+  @apply mt-1;
+
+  .radio-group,
+  .checkbox-group {
+    @apply mt-3;
+  }
+}
+
+.form-item-extra {
+  @apply mt-2 text-sm text-slate-500;
+}
+
+.form-item-error {
+  @apply mt-2 text-sm text-red-600;
+}
+
+.form-submit-button {
+  @apply flex sm:inline-flex;
+}

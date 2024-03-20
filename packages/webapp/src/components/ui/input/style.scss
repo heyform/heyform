@@ -1,0 +1,99 @@
+.input,
+.textarea {
+  @apply flex items-center px-3 py-2 sm:text-sm rounded-md border border-gray-300 cursor-text;
+}
+
+.input {
+  input {
+    @apply flex-1 w-full text-slate-900 sm:text-sm p-0;
+
+    &,
+    &:focus,
+    &:active {
+      @apply bg-transparent border-none outline-none shadow-none;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.textarea {
+  @apply p-0;
+
+  textarea {
+    @apply block w-full text-slate-900 sm:text-sm bg-transparent;
+
+    &,
+    &:focus,
+    &:active {
+      @apply bg-transparent border-none outline-none shadow-none;
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
+
+.input-has-error {
+  @apply border-red-300;
+
+  input {
+    @apply text-red-900 placeholder-red-300;
+  }
+
+  .input-leading,
+  .input-trailing {
+    &,
+    svg {
+      @apply text-red-500;
+    }
+  }
+}
+
+.input-disabled {
+  @apply border-gray-300 bg-slate-100 text-slate-500;
+
+  &,
+  input,
+  textarea {
+    @apply cursor-not-allowed;
+  }
+}
+
+.input-focused {
+  @apply ring-1 ring-blue-600 border-blue-600;
+
+  &.input-has-error {
+    @apply ring-red-500 border-red-500;
+  }
+}
+
+.input-leading,
+.input-trailing {
+  @apply flex items-center text-slate-500 sm:text-sm sm:leading-none;
+
+  svg {
+    @apply w-5 h-5 text-slate-400;
+  }
+}
+
+.input-leading {
+  @apply pr-2;
+}
+
+.input-trailing {
+  @apply pl-2;
+
+  &:hover {
+    svg {
+      @apply text-slate-700;
+    }
+  }
+}
+
+.input-counting {
+  @apply pl-2 text-slate-500 sm:text-sm sm:leading-none;
+}
+
+.input-password-toggle {
+  @apply cursor-pointer;
+}
