@@ -52,7 +52,7 @@ export const InviteMember: FC<IModalProps> = observer(({ visible, onClose }) => 
           <p className="mt-1 text-sm text-slate-500">
             {t('workspace.members.inviteExplain')}{' '}
             <span className="text-slate-700">
-              {unixDate(workspaceStore.workspace.inviteCodeExpireAt || 0).format('MMMM DD, YYYY')}
+              {unixDate(workspaceStore.workspace?.inviteCodeExpireAt || 0).format('MMMM DD, YYYY')}
             </span>
             .
           </p>
