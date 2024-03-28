@@ -17,12 +17,6 @@
     "prestart": "npm run migrate:seed",
     "prebuild": "rimraf dist"
   },
-  "pnpm": {
-    "overrides": {
-      "apollo-upload-client": "17.0.0",
-      "fs-capacitor": "6.2.0"
-    }
-  },
   "dependencies": {
     "@heyform-inc/answer-utils": "1.0.1",
     "@heyform-inc/shared-types-enums": "1.0.0",
@@ -37,14 +31,14 @@
     "@puckjs/mongoose-cli": "2.0.0",
     "@svtslv/nestjs-ioredis": "1.0.2",
     "akismet-api": "5.0.0",
-    "apollo-server": "2.17.0",
-    "apollo-server-express": "2.17.0",
+    "apollo-server": "2.26.1",
+    "apollo-server-express": "2.26.1",
     "axios": "1.6.8",
     "bcrypt": "5.0.0",
     "body-parser": "1.20.2",
     "bull": "3.22.0",
     "class-transformer": "0.3.1",
-    "class-validator": "0.12.2",
+    "class-validator": "0.14.0",
     "cookie-parser": "1.4.5",
     "country-list": "2.2.0",
     "disposable-email-blocklist": "0.0.1",
@@ -53,20 +47,20 @@
     "fs-extra": "11.2.0",
     "google-auth-library": "6.0.6",
     "googleapis": "59.0.0",
-    "got": "11.8.2",
+    "got": "11.8.5",
     "graphql": "15.3.0",
     "graphql-middleware": "4.0.2",
     "graphql-tools": "6.2.1",
     "graphql-type-json": "0.3.2",
     "gt4-node-sdk": "0.0.2",
-    "hbs": "4.1.1",
+    "hbs": "4.2.0",
     "helmet": "4.1.1",
     "ioredis": "4.17.3",
     "json2csv": "5.0.6",
     "jsonwebtoken": "8.5.1",
-    "mongoose": "5.10.5",
+    "mongoose": "5.13.20",
     "multer": "1.4.5-lts.1",
-    "nodemailer": "6.4.11",
+    "nodemailer": "6.9.9",
     "raw-body": "2.4.1",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
@@ -103,5 +97,24 @@
     "prettier": "2.1.1",
     "ts-loader": "8.0.3",
     "typescript": "4.9.5"
-  }
+  },
+	"pnpm": {
+		"overrides": {
+			"apollo-upload-client": "17.0.0",
+			"apollo-server-core": "2.16.1",
+			"fs-capacitor": "6.2.0",
+			"express": "4.19.2",
+			"lodash": "4.17.21",
+			"axios": "1.6.8",
+			"@babel/traverse": "7.23.2",
+			"node-fetch": "2.6.7",
+			"qs": "6.7.3",
+			"graphql-tools": "6.2.6",
+			"cross-fetch": "3.1.5",
+			"ip": "2.0.1",
+			"ws": "7.4.6",
+			"got": "11.8.5",
+			"busboy": "1.6.0"
+		}
+	}
 }
