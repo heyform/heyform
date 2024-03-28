@@ -5,7 +5,7 @@
   <p>HeyForm is an open-source form builder that allows anyone to create engaging conversational forms for surveys, questionnaires, quizzes, and polls. No coding skills required.</p>
 </div>
 <p align="center">
-  <a target="_blank" href="https://heform.net">Website</a> | <a target="_blank" href="https://heyform.net/help">Documentation</a> | <a target="_blank" href="https://heyform.net/blog">Blog</a> | <a target="_blank" href="https://twitter.com/HeyformHQ">Twitter</a>
+  <a target="_blank" href="https://heform.net">Website</a> | <a target="_blank" href="https://docs.heyform.net">Documentation</a> | <a target="_blank" href="https://heyform.net/blog">Blog</a> | <a target="_blank" href="https://twitter.com/HeyformHQ">Twitter</a>
 </p>
 
 <img src="./assets/images/screenshot.png" alt="HeyForm" />
