@@ -210,7 +210,6 @@ export class FormService {
         }
       },
       {
-        safe: true,
         multi: true
       }
     )

@@ -19,7 +19,11 @@ async function bootstrap() {
   })
 
   // Verify all params
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidUnknownValues: false
+    })
+  )
 
   // Enable cookie
   app.use(cookieParser())
