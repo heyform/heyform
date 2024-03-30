@@ -5,6 +5,7 @@ import { locales } from '@/components/formComponents'
 
 import en from './en'
 import zhCn from './zhCn'
+import zhTw from './zhTw'
 
 const resources = {
   en: {
@@ -19,7 +20,12 @@ const resources = {
       ...locales['zh-cn'].translation
     }
   },
-  'zh-tw': locales['zh-tw'],
+  'zh-tw': {
+    translation: {
+      ...zhTw,
+      ...locales['zh-tw'].translation
+    }
+  }
   fr: locales.fr,
   de: locales.de
 }
