@@ -18,7 +18,7 @@ export function useGridDimensions(): [
 
     const resizeObserver = new ResizeObserver(() => {
       // Get dimensions without scrollbars.
-      // The dimensions given by the callback entries in Firefox do not substract the scrollbar sizes.
+      // The dimensions given by the callback entries in Firefox do not subtract the scrollbar sizes.
       const { clientWidth, clientHeight } = gridRef.current!
       setGridWidth(clientWidth)
       setGridHeight(clientHeight)
