@@ -5,14 +5,14 @@
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "GPL-3.0",
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"./dist"
-	],
-	"scripts": {
-		"build": "tsup",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist"
+  ],
+  "scripts": {
+    "build": "tsup",
     "test": "jest",
     "cov": "jest --coverage",
     "lint": "eslint . --ext .ts --quiet --fix",
@@ -42,6 +42,7 @@
     "@types/big.js": "^6.1.6",
     "@types/jest": "^26.0.3",
     "@types/markdown-it": "^12.2.3",
+    "@types/node": "^20.12.2",
     "@types/validator": "^13.7.3",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
@@ -52,12 +53,12 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^26.1.0",
-		"tsup": "^8.0.2",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.1.0",
     "tslib": "^2.4.0",
-		"typescript": "4.9.5"
+    "tsup": "^8.0.2",
+    "typescript": "4.9.5"
   },
   "jest": {
     "transform": {
