@@ -68,4 +68,4 @@ You'll find a lot of resources to help you get started with HeyForm in the [help
 
 ## License
 
-HeyForm is open-source under the GNU General Public License Version 3 (GPLv3), you will find more information about the license and how to comply with it [here](https://docs.heyform.net/license).
+HeyForm is open-source under the GNU Affero General Public License v3.0 (AGPL-3.0), you will find more information about the license and how to comply with it [here](https://docs.heyform.net/license).
