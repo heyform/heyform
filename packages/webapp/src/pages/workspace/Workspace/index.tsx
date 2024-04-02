@@ -75,7 +75,7 @@ const Item: FC<ItemProps> = ({ project, users, isOwner, onRename, onDelete }) =>
         </p>
         <div className="mt-4 flex items-center justify-between">
           <Avatar.Group
-            avatarClassName="w-10 h-10"
+            avatarClassName="!w-10 !h-10"
             options={members}
             size={80}
             maximum={8}
@@ -128,7 +128,7 @@ const Workspace = observer(() => {
         title={workspaceStore.workspace?.name}
         icon={
           <Avatar
-            className="h-14 w-14"
+            className="!h-14 !w-14"
             src={workspaceStore.workspace?.avatar}
             defaultIcon={<WorkspaceIcon />}
             size={80}

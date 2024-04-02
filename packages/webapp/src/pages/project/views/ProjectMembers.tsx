@@ -85,7 +85,7 @@ export const MemberItem: FC<MemberItemProps> = ({ member, disabled }) => {
   return (
     <div className="group flex items-center py-2.5 text-sm text-slate-700">
       <Avatar
-        className="h-10 w-10"
+        className="!h-10 !w-10"
         src={member.avatar}
         size={80}
         retainLength={2}

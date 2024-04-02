@@ -78,7 +78,7 @@ const Header: FC<HeaderProps> = observer(({ onRename, onDelete, onMemberManage }
       description={
         <div className="mt-2 flex items-center">
           <Avatar.Group
-            avatarClassName="w-10 h-10"
+            avatarClassName="!w-10 !h-10"
             options={members}
             size={80}
             maximum={8}

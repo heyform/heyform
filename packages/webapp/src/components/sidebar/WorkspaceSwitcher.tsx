@@ -39,7 +39,7 @@ const WorkspaceItem: FC<WorkspaceItemProps> = ({ workspace, onClick }) => {
       onClick={handleClick}
     >
       <Avatar
-        className="h-10 w-10"
+        className="!h-10 !w-10"
         src={workspace.avatar}
         defaultIcon={<WorkspaceIcon />}
         size={80}
@@ -87,7 +87,7 @@ const CurrentWorkspace = observer(() => {
       <span className="flex w-full cursor-pointer items-center justify-between">
         <span className="flex min-w-0 items-center justify-between space-x-3">
           <Avatar
-            className="h-10 w-10 flex-shrink-0 rounded-full"
+            className="!h-10 !w-10 flex-shrink-0 rounded-full"
             src={workspaceStore.workspace?.avatar}
             defaultIcon={<WorkspaceIcon />}
             size={80}

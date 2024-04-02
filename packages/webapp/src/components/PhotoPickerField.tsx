@@ -60,7 +60,7 @@ export const PhotoPickerField: FC<PhotoPickerFieldProps> = ({
         <p className="form-item-description">{description}</p>
         <div className="mt-3 flex items-center">
           <Avatar
-            className="h-12 w-12"
+            className="!h-12 !w-12"
             src={value}
             size={80}
             defaultIcon={defaultIcon}

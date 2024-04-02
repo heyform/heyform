@@ -72,7 +72,7 @@ const JoinWorkspace = () => {
         <div className="mt-6">
           <div className="group flex items-center rounded-md py-2.5 text-sm text-slate-700">
             <Avatar
-              className="h-12 w-12"
+              className="!h-12 !w-12"
               src={workspace?.avatar}
               size={80}
               defaultIcon={<WorkspaceIcon />}

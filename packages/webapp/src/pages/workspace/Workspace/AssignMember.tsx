@@ -22,7 +22,7 @@ export const MemberItem: FC<MemberItemProps> = ({ member, onClick }) => {
   return (
     <div className="group -mx-2.5 flex items-center rounded-md p-2.5 text-sm text-slate-700 hover:bg-slate-50">
       <Avatar
-        className="-10 w-10"
+        className="!h-10 !w-10"
         src={member.avatar}
         size={80}
         retainLength={2}
