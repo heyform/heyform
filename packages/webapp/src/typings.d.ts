@@ -31,6 +31,9 @@ declare global {
       stripePublishableKey: string
       geetestCaptchaId: string
       googleRecaptchaKey: string
+      disableLoginWithGoogle: boolean
+      disableLoginWithApple: boolean
+      verifyUserEmail: boolean
       device: {
         ios: boolean
         android: boolean

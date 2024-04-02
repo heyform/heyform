@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
+import { RedirectUriLink } from '@/components'
 import { Form, Input } from '@/components/ui'
+import { VERIFY_USER_EMAIL } from '@/consts'
 import { AuthService } from '@/service'
 import { useQueryURL, useRouter } from '@/utils'
 
@@ -9,7 +11,7 @@ import { ThirdPartyLogin } from './views/ThirdPartyLogin'
 const SignUp = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const nextURL = useQueryURL('/verify-email')
+  const nextURL = useQueryURL(VERIFY_USER_EMAIL ? '/verify-email' : '/')
 
   async function handleFinish(values: any) {
     await AuthService.signUp(values)
@@ -26,19 +28,10 @@ const SignUp = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-          <div>
-            <p className="text-sm font-medium text-slate-700"> {t('auth.signup.signWith')}</p>
-            <ThirdPartyLogin />
-          </div>
-
-          <div className="relative mt-6">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-slate-500">{t('auth.signup.continueWith')}</span>
-            </div>
-          </div>
+          <ThirdPartyLogin
+            headline={t('auth.signup.signWith')}
+            subHeadline={t('auth.signup.continueWith')}
+          />
 
           <div className="mt-6">
             <Form.Custom
@@ -103,6 +96,12 @@ const SignUp = () => {
                 </p>
               </div>
             </Form.Custom>
+
+            <div className="mt-6 text-center text-blue-700 hover:text-blue-800 sm:text-sm">
+              <RedirectUriLink href="/login" className="inline-flex items-center">
+                {t('auth.forgotPassword.link')}
+              </RedirectUriLink>
+            </div>
           </div>
         </div>
       </div>

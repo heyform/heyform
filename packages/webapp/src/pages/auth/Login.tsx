@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { RedirectUriLink } from '@/components'
 import { Form, Input } from '@/components/ui'
+import { DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE } from '@/consts'
 import { AuthService } from '@/service'
 import { useQueryURL, useRouter } from '@/utils'
 
@@ -34,6 +35,8 @@ const Login = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+          <ThirdPartyLogin headline={t('login.signWith')} subHeadline={t('login.continueWith')} />
+
           <Form.Custom
             submitText={t('login.button')}
             submitOptions={{
@@ -68,19 +71,6 @@ const Login = () => {
               <Input.Password />
             </Form.Item>
           </Form.Custom>
-
-          <div className="relative mb-4 mt-6">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-slate-500">{t('login.continueWith')}</span>
-            </div>
-          </div>
-
-          <div>
-            <ThirdPartyLogin />
-          </div>
         </div>
       </div>
     </div>
