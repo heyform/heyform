@@ -92,6 +92,10 @@ export const Form: FC<FormProps> = ({
 
     // Validate all form fields value
     if (isLastBlock || isPartialSubmission) {
+      if (loading) {
+        return
+      }
+
       if (isLastBlock) {
         dispatch({
           type: 'setIsSubmitTouched',
