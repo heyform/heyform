@@ -6,11 +6,10 @@ import { RetryLink } from 'apollo-link-retry'
 import ApolloLinkTimeout from 'apollo-link-timeout'
 import { createUploadLink } from 'apollo-upload-client'
 
-import { GRAPHQL_URL } from '@/consts'
 import { clearAuthState, getBrowserId } from '@/utils'
 
 const uploadLink = createUploadLink({
-  uri: GRAPHQL_URL,
+  uri: '/graphql',
   credentials: 'include'
 })
 

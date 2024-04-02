@@ -20,7 +20,6 @@ export class DashboardController {
     return res.render('index', {
       rendererData: {
         homepageURL: APP_HOMEPAGE_URL,
-        graphqlURL: `${APP_HOMEPAGE_URL}/graphql`,
         cookieDomain: COOKIE_DOMAIN,
         stripePublishableKey: STRIPE_PUBLISHABLE_KEY,
         geetestCaptchaId: GEETEST_CAPTCHA_ID,
