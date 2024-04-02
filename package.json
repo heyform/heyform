@@ -23,11 +23,19 @@
   },
 	"pnpm": {
 		"overrides": {
+			"@graphql-tools/git-loader": ">=6.2.6",
 			"apollo-upload-client": "17.0.0",
 			"fs-capacitor": "6.2.0",
 			"dayjs": "^1.11.3",
 			"i18next": "^21.9.1",
-			"react-i18next": "^11.18.6"
+			"react-i18next": "^11.18.6",
+			"@babel/traverse": "^7.24.1",
+			"node-fetch": "2.6.7",
+			"lodash": "4.17.21",
+			"qs": "^6.12.0",
+			"busboy": "1.6.0",
+			"axios": "1.6.8",
+			"minimist": "^1.2.6"
 		}
 	}
 }
