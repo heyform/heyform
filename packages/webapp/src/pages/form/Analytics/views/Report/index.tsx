@@ -6,11 +6,13 @@ import {
   QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 import { helper, pickValidValues } from '@heyform-inc/utils'
+import { IconChartBar, IconDatabase } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Async, SubHeading } from '@/components'
+import { EmptyStates } from '@/components/ui'
 import { FormService } from '@/service'
 import { useStore } from '@/store'
 import { useParam } from '@/utils'
@@ -24,7 +26,7 @@ const Report: FC = observer(() => {
   const { t } = useTranslation()
   const { formId } = useParam()
   const formStore = useStore('formStore')
-  const [responses, setResponses] = useState([])
+  const [responses, setResponses] = useState<any[]>([])
 
   async function fetchReport() {
     const result = await FormService.report(formId)
@@ -67,7 +69,7 @@ const Report: FC = observer(() => {
           ? htmlUtils.plain(htmlUtils.serialize(field.title as any))
           : field.title
         response.kind = field.kind
-        response.properties = pickValidValues(field.properties as any, [
+        response.properties = pickValidValues((field.properties as any) || {}, [
           'tableColumns',
           'total',
           'average',
@@ -78,7 +80,7 @@ const Report: FC = observer(() => {
         return response
       })
 
-      setResponses(responses as any)
+      setResponses(responses)
     }
 
     return result.responses.length
@@ -96,7 +98,18 @@ const Report: FC = observer(() => {
           {t('analytics.Report')}
         </SubHeading>
 
-        <Async request={fetchReport} deps={[formStore.current]}>
+        <Async
+          request={fetchReport}
+          deps={[formStore.current]}
+          emptyState={
+            <EmptyStates
+              className="empty-states-fit"
+              icon={<IconChartBar className="non-scaling-stroke" />}
+              title={t('submissions.NoSubmissions')}
+              description={t('submissions.SubHeadline')}
+            />
+          }
+        >
           {responses.map((row, index) => (
             <ReportItem key={index} index={index + 1} response={row} />
           ))}

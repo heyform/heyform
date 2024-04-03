@@ -5,10 +5,17 @@ import { IComponentProps } from '../typing'
 
 export interface ProgressProps extends IComponentProps {
   type?: 'gray' | 'red' | 'yellow' | 'green' | 'blue' | 'indigo' | 'purple' | 'pink'
+  barClassName?: string
   percent: number
 }
 
-const Progress: FC<ProgressProps> = ({ className, type = 'blue', percent, ...restProps }) => {
+const Progress: FC<ProgressProps> = ({
+  className,
+  barClassName,
+  type = 'blue',
+  percent,
+  ...restProps
+}) => {
   const width = useMemo(() => {
     return Math.max(0, Math.min(percent, 100)) + '%'
   }, [percent])
@@ -24,7 +31,7 @@ const Progress: FC<ProgressProps> = ({ className, type = 'blue', percent, ...res
       )}
       {...restProps}
     >
-      <div className="progress-background" style={{ width }} />
+      <div className={clsx('progress-bar', barClassName)} style={{ width }} />
     </div>
   )
 }

@@ -1,12 +1,13 @@
 import { Answer, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
 import { helper, parseNumber } from '@heyform-inc/utils'
+import { IconClipboardCheck, IconDatabase } from '@tabler/icons-react'
 import throttle from 'lodash/throttle'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Async, Pagination } from '@/components'
-import { Button, Spin, notification } from '@/components/ui'
+import { Button, EmptyStates, Spin, notification } from '@/components/ui'
 import { FormModel, SubmissionModel } from '@/models'
 import { FormService, SubmissionService } from '@/service'
 import { urlBuilder, useParam, useQuery } from '@/utils'
@@ -194,7 +195,7 @@ const Submissions: FC = () => {
     setDeleting(false)
   }
 
-  // 限制 cell 更新提交的频率
+  // Limit the frequency of cell value changes
   const throttledCellValueChange = throttle(handleCellValueChange)
 
   return (
@@ -221,6 +222,14 @@ const Submissions: FC = () => {
           request={fetchData}
           deps={[category, page]}
           skeleton={<Spin className="h-5 w-5 text-[#1d4ed8]" />}
+          emptyState={
+            <EmptyStates
+              className="empty-states-fit"
+              icon={<IconDatabase className="non-scaling-stroke" />}
+              title={t('submissions.NoSubmissions')}
+              description={t('submissions.SubHeadline')}
+            />
+          }
         >
           <Sheet
             loading={false}

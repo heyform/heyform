@@ -60,7 +60,7 @@ export const AnswerValue: FC<{ answer: AnswerModel; columns?: Column[] }> = ({
   columns
 }) => {
   return (
-    <div className="mr-5 flex flex-1 items-center">
+    <div className="mr-5 flex flex-1 items-center text-sm text-slate-900">
       {(() => {
         switch (answer.kind) {
           case FieldKindEnum.ADDRESS:
@@ -169,7 +169,7 @@ const AnswerModal: FC<AnswerModalProps> = ({ visible, response, onVisibleChange 
               key={row.submissionId}
             >
               <AnswerValue answer={row} columns={response.properties?.tableColumns} />
-              <div className="min-w-[100px] text-slate-500">
+              <div className="min-w-[100px] text-[13px] text-slate-500">
                 {timeago.format(row.endAt! * 1_000)}
               </div>
             </div>
@@ -205,7 +205,7 @@ export const AnswerList: FC<AnswerListProps> = ({ response }) => {
       {response.answers?.map(row => (
         <div className="flex items-center border-b border-[#f3f3f3] py-3" key={row.submissionId}>
           <AnswerValue answer={row} columns={response.properties?.tableColumns} />
-          <div className="text-[#8a94a6]">{timeago.format(row.endAt! * 1_000)}</div>
+          <div className="text-[13px] text-[#8a94a6]">{timeago.format(row.endAt! * 1_000)}</div>
         </div>
       ))}
       {response.count > 5 && (

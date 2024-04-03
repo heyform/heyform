@@ -377,7 +377,9 @@ export default {
     export: 'Export CSV',
     Delete: 'Delete',
     selected: 'selected',
-    Deselect: 'Deselect all'
+    Deselect: 'Deselect all',
+    NoSubmissions: 'No submissions yet',
+		SubHeadline: 'Share the form online to engage a broader audience.'
   },
   formSettings: {
     Form: 'Form settings',
