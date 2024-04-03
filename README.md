@@ -52,6 +52,10 @@ Choosing our hosted version not only saves a significant amount of time and reso
 
 Interested in self-hosting HeyForm on your server? Take a look at the [self-hosting installation instructions](https://docs.heyform.net/self-hosting).
 
+### Deploy on Zeabur with One Click
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/9YAUUO)
+
 ## Local development
 
 Follow the [local installation instructions](https://docs.heyform.net/local-development) to run the project locally.
