@@ -47,7 +47,7 @@ export class UploadController {
   )
   async index(@UploadedFile() file: Express.Multer.File): Promise<{ url: string }> {
     return {
-      url: APP_HOMEPAGE_URL + `/static/upload/${file.filename}`
+      url: APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${file.filename}`
     }
   }
 }
