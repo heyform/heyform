@@ -111,7 +111,7 @@ const Rating: FC<RatingProps> = ({ length, leftLabel, rightLabel, chooses }) => 
                 {num} {t('report.responses')}
               </div>
             </div>
-            <Progress className="!h-[5px] w-full" percent={num / total} />
+            <Progress className="!h-1 w-full" barClassName="!h-1" percent={(num * 100) / total} />
           </div>
         )
       })}
