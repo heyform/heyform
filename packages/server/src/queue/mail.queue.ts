@@ -4,9 +4,9 @@ import { Job } from 'bull'
 import { SmtpOptionsFactory } from '@config'
 import { SmtpMessage, SmtpOptions, smtpSendMail } from '@utils'
 
-import { BaseQueue, BaseQueueJob } from './base.queue'
+import { BaseQueue } from './base.queue'
 
-export interface MailQueueJob extends BaseQueueJob {
+export interface MailQueueJob {
   data: SmtpMessage
 }
 

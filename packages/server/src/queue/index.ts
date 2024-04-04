@@ -2,16 +2,16 @@ import { BullModule } from '@nestjs/bull'
 
 import { BullOptionsFactory } from '@config'
 
-import { EmailQueue } from './email.queue'
 import { FormReportQueue } from './form-report.queue'
 import { MailQueue } from './mail.queue'
-import { WebhookQueue } from './webhook.queue'
+import { IntegrationEmailQueue } from './integration-email.queue'
+import { IntegrationWebhookQueue } from './integration-webhook.queue'
 
 export const QueueProviders = {
-  EmailQueue,
   FormReportQueue,
   MailQueue,
-  WebhookQueue
+  IntegrationEmailQueue,
+  IntegrationWebhookQueue
 }
 
 export const QueueModules = Object.keys(QueueProviders).map(queueName => {

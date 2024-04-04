@@ -3,9 +3,9 @@ import { Job } from 'bull'
 
 import { FormReportService } from '@service'
 
-import { BaseQueue, BaseQueueJob } from './base.queue'
+import { BaseQueue } from './base.queue'
 
-interface FormReportQueueJob extends BaseQueueJob {
+interface FormReportQueueJob {
   formId: string
 }
 

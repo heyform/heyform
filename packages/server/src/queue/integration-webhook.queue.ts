@@ -7,8 +7,8 @@ import { mapToObject } from '@utils'
 
 import { BaseQueue, IntegrationQueueJob } from './base.queue'
 
-@Processor('WebhookQueue')
-export class WebhookQueue extends BaseQueue {
+@Processor('IntegrationWebhookQueue')
+export class IntegrationWebhookQueue extends BaseQueue {
   constructor(
     private readonly integrationService: IntegrationService,
     private readonly submissionService: SubmissionService,
@@ -19,8 +19,10 @@ export class WebhookQueue extends BaseQueue {
 
   @Process()
   async callWebhook(job: Job<IntegrationQueueJob>): Promise<any> {
-    const integration = await this.integrationService.findById(job.data.integrationId)
-    const submission = await this.submissionService.findById(job.data.submissionId)
+    const [integration, submission] = await Promise.all([
+      this.integrationService.findById(job.data.integrationId),
+      this.submissionService.findById(job.data.submissionId)
+    ])
     const form = await this.formService.findById(submission.formId)
     const { webhook } = mapToObject(integration.attributes)
 

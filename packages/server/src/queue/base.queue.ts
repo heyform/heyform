@@ -3,12 +3,7 @@ import { Job } from 'bull'
 
 import { Logger } from '@utils'
 
-export interface BaseQueueJob {
-  failedTaskId?: string
-  queueName: string
-}
-
-export interface IntegrationQueueJob extends BaseQueueJob {
+export interface IntegrationQueueJob {
   integrationId: string
   submissionId: string
 }

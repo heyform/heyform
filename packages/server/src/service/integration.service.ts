@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common'
+import { InjectQueue } from '@nestjs/bull'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
+import { Queue } from 'bull'
 
 import { IntegrationModel, IntegrationStatusEnum } from '@model'
 
 import { AppService } from './app.service'
-import { QueueService } from './queue.service'
 
 @Injectable()
 export class IntegrationService {
@@ -13,7 +14,8 @@ export class IntegrationService {
     @InjectModel(IntegrationModel.name)
     private readonly integrationModel: Model<IntegrationModel>,
     private readonly appService: AppService,
-    private readonly queueService: QueueService
+    @InjectQueue('IntegrationEmailQueue') private readonly emailQueue: Queue,
+    @InjectQueue('IntegrationWebhookQueue') private readonly webhookQueue: Queue
   ) {}
 
   async findById(id: string): Promise<IntegrationModel | null> {
@@ -100,13 +102,18 @@ export class IntegrationService {
         continue
       }
 
+      const data = {
+        integrationId: integration.id,
+        submissionId
+      }
+
       switch (app.uniqueId) {
         case 'email':
-          this.queueService.addEmailQueue(integration.id, submissionId)
+          this.emailQueue.add(data)
           break
 
         case 'webhook':
-          this.queueService.addWebhookQueue(integration.id, submissionId)
+          this.webhookQueue.add(data)
           break
       }
     }

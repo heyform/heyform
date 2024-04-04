@@ -9,8 +9,8 @@ import { mapToObject } from '@utils'
 
 import { BaseQueue, IntegrationQueueJob } from './base.queue'
 
-@Processor('EmailQueue')
-export class EmailQueue extends BaseQueue {
+@Processor('IntegrationEmailQueue')
+export class IntegrationEmailQueue extends BaseQueue {
   constructor(
     private readonly integrationService: IntegrationService,
     private readonly submissionService: SubmissionService,
@@ -22,8 +22,10 @@ export class EmailQueue extends BaseQueue {
 
   @Process()
   async sendNotification(job: Job<IntegrationQueueJob>): Promise<any> {
-    const integration = await this.integrationService.findById(job.data.integrationId)
-    const submission = await this.submissionService.findById(job.data.submissionId)
+    const [integration, submission] = await Promise.all([
+      this.integrationService.findById(job.data.integrationId),
+      this.submissionService.findById(job.data.submissionId)
+    ])
     const form = await this.formService.findById(submission.formId)
 
     const html = answersToHtml(submission.answers)
@@ -32,7 +34,7 @@ export class EmailQueue extends BaseQueue {
     await this.mailService.submissionNotification(email, {
       formName: form.name,
       submission: html,
-      link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/results/submissions`
+      link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/submissions`
     })
   }
 }
