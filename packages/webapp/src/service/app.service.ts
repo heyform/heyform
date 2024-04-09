@@ -1,3 +1,4 @@
+import { FileUploadValue } from '@heyform-inc/shared-types-enums'
 import axios from 'axios'
 
 import { APPS_GQL, APP_AUTHORIZE_URL_GQL, APP_DETAIL_GQL } from '@/consts'
@@ -35,7 +36,7 @@ export class AppService {
     })
   }
 
-  static async upload(file: File): Promise<{ url: string }> {
+  static async upload(file: File): Promise<FileUploadValue> {
     const formData = new FormData()
     formData.append('file', file)
 

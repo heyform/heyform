@@ -440,11 +440,17 @@
   font-size: 14px;
   font-weight: 400;
   margin-bottom: 10px;
-  color: #b0b7c3;
+  @apply text-slate-500;
 }
 
 .heygrid-panel {
   .heygrid-header-cell {
     padding: 0;
   }
+}
+
+.heygrid-checkbox {
+	.checkbox-description {
+		@apply hidden pointer-events-none;
+	}
 }

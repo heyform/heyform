@@ -138,3 +138,27 @@ export function insertThemeStyle(customTheme?: FormTheme) {
 
   style.innerHTML = content
 }
+
+export function getFileUploadValue(v: any) {
+  if (helper.isObject(v) && helper.isURL(v.url)) {
+    return {
+      filename: v.filename,
+      url: urlBuilder(v.url, {
+        attname: v.filename
+      })
+    }
+  } else if (helper.isString(v) && helper.isURL(v)) {
+    return {
+      filename: 'Attachment',
+      url: urlBuilder(v, {
+        attname: 'Attachment'
+      })
+    }
+  }
+}
+
+export function getUrlValue(v: any) {
+  if (helper.isURL(v)) {
+    return v
+  }
+}

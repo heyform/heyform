@@ -62,7 +62,7 @@ export class Uploader {
     const result = await AppService.upload(file)
 
     return {
-      [field.id]: result.url
+      [field.id]: field.kind === FieldKindEnum.SIGNATURE ? result.url : result
     }
   }
 

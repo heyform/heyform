@@ -7,7 +7,7 @@ import * as timeago from 'timeago.js'
 import { Async, Heading, Pagination } from '@/components'
 import { Modal, Spin } from '@/components/ui'
 import { SubmissionService } from '@/service'
-import { useParam } from '@/utils'
+import { getFileUploadValue, getUrlValue, urlBuilder, useParam } from '@/utils'
 
 interface AnswerModel {
   submissionId: string
@@ -81,21 +81,27 @@ export const AnswerValue: FC<{ answer: AnswerModel; columns?: Column[] }> = ({
             return <InputTableValue columns={columns} value={answer.value} />
 
           case FieldKindEnum.FILE_UPLOAD:
+            const value = getFileUploadValue(answer.value)
+
             return (
               <a
-                href={`${answer.value.cdnUrlPrefix}/${
-                  answer.value.cdnKey
-                }?attname=${encodeURIComponent(answer.value?.filename)}`}
+                href={urlBuilder(value?.url as string, { attname: value?.filename })}
                 target="_blank"
                 rel="noreferrer"
               >
-                {answer.value?.filename}
+                {value?.filename}
               </a>
             )
 
           case FieldKindEnum.SIGNATURE:
+            const value2 = getUrlValue(answer.value)
+
             return (
-              <a href={`${answer.value}?attname=signature.jpg`} target="_blank" rel="noreferrer">
+              <a
+                href={urlBuilder(value2 as string, { attname: 'signature.jpg' })}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Signature
               </a>
             )

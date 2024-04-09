@@ -1,18 +1,18 @@
-import { FullNameValue } from '@heyform-inc/shared-types-enums'
-import { FC } from 'react'
+import { helper } from '@heyform-inc/utils'
+import { FC, useMemo } from 'react'
 
 import { SheetCellProps } from '../types'
 
 export const FullNameCell: FC<SheetCellProps> = ({ column, row }) => {
-  const value: FullNameValue = row[column.key]
+  const value = useMemo(() => {
+    const v = row[column.key]
+
+    if (helper.isObject(v)) {
+      return [v.firstName, v.lastName].filter(Boolean).join(', ')
+    }
+  }, [column.key, row])
 
   return (
-    <div className="heygrid-cell-text overflow-hidden text-ellipsis whitespace-nowrap">
-      {value && (
-        <>
-          {value.firstName} {value.lastName}
-        </>
-      )}
-    </div>
+    <div className="heygrid-cell-text overflow-hidden text-ellipsis whitespace-nowrap">{value}</div>
   )
 }
