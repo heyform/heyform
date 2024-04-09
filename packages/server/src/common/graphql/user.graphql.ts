@@ -4,15 +4,6 @@ import { IsEmail, IsOptional, Length, Matches } from 'class-validator'
 import { LowerCase } from '@utils'
 
 @InputType()
-export class CdnTokenInput {
-  @Field()
-  mime: string
-
-  @Field()
-  filename: string
-}
-
-@InputType()
 export class UpdateUserInput {
   @Field({ nullable: true })
   @IsOptional()
@@ -61,18 +52,6 @@ export class UpdateUserPasswordInput {
     message: 'Invalid password'
   })
   newPassword: string
-}
-
-@ObjectType()
-export class CdnTokenType {
-  @Field()
-  token: string
-
-  @Field()
-  urlPrefix: string
-
-  @Field()
-  key: string
 }
 
 @ObjectType()

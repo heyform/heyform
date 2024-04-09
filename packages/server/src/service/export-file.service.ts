@@ -116,7 +116,7 @@ export class ExportFileService {
         break
 
       case FieldKindEnum.FILE_UPLOAD:
-        result = value?.cdnUrlPrefix + value?.cdnKey
+        result = helper.isObject(value) ? value.url : helper.isString(value) ? value : ''
         break
 
       default:

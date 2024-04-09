@@ -2,14 +2,6 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsOptional, IsString } from 'class-validator'
 import { GraphQLJSONObject } from 'graphql-type-json'
 
-import { CdnTokenInput } from './user.graphql'
-
-@InputType()
-export class UploadFormFileInput extends CdnTokenInput {
-  @Field()
-  formId: string
-}
-
 @InputType()
 export class UploadFormSignatureInput {
   @Field()
@@ -106,10 +98,7 @@ export class UploadFormFileType {
   filename: string
 
   @Field()
-  cdnKey: string
-
-  @Field()
-  cdnUrlPrefix: string
+  url: string
 
   @Field()
   size: number

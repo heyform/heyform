@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer'
-import { IsInt, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator'
+import { IsInt, IsOptional, IsString, IsUrl } from 'class-validator'
 import { APP_HOMEPAGE_URL } from '@environments'
 
 export class ImageResizingDto {
@@ -26,23 +26,6 @@ export class ImageResizingDto {
   @IsInt()
   @IsOptional()
   h?: number
-}
-
-export class CdnCallbackDto {
-  @IsString()
-  key: string
-
-  @IsString()
-  hash: string
-
-  @IsNumber()
-  size: number
-
-  @IsString()
-  name: string
-
-  @IsString()
-  endUser: string
 }
 
 export class ExportSubmissionsDto {

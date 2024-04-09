@@ -49,18 +49,6 @@ export class InviteMemberInput extends TeamDetailInput {
 }
 
 @InputType()
-export class TeamCdnTokenInput {
-  @Field()
-  teamId: string
-
-  @Field()
-  mime: string
-
-  @Field()
-  filename: string
-}
-
-@InputType()
 export class UpdateTeamInput extends TeamDetailInput {
   @Field({ nullable: true })
   @Length(1, 30, {
