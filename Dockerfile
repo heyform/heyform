@@ -4,7 +4,7 @@ ARG APP_PATH=/app
 WORKDIR $APP_PATH
 
 RUN npm install -g pnpm
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+RUN apk add --no-cache python3 make g++
 
 COPY package.json $APP_PATH/package.json
 COPY pnpm-lock.yaml $APP_PATH/pnpm-lock.yaml
@@ -22,7 +22,7 @@ ARG APP_PATH=/app
 WORKDIR $APP_PATH
 
 RUN npm install -g pnpm
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+RUN apk add --no-cache python3 make g++
 
 COPY --from=base $APP_PATH/packages/server/dist ./dist
 COPY --from=base $APP_PATH/packages/server/mongoose ./mongoose
