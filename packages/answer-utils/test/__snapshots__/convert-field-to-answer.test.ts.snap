@@ -113,10 +113,16 @@ Array [
     "properties": Object {},
     "title": "🈴️ Upload you avatar ",
     "value": Object {
-      "cdnKey": "qCpteNRi2SiO_avatar.jpg",
-      "cdnUrlPrefix": "https://heyformhq.com",
       "filename": "avatar.jpg",
+      "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
     },
+  },
+  Object {
+    "id": "NqCpSqCpteiO",
+    "kind": "file_upload",
+    "properties": Object {},
+    "title": "You sig here",
+    "value": "https://heyform.net/sig.jpg",
   },
   Object {
     "id": "qFN5cteg6SOa",
@@ -303,10 +309,16 @@ Array [
     "properties": Object {},
     "title": "🈴️ Upload you avatar ",
     "value": Object {
-      "cdnKey": "qCpteNRi2SiO_avatar.jpg",
-      "cdnUrlPrefix": "https://heyformhq.com",
       "filename": "avatar.jpg",
+      "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
     },
+  },
+  Object {
+    "id": "NqCpSqCpteiO",
+    "kind": "file_upload",
+    "properties": Object {},
+    "title": "You sig here",
+    "value": "https://heyform.net/sig.jpg",
   },
   Object {
     "id": "qFN5cteg6SOa",

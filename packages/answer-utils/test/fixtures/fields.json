@@ -196,6 +196,14 @@
     "validations": {
       "required": false
     },
+    "id": "NqCpSqCpteiO",
+    "title": "You sig here",
+    "kind": "file_upload"
+  },
+  {
+    "validations": {
+      "required": false
+    },
     "properties": {
       "total": 10
     },

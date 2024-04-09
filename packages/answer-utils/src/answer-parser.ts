@@ -10,13 +10,16 @@ function fileUpload(answer: Answer, livePreview = false) {
     }
   }
 
-  const filename = helper.isValid(answer.value.filename) ? answer.value.filename : ''
-  const urls = [answer.value.cdnUrlPrefix, answer.value.cdnKey].filter(helper.isValid)
-  const url = urls.length > 0 ? urls.join('/') : ''
+  if (helper.isURL(answer.value)) {
+    return {
+      filename: '',
+      url: answer.value
+    }
+  }
 
   return {
-    filename,
-    url
+    filename: answer.value.filename || '',
+    url: answer.value.url
   }
 }
 

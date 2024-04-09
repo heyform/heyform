@@ -4,6 +4,7 @@ exports[`should convert value to api object 1`] = `
 Object {
   "(ID: EF9tbsJj3CNZ) 🐶 Choose the dog ": "Choice 3",
   "(ID: MVlZfnmjZlye) 👋 Just choose one": "🍍 Pineapple",
+  "(ID: NqCpSqCpteiO) You sig here": " (https://heyform.net/sig.jpg)",
   "(ID: NteSqF9g5cOa6) Input table": "Ivan, 16
 Jack Smith, 24",
   "(ID: X9F47wrnJImk) 👍 Do you agree with us ": "No",
@@ -20,6 +21,7 @@ exports[`should convert value to flat json 1`] = `
 Object {
   "EF9tbsJj3CNZ": "Choice 3",
   "MVlZfnmjZlye": "🍍 Pineapple",
+  "NqCpSqCpteiO": " (https://heyform.net/sig.jpg)",
   "NteSqF9g5cOa6": "Ivan, 16
 Jack Smith, 24",
   "X9F47wrnJImk": "No",
@@ -70,6 +72,11 @@ exports[`should convert value to html 1`] = `
 </li>
 
 <li>
+  <h3>You sig here</h3>
+  <p> (https://heyform.net/sig.jpg)</p>
+</li>
+
+<li>
   <h3>🪐 Rate here </h3>
   <p>5</p>
 </li>
@@ -91,6 +98,10 @@ exports[`should convert value to json 1`] = `
 Object {
   "EF9tbsJj3CNZ": "Choice 3",
   "MVlZfnmjZlye": "🍍 Pineapple",
+  "NqCpSqCpteiO": Object {
+    "filename": "",
+    "url": "https://heyform.net/sig.jpg",
+  },
   "NteSqF9g5cOa6": Array [
     Object {
       "age": "16",
@@ -138,6 +149,9 @@ Choice 3
 
 🈴️ Upload you avatar 
 avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)
+
+You sig here
+ (https://heyform.net/sig.jpg)
 
 🪐 Rate here 
 5

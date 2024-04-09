@@ -15,10 +15,10 @@
     "value": ["1Fl7MP9Nv2TM"]
   },
   "Ri2SiOqCpteN": "let x: int = 0\n\n\n func (x: int) {\nreturn x * 3\n}\n",
+  "NqCpSqCpteiO": "https://heyform.net/sig.jpg",
   "qCpteNRi2SiO": {
-    "cdnKey": "qCpteNRi2SiO_avatar.jpg",
     "filename": "avatar.jpg",
-    "cdnUrlPrefix": "https://heyformhq.com"
+    "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg"
   },
   "qFN5cteg6SOa": 5,
   "NteSqF9g5cOa6": [

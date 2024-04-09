@@ -196,6 +196,14 @@ In the Land of Mordor where the shadows lie.",
     },
   },
   Object {
+    "id": "NqCpSqCpteiO",
+    "kind": "file_upload",
+    "title": "You sig here",
+    "validations": Object {
+      "required": false,
+    },
+  },
+  Object {
     "id": "qFN5cteg6SOa",
     "kind": "rating",
     "properties": Object {
