@@ -240,8 +240,7 @@ export interface ChoiceValue {
 
 export interface FileUploadValue {
   filename: string
-  key: string
-  urlPrefix: string
+  url: string
   size: number
 }
 
