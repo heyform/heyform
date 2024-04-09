@@ -66,6 +66,8 @@ export const SMTP_HOST: string = process.env.SMTP_HOST
 export const SMTP_PORT: number = +process.env.SMTP_PORT
 export const SMTP_USER: string = process.env.SMTP_USER
 export const SMTP_PASSWORD: string = process.env.SMTP_PASSWORD
+export const SMTP_SECURE: boolean = process.env.SMTP_SECURE === "true" ? true : false
+export const SMTP_IGNORE_CERT: boolean = process.env.SMTP_IGNORE_CERT === "true" ? true : false
 
 // Google recaptcha
 export const GOOGLE_RECAPTCHA_KEY: string = process.env.GOOGLE_RECAPTCHA_KEY

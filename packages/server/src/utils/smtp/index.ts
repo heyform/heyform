@@ -5,6 +5,8 @@ export interface SmtpOptions {
   port: number
   user: string
   password: string
+  secure: boolean
+  ignoreCert: boolean
   pool: boolean
   logger: any
 }
@@ -23,9 +25,13 @@ export async function smtpSendMail(
   const transport = nodemailer.createTransport({
     host: options.host,
     port: options.port,
+    secure: options.secure,
     auth: {
       user: options.user,
       pass: options.password
+    },
+    tls: {
+      rejectUnauthorized: options.ignoreCert,
     },
     pool: options.pool,
     logger: options.logger
