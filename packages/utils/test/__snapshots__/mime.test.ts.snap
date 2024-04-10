@@ -5,6 +5,7 @@ Array [
   "image/jpeg",
   "image/png",
   "image/bmp",
+  "image/webp",
   "image/gif",
   "text/plain",
   "text/x-markdown",
@@ -18,6 +19,7 @@ Array [
   "application/pdf",
   "video/mp4",
   "video/x-ms-wmv",
+  "image/svg+xml",
 ]
 `;
 
@@ -26,6 +28,7 @@ Array [
   "image/jpeg",
   "image/png",
   "image/bmp",
+  "image/webp",
   "image/gif",
 ]
 `;
