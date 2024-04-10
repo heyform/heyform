@@ -17,6 +17,7 @@ export const APP_LISTEN_PORT: number = +process.env.APP_LISTEN_PORT || 8000
 export const APP_LISTEN_HOSTNAME: string = process.env.APP_LISTEN_HOSTNAME || '0.0.0.0'
 export const APP_HOMEPAGE_URL: string =
   process.env.APP_HOMEPAGE_URL || `http://${APP_LISTEN_HOSTNAME}:${APP_LISTEN_PORT}`
+export const APP_DISABLE_REGISTRATION: boolean = helper.isTrue(process.env.APP_DISABLE_REGISTRATION)
 
 // Cookie
 export const COOKIE_MAX_AGE: string = process.env.COOKIE_MAX_AGE || '1y'

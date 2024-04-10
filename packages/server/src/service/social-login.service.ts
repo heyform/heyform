@@ -12,7 +12,8 @@ import {
   APPLE_LOGIN_WEB_CLIENT_ID,
   APP_HOMEPAGE_URL,
   GOOGLE_LOGIN_CLIENT_ID,
-  GOOGLE_LOGIN_CLIENT_SECRET
+  GOOGLE_LOGIN_CLIENT_SECRET,
+  APP_DISABLE_REGISTRATION
 } from '@environments'
 import { UserSocialAccountModel } from '@model'
 import { UserInfo, appleLoginUrl, appleUserInfo, googleLoginUrl, googleUserInfo } from '@utils'
@@ -139,6 +140,10 @@ export class SocialLoginService {
 
       // Create new user
       if (!userId) {
+        if (APP_DISABLE_REGISTRATION) {
+          throw new BadRequestException('Error: Registration is disabled')
+        }
+
         if (userInfo!.user.email) {
           // @ts-ignore
           userInfo!.user.isEmailVerified = true
