@@ -22,7 +22,7 @@
   },
   "peerDependencies": {
     "@heyform-inc/shared-types-enums": "^1.0.1",
-    "@heyform-inc/utils": "^1.0.1",
+		"@heyform-inc/utils": "1.0.3",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@heyform-inc/shared-types-enums": "^1.0.0",
-    "@heyform-inc/utils": "^1.0.1",
+		"@heyform-inc/utils": "1.0.3",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",
