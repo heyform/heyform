@@ -23,7 +23,7 @@ export function getDateFormat(format: string, allowTime?: boolean): string {
   return allowTime ? `${format} HH:mm` : format
 }
 
-export function isDate(input: string, format: string): boolean {
+export function isDate(input: string, format = 'MM/DD/YYYY'): boolean {
   const inputArr = input.match(REGEX_NUMBERS)
   const formatArr = format.match(REGEX_FORMAT)
 
