@@ -149,7 +149,7 @@ const Render = () => {
             stripeAccountId={(form as any).stripe?.accountId}
             autoSave={!(form.settings?.enableTimeLimit && helper.isValid(form.settings?.timeLimit))}
             alwaysShowNextButton={true}
-            customUrlRedirects={(form.settings as IMapType)?.customUrlRedirects}
+            customUrlRedirects={true}
             onSubmit={handleSubmit}
           />
           <CustomCode form={form} />
