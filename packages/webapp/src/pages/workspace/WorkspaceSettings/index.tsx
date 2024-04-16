@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { Modal } from '@/components/ui'
 
+import { Branding } from './Branding'
 import { DeleteWorkspace } from './DeleteWorkspace'
-import { LogoUploader } from './LogoUploader'
 
 const WorkspaceSettings: FC<IModalProps> = ({ visible, onClose }) => {
   const { t } = useTranslation()
@@ -18,8 +18,7 @@ const WorkspaceSettings: FC<IModalProps> = ({ visible, onClose }) => {
           <p className="mt-1 text-sm text-slate-500">{t('workspace.settings.subTitle')}</p>
         </div>
 
-        {/* Workspace avatar */}
-        <LogoUploader />
+        <Branding />
 
         <div className="border-t-blue-gray-200 mt-6 border-t" />
 
