@@ -171,3 +171,11 @@ button.button-icon-only {
     }
   }
 }
+
+.button-loading {
+	.button-leading,
+	.button-content,
+	.button-trailing {
+		@apply opacity-0;
+	}
+}

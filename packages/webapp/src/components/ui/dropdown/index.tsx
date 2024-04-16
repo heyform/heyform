@@ -59,7 +59,10 @@ const Dropdown = forwardRef<DropdownInstance, DropdownProps>(
 
     function handleClick(event: MouseEvent<HTMLDivElement>) {
       stopEvent(event)
-      setIsOpen(true)
+
+      if (!disabled) {
+        setIsOpen(true)
+      }
     }
 
     function handleDropdownClick(event: MouseEvent<HTMLDivElement>) {

@@ -128,7 +128,7 @@ const Main: FC = () => {
 }
 
 export const Blocks = () => {
-  const { state } = useStore()
+  const { state, dispatch } = useStore()
   const { t } = useTranslation()
 
   function handleResize() {
@@ -138,6 +138,10 @@ export const Blocks = () => {
   }
 
   useEffect(() => {
+    dispatch({
+      type: 'init'
+    })
+
     window.addEventListener('resize', handleResize, false)
 
     return () => {

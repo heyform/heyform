@@ -18,8 +18,8 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
-    "@heyform-inc/answer-utils": "1.0.4",
-    "@heyform-inc/shared-types-enums": "1.0.4",
+    "@heyform-inc/answer-utils": "1.0.5",
+    "@heyform-inc/shared-types-enums": "1.0.6",
     "@heyform-inc/utils": "1.0.3",
     "@nestjs/bull": "0.3.1",
     "@nestjs/common": "7.4.4",

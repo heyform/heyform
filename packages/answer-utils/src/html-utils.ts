@@ -23,13 +23,15 @@ const ALLOWED_TAGS = [
   'u',
   's',
   'mention',
-  'variable'
+  'variable',
+  'hiddenfield'
 ]
 const ALLOWED_ATTRIBUTES = [
   'href',
   'class',
   'data-mention',
   'data-variable',
+  'data-hiddenfield',
   'contenteditable',
   'style'
 ]

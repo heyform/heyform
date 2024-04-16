@@ -11,12 +11,12 @@ import { Block } from './Block'
 
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
-  const { values, fields, variables } = state
+  const { values, fields, query, variables } = state
 
   const newField: FormField = {
     ...field,
-    title: replaceHTML(field.title as string, values, fields, variables),
-    description: replaceHTML(field.description as string, values, fields, variables)
+    title: replaceHTML(field.title as string, values, fields, query, variables),
+    description: replaceHTML(field.description as string, values, fields, query, variables)
   }
 
   useEffect(() => {

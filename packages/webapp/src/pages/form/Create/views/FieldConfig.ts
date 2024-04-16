@@ -9,6 +9,7 @@ import {
   IconChartBar,
   IconCheck,
   IconCreditCard,
+  IconEyeOff,
   IconFolder,
   IconGlobe,
   IconHash,
@@ -82,6 +83,13 @@ export const CUSTOM_FIELDS_CONFIGS: FieldConfig[] = [
     label: 'formBuilder.submitDate',
     textColor: '#1d4ed8',
     backgroundColor: '#dbeafe'
+  },
+  {
+    kind: 'hidden_fields' as FieldKindEnum,
+    icon: IconEyeOff,
+    label: 'formBuilder.hiddenFields',
+    textColor: '#334155',
+    backgroundColor: '#e5e7eb'
   },
   {
     kind: FieldKindEnum.CUSTOM_TEXT,

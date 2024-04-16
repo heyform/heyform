@@ -198,6 +198,10 @@ export const TEMPLATE_DETAIL_GQL = gql`
         validations
         properties
       }
+      hiddenFields {
+        id
+        name
+      }
       themeSettings {
         theme
       }
@@ -425,6 +429,10 @@ export const FORM_DETAIL_GQL = gql`
         properties
         layout
       }
+      hiddenFields {
+        id
+        name
+      }
       logics
       variables
       fieldUpdateAt
@@ -448,6 +456,24 @@ export const CREATE_FORM_GQL = gql`
 export const IMPORT_FORM_GQL = gql`
   query importExternalForm($input: ImportExternalFormInput!) {
     importExternalForm(input: $input)
+  }
+`
+
+export const CREATE_FORM_HIDDEN_FIELD_GQL = gql`
+  mutation createFormHiddenField($input: CreateHiddenFieldInput!) {
+    createFormHiddenField(input: $input)
+  }
+`
+
+export const UPDATE_FORM_HIDDEN_FIELD_GQL = gql`
+  mutation updateFormHiddenField($input: CreateHiddenFieldInput!) {
+    updateFormHiddenField(input: $input)
+  }
+`
+
+export const DELETE_FORM_HIDDEN_FIELD_GQL = gql`
+  mutation deleteFormHiddenField($input: DeleteHiddenFieldInput!) {
+    deleteFormHiddenField(input: $input)
   }
 `
 
@@ -603,6 +629,11 @@ export const SUBMISSIONS_GQL = gql`
         category
         title
         answers
+        hiddenFields {
+          id
+          name
+          value
+        }
         endAt
       }
     }
@@ -810,6 +841,10 @@ export const PUBLIC_FORM_GQL = gql`
         validations
         properties
         layout
+      }
+      hiddenFields {
+        id
+        name
       }
       logics
       variables

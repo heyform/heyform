@@ -3,6 +3,7 @@ import type {
   FormField,
   FormSettings,
   FormTheme,
+  HiddenField,
   Logic,
   Variable
 } from '@heyform-inc/shared-types-enums'
@@ -12,6 +13,7 @@ import { useContext } from 'react'
 import store2 from 'store2'
 
 import { createStoreContext, createStoreReducer } from '@/components/store'
+import { IMapType } from '@/components/ui/typing'
 
 import type { IFormField } from './typings'
 import { LRU, isFile, progressPercentage, replaceHTML, validateLogicField } from './utils'
@@ -73,6 +75,8 @@ export interface IState {
   // Used for logic to reset fields
   allFields: IFormField[]
   fields: IFormField[]
+  hiddenFields: HiddenField[]
+  query: Record<string, any>
   jumpFieldIds: string[]
   logics?: Logic[]
   parameters?: Variable[]
@@ -108,6 +112,19 @@ export interface IState {
   stripe?: IStripe
   // Callback functions
   onSubmit?: (values: Record<string, any>, isPartial?: boolean, stripe?: IStripe) => Promise<void>
+}
+
+function replaceField(
+  field: IFormField,
+  values: IMapType,
+  fields: IFormField[],
+  query: IMapType,
+  variables: IMapType
+) {
+  field.title = replaceHTML(field.title as string, values, fields, query, variables)
+  field.description = replaceHTML(field.description as string, values, fields, query, variables)
+
+  return field
 }
 
 const actions: any = {
@@ -159,11 +176,17 @@ const actions: any = {
   },
 
   setIsStarted: (state: IState, { isStarted }: any) => {
-    return {
-      ...state,
-      isStarted,
-      isSubmitted: state.fields.length < 1
-    }
+    return actions.scrollTo(
+      {
+        ...state,
+        isStarted,
+        isSubmitted: state.fields.length < 1
+      },
+      {
+        scrollIndex: 0,
+        scrollTo: 'next'
+      }
+    )
   },
 
   setIsSubmitTouched: (state: IState, { isSubmitTouched }: any) => ({ ...state, isSubmitTouched }),
@@ -223,12 +246,48 @@ const actions: any = {
     })
   },
 
+  init(state: IState) {
+    if (!state.isStarted && state.welcomeField) {
+      return {
+        ...state,
+        welcomeField: {
+          ...state.welcomeField,
+          title: replaceHTML(
+            state.welcomeField.title as string,
+            state.values,
+            state.fields,
+            state.query,
+            state.variables
+          ),
+          description: replaceHTML(
+            state.welcomeField.description as string,
+            state.values,
+            state.fields,
+            state.query,
+            state.variables
+          )
+        }
+      }
+    }
+
+    return actions.scrollTo(state, {
+      scrollIndex: 0,
+      scrollTo: 'next'
+    })
+  },
+
   scrollTo(state: IState, { scrollIndex, scrollTo, errorFieldId }: any) {
     const { fields, values, variables } = state
     const field = fields[scrollIndex]
 
-    field.title = replaceHTML(field.title as string, values, fields, variables)
-    field.description = replaceHTML(field.description as string, values, fields, variables)
+    field.title = replaceHTML(field.title as string, values, fields, state.query, variables)
+    field.description = replaceHTML(
+      field.description as string,
+      values,
+      fields,
+      state.query,
+      variables
+    )
 
     return {
       ...state,
@@ -245,6 +304,8 @@ export const StoreContext = createStoreContext<IState>({
   formId: '',
   allFields: [],
   fields: [],
+  hiddenFields: [],
+  query: {},
   jumpFieldIds: [],
   values: {},
   variables: {},

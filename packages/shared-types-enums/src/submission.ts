@@ -4,7 +4,7 @@ import type {
   SubmissionCategoryEnum,
   SubmissionStatusEnum
 } from './enums/submission'
-import type { Property, Variable } from './form'
+import type { HiddenField, Property, Variable } from './form'
 
 export interface SharedColumns {
   id: string
@@ -18,6 +18,10 @@ export interface Answer extends SharedColumns {
   description?: string
 }
 
+export interface HiddenFieldAnswer extends HiddenField {
+  value: string
+}
+
 export interface SubmissionModel {
   id: string
   formId: string
@@ -25,6 +29,7 @@ export interface SubmissionModel {
   title: string
   contact?: ContactModel
   answers: Answer[]
+  hiddenFields: HiddenFieldAnswer[]
   columns?: SharedColumns[]
   variables?: Variable[]
   startAt?: number

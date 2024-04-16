@@ -1,5 +1,9 @@
 import { htmlUtils } from '@heyform-inc/answer-utils'
-import { FieldKindEnum, OTHER_FIELD_KINDS, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import {
+  FieldKindEnum,
+  OTHER_FIELD_KINDS,
+  QUESTION_FIELD_KINDS
+} from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import { IconDotsVertical } from '@tabler/icons-react'
 import clsx from 'clsx'

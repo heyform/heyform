@@ -3,6 +3,7 @@ import { Document } from 'mongoose'
 
 import {
   FormField,
+  HiddenField,
   FormKindEnum,
   FormSettings,
   FormStatusEnum,
@@ -57,6 +58,9 @@ export class FormModel extends Document {
 
   @Prop({ default: [] })
   fields?: FormField[]
+
+  @Prop({ default: [] })
+  hiddenFields?: HiddenField[]
 
   @Prop({ default: [] })
   logics?: Logic[]

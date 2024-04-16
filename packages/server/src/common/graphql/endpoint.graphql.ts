@@ -1,6 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsOptional, IsString } from 'class-validator'
 import { GraphQLJSONObject } from 'graphql-type-json'
+import { HiddenFieldAnswer } from '@heyform-inc/shared-types-enums'
 
 @InputType()
 export class UploadFormSignatureInput {
@@ -27,12 +28,27 @@ export class VerifyPasswordInput {
 }
 
 @InputType()
+class HiddenFieldAnswerInput {
+  @Field()
+  id: string
+
+  @Field()
+  name: string
+
+  @Field({ nullable: true })
+  value?: string
+}
+
+@InputType()
 export class CompleteSubmissionInput {
   @Field()
   formId: string
 
   @Field(type => GraphQLJSONObject)
   answers: Record<string, any>
+
+  @Field(type => [HiddenFieldAnswerInput])
+  hiddenFields: HiddenFieldAnswer[]
 
   @Field({ nullable: true })
   partialSubmission?: boolean

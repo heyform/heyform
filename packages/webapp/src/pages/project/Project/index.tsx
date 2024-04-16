@@ -1,7 +1,14 @@
 import type { FormModel } from '@heyform-inc/shared-types-enums'
 import { FormStatusEnum } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
-import { IconClipboardCheck, IconCopy, IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
+import {
+  IconClipboardCheck,
+  IconCopy,
+  IconDots,
+  IconEdit,
+  IconPencil,
+  IconTrash
+} from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -183,10 +190,10 @@ const Project = observer(() => {
         return (
           <Dropdown
             className="ml-1 cursor-pointer rounded-md p-1 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
-            placement="bottom-start"
+            placement="bottom-end"
             overlay={
               <Menus onClick={handleClick}>
-                <Menus.Item value="edit" icon={<IconPencil />} label={t('project.edit')} />
+                <Menus.Item value="edit" icon={<IconEdit />} label={t('project.edit')} />
                 <Menus.Item value="duplicate" icon={<IconCopy />} label={t('project.dup')} />
                 <Menus.Item value="rename" icon={<IconPencil />} label={t('project.rename')} />
                 <Menus.Item value="delete" icon={<IconTrash />} label={t('project.del')} />

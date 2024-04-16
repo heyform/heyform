@@ -179,6 +179,11 @@ export interface FormField {
   hide?: boolean
 }
 
+export interface HiddenField {
+	id: string
+	name: string
+}
+
 export interface FormTheme {
   fontFamily?: string
   screenFontSize?: 'small' | 'normal' | 'large'
@@ -216,6 +221,7 @@ export interface FormModel {
   kind: FormKindEnum
   settings?: FormSettings
   fields?: FormField[]
+	hiddenFields?: HiddenField[]
   fieldUpdateAt?: number
   logics?: Logic[]
   variables?: Variable[]

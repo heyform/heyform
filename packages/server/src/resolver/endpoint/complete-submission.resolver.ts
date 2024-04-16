@@ -1,4 +1,4 @@
-import { BadRequestException, Headers, UseGuards } from '@nestjs/common'
+import { BadRequestException, UseGuards } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 import { applyLogicToFields, fieldValuesToAnswers, flattenFields } from '@heyform-inc/answer-utils'
@@ -43,7 +43,6 @@ export class CompleteSubmissionResolver {
 
   @Mutation(returns => CompleteSubmissionType)
   async completeSubmission(
-    @Headers('x-anonymous-id') anonymousId: string,
     @GqlClient() client: ClientInfo,
     @Args('input') input: CompleteSubmissionInput
   ): Promise<CompleteSubmissionType> {
@@ -154,6 +153,7 @@ export class CompleteSubmissionResolver {
       category,
       title: form.name,
       answers,
+      hiddenFields: input.hiddenFields,
       variables,
       startAt,
       endAt,

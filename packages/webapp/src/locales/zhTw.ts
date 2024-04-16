@@ -27,8 +27,7 @@ export default {
     CodeSendSuccess: '驗證碼已傳送到您的手機',
     bindAccount: '綁定帳號',
     signInAndBindPhoneNumber: '登入並綁定手機號碼',
-    termsPrivacy:
-      '登入即表示您同意我們的 <2>服務條款</2> 和 <6>隱私政策</6>。',
+    termsPrivacy: '登入即表示您同意我們的 <2>服務條款</2> 和 <6>隱私政策</6>。',
     EmailRequired: '無效的電子郵件位址',
     PasswordRequired: '無效的密碼',
     PhoneNumberRequired: '無效的手機號碼',
@@ -53,14 +52,13 @@ export default {
     },
     forgotPassword: {
       forgot: '忘記密碼？',
-      sendEmail: "我們將向您傳送一封帶有驗證碼的電子郵件。",
+      sendEmail: '我們將向您傳送一封帶有驗證碼的電子郵件。',
       link: '返回登入頁面',
       continue: '繼續'
     },
     resetPassword: {
       reset: '重設密碼',
-      sentEmail:
-        "我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件，請檢查您的收件夾，位於",
+      sentEmail: '我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件，請檢查您的收件夾，位於',
       verificationCode: '驗證碼',
       invalidCode: '無效的驗證碼',
       newPassword: '新密碼',
@@ -80,10 +78,8 @@ export default {
   project: {
     deleteProject: {
       del: '刪除專案',
-      deleteExplain:
-        '請記住，此操作是不可逆的，並將永久刪除與此專案相關的所有資料。',
-      deleteExplain2:
-        '一旦您確認刪除專案，您將無法再存取專案資料。',
+      deleteExplain: '請記住，此操作是不可逆的，並將永久刪除與此專案相關的所有資料。',
+      deleteExplain2: '一旦您確認刪除專案，您將無法再存取專案資料。',
       sendEmail: '一封包含驗證碼的電子郵件已傳送至',
       delBottom: '刪除專案',
       code: '驗證碼'
@@ -110,8 +106,7 @@ export default {
     noForm: '此專案中尚未有任何表單',
     text: '只需選擇一個範本或從頭開始。',
     suspendForm: '此表單已被暫停',
-    suspendText:
-      '如果您對暫停有任何疑問，請點選下面的按鈕與我們聯絡。',
+    suspendText: '如果您對暫停有任何疑問，請點選下面的按鈕與我們聯絡。',
     contact: '聯絡我們',
     Deleting: '正在刪除表單...',
     Duplicating: '正在複製表單...',
@@ -136,9 +131,9 @@ export default {
       delForever: '永久刪除',
       explain: '您可以還原在過去 30 天內刪除的任何文件。',
       link: '了解更多',
-      noForm: "垃圾桶中沒有任何表單",
+      noForm: '垃圾桶中沒有任何表單',
       daysExplain: '表單將在 30 天後從垃圾桶中永久刪除。',
-      delForm: "將被永久刪除，而您無法將它恢復。",
+      delForm: '將被永久刪除，而您無法將它恢復。',
       deleteForever: '永久刪除？',
       cancel: '取消',
       restoring: '正在還原表單',
@@ -148,26 +143,22 @@ export default {
   },
   workspace: {
     members: {
-      delMember:
-        '一旦您確認刪除此成員，該成員將無法再存取此工作區的資料。',
+      delMember: '一旦您確認刪除此成員，該成員將無法再存取此工作區的資料。',
       delConfirm: '您確定要刪除此成員嗎？',
       remove: '移除',
       inputPrompt: '請至少輸入一個有效的電子郵件位址',
       inviteMember: '邀請您的團隊成員',
       send: '邀請已傳送',
-      inviteExplain:
-        '您可以透過電子郵件邀請您的團隊成員加入工作區。邀請有效期為 7 天，將在',
+      inviteExplain: '您可以透過電子郵件邀請您的團隊成員加入工作區。邀請有效期為 7 天，將在',
       Add: '新增更多',
       sendBottom: '傳送邀請',
       member: '成員',
       manage: '管理誰有權存取工作區。',
       leave: '您確定要離開工作區嗎？',
-      leaveExplain:
-        '一旦您確認離開此工作區，您將無法再存取此工作區的資料。',
+      leaveExplain: '一旦您確認離開此工作區，您將無法再存取此工作區的資料。',
       bottomLeave: '離開',
       transferTitle: '您確定要轉移此工作區嗎？',
-      transferWorkspace:
-        '一旦您確認轉移此工作區，您將不再是此工作區的擁有者。',
+      transferWorkspace: '一旦您確認轉移此工作區，您將不再是此工作區的擁有者。',
       transfer: '轉移',
       Role: '角色',
       LastSeen: '最後上線時間',
@@ -201,12 +192,9 @@ export default {
       delWorkspace: {
         sendEmail: '一封包含驗證碼的電子郵件已傳送至',
         dissolve: '解散工作區',
-        warning:
-          '請記住，此操作是不可逆的，並將永久刪除與此工作區相關的所有資料。',
-        warning2:
-          '一旦您確認解散工作區，您將無法再存取工作區資料。',
-        warning3:
-          '透過解散團隊，所有的表單和資料都將被擦除，無法恢復！請謹慎操作！'
+        warning: '請記住，此操作是不可逆的，並將永久刪除與此工作區相關的所有資料。',
+        warning2: '一旦您確認解散工作區，您將無法再存取工作區資料。',
+        warning3: '透過解散團隊，所有的表單和資料都將被擦除，無法恢復！請謹慎操作！'
       },
       receive: '一旦導出完成，您將收到一封帶有下載連結的電子郵件。',
       export: '匯出內容',
@@ -238,23 +226,19 @@ export default {
     update: '更新',
     settings: {
       avatar: '個人圖示',
-      avatarText:
-        'Gravatar 預設為您的 HeyForm 個人圖示，您可以在這裡上傳您的個人圖示。',
+      avatarText: 'Gravatar 預設為您的 HeyForm 個人圖示，您可以在這裡上傳您的個人圖示。',
       deletedAccount: {
         sendEmail: '一封包含驗證碼的電子郵件已傳送至',
         del: '刪除帳號',
         delText:
           '此操作無法撤銷。這將永久刪除您的整個帳號。您建立的所有工作區都將被刪除，並且您將從所有共享工作區中移除。',
-        delSure:
-          '如果您確定要繼續刪除您的帳號，請繼續以下操作。',
+        delSure: '如果您確定要繼續刪除您的帳號，請繼續以下操作。',
         delBottom: '刪除我的帳號',
         delCode: '驗證碼',
         delAccount: '已排程刪除帳號',
-        delSendEmail:
-          '我們已排程在 48 小時內刪除您的帳號。完成後，您將收到一封電子郵件確認。',
+        delSendEmail: '我們已排程在 48 小時內刪除您的帳號。完成後，您將收到一封電子郵件確認。',
         loggedOut: '您將會登出',
-        delText2:
-          '這將永久刪除您的整個帳號。您的所有表單、提交和工作區都將被刪除',
+        delText2: '這將永久刪除您的整個帳號。您的所有表單、提交和工作區都將被刪除',
         danger: '危險區域'
       },
       emailAddress: {
@@ -262,7 +246,7 @@ export default {
         sendEmail: '我們將向您傳送一封帶有 6 位數字驗證碼的電子郵件。',
         newEmail: '新電子郵件位址',
         checkEmail: '檢視您的電子郵件',
-        code: "我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件。請檢視您的收件夾：",
+        code: '我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件。請檢視您的收件夾：',
         continue: '繼續',
         changeEmail: '更改電子郵件位址',
         send: '傳送'
@@ -282,8 +266,7 @@ export default {
       name: '您的名字'
     },
     verifyEmail: '驗證您的電子郵件位址',
-    sendEmailText:
-      '我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件。請檢視您的收件夾：',
+    sendEmailText: '我們已向您傳送一封帶有 6 位數字驗證碼的電子郵件。請檢視您的收件夾：',
     typoEmail: '輸入了錯誤的電子郵件位址？',
     click: '點選這裡',
     change: '來更改它。',
@@ -325,8 +308,7 @@ export default {
     shareAudience: '分享給受眾',
     sendForm: '將表單傳送給合適的受眾以獲得準確的結果。您可以',
     organize: '或將它們組織成',
-    easilyShare:
-      '無需每次手動輸入所有電子郵件位址，即可更輕鬆地與他們共享表單。',
+    easilyShare: '無需每次手動輸入所有電子郵件位址，即可更輕鬆地與他們共享表單。',
     embedWeb: [
       {
         title: '標準',
@@ -379,18 +361,16 @@ export default {
     selected: '已選擇',
     Deselect: '取消全選',
     NoSubmissions: '尚未有任何回應',
-		SubHeadline: '線上分享表單以吸引更廣泛的受眾。'
+    SubHeadline: '線上分享表單以吸引更廣泛的受眾。'
   },
   formSettings: {
     Form: '表單設定',
     subTitle: '管理您的表單設定',
     Extra: '額外的',
     subArchive: '提交存檔',
-    archiveText:
-      "如果您不希望 HeyForm 儲存您的提交，請停用提交存檔。",
+    archiveText: '如果您不希望 HeyForm 儲存您的提交，請停用提交存檔。',
     timeLimit: '時間限制',
-    timeText:
-      '如果您希望在倒數計時結束後阻止送出，可以在此設定允許的時間。',
+    timeText: '如果您希望在倒數計時結束後阻止送出，可以在此設定允許的時間。',
     dataError: '請輸入有效的數字',
     Hour: '小時',
     Minute: '分鐘',
@@ -399,45 +379,37 @@ export default {
     progressBar: '進度條',
     progressText: '您可以輕鬆讓受訪者知道他們完成您的表單的進度。',
     Redirect: '完成時重新導向',
-    redirectText:
-      '填寫完您的表單後，將您的受訪者帶到另一個網頁。',
+    redirectText: '填寫完您的表單後，將您的受訪者帶到另一個網頁。',
     Update: '更新',
     Basic: '基本',
     formUpdated: '表單設定已成功更新',
     status: '表單狀態',
     closeForm: '關閉表單',
-    closeFormText:
-      '您可以關閉此表單以停止接收新的回應，並防止公眾存取該表單。',
+    closeFormText: '您可以關閉此表單以停止接收新的回應，並防止公眾存取該表單。',
     closedFormMessage: '關閉表單訊息',
-    closedFormMessageText:
-      '如果您以以上選項關閉了表單，則收件人將看到此內容。',
+    closedFormMessageText: '如果您以以上選項關閉了表單，則收件人將看到此內容。',
     closedFormTitle: '標題',
     closedFormDescription: '描述',
     expiration: '到期時關閉',
-    expirationText:
-      '如果您希望在特定日期範圍內接收回應，可以在此設定開始和結束日期。',
+    expirationText: '如果您希望在特定日期範圍內接收回應，可以在此設定開始和結束日期。',
     to: '至',
     dateErr: '結束日期必須在開始日期之後',
     submission: '提交數量限制',
-    submissionText:
-      '這允許您為表單設定特定的回應總數。',
+    submissionText: '這允許您為表單設定特定的回應總數。',
     IpLimit: '同一 IP 位址提交頻率限制',
-    IpLimitText:
-      '如果您希望在一段時間內限制同一 IP 位址的提交次數，可以在此設定。',
+    IpLimitText: '如果您希望在一段時間內限制同一 IP 位址的提交次數，可以在此設定。',
     Protection: '保護',
     Anti: '防垃圾郵件',
     AntiText: '啟用以防止垃圾郵件。',
     Bots: '防機器人',
     BotsText: '啟用驗證碼以防止機器人提交。',
     deleteForm: '刪除此表單',
-    deleteFormText:
-      '刪除表單將從我們的資料庫中擦除此表單的所有痕跡，包括所有提交。',
+    deleteFormText: '刪除表單將從我們的資料庫中擦除此表單的所有痕跡，包括所有提交。',
     archive: '您確定要停用提交存檔嗎？',
-    archiveConfirm:
-      '一旦您確認停用提交存檔，所有提交將被刪除。',
+    archiveConfirm: '一旦您確認停用提交存檔，所有提交將被刪除。',
     Cancel: '取消',
     Confirm: '確認',
-    Disable: '停用',  
+    Disable: '停用',
     times: '次 每',
     Language: '語言',
     LanguageDescription:
@@ -449,25 +421,21 @@ export default {
     help: '幫助中心',
     helpApp: '以取得使用說明。',
     Integrations: '整合',
-    AirtableText:
-      'Airtable 使用簡單的基於令牌的身份驗證。要產生或管理您的 API 金鑰，請存取您的',
+    AirtableText: 'Airtable 使用簡單的基於令牌的身份驗證。要產生或管理您的 API 金鑰，請存取您的',
     airtablePage: 'Airtable 帳號頁面',
     airtableLabel: 'Airtable API 金鑰',
     AirtableId: 'Airtable 基礎 ID',
     open: '要取得您的 Airtable 基礎 ID，請開啟',
     airtableLink: 'Airtable API 頁面',
-    airtableIDText:
-      '並點選您要使用的基礎。您將在介紹部分找到您的基礎 ID。',
-    tableText:
-      "輸入表格名稱時必須與您的 Airtable 基礎上的名稱完全相同，例如：Table 1。",
+    airtableIDText: '並點選您要使用的基礎。您將在介紹部分找到您的基礎 ID。',
+    tableText: '輸入表格名稱時必須與您的 Airtable 基礎上的名稱完全相同，例如：Table 1。',
     tableText2:
-      "如果您在 Airtable 上更改了表格名稱，請在此處也進行更新，否則整合將無法按預期運作。",
+      '如果您在 Airtable 上更改了表格名稱，請在此處也進行更新，否則整合將無法按預期運作。',
     tableName: '表格名稱',
     mapFields: '對映欄位',
     tableText3:
-      "將 HeyForm 對映到 Airtable 欄位。輸入 Airtable 欄位名稱時必須與您的表格上的名稱完全相同。如果您在 Airtable 上更改了欄位名稱，請在此處也進行更新，否則整合將無法按預期運作。",
-    DropboxText:
-      '如果您在表單中添加了 "檔案上傳" 元件，則將檔案放置在資料夾中。',
+      '將 HeyForm 對映到 Airtable 欄位。輸入 Airtable 欄位名稱時必須與您的表格上的名稱完全相同。如果您在 Airtable 上更改了欄位名稱，請在此處也進行更新，否則整合將無法按預期運作。',
+    DropboxText: '如果您在表單中添加了 "檔案上傳" 元件，則將檔案放置在資料夾中。',
     select: '選擇資料夾',
     Connect: '連接',
     coming: '即將推出',
@@ -491,8 +459,7 @@ export default {
     copyId: '複製並貼上您的 Facebook Pixel ID。',
     findId: '如何找到我的 Pixel ID？',
     ServerURL: '伺服器網址',
-    gitlabURL:
-      '系統網址是您存取系統前端的網址。例如：https://domain.com。',
+    gitlabURL: '系統網址是您存取系統前端的網址。例如：https://domain.com。',
     tokens: '個人存取令牌',
     obtainToken:
       '要取得存取令牌，請開啟 https://domain.com/-/profile/personal_access_tokens 並新增一個。您也可以存取',
@@ -513,8 +480,7 @@ export default {
     GoogleSharedDrives: 'Google 共享硬碟',
     with: '與您有聯絡。',
     SelectFolder: '選擇資料夾',
-    GoogleText:
-      '如果您在表單中添加了 "檔案上傳" 元件，則將檔案放置在資料夾中。',
+    GoogleText: '如果您在表單中添加了 "檔案上傳" 元件，則將檔案放置在資料夾中。',
     SelectSpreadsheet: '選擇試算表',
     SelectWorksheet: '選擇工作表',
     MapFields: '對映欄位',
@@ -545,15 +511,13 @@ export default {
     serverURLText:
       '伺服器網址是您存取系統前端的網址。例如：https://support.domain.com 或 https://domain.com/support。',
     ApiKey: 'API 金鑰',
-    ApiKeyText:
-      '透過前往管理 -> API 金鑰的管理面板生成 API 金鑰，確保它具有建立票證的權限',
+    ApiKeyText: '透過前往管理 -> API 金鑰的管理面板生成 API 金鑰，確保它具有建立票證的權限',
     LearnAbout: '了解更多',
     integration: '整合',
     URLText:
       '系統網址是您存取系統前端的網址。這可能是例如：https://support.domain.com 或 https://domain.com/support。系統網址可能需要 "/index.php"。如果您沒有啟用漂亮的地址，請在網址的末端新增 ".php"。',
     tokenAPT: 'API 令牌',
-    APIText:
-      '透過前往設定 -> 一般 -> API 令牌生成 API 令牌，並確保它具有讀寫權限。',
+    APIText: '透過前往設定 -> 一般 -> API 令牌生成 API 令牌，並確保它具有讀寫權限。',
     UserName: '使用者名稱（可選填的）',
     UserEmail: '電子郵件位址（可選填的）',
     UserNameRequired: '使用者名稱',
@@ -578,8 +542,7 @@ export default {
     create: '建立一個新表單'
   },
   createForm: {
-    typeText:
-      '根據您的目的選擇表單類型。一旦建立表單，就無法更改表單類型。',
+    typeText: '根據您的目的選擇表單類型。一旦建立表單，就無法更改表單類型。',
     createNew: '從頭開始建立一個新表單',
     ClassicForm: '經典表單',
     templatesForm: '從範本建立新表單',
@@ -742,7 +705,7 @@ export default {
     edit: '編輯',
     rules: '規則',
     bulkEdit: '批次編輯',
-    bulkEditDescription: "批次編輯多個問題的邏輯",
+    bulkEditDescription: '批次編輯多個問題的邏輯',
     removeAll: '移除全部',
     saveChanges: '儲存變更',
     cancel: '取消',
@@ -762,6 +725,7 @@ export default {
     customCssTableClass: 'CSS 類別',
     ConnectStripe: '連接到 Stripe',
     price: '價格',
-    currency: '貨幣'
+    currency: '貨幣',
+    hiddenFields: '隱藏欄位'
   }
 }

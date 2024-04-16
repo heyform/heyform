@@ -140,10 +140,15 @@ export class FormService {
     return result.id
   }
 
-  public async update(formId: string, updates: Record<string, any>): Promise<boolean> {
+  public async update(
+    formId: string,
+    updates: Record<string, any>,
+    conditions?: Record<string, any>
+  ): Promise<boolean> {
     const result = await this.formModel.updateOne(
       {
-        _id: formId
+        _id: formId,
+        ...conditions
       },
       updates
     )
@@ -230,6 +235,7 @@ export class FormService {
         id: formId,
         name: form?.name,
         fields: [],
+        hiddenFields: [],
         settings: {
           active: false,
           ...pickObject(form?.settings || {}, [
@@ -252,6 +258,7 @@ export class FormService {
         id: formId,
         name: form?.name,
         fields: [],
+        hiddenFields: [],
         logics: [],
         variables: [],
         settings: {
@@ -272,6 +279,7 @@ export class FormService {
       'nameSchema',
       'interactiveMode',
       'kind',
+      'hiddenFields',
       'logics',
       'variables',
       'themeSettings'

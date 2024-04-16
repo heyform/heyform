@@ -1,4 +1,4 @@
-import type { Logic, Variable } from '@heyform-inc/shared-types-enums'
+import type { HiddenField, Logic, Variable } from '@heyform-inc/shared-types-enums'
 import { deepEqual } from 'fast-equals'
 import { createContext } from 'react'
 
@@ -10,6 +10,7 @@ export interface IState {
   formId: string
   locale: string
   fields: FormField[]
+  hiddenFields: HiddenField[]
   // Version to detect changes whether we need to sync with server or not
   version: number
   questions: Partial<FormField>[]
@@ -154,6 +155,21 @@ export interface SetActiveTabNameAction {
   }
 }
 
+export interface CreateHiddenFieldAction {
+  type: 'createHiddenField'
+  payload: HiddenField
+}
+
+export interface EditHiddenFieldAction {
+  type: 'editHiddenField'
+  payload: HiddenField
+}
+
+export interface DeleteHiddenFieldAction {
+  type: 'deleteHiddenField'
+  payload: Pick<HiddenField, 'id'>
+}
+
 export interface IContext {
   state: IState
   dispatch: (action: IAction) => void
@@ -184,6 +200,9 @@ export type IAction =
   | ClearLogicAction
   | TogglePanelAction
   | SetActiveTabNameAction
+  | CreateHiddenFieldAction
+  | EditHiddenFieldAction
+  | DeleteHiddenFieldAction
 
 const SYNC_ACTIONS = [
   'setFields',
@@ -227,6 +246,9 @@ export const storeReducer = (state: IState, action: IAction) => {
     case 'deleteVariable':
     case 'togglePanel':
     case 'setActiveTabName':
+    case 'createHiddenField':
+    case 'editHiddenField':
+    case 'deleteHiddenField':
       return handleAction(state, action)
 
     default:

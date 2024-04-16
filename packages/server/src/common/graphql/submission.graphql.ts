@@ -9,7 +9,7 @@ import {
   Variable
 } from '@heyform-inc/shared-types-enums'
 
-import { FormDetailInput, PropertyInput, PropertyType } from './form.graphql'
+import { FormDetailInput, HiddenFieldType, PropertyInput, PropertyType } from './form.graphql'
 
 @InputType()
 export class DeleteSubmissionInput extends FormDetailInput {
@@ -127,6 +127,12 @@ export class SubmissionCategoryType {
 }
 
 @ObjectType()
+export class HiddenFieldAnswerType extends HiddenFieldType {
+  @Field({ nullable: true })
+  value?: string
+}
+
+@ObjectType()
 export class SubmissionType {
   @Field()
   id: string
@@ -139,6 +145,9 @@ export class SubmissionType {
 
   @Field(type => [GraphQLJSONObject])
   answers: Record<string, any>[]
+
+  @Field(type => [HiddenFieldAnswerType], { nullable: true })
+  hiddenFields: HiddenFieldAnswerType[]
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   variables?: Variable[]

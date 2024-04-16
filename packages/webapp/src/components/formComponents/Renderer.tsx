@@ -11,6 +11,8 @@ import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 
+import { useQuery } from '@/utils'
+
 import { ClosedMessage } from './blocks/ClosedMessage'
 import type { IState, IStripe } from './store'
 import { StoreContext, StoreReducer, getStorage } from './store'
@@ -68,6 +70,8 @@ function initStore(form: IFormModel, autoSave: boolean, allowPayment: boolean): 
     thankYouField,
     allFields,
     fields,
+    hiddenFields: form.hiddenFields || [],
+    query: {},
     jumpFieldIds,
     logics: form.logics,
     parameters: form.variables,
@@ -96,6 +100,7 @@ export const Renderer: FC<RendererProps> = ({
   customUrlRedirects = false,
   onSubmit
 }) => {
+  const query = useQuery()
   const [isAndroid, setAndroid] = useState(false)
 
   useEffect(() => {
@@ -112,9 +117,19 @@ export const Renderer: FC<RendererProps> = ({
       customUrlRedirects,
       alwaysShowNextButton,
       onSubmit,
-      ...initStore(form, autoSave, allowPayment)
+      ...initStore(form, autoSave, allowPayment),
+      query
     }),
-    [form, autoSave, allowPayment]
+    [
+      reportAbuseURL,
+      customUrlRedirects,
+      alwaysShowNextButton,
+      onSubmit,
+      query,
+      form,
+      autoSave,
+      allowPayment
+    ]
   )
   const [state, dispatch] = useReducer(StoreReducer, memoState)
 

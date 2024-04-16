@@ -3,6 +3,7 @@ import { Document } from 'mongoose'
 
 import {
   Answer,
+  HiddenFieldAnswer,
   SubmissionCategoryEnum,
   SubmissionStatusEnum,
   Variable
@@ -35,6 +36,9 @@ export class SubmissionModel extends Document {
 
   @Prop()
   answers: Answer[]
+
+  @Prop({ default: [] })
+  hiddenFields?: HiddenFieldAnswer[]
 
   @Prop({ default: [] })
   variables?: Variable[]

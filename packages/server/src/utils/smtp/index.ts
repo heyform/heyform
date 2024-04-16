@@ -31,7 +31,7 @@ export async function smtpSendMail(
       pass: options.password
     },
     tls: {
-      rejectUnauthorized: options.ignoreCert,
+      rejectUnauthorized: options.ignoreCert
     },
     pool: options.pool,
     logger: options.logger

@@ -1,4 +1,8 @@
-import { FieldLayoutAlignEnum, FormField, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import {
+  FieldLayoutAlignEnum,
+  FormField,
+  QUESTION_FIELD_KINDS
+} from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
 import type { FC } from 'react'

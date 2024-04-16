@@ -379,7 +379,7 @@ export default {
     selected: 'selected',
     Deselect: 'Deselect all',
     NoSubmissions: 'No submissions yet',
-		SubHeadline: 'Share the form online to engage a broader audience.'
+    SubHeadline: 'Share the form online to engage a broader audience.'
   },
   formSettings: {
     Form: 'Form settings',
@@ -762,6 +762,12 @@ export default {
     customCssTableClass: 'CSS Class',
     ConnectStripe: 'Connect with stripe',
     price: 'Price',
-    currency: 'Currency'
+    currency: 'Currency',
+    hiddenFields: 'Hidden Fields',
+    hiddenFieldName: 'Name',
+    hiddenFieldNamePlaceholder: 'URL query parameter e.g. ref, utm_campaign',
+    createHiddenField: 'Create hidden field',
+    editHiddenField: 'Edit hidden field',
+    hiddenFieldsTip: 'Learn about hidden fields'
   }
 }

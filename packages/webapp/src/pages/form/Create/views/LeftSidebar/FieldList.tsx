@@ -85,7 +85,7 @@ export const FieldList: FC = () => {
   )
 
   return (
-    <div className="scrollbar flex-1">
+    <div className="scrollbar h-full">
       {data.welcome && (
         <FieldCard
           field={data.welcome}

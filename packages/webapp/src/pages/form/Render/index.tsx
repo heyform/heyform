@@ -1,4 +1,9 @@
-import { CaptchaKindEnum, FieldKindEnum, FormModel } from '@heyform-inc/shared-types-enums'
+import {
+  CaptchaKindEnum,
+  FieldKindEnum,
+  FormModel,
+  HiddenFieldAnswer
+} from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import { useEffect, useRef, useState } from 'react'
 
@@ -7,7 +12,7 @@ import { Renderer } from '@/components/formComponents'
 import { IStripe } from '@/components/formComponents/store'
 import { IFormModel } from '@/components/formComponents/typings'
 import { FormService } from '@/service'
-import { useParam } from '@/utils'
+import { useParam, useQuery } from '@/utils'
 
 import { CustomCode } from './CustomCode'
 import { PasswordCheck } from './PasswordCheck'
@@ -18,6 +23,7 @@ let captchaRef: any = null
 
 const Render = () => {
   const { formId } = useParam()
+  const query = useQuery()
 
   const openTokenRef = useRef<string>()
   const passwordTokenRef = useRef<string>()
@@ -58,12 +64,26 @@ const Render = () => {
 
       const file = await new Uploader(form!, values).start()
 
+      const hiddenFields = (form!.hiddenFields || [])
+        .map(field => {
+          const value = query[field.name]
+
+          if (helper.isValid(value)) {
+            return {
+              ...field,
+              value
+            }
+          }
+        })
+        .filter(Boolean) as HiddenFieldAnswer[]
+
       const { clientSecret } = await FormService.completeSubmission({
         formId,
         answers: {
           ...values,
           ...file
         },
+        hiddenFields,
         openToken: openTokenRef.current,
         passwordToken: passwordTokenRef.current,
         partialSubmission,

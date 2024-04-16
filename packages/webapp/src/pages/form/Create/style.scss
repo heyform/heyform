@@ -368,7 +368,8 @@
     }
 
     .mention,
-    .variable {
+    .variable,
+		.hiddenfield {
       color: var(--heyform-label-color);
     }
   }
@@ -1196,7 +1197,7 @@
 .variable-panel {
   @apply fixed right-0 flex flex-col bg-white border-l border-gray-200 shadow-xl z-20;
   width: 40rem;
-  top: 3.75rem;
+  top: 4.25rem;
   bottom: 0;
 
   .field-icon {

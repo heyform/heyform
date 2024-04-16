@@ -58,6 +58,7 @@ export class CreateFormResolver {
           kind: FieldKindEnum.THANK_YOU
         }
       ],
+      hiddenFields: [],
       draft: true,
       status: FormStatusEnum.NORMAL,
       ...input

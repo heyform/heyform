@@ -7,8 +7,9 @@ import { IMapType } from '@/components/ui/typing'
 
 import type { IFormField, IPartialFormField } from '../typings'
 
-const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)">[^<]+<\/span>/gi
-const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)">[^<]+<\/span>/gi
+const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"[^>]+>[^<]+<\/span>/gi
+const HIDDEN_FIELD_REGEX = /<span[^>]+data-hiddenfield="([^"]+)"[^>]+>[^<]+<\/span>/gi
+const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)"[^>]+>[^<]+<\/span>/gi
 
 export function isNotNil(arg: any): boolean {
   return !helper.isNil(arg)
@@ -28,6 +29,7 @@ export function replaceHTML(
   html: string,
   values: IMapType,
   fields: IFormField[],
+  query: IMapType,
   variables: IMapType
 ) {
   if (helper.isEmpty(html)) {
@@ -57,6 +59,17 @@ export function replaceHTML(
     )
 
     return `<span class="mention" data-mention="${fieldId}">${text}</span>`
+  })
+
+  // Replace hidden fields
+  html = html.replace(HIDDEN_FIELD_REGEX, (matched, varId) => {
+    const value = query[varId]
+
+    if (helper.isEmpty(value)) {
+      return matched
+    }
+
+    return `<span class="hiddenfield" data-variable="${varId}">${value}</span>`
   })
 
   // Replace variables

@@ -1,7 +1,9 @@
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 
 import { FieldList } from './FieldList'
+import { HiddenFields } from './HiddenFields'
 import { InsertFieldDropdown } from './InsertFieldDropdown'
 
 const LeftSidebarComponent = () => {
@@ -14,7 +16,17 @@ const LeftSidebarComponent = () => {
         <InsertFieldDropdown />
       </div>
 
-      <FieldList />
+      <PanelGroup className="flex-1" direction="vertical">
+        <Panel defaultSize={70} maxSize={85}>
+          <FieldList />
+        </Panel>
+
+        <PanelResizeHandle className="border-t border-slate-200" />
+
+        <Panel defaultSize={20} maxSize={65}>
+          <HiddenFields />
+        </Panel>
+      </PanelGroup>
     </div>
   )
 }

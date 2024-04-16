@@ -15,6 +15,7 @@ import {
   FormKindEnum,
   FormSettings,
   FormStatusEnum,
+  HiddenField,
   InteractiveModeEnum,
   Layout,
   Logic,
@@ -547,6 +548,21 @@ export class UpdateFormFieldInput extends DeleteFormFieldInput {
 }
 
 @InputType()
+export class DeleteHiddenFieldInput {
+  @Field()
+  formId: string
+
+  @Field()
+  fieldId: string
+}
+
+@InputType()
+export class CreateHiddenFieldInput extends DeleteHiddenFieldInput {
+  @Field()
+  fieldName: string
+}
+
+@InputType()
 export class FormThemeInput {
   @Field({ nullable: true })
   fontFamily?: string
@@ -814,6 +830,15 @@ export class FormFieldType {
 }
 
 @ObjectType()
+export class HiddenFieldType {
+  @Field()
+  id: string
+
+  @Field()
+  name: string
+}
+
+@ObjectType()
 export class PageBackgroundType {
   @Field({ nullable: true })
   backgroundPosition?: string
@@ -824,18 +849,6 @@ export class PageBackgroundType {
   @Field({ nullable: true })
   backgroundImage?: string
 }
-
-// @ObjectType()
-// export class ThankYouType {
-//   @Field({ nullable: true })
-//   icon?: string
-//
-//   @Field(type => GraphQLJSON, { nullable: true })
-//   titleSchema?: any[]
-//
-//   @Field(type => GraphQLJSON, { nullable: true })
-//   bodySchema?: any[]
-// }
 
 @ObjectType()
 class StripeAccountType {
@@ -877,6 +890,9 @@ export class FormType {
 
   @Field(type => [FormFieldType], { nullable: true })
   fields?: FormField[]
+
+  @Field(type => [HiddenFieldType], { nullable: true })
+  hiddenFields?: HiddenField[]
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   logics?: Logic[]
@@ -957,21 +973,6 @@ export class FormAnalyticType {
   @Field()
   updatedAt: Date
 }
-
-// @ObjectType()
-// class FormReportChoosesType {
-//   @Field()
-//   id: string
-//
-//   @Field()
-//   label: string
-//
-//   @Field({ nullable: true })
-//   image?: string
-//
-//   @Field()
-//   count: number
-// }
 
 @ObjectType()
 export class FormReportResponseType {

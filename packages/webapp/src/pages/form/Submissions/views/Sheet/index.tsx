@@ -17,6 +17,7 @@ export const Sheet: FC<SheetProps> = ({
   loading,
   width = 200,
   formFields,
+  hiddenFields,
   selectedRows,
   onSelectedRowsChange,
   submissions,
@@ -219,7 +220,24 @@ export const Sheet: FC<SheetProps> = ({
       }
     })
 
-    const columns: Column<any>[] = [SelectColumn, ...internalColumns, ...fieldColumns]
+    const hiddenColumns = hiddenFields.map(row => ({
+      key: 'hidden_fields',
+      kind: 'hidden_fields',
+      name: row.name,
+      width: 160,
+      minWidth: 80,
+      properties: {},
+      resizable: true,
+      headerRenderer: cellHeaderRenderer,
+      formatter: cellFormatter
+    }))
+
+    const columns: Column<any>[] = [
+      SelectColumn,
+      ...internalColumns,
+      ...fieldColumns,
+      ...hiddenColumns
+    ]
 
     setColumns(columns)
   }, [])
@@ -234,6 +252,10 @@ export const Sheet: FC<SheetProps> = ({
 
       row.answers.forEach(row2 => {
         values[row2.id] = row2.value
+      })
+
+      row.hiddenFields?.forEach(row2 => {
+        values[row2.name] = row2.value
       })
 
       row.columns?.forEach(row2 => {

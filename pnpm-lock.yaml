@@ -35,11 +35,11 @@ importers:
   packages/server:
     dependencies:
       '@heyform-inc/answer-utils':
-        specifier: 1.0.4
-        version: 1.0.4(@heyform-inc/shared-types-enums@1.0.4)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        specifier: 1.0.5
+        version: 1.0.5(@heyform-inc/shared-types-enums@1.0.6)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.0.4
-        version: 1.0.4
+        specifier: 1.0.6
+        version: 1.0.6
       '@heyform-inc/utils':
         specifier: 1.0.3
         version: 1.0.3
@@ -279,11 +279,11 @@ importers:
         specifier: ^1.6.6
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
       '@heyform-inc/answer-utils':
-        specifier: 1.0.4
-        version: 1.0.4(@heyform-inc/shared-types-enums@1.0.4)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        specifier: 1.0.5
+        version: 1.0.5(@heyform-inc/shared-types-enums@1.0.6)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.0.4
-        version: 1.0.4
+        specifier: 1.0.6
+        version: 1.0.6
       '@heyform-inc/utils':
         specifier: 1.0.3
         version: 1.0.3
@@ -383,6 +383,9 @@ importers:
       react-popper:
         specifier: ^2.3.0
         version: 2.3.0(@popperjs/core@2.11.8)(react-dom@18.2.0)(react@18.2.0)
+      react-resizable-panels:
+        specifier: ^2.0.16
+        version: 2.0.16(react-dom@18.2.0)(react@18.2.0)
       react-router-dom:
         specifier: ^6.22.3
         version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
@@ -2044,10 +2047,10 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@heyform-inc/answer-utils@1.0.4(@heyform-inc/shared-types-enums@1.0.4)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
-    resolution: {integrity: sha512-58VsAZ/2YK6ElQMygKXMJcOnQn+jPkRsK0/QPdjc44VmZyWNAA9FZ0c17D+lKR6LtD+KGey/3EHhB83iG6o0rA==}
+  /@heyform-inc/answer-utils@1.0.5(@heyform-inc/shared-types-enums@1.0.6)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
+    resolution: {integrity: sha512-4vTwTdVp9FdTZVxzxHhe61rNxmk79PWyer5y80UD6H2dBZobOtfwlI230fIBeaDi/BBGX5pf3viMHMM39RxNug==}
     peerDependencies:
-      '@heyform-inc/shared-types-enums': ^1.0.4
+      '@heyform-inc/shared-types-enums': 1.0.6
       '@heyform-inc/utils': 1.0.3
       big.js: ^6.2.1
       dayjs: ^1.11.3
@@ -2055,7 +2058,7 @@ packages:
       libphonenumber-js: ^1.10.7
       validator: ^13.7.0
     dependencies:
-      '@heyform-inc/shared-types-enums': 1.0.4
+      '@heyform-inc/shared-types-enums': 1.0.6
       '@heyform-inc/utils': 1.0.3
       big.js: 6.2.1
       dayjs: 1.11.10
@@ -2064,8 +2067,8 @@ packages:
       validator: 13.11.0
     dev: false
 
-  /@heyform-inc/shared-types-enums@1.0.4:
-    resolution: {integrity: sha512-dONeMYFURLcT8o0uGlAutWaM3YNzJkVzrOIa0fWrYCsGnSk8yP+O6sLaXTYSLnsd+pYwARkDYNiWP2X6lNMmTw==}
+  /@heyform-inc/shared-types-enums@1.0.6:
+    resolution: {integrity: sha512-j5gfLEWrRkdrFN32wQzbTLoVMEuJqxnJDgK7wnQPhDqd5gaOomxcFzyt30q6PUVWWnnDJsm5d+HidEcGr/z9yw==}
     engines: {node: '>=12.0.0'}
     dev: false
 
@@ -11304,6 +11307,16 @@ packages:
     resolution: {integrity: sha512-PgidR3wST3dDYKr6b4pJoqQFpPGNKDSCDx4cZoshjXipw3LzO7mG1My2pwEzz2JVkF+inx3xRpDeQLFQGH/hsQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /react-resizable-panels@2.0.16(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-UrnxmTZaTnbCl/xIOX38ig35RicqGfLuqt2x5fytpNlQvCRuxyXZwIBEhmF+pmrEGxfajyXFBoCplNxLvhF0CQ==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /react-router-dom@6.22.3(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-7ZILI7HjcE+p31oQvwbokjk6OA/bnFxrhJ19n82Ex9Ph8fNAq+Hm/7KchpMGlTgWhUxRHMMCut+vEtNpWpowKw==}

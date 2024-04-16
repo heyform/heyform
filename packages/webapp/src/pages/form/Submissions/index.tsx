@@ -234,6 +234,7 @@ const Submissions: FC = () => {
           <Sheet
             loading={false}
             formFields={[...(form?.fields || [])]}
+            hiddenFields={form?.hiddenFields || []}
             submissions={submissions}
             selectedRows={selectedRows}
             onSelectedRowsChange={handleSelectedRowsChange}

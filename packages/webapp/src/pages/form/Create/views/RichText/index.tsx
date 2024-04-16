@@ -1,4 +1,4 @@
-import type { FormField, Variable } from '@heyform-inc/shared-types-enums'
+import type { FormField, HiddenField, Variable } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
 import type { CSSProperties, ClipboardEvent, FC, KeyboardEvent, RefObject } from 'react'
@@ -99,6 +99,10 @@ export const RichText: FC<RichTextProps> = ({
       template = `<span class="mention" data-mention="${option.id}" contenteditable="false">@${
         (option as FormField).title
       }</span>\xA0`
+    } else if (type === 'hiddenfield') {
+      template = `<span class="hiddenfield" data-hiddenfield="${
+        (option as HiddenField).name
+      }" contenteditable="false">@${(option as HiddenField).name}</span>\xA0`
     }
 
     replaceTriggerText(innerRef.current!, sel, template)
