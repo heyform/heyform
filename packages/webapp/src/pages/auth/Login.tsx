@@ -2,7 +2,11 @@ import { useTranslation } from 'react-i18next'
 
 import { RedirectUriLink } from '@/components'
 import { Form, Input } from '@/components/ui'
-import { DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE } from '@/consts'
+import {
+  APP_DISABLE_REGISTRATION,
+  DISABLE_LOGIN_WITH_APPLE,
+  DISABLE_LOGIN_WITH_GOOGLE
+} from '@/consts'
 import { AuthService } from '@/service'
 import { useQueryURL, useRouter } from '@/utils'
 
@@ -23,13 +27,18 @@ const Login = () => {
       <div>
         <h1 className="mt-6 text-center text-3xl font-bold text-slate-900">{t('login.signIn')}</h1>
         <p className="mt-2 text-center text-sm text-slate-500">
-          {t('login.logIn')} {''} {t('login.or')} {''}
-          <RedirectUriLink
-            href="/sign-up"
-            className="font-medium text-blue-700 hover:text-blue-800"
-          >
-            {t('login.startFree')}
-          </RedirectUriLink>
+          {t('login.logIn')} {''}
+          {!APP_DISABLE_REGISTRATION && (
+            <>
+              {t('login.or')} {''}
+              <RedirectUriLink
+                href="/sign-up"
+                className="font-medium text-blue-700 hover:text-blue-800"
+              >
+                {t('login.startFree')}
+              </RedirectUriLink>
+            </>
+          )}
         </p>
       </div>
 

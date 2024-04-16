@@ -2,6 +2,7 @@ import { Controller, Get, Header, Res } from '@nestjs/common'
 import { Response } from 'express'
 
 import {
+  APP_DISABLE_REGISTRATION,
   APP_HOMEPAGE_URL,
   COOKIE_DOMAIN,
   DISABLE_LOGIN_WITH_APPLE,
@@ -24,6 +25,7 @@ export class DashboardController {
         stripePublishableKey: STRIPE_PUBLISHABLE_KEY,
         geetestCaptchaId: GEETEST_CAPTCHA_ID,
         googleRecaptchaKey: GOOGLE_RECAPTCHA_KEY,
+        appDisableRegistration: APP_DISABLE_REGISTRATION,
         disableLoginWithApple: DISABLE_LOGIN_WITH_APPLE,
         disableLoginWithGoogle: DISABLE_LOGIN_WITH_GOOGLE,
         verifyUserEmail: VERIFY_USER_EMAIL

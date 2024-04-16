@@ -17,3 +17,6 @@ export const DISABLE_LOGIN_WITH_APPLE = helper.isTrue(
 export const VERIFY_USER_EMAIL = helper.isTrue(
   window.heyform?.verifyUserEmail || import.meta.env.VITE_VERIFY_USER_EMAIL
 )
+export const APP_DISABLE_REGISTRATION = helper.isTrue(
+  window.heyform?.appDisableRegistration || import.meta.env.VITE_APP_DISABLE_REGISTRATION
+)
