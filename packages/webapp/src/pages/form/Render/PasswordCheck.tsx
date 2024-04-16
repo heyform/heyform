@@ -33,7 +33,7 @@ export const PasswordCheck = ({ form, onFinish }: PasswordCheckProps): JSX.Eleme
   }
 
   return (
-    <div className="heyform-root">
+    <div className="heyform-root !h-screen">
       <div className="heyform-block-container heyform-short-text">
         <div className="heyform-theme-background"></div>
         <div className="heyform-block heyform-block-next heyform-block-entered">
