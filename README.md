@@ -62,6 +62,10 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 	<img src="https://zeabur.com/button.svg" alt="Deploy on Zeabur" />
 </a>
 
+<a href="https://cloud.sealos.io/?openapp=system-template%3FtemplateName%3Dheyform" style="margin-left:16px">
+	<img src="https://cdn.jsdelivr.net/gh/labring-actions/templates@main/Deploy-on-Sealos.svg" alt="Deploy on Sealos" height="36" />
+</a>
+
 ## Local development
 
 Follow the [local installation instructions](https://docs.heyform.net/local-development) to run the project locally.
