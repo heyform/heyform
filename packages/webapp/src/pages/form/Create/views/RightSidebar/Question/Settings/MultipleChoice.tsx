@@ -41,6 +41,21 @@ export const MultipleChoice: FC<IBasicProps> = ({ field }) => {
     })
   }
 
+  function handleAllowOther(allowOther: boolean) {
+    dispatch({
+      type: 'updateField',
+      payload: {
+        id: field.id,
+        updates: {
+          properties: {
+            ...field.properties,
+            allowOther
+          }
+        }
+      }
+    })
+  }
+
   function handleRange(range: any) {
     dispatch({
       type: 'updateField',
@@ -58,6 +73,7 @@ export const MultipleChoice: FC<IBasicProps> = ({ field }) => {
 
   const handleAllowMultipleCallback = useCallback(handleAllowMultiple, [field.properties])
   const handleRandomizeCallback = useCallback(handleRandomize, [field.properties])
+  const handleAllowOtherCallback = useCallback(handleAllowOther, [field.properties])
   const handleRangeCallback = useCallback(handleRange, [field.validations])
 
   return (
@@ -83,6 +99,13 @@ export const MultipleChoice: FC<IBasicProps> = ({ field }) => {
           label={t('formBuilder.randomize')}
           value={field.properties?.randomize}
           onChange={handleRandomizeCallback}
+        />
+      </div>
+      <div className="right-sidebar-settings-item">
+        <SwitchField
+          label={t('formBuilder.otherOption')}
+          value={field.properties?.allowOther}
+          onChange={handleAllowOtherCallback}
         />
       </div>
     </>

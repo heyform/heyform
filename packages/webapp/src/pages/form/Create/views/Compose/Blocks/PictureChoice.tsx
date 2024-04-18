@@ -1,6 +1,6 @@
 import type { Choice } from '@heyform-inc/shared-types-enums'
 import { clone, helper, nanoid } from '@heyform-inc/utils'
-import { IconPlus, IconTrash, IconX } from '@tabler/icons-react'
+import { IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons-react'
 import type { FC } from 'react'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,16 +15,18 @@ import { Block } from './Block'
 interface PictureChoiceItemProps {
   index: number
   choice: Choice
+  isOther?: boolean
   enableRemove?: boolean
-  onLabelChange: (id: string, label: string) => void
-  onSelectImage: (id: string) => void
-  onRemoveImage: (id: string) => void
+  onLabelChange?: (id: string, label: string) => void
+  onSelectImage?: (id: string) => void
+  onRemoveImage?: (id: string) => void
   onRemove: (id: string) => void
 }
 
 const PictureChoiceItem: FC<PictureChoiceItemProps> = ({
   choice,
   index,
+  isOther,
   enableRemove,
   onLabelChange,
   onSelectImage,
@@ -39,7 +41,7 @@ const PictureChoiceItem: FC<PictureChoiceItemProps> = ({
   }
 
   function handleLabelChange(value: any) {
-    onLabelChange(choice.id, value)
+    onLabelChange?.(choice.id, value)
   }
 
   function handleBlur() {
@@ -51,17 +53,21 @@ const PictureChoiceItem: FC<PictureChoiceItemProps> = ({
   }
 
   function handleSelectImage() {
-    onSelectImage(choice.id)
+    onSelectImage?.(choice.id)
   }
 
   function handleRemoveImage() {
-    onRemoveImage(choice.id)
+    onRemoveImage?.(choice.id)
   }
 
   return (
     <div className="heyform-radio">
       <div className="heyform-radio-container">
-        {helper.isURL(choice.image) ? (
+        {isOther ? (
+          <div className="heyform-radio-trigger">
+            <IconPencil />
+          </div>
+        ) : helper.isURL(choice.image) ? (
           <>
             <div className="heyform-radio-image">
               <img src={choice.image!} alt={choice.label} />
@@ -80,13 +86,17 @@ const PictureChoiceItem: FC<PictureChoiceItemProps> = ({
         <div className="heyform-radio-content">
           <div className="heyform-radio-hotkey">{String.fromCharCode(KeyCode.A + index)}</div>
           <div className="heyform-radio-label">
-            <Input
-              value={choice.label}
-              placeholder={isFocused ? t('formBuilder.choicePlaceholder') : undefined}
-              onBlur={handleBlur}
-              onFocus={handleFocus}
-              onChange={handleLabelChange}
-            />
+            {isOther ? (
+              <div className="heyform-radio-label-other">{choice.label}</div>
+            ) : (
+              <Input
+                value={choice.label}
+                placeholder={isFocused ? t('formBuilder.choicePlaceholder') : undefined}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+                onChange={handleLabelChange}
+              />
+            )}
           </div>
           {enableRemove && (
             <div className="heyform-radio-remove" onClick={handleRemove}>
@@ -112,6 +122,7 @@ const AddPictureChoice: FC<IComponentProps> = props => {
 }
 
 export const PictureChoice: FC<BlockProps> = ({ field, locale, ...restProps }) => {
+  const { t } = useTranslation()
   const { dispatch } = useStoreContext()
   const [choiceId, setChoiceId] = useState<string>()
 
@@ -147,6 +158,15 @@ export const PictureChoice: FC<BlockProps> = ({ field, locale, ...restProps }) =
   }
 
   function handleChoiceRemove(id: string) {
+    const updates =
+      id === 'other'
+        ? {
+            allowOther: false
+          }
+        : {
+            choices: field.properties?.choices?.filter(c => c.id !== id)
+          }
+
     dispatch({
       type: 'updateField',
       payload: {
@@ -154,7 +174,7 @@ export const PictureChoice: FC<BlockProps> = ({ field, locale, ...restProps }) =
         updates: {
           properties: {
             ...field.properties,
-            choices: field.properties?.choices?.filter(c => c.id !== id)
+            ...updates
           }
         }
       }
@@ -247,6 +267,21 @@ export const PictureChoice: FC<BlockProps> = ({ field, locale, ...restProps }) =
             onRemove={handleChoiceRemoveCallback}
           />
         ))}
+
+        {field.properties?.allowOther && (
+          <PictureChoiceItem
+            index={field.properties!.choices!.length}
+            choice={
+              {
+                id: 'other',
+                label: t('formBuilder.other')
+              } as Choice
+            }
+            isOther={true}
+            enableRemove={field.properties!.choices!.length > 1}
+            onRemove={handleChoiceRemoveCallback}
+          />
+        )}
 
         <AddPictureChoice onClick={handleAddChoiceCallback} />
       </div>

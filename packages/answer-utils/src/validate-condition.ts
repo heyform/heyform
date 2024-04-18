@@ -95,51 +95,25 @@ function validateChoice(
   condition: LogicCondition,
   values?: Record<string, AnswerValue>
 ) {
-  return field.properties?.allowMultiple === true
-    ? validateMultipleChoice(field, condition, values)
-    : validateSingleChoice(field, condition, values)
-}
-
-function validateSingleChoice(
-  field: FormField,
-  condition: LogicCondition,
-  values?: Record<string, AnswerValue>
-) {
-  const value = values?.[field.id] as ChoiceValue
+  const rawValue = values?.[field.id] as ChoiceValue
   const { expected: rawExpected } = condition as TextCondition
+  const allowMultiple = helper.isTrue(field.properties?.allowMultiple)
+
   const expected = helper.isArray(rawExpected) ? rawExpected : [rawExpected]
+  const value = [...(rawValue?.value || []), rawValue.other].filter(helper.isValid)
 
   switch (condition.comparison) {
     case ComparisonEnum.IS:
-      return isEqual(value?.value, expected)
+      return isEqual(value, expected)
 
     case ComparisonEnum.IS_NOT:
-      return !isEqual(value?.value, expected)
-  }
-
-  return false
-}
-
-function validateMultipleChoice(
-  field: FormField,
-  condition: LogicCondition,
-  values?: Record<string, AnswerValue>
-) {
-  const value = values?.[field.id] as ChoiceValue
-  const { expected } = condition as TextCondition
-
-  switch (condition.comparison) {
-    case ComparisonEnum.IS:
-      return isEqual(value?.value, expected)
-
-    case ComparisonEnum.IS_NOT:
-      return !isEqual(value?.value, expected)
+      return !isEqual(value, expected)
 
     case ComparisonEnum.CONTAINS:
-      return isContains(value?.value, expected)
+      return allowMultiple && isContains(value, expected)
 
     case ComparisonEnum.DOES_NOT_CONTAIN:
-      return !isContains(value?.value, expected)
+      return allowMultiple && !isContains(value, expected)
   }
 
   return false

@@ -1,19 +1,37 @@
+import { Choice } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import { IconPhoto } from '@tabler/icons-react'
 import { FC, useMemo } from 'react'
 
+import { TagGroup } from '@/components'
+
 import { SheetCellProps } from '../types'
 
 export const PictureChoiceCell: FC<SheetCellProps> = ({ column, row }) => {
-  const value = useMemo(() => {
-    const v = row[column.key]?.value
-    const choices = column.properties?.choices
+  const { value, other } = useMemo(() => {
+    let value: Choice[] = []
+    const other: Choice[] = []
 
-    if (helper.isValidArray(v) && helper.isValidArray(choices)) {
-      return choices!.filter(choice => v!.includes(choice.id)) || []
+    const v = row[column.key]
+
+    if (helper.isValid(v) && helper.isObject(v)) {
+      const choices = column.properties?.choices
+
+      if (helper.isValidArray(choices)) {
+        if (helper.isValidArray(v?.value)) {
+          value = choices!.filter(choice => v.value.includes(choice.id)) || []
+        }
+
+        if (v.other) {
+          other.push({
+            id: v.other,
+            label: v.other
+          })
+        }
+      }
     }
 
-    return []
+    return { value, other }
   }, [column.key, column.properties?.choices, row])
 
   return (
@@ -31,6 +49,8 @@ export const PictureChoiceCell: FC<SheetCellProps> = ({ column, row }) => {
           <IconPhoto key={index} />
         )
       )}
+
+      {other.length > 0 && <TagGroup tags={other} />}
     </div>
   )
 }

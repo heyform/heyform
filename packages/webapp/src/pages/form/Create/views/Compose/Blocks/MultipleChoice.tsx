@@ -14,14 +14,16 @@ import { Block } from './Block'
 interface MultipleChoiceItemProps {
   index: number
   choice: Choice
+  isOther?: boolean
   enableRemove?: boolean
   onRemove: (id: string) => void
-  onChange: (id: string, label: string) => void
+  onChange?: (id: string, label: string) => void
 }
 
 const MultipleChoiceItem: FC<MultipleChoiceItemProps> = ({
   index,
   choice,
+  isOther,
   enableRemove,
   onRemove,
   onChange
@@ -34,7 +36,7 @@ const MultipleChoiceItem: FC<MultipleChoiceItemProps> = ({
   }
 
   function handleChange(value: any) {
-    onChange(choice.id, value)
+    onChange?.(choice.id, value)
   }
 
   function handleBlur() {
@@ -51,13 +53,17 @@ const MultipleChoiceItem: FC<MultipleChoiceItemProps> = ({
         <div className="heyform-radio-content">
           <div className="heyform-radio-hotkey">{String.fromCharCode(KeyCode.A + index)}</div>
           <div className="heyform-radio-label">
-            <Input
-              value={choice.label}
-              placeholder={isFocused ? t('formBuilder.choicePlaceholder') : undefined}
-              onBlur={handleBlur}
-              onFocus={handleFocus}
-              onChange={handleChange}
-            />
+            {isOther ? (
+              <div className="heyform-radio-label-other">{choice.label}</div>
+            ) : (
+              <Input
+                value={choice.label}
+                placeholder={isFocused ? t('formBuilder.choicePlaceholder') : undefined}
+                onBlur={handleBlur}
+                onFocus={handleFocus}
+                onChange={handleChange}
+              />
+            )}
           </div>
           {enableRemove && (
             <div className="heyform-radio-remove" onClick={handleRemove}>
@@ -96,6 +102,15 @@ export const MultipleChoice: FC<BlockProps> = ({ field, locale, ...restProps }) 
   }
 
   function handleChoiceRemove(id: string) {
+    const updates =
+      id === 'other'
+        ? {
+            allowOther: false
+          }
+        : {
+            choices: field.properties?.choices?.filter(c => c.id !== id)
+          }
+
     dispatch({
       type: 'updateField',
       payload: {
@@ -103,7 +118,7 @@ export const MultipleChoice: FC<BlockProps> = ({ field, locale, ...restProps }) 
         updates: {
           properties: {
             ...field.properties,
-            choices: field.properties?.choices?.filter(c => c.id !== id)
+            ...updates
           }
         }
       }
@@ -147,6 +162,21 @@ export const MultipleChoice: FC<BlockProps> = ({ field, locale, ...restProps }) 
             onChange={handleLabelChangeCallback}
           />
         ))}
+
+        {field.properties?.allowOther && (
+          <MultipleChoiceItem
+            index={field.properties!.choices!.length}
+            choice={
+              {
+                id: 'other',
+                label: t('formBuilder.other')
+              } as Choice
+            }
+            isOther={true}
+            enableRemove={field.properties!.choices!.length > 1}
+            onRemove={handleChoiceRemoveCallback}
+          />
+        )}
       </div>
       <div className="heyform-add-choice">
         <Button.Link className="heyform-add-column" onClick={handleAddChoiceCallback}>

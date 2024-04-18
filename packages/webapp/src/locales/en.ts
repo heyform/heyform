@@ -627,6 +627,7 @@ export default {
     exactNumber: 'Exact number',
     range: 'Range',
     randomize: 'Randomize',
+    otherOption: '"Other" option',
     steps: 'Steps',
     labels: 'Labels',
     leftLabel: 'Left label',
@@ -768,6 +769,7 @@ export default {
     hiddenFieldNamePlaceholder: 'URL query parameter e.g. ref, utm_campaign',
     createHiddenField: 'Create hidden field',
     editHiddenField: 'Edit hidden field',
-    hiddenFieldsTip: 'Learn about hidden fields'
+    hiddenFieldsTip: 'Learn about hidden fields',
+    other: 'Other'
   }
 }

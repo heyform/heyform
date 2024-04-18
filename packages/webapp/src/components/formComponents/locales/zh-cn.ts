@@ -57,5 +57,7 @@ export default {
   Questions: '问题列表',
   'Search country': '搜索国家',
   'Previous question': '上个问题',
-  'Next question': '下个问题'
+  'Next question': '下个问题',
+  Other: '其他',
+  'Type your answer': '输入您的答案'
 }

@@ -221,7 +221,7 @@ export const Sheet: FC<SheetProps> = ({
     })
 
     const hiddenColumns = hiddenFields.map(row => ({
-      key: 'hidden_fields',
+      key: row.id,
       kind: 'hidden_fields',
       name: row.name,
       width: 160,

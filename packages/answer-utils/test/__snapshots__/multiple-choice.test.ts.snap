@@ -33,6 +33,41 @@ Array [
 ]
 `;
 
+exports[`multiple values with other should be verified 1`] = `
+Array [
+  Object {
+    "id": "MULTIPLE_CHOICE",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "allowOther": true,
+      "choices": Array [
+        Object {
+          "id": "id_a",
+          "label": "A",
+        },
+        Object {
+          "id": "id_b",
+          "label": "B",
+        },
+        Object {
+          "id": "id_c",
+          "label": "C",
+        },
+      ],
+    },
+    "title": "multiple-choice.test",
+    "value": Object {
+      "other": "Other answer",
+      "value": Array [
+        "id_a",
+        "id_b",
+      ],
+    },
+  },
+]
+`;
+
 exports[`single value should be verified 1`] = `
 Array [
   Object {
@@ -59,6 +94,37 @@ Array [
       "value": Array [
         "id_a",
       ],
+    },
+  },
+]
+`;
+
+exports[`single value with other should be verified 1`] = `
+Array [
+  Object {
+    "id": "MULTIPLE_CHOICE",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowOther": true,
+      "choices": Array [
+        Object {
+          "id": "id_a",
+          "label": "A",
+        },
+        Object {
+          "id": "id_b",
+          "label": "B",
+        },
+        Object {
+          "id": "id_c",
+          "label": "C",
+        },
+      ],
+    },
+    "title": "multiple-choice.test",
+    "value": Object {
+      "other": "Other answer",
+      "value": Array [],
     },
   },
 ]

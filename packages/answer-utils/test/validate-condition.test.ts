@@ -121,6 +121,57 @@ test('validate single choice condition', () => {
   }
 })
 
+test('validate single choice with other condition', () => {
+  const field: FormField = {
+    id: 'id_single_choice',
+    title: 'Single choice',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    properties: {
+      allowOther: true,
+      choices: [
+        {
+          id: '_a',
+          label: 'A'
+        },
+        {
+          id: '_b',
+          label: 'B'
+        },
+        {
+          id: '_c',
+          label: 'C'
+        }
+      ]
+    }
+  }
+  const values = {
+    id_single_choice: {
+      other: 'Other'
+    }
+  }
+
+  const comparisons: any[] = [
+    {
+      comparison: ComparisonEnum.IS,
+      expected: values.id_single_choice.other,
+      values
+    },
+    {
+      comparison: ComparisonEnum.IS_NOT,
+      expected: values.id_single_choice.other,
+      values: {
+        id_single_choice: {
+          value: ['_c']
+        }
+      }
+    }
+  ]
+
+  for (const comparison of comparisons) {
+    expect(validateCondition(field, comparison, comparison.values)).toBe(true)
+  }
+})
+
 test('validate multiple choice condition', () => {
   const field: FormField = {
     id: 'id_multiple_choice',
@@ -168,6 +219,74 @@ test('validate multiple choice condition', () => {
     {
       comparison: ComparisonEnum.CONTAINS,
       expected: ['_c'],
+      values
+    },
+    {
+      comparison: ComparisonEnum.DOES_NOT_CONTAIN,
+      expected: ['_b'],
+      values
+    }
+  ]
+
+  for (const comparison of comparisons) {
+    expect(validateCondition(field, comparison, comparison.values)).toBe(true)
+  }
+})
+
+test('validate multiple choice with other condition', () => {
+  const field: FormField = {
+    id: 'id_multiple_choice',
+    title: 'Multiple choice',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    properties: {
+      allowMultiple: true,
+      allowOther: true,
+      choices: [
+        {
+          id: '_a',
+          label: 'A'
+        },
+        {
+          id: '_b',
+          label: 'B'
+        },
+        {
+          id: '_c',
+          label: 'C'
+        }
+      ]
+    }
+  }
+  const values = {
+    id_multiple_choice: {
+      value: ['_a', '_c'],
+      other: 'Other'
+    }
+  }
+
+  const comparisons: any[] = [
+    {
+      comparison: ComparisonEnum.IS,
+      expected: [...values.id_multiple_choice.value, values.id_multiple_choice.other],
+      values
+    },
+    {
+      comparison: ComparisonEnum.IS_NOT,
+      expected: [...values.id_multiple_choice.value, values.id_multiple_choice.other],
+      values: {
+        id_multiple_choice: {
+          value: ['_b']
+        }
+      }
+    },
+    {
+      comparison: ComparisonEnum.CONTAINS,
+      expected: ['_c'],
+      values
+    },
+    {
+      comparison: ComparisonEnum.CONTAINS,
+      expected: ['Other'],
       values
     },
     {

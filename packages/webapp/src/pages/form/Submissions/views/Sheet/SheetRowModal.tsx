@@ -1,5 +1,5 @@
 import { CURRENCY_SYMBOLS } from '@heyform-inc/answer-utils'
-import { FieldKindEnum, ServerSidePaymentValue } from '@heyform-inc/shared-types-enums'
+import { Choice, FieldKindEnum, ServerSidePaymentValue } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import {
   IconCheck,
@@ -42,6 +42,22 @@ const InputItem: FC<SheetCellProps> = ({ column, row }) => {
       return v
     }
   }, [column.key, row])
+
+  return (
+    <div className="min-h-11 whitespace-pre-line rounded-lg bg-white p-[10px] text-sm font-normal leading-6 text-slate-800">
+      {value}
+    </div>
+  )
+}
+
+const HiddenFieldItem: FC<SheetCellProps> = ({ column, row }) => {
+  const value = useMemo(() => {
+    const v = row[column.name as string]
+
+    if (helper.isString(v) || helper.isNumber(v)) {
+      return v
+    }
+  }, [column.name, row])
 
   return (
     <div className="min-h-11 whitespace-pre-line rounded-lg bg-white p-[10px] text-sm font-normal leading-6 text-slate-800">
@@ -195,14 +211,27 @@ const OpinionScaleItem: FC<SheetCellProps> = ({ column, row }) => {
 
 const PictureChoiceItem: FC<SheetCellProps> = ({ column, row }) => {
   const value = useMemo(() => {
-    const v = row[column.key]?.value
+    let value: Choice[] = []
+
+    const v = row[column.key]
     const choices = column.properties?.choices
 
-    if (helper.isValidArray(v) && helper.isValidArray(choices)) {
-      return choices!.filter(choice => v!.includes(choice.id)) || []
+    if (helper.isValid(v) && helper.isObject(v)) {
+      if (helper.isValidArray(choices)) {
+        if (helper.isValidArray(v?.value)) {
+          value = choices!.filter(choice => v.value.includes(choice.id)) || []
+        }
+
+        if (v.other) {
+          value.push({
+            id: v.other,
+            label: v.other
+          })
+        }
+      }
     }
 
-    return []
+    return value
   }, [column.key, column.properties?.choices, row])
 
   return (
@@ -212,11 +241,12 @@ const PictureChoiceItem: FC<SheetCellProps> = ({ column, row }) => {
           {value!.map((choice, index) => (
             <div key={index}>
               <div className="mx-[6px] mb-3 rounded-[3px] border border-[rgba(0,0,0,0.2)] bg-white p-2">
-                <div className="relative flex min-h-[50px] w-screen before:block before:w-screen before:pt-[100%] before:content-['']">
+                <div className="relative flex h-[120px] w-[120px] before:block before:w-screen before:pt-[100%] before:content-['']">
                   <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center overflow-hidden">
                     {choice.image ? (
                       <img
                         className="block max-h-[100px] min-h-[1px] max-w-[100%] object-cover"
+                        src={choice.image}
                         width={200}
                         height={200}
                         alt={choice.label}
@@ -244,11 +274,27 @@ const PictureChoiceItem: FC<SheetCellProps> = ({ column, row }) => {
 
 const MultipleChoiceItem: FC<SheetCellProps> = ({ column, row }) => {
   const value = useMemo(() => {
-    const v = row[column.key]?.value
-    const choices = column.properties?.choices
+    const v = row[column.key]
 
-    if (helper.isValidArray(v) && helper.isValidArray(choices)) {
-      return choices!.filter(choice => v!.includes(choice.id)) || []
+    if (helper.isValid(v) && helper.isObject(v)) {
+      const choices = column.properties?.choices
+
+      if (helper.isValidArray(choices)) {
+        let result: Choice[] = []
+
+        if (helper.isValidArray(v?.value)) {
+          result = choices!.filter(choice => v.value.includes(choice.id)) || []
+        }
+
+        if (v.other) {
+          result.push({
+            id: v.other,
+            label: v.other
+          })
+        }
+
+        return result
+      }
     }
 
     return []
@@ -559,6 +605,9 @@ export const SheetRowModal: FC<SheetRowModalProps> = ({
 
                               case FieldKindEnum.PAYMENT:
                                 return <PaymentItem row={row!} column={column} />
+
+                              case 'hidden_fields':
+                                return <HiddenFieldItem row={row!} column={column} />
 
                               default:
                                 return <InputItem row={row!} column={column} />

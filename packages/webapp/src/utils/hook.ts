@@ -283,3 +283,28 @@ export function useWindow(
     }
   }, [])
 }
+
+export function useKey(key: string, callback: (event: KeyboardEvent) => void) {
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === key) {
+        const isIgnoredElement = (event.target as any)?.matches(
+          'input, [contenteditable="true"], [contenteditable="true"] *'
+        )
+
+        if (!isIgnoredElement) {
+          callback(event)
+        }
+      }
+    },
+    [key, callback]
+  )
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+}

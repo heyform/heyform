@@ -453,11 +453,9 @@
 
       &:empty {
         @apply text-left;
-        padding-left: 50%;
 
         &:before {
-          @apply w-full text-center;
-          transform: translateX(-50%);
+          @apply w-full;
         }
       }
     }
@@ -547,6 +545,7 @@
       box-shadow: none;
     }
 
+    .heyform-radio-label-other,
     input {
       @apply text-lg w-full;
       color: var(--heyform-answer-color);

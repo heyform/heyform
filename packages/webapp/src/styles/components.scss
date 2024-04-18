@@ -31,6 +31,18 @@
   @apply flex-1 ml-2 mr-2;
 }
 
+.heyform-radio-other {
+	.heyform-radio-container {
+		@apply py-0;
+	}
+
+	.heyform-radio-label-text,
+	.input input {
+		@apply text-base py-2;
+		color: var(--heyform-answer-color);
+	}
+}
+
 .heyform-radio-icon {
   @apply flex items-center justify-center opacity-0 invisible;
 
@@ -58,7 +70,7 @@
 }
 
 .heyform-radio-image {
-  @apply flex w-full h-40 items-center justify-center;
+  @apply flex w-full h-36 items-center justify-center;
 
   img {
     @apply block min-w-full max-h-full min-h-0 object-cover;
@@ -572,7 +584,7 @@
 
 .heyform-radio-label {
   .input {
-    @apply p-0;
+    @apply text-base p-0;
   }
 
   .input,

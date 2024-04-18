@@ -1,7 +1,7 @@
 import { helper } from '@heyform-inc/utils'
 import type { FC } from 'react'
 
-import { FormField, RadioGroup, SelectHelper } from '../components'
+import { ChoiceRadioGroup, FormField, SelectHelper } from '../components'
 import { useStore } from '../store'
 import { useTranslation } from '../utils'
 import type { BlockProps } from './Block'
@@ -20,8 +20,8 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
     field.validations?.max
   )
 
-  function getValues(values: any) {
-    return helper.isValidArray(values?.value) ? values : undefined
+  function getValues({ value }: any) {
+    return helper.isValidArray(value?.value) || helper.isValid(value?.other) ? value : undefined
   }
 
   return (
@@ -29,7 +29,9 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
       <SelectHelper min={min} max={max} />
 
       <Form
-        initialValues={state.values[field.id]}
+        initialValues={{
+          value: state.values[field.id]
+        }}
         autoSubmit={!allowMultiple}
         isSubmitShow={allowMultiple}
         field={field}
@@ -39,17 +41,36 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
           name="value"
           rules={[
             {
-              required: field.validations?.required,
-              type: 'array',
-              min,
-              max: max > 0 ? max : undefined,
-              message: t('This field is required')
+              validator: (_, value) => {
+                if (field.validations?.required) {
+                  if (helper.isEmpty(value)) {
+                    return Promise.reject(t('This field is required'))
+                  }
+                }
+
+                const count = value.value.length + helper.isValid(value.other) ? 1 : 0
+
+                if (count < min) {
+                  return Promise.reject(
+                    t('Choose at least {{min}} choices', { min: field.validations?.min })
+                  )
+                }
+
+                if (max > 0 && count > max) {
+                  return Promise.reject(
+                    t('Choose up to {{max}} choices', { max: field.validations?.max })
+                  )
+                }
+
+                return Promise.resolve()
+              }
             }
           ]}
         >
-          <RadioGroup
+          <ChoiceRadioGroup
             options={options}
             allowMultiple={field.properties?.allowMultiple}
+            allowOther={field.properties?.allowOther}
             max={field.validations?.max ?? 0}
           />
         </FormField>

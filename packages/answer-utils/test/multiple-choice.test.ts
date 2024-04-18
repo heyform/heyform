@@ -123,6 +123,45 @@ test('multiple values should throw error', () => {
       }
     })
   }).toThrow('Multiple choose is not allowed')
+
+  expect(() => {
+    fieldValuesToAnswers(
+      [
+        {
+          ...field,
+          properties: {
+            choices,
+            allowOther: true
+          }
+        }
+      ],
+      {
+        MULTIPLE_CHOICE: {
+          value: ['id_a'],
+          other: 'Other answer'
+        }
+      }
+    )
+  }).toThrow('Multiple choose is not allowed')
+
+  expect(() => {
+    fieldValuesToAnswers(
+      [
+        {
+          ...field,
+          properties: {
+            choices,
+            allowOther: true
+          }
+        }
+      ],
+      {
+        MULTIPLE_CHOICE: {
+          value: ['id_C']
+        }
+      }
+    )
+  }).toThrow('Cannot select non-specified choices')
 })
 
 test('invalid value should throw error', () => {
@@ -133,4 +172,84 @@ test('invalid value should throw error', () => {
       }
     })
   }).toThrow('Cannot select non-specified choices')
+})
+
+test('other value should throw error', () => {
+  expect(() => {
+    fieldValuesToAnswers([field], {
+      MULTIPLE_CHOICE: {
+        other: 'Other answer'
+      }
+    })
+  }).toThrow('Other value is not allowed')
+})
+
+test('multiple values with other should be verified', () => {
+  const answer = fieldValuesToAnswers(
+    [
+      {
+        ...field,
+        validations: {
+          required: true
+        },
+        properties: {
+          choices,
+          allowMultiple: true,
+          allowOther: true
+        }
+      }
+    ],
+    {
+      MULTIPLE_CHOICE: {
+        value: ['id_a', 'id_b'],
+        other: 'Other answer'
+      }
+    }
+  )
+
+  expect(answer).toMatchSnapshot()
+})
+
+test('other value should throw error', () => {
+  expect(() => {
+    fieldValuesToAnswers([field], {
+      MULTIPLE_CHOICE: {
+        value: [],
+        other: 'Other answer'
+      }
+    })
+  }).toThrow('Other value is not allowed')
+
+  expect(() => {
+    fieldValuesToAnswers([field], {
+      MULTIPLE_CHOICE: {
+        value: ['id_a'],
+        other: 'Other answer'
+      }
+    })
+  }).toThrow('Other value is not allowed')
+})
+
+test('single value with other should be verified', () => {
+  const answer = fieldValuesToAnswers(
+    [
+      {
+        ...field,
+        validations: {
+          required: true
+        },
+        properties: {
+          choices,
+          allowOther: true
+        }
+      }
+    ],
+    {
+      MULTIPLE_CHOICE: {
+        other: 'Other answer'
+      }
+    }
+  )
+
+  expect(answer).toMatchSnapshot()
 })

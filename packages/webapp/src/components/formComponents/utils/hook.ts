@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useTranslation as useReactTranslation } from 'react-i18next'
 
 import { IMapType } from '@/components/ui/typing'

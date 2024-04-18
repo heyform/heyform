@@ -250,7 +250,15 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     return
   }
 
-  if (!helper.isArray(value.value)) {
+  if (!helper.isValidArray(value.value)) {
+    if (!helper.isObject(value)) {
+      value = {}
+    }
+
+    value.value = []
+  }
+
+  if (value.value.length < 1 && helper.isEmpty(value.other)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -281,8 +289,10 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     }
   }
 
+  const count = value.value.length + (isOtherExists ? 1 : 0)
+
   if (!rule.allowMultiple) {
-    if (value.value.length > 1) {
+    if (count > 1) {
       throw new ValidateError({
         id: rule.id,
         kind: rule.kind,
@@ -303,7 +313,6 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     }
   }
 
-  const count = value.value.length + (isOtherExists ? 1 : 0)
   const result =
     validateInt(count, rule.min, rule.max) &&
     value.value.filter((row: string) => !rule.choices!.includes(row)).length < 1

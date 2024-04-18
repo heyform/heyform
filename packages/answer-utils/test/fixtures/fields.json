@@ -238,5 +238,49 @@
     "id": "NteSqF9g5cOa6",
     "title": "Input table",
     "kind": "input_table"
+  },
+  {
+    "validations": {
+      "required": true
+    },
+    "properties": {
+      "choices": [
+        {
+          "id": "krAjByF7XB2w",
+          "label": "Choice 1"
+        },
+        {
+          "id": "P6cnBFEkKnXm",
+          "label": "Choice 2"
+        }
+      ],
+      "allowMultiple": true,
+      "allowOther": true
+    },
+    "id": "u1NyLxkSvkN7",
+    "title": "✈ Multiple Choose with other",
+    "kind": "multiple_choice"
+  },
+  {
+    "validations": {
+      "required": true
+    },
+    "properties": {
+      "choices": [
+        {
+          "id": "kB2wF7XrAjBy",
+          "label": "Choice 1"
+        },
+        {
+          "id": "BPnXm6cFEkKn",
+          "label": "Choice 2"
+        }
+      ],
+      "allowMultiple": false,
+      "allowOther": true
+    },
+    "id": "Svky0NLxkN7u",
+    "title": "🎉 Single Choose with other",
+    "kind": "multiple_choice"
   }
 ]

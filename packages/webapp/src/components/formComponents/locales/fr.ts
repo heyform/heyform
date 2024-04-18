@@ -58,5 +58,7 @@ export default {
   Questions: 'Liste des questions',
   'Search country': 'Recherche par pays',
   'Previous question': 'Question précédente',
-  'Next question': 'Question suivante'
+  'Next question': 'Question suivante',
+  Other: 'Autre',
+  'Type your answer': 'Tapez votre réponse'
 }

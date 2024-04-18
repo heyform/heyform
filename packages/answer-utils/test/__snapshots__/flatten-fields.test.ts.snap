@@ -242,5 +242,49 @@ In the Land of Mordor where the shadows lie.",
       "required": true,
     },
   },
+  Object {
+    "id": "u1NyLxkSvkN7",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": true,
+      "allowOther": true,
+      "choices": Array [
+        Object {
+          "id": "krAjByF7XB2w",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "P6cnBFEkKnXm",
+          "label": "Choice 2",
+        },
+      ],
+    },
+    "title": "✈ Multiple Choose with other",
+    "validations": Object {
+      "required": true,
+    },
+  },
+  Object {
+    "id": "Svky0NLxkN7u",
+    "kind": "multiple_choice",
+    "properties": Object {
+      "allowMultiple": false,
+      "allowOther": true,
+      "choices": Array [
+        Object {
+          "id": "kB2wF7XrAjBy",
+          "label": "Choice 1",
+        },
+        Object {
+          "id": "BPnXm6cFEkKn",
+          "label": "Choice 2",
+        },
+      ],
+    },
+    "title": "🎉 Single Choose with other",
+    "validations": Object {
+      "required": true,
+    },
+  },
 ]
 `;
