@@ -1,9 +1,9 @@
 import { FC } from 'react'
 
-import { FormPreviewModal } from '@/components'
+import { FormNavbar } from '@/pages/form/views/FormNavbar'
+import { FormPreviewModal } from '@/pages/form/views/FormPreviewModal'
+import { FormShareModal } from '@/pages/form/views/FormShareModal'
 
-import { FormShareModal } from '../FormShareModal'
-import { FormNavbar } from '../formNavbar'
 import { FormGuardLayout } from './FormGuardLayout'
 
 export const FormLayout: FC<IComponentProps> = ({ children }) => {

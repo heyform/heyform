@@ -9,8 +9,8 @@ import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import { makeAutoObservable } from 'mobx'
 
-import { getTheme } from '@/components/formComponents'
 import type { FormModel } from '@/models'
+import { getTheme } from '@/pages/form/views/FormComponents'
 
 interface TempFormSettings extends FormSettings {
   closeForm?: boolean

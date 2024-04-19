@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { memo, useMemo } from 'react'
 import { Handle, Node, Position } from 'react-flow-renderer'
 
-import { IFormField } from '@/components/formComponents/typings'
+import { IFormField } from '@/pages/form/views/FormComponents/typings'
 
 import { FieldKindIcon } from '../LeftSidebar/FieldKindIcon'
 

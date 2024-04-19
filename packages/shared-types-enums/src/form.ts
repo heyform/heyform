@@ -180,8 +180,8 @@ export interface FormField {
 }
 
 export interface HiddenField {
-	id: string
-	name: string
+  id: string
+  name: string
 }
 
 export interface FormTheme {
@@ -221,9 +221,14 @@ export interface FormModel {
   kind: FormKindEnum
   settings?: FormSettings
   fields?: FormField[]
-	hiddenFields?: HiddenField[]
+  hiddenFields?: HiddenField[]
   fieldUpdateAt?: number
   logics?: Logic[]
+  locales?: {
+    [lang: string]: {
+      [field: string]: string | any[]
+    }
+  }
   variables?: Variable[]
   columns?: FormField[]
   stripeAccount?: StripeAccount

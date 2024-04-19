@@ -1,9 +1,10 @@
 import { htmlUtils } from '@heyform-inc/answer-utils'
 import {
-	FieldKindEnum, HiddenField,
-	type Logic,
-	QUESTION_FIELD_KINDS,
-	type Variable
+  FieldKindEnum,
+  HiddenField,
+  type Logic,
+  QUESTION_FIELD_KINDS,
+  type Variable
 } from '@heyform-inc/shared-types-enums'
 import { clone, helper, nanoid } from '@heyform-inc/utils'
 

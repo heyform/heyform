@@ -17,7 +17,6 @@
 		"build:webapp": "pnpm --filter ./packages/webapp build",
 		"build:deps": "pnpm --filter ./packages/utils build && pnpm --filter ./packages/shared-types-enums build && pnpm --filter ./packages/answer-utils build"
 	},
-  "packageManager": "pnpm@8.15.4",
   "dependencies": {
     "npm-run-all": "^4.1.5"
   },

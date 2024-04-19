@@ -5,10 +5,10 @@ import { IconX } from '@tabler/icons-react'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { flattenFieldsWithGroups } from '@/components/formComponents'
 import { Button, Form, useForm } from '@/components/ui'
 import { useStoreContext } from '@/pages/form/Create/store'
 import { UNSELECTABLE_FIELD_KINDS } from '@/pages/form/Create/views/FieldConfig'
+import { flattenFieldsWithGroups } from '@/pages/form/views/FormComponents'
 
 import { FieldKindIcon } from '../LeftSidebar/FieldKindIcon'
 import { PayloadList } from '../LogicPanel/PayloadForm'

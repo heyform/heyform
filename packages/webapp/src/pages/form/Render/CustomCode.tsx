@@ -2,8 +2,8 @@ import { CaptchaKindEnum, FormModel } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import { FC, useEffect, useRef } from 'react'
 
-import { getTheme, getThemeStyle, getWebFontURL } from '@/components/formComponents'
 import { GOOGLE_RECAPTCHA_KEY } from '@/consts'
+import { getTheme, getThemeStyle, getWebFontURL } from '@/pages/form/views/FormComponents'
 
 import { isStripeEnabled } from './utils/payment'
 

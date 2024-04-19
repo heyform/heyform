@@ -9,9 +9,9 @@ import type { FC } from 'react'
 import { RefObject, useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { questionNumber } from '@/components/formComponents'
 import { useStoreContext } from '@/pages/form/Create/store'
 import { RichText } from '@/pages/form/Create/views/RichText'
+import { questionNumber } from '@/pages/form/views/FormComponents'
 
 import { Layout } from '../Layout'
 

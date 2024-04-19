@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
-import { locales } from '@/components/formComponents'
+import { locales } from '@/pages/form/views/FormComponents'
 
 import en from './en'
 import zhCn from './zhCn'

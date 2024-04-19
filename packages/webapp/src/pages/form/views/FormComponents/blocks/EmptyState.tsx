@@ -1,7 +1,8 @@
 import type { FormField } from '@heyform-inc/shared-types-enums'
 import clsx from 'clsx'
 import type { FC } from 'react'
-import { useKey } from 'react-use'
+
+import { useKey } from '@/utils'
 
 import { Submit } from '../components'
 import { useTranslation } from '../utils'

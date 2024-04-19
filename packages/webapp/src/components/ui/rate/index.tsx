@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import type { FC, ReactNode } from 'react'
 import { useState } from 'react'
-import { useKey } from 'react-use'
+
+import { useKey } from '@/utils'
 
 import { IComponentProps } from '../typing'
 

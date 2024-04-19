@@ -1,7 +1,7 @@
 import { IconMenu2 } from '@tabler/icons-react'
 import type { FC } from 'react'
 
-import CreateWorkspaceModal from '@/components/CreateWorkspaceModal'
+import CreateWorkspaceModal from '@/pages/form/views/CreateWorkspaceModal'
 import WorkspaceSettings from '@/pages/workspace/WorkspaceSettings'
 import { useStore } from '@/store'
 import { useVisible } from '@/utils'

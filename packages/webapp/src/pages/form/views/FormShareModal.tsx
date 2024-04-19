@@ -9,13 +9,12 @@ import {
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 
+import { CopyButton } from '@/components'
 import { Button, Modal, Switch, notification } from '@/components/ui'
 import { HOMEPAGE_URL } from '@/consts'
 import { FormService } from '@/service'
 import { useStore } from '@/store'
 import { urlBuilder } from '@/utils'
-
-import { CopyButton } from './CopyButton'
 
 function getShareURL(formId?: string) {
   return HOMEPAGE_URL + `/form/${formId}`

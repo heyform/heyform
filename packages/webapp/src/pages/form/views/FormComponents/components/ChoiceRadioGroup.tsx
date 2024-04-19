@@ -1,11 +1,10 @@
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
-import { FC, useEffect } from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useTranslation } from '@/components/formComponents'
 import { KeyCode } from '@/components/ui'
 import type { IComponentProps } from '@/components/ui/typing'
+import { useTranslation } from '@/pages/form/views/FormComponents'
 
 import type { ChoiceRadioOption } from './ChoiceRadio'
 import { ChoiceRadio } from './ChoiceRadio'

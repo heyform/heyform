@@ -8,9 +8,9 @@ import { helper } from '@heyform-inc/utils'
 import { useEffect, useRef, useState } from 'react'
 
 import { Async } from '@/components'
-import { Renderer } from '@/components/formComponents'
-import { IStripe } from '@/components/formComponents/store'
-import { IFormModel } from '@/components/formComponents/typings'
+import { Renderer } from '@/pages/form/views/FormComponents'
+import { IStripe } from '@/pages/form/views/FormComponents/store'
+import { IFormModel } from '@/pages/form/views/FormComponents/typings'
 import { FormService } from '@/service'
 import { useParam, useQuery } from '@/utils'
 

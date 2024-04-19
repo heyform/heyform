@@ -2,8 +2,8 @@ import { FormTheme } from '@heyform-inc/shared-types-enums'
 import { helper, qs, removeObjectNil } from '@heyform-inc/utils'
 import isMobilePhone from 'validator/lib/isMobilePhone'
 
-import { getTheme, getThemeStyle } from '@/components/formComponents'
 import { STRIPE_PUBLISHABLE_KEY } from '@/consts'
+import { getTheme, getThemeStyle } from '@/pages/form/views/FormComponents'
 
 export function urlBuilder(prefix: string, query: Record<string, any>): string {
   return prefix + '?' + qs.stringify(removeObjectNil(query), { encode: true })

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { questionNumber } from '@/components/formComponents'
+import { questionNumber } from '@/pages/form/views/FormComponents'
 
 import type { FieldIconProps } from '../FieldIcon'
 import { FieldIcon } from '../FieldIcon'

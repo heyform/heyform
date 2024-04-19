@@ -34,7 +34,7 @@ declare global {
       disableLoginWithGoogle: boolean
       disableLoginWithApple: boolean
       verifyUserEmail: boolean
-			appDisableRegistration: boolean
+      appDisableRegistration: boolean
       device: {
         ios: boolean
         android: boolean

@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 
-import { Renderer, insertWebFont } from '@/components/formComponents'
-import { type IFormModel } from '@/components/formComponents/typings'
 import { Button, Modal, Spin, Switch, notification, useLockBodyScroll } from '@/components/ui'
 import { STRIPE_PUBLISHABLE_KEY } from '@/consts'
+import { Renderer, insertWebFont } from '@/pages/form/views/FormComponents'
+import { type IFormModel } from '@/pages/form/views/FormComponents/typings'
 import { useStore } from '@/store'
 import { insertThemeStyle, loadScript } from '@/utils'
 

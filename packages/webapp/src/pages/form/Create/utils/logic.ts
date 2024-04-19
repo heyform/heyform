@@ -2,8 +2,8 @@ import { ActionEnum, FormField, Logic } from '@heyform-inc/shared-types-enums'
 import * as dagre from 'dagre'
 import { Edge, Node } from 'react-flow-renderer'
 
-import { flattenFieldsWithGroups } from '@/components/formComponents'
 import { UNSELECTABLE_FIELD_KINDS } from '@/pages/form/Create/views/FieldConfig'
+import { flattenFieldsWithGroups } from '@/pages/form/views/FormComponents'
 
 const dagreGraph = new dagre.graphlib.Graph()
 dagreGraph.setDefaultEdgeLabel(() => ({}))

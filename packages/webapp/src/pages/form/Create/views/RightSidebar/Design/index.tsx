@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { insertWebFont } from '@/components/formComponents'
 import { Tabs } from '@/components/ui'
+import { insertWebFont } from '@/pages/form/views/FormComponents'
 import { useStore } from '@/store'
 import { insertThemeStyle } from '@/utils'
 

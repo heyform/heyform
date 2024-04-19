@@ -9,7 +9,8 @@ import type { FormProps as RCFormProps } from 'rc-field-form'
 import RCForm, { Field, useForm } from 'rc-field-form'
 import type { FC, ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
-import { useKey } from 'react-use'
+
+import { useKey } from '@/utils'
 
 import { Submit } from '../components'
 import { removeStorage, useStore } from '../store'

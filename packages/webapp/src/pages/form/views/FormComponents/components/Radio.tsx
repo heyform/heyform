@@ -2,9 +2,9 @@ import { helper } from '@heyform-inc/utils'
 import { IconCheck, IconPhoto } from '@tabler/icons-react'
 import clsx from 'clsx'
 import type { FC, ReactNode } from 'react'
-import { useKey } from 'react-use'
 
 import type { IComponentProps } from '@/components/ui/typing'
+import { useKey } from '@/utils'
 
 export interface RadioOption {
   keyName?: string
@@ -42,7 +42,7 @@ export const Radio: FC<RadioProps> = ({
     }
   }
 
-  useKey(keyName?.toLowerCase(), handleClick)
+  useKey(keyName?.toLowerCase() as string, handleClick)
 
   return (
     <div
