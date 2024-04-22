@@ -18,7 +18,7 @@ export class UnsplashSearchResolver {
 
     if (helper.isEmpty(query)) {
       query = 'hd wallpapers'
-      page = randomNumber(1, 400)
+      page = randomNumber(1, 200)
     }
 
     const unsplash = Unsplash.init({
