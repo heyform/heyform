@@ -19,6 +19,9 @@ export class AppStore {
   // Form share modal is open or not
   isFormShareModalOpen = false
 
+  // Multi-language modal is open or not
+  isMultiLanguageModalOpen = false
+
   // User settings is open or not
   isUserSettingsOpen = false
 

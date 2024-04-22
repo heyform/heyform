@@ -1,4 +1,11 @@
-import { SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_USER, SMTP_SECURE, SMTP_IGNORE_CERT } from '@environments'
+import {
+  SMTP_HOST,
+  SMTP_PASSWORD,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_SECURE,
+  SMTP_IGNORE_CERT
+} from '@environments'
 import { SmtpOptions } from '@utils'
 
 export const SmtpOptionsFactory = (): SmtpOptions => ({

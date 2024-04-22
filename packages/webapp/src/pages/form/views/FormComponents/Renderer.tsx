@@ -11,6 +11,7 @@ import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 
+import { FORM_LOCALES_OPTIONS } from '@/consts'
 import { useQuery } from '@/utils'
 
 import { ClosedMessage } from './blocks/ClosedMessage'
@@ -18,7 +19,12 @@ import type { IState, IStripe } from './store'
 import { StoreContext, StoreReducer, getStorage } from './store'
 import { getTheme } from './theme'
 import type { IFormModel } from './typings'
-import { flattenFieldsWithGroups, parseFields, progressPercentage } from './utils'
+import {
+  flattenFieldsWithGroups,
+  getPreferredLanguage,
+  parseFields,
+  progressPercentage
+} from './utils'
 import { Blocks } from './views/Blocks'
 import { Sidebar } from './views/Sidebar'
 
@@ -35,7 +41,11 @@ export interface RendererProps {
 }
 
 function initStore(form: IFormModel, autoSave: boolean, allowPayment: boolean): IState {
-  const list = parseFields(form.fields)
+  const locale = getPreferredLanguage({
+    languages: FORM_LOCALES_OPTIONS.map(l => l.value),
+    fallback: form.settings?.locale || 'en'
+  })
+  const list = parseFields(form.fields, form.translations?.[locale])
 
   const welcomeField = list.find(f => f.kind === FieldKindEnum.WELCOME)
   const thankYouField = list.find(f => f.kind === FieldKindEnum.THANK_YOU)
@@ -62,15 +72,13 @@ function initStore(form: IFormModel, autoSave: boolean, allowPayment: boolean): 
   const questionCount = fields.filter(f => QUESTION_FIELD_KINDS.includes(f.kind)).length
   const percentage = progressPercentage(Object.keys(values).length, questionCount)
 
-  // Locale
-  const locale = form.settings?.locale || 'en'
-
   return {
     welcomeField,
     thankYouField,
     allFields,
     fields,
     hiddenFields: form.hiddenFields || [],
+    translations: form.translations,
     query: {},
     jumpFieldIds,
     logics: form.logics,

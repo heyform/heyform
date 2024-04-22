@@ -11,7 +11,8 @@ import {
   Logic,
   StripeAccount,
   ThemeSettings,
-  Variable
+  Variable,
+  FormModel as IForModel
 } from '@heyform-inc/shared-types-enums'
 import { nanoid } from '@heyform-inc/utils'
 
@@ -61,6 +62,9 @@ export class FormModel extends Document {
 
   @Prop({ default: [] })
   hiddenFields?: HiddenField[]
+
+  @Prop({ type: Map, default: {} })
+  translations?: IForModel['translations']
 
   @Prop({ default: [] })
   logics?: Logic[]

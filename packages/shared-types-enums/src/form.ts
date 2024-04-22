@@ -34,6 +34,7 @@ export interface FormSettings {
   ipLimitTime?: number
   enableProgress?: boolean
   locale?: string
+  languages?: string[]
 
   // Custom closed form message
   enableClosedMessage?: boolean
@@ -224,11 +225,7 @@ export interface FormModel {
   hiddenFields?: HiddenField[]
   fieldUpdateAt?: number
   logics?: Logic[]
-  locales?: {
-    [lang: string]: {
-      [field: string]: string | any[]
-    }
-  }
+  translations?: Record<string, Record<string, any>>
   variables?: Variable[]
   columns?: FormField[]
   stripeAccount?: StripeAccount

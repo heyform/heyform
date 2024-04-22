@@ -27,7 +27,7 @@ import {
   Variable
 } from '@heyform-inc/shared-types-enums'
 
-import { IntegrationStatusEnum } from '@model'
+import { FormModel, IntegrationStatusEnum } from '@model'
 
 @InputType()
 class ChoiceInput {
@@ -374,6 +374,10 @@ export class UpdateFormInput extends FormDetailInput {
   @Field({ nullable: true })
   @IsOptional()
   requirePassword?: boolean
+
+  @Field(type => [String], { nullable: true })
+  @IsOptional()
+  languages?: string[]
 
   @Field({ nullable: true })
   @IsOptional()
@@ -776,6 +780,9 @@ export class FormSettingType {
   @Field({ nullable: true })
   locale?: string
 
+  @Field(type => [String], { nullable: true, defaultValue: [] })
+  languages?: string[]
+
   @Field({ nullable: true })
   enableClosedMessage?: boolean
 
@@ -931,6 +938,9 @@ export class FormType {
 
 @ObjectType()
 export class PublicFormType extends FormType {
+  @Field(type => GraphQLJSONObject, { nullable: true })
+  translations: FormModel['translations']
+
   @Field(type => GraphQLJSONObject, { nullable: true })
   integrations?: Record<string, string>
 }

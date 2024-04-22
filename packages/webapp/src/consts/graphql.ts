@@ -298,6 +298,7 @@ export const FORMS_GQL = gql`
         ipLimitTime
         enableProgress
         locale
+        languages
         enableClosedMessage
         closedFormTitle
         closedFormDescription
@@ -369,6 +370,7 @@ export const FORM_SUMMARY_GQL = gql`
         ipLimitCount
         ipLimitTime
         locale
+        languages
         enableClosedMessage
         closedFormTitle
         closedFormDescription
@@ -415,6 +417,7 @@ export const FORM_DETAIL_GQL = gql`
         ipLimitTime
         enableProgress
         locale
+        languages
         enableClosedMessage
         closedFormTitle
         closedFormDescription
@@ -828,6 +831,7 @@ export const PUBLIC_FORM_GQL = gql`
         ipLimitTime
         enableProgress
         locale
+        languages
         enableClosedMessage
         closedFormTitle
         closedFormDescription
@@ -842,6 +846,7 @@ export const PUBLIC_FORM_GQL = gql`
         properties
         layout
       }
+      translations
       hiddenFields {
         id
         name

@@ -39,7 +39,7 @@ export const Navigation = () => {
   return (
     <div
       role="navigation"
-      className="flex flex-col items-center gap-2 text-sm md:flex-row md:gap-6 md:text-xs"
+      className="flex flex-col items-center justify-center gap-2 text-sm md:flex-row md:gap-6 md:text-xs"
     >
       {LINKS.map((link, index) => (
         <NavLink

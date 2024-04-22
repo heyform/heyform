@@ -439,9 +439,12 @@ export default {
     Confirm: 'Confirm',
     Disable: 'Disable',
     times: 'times in every',
-    Language: 'Language',
-    LanguageDescription:
-      'Select the language in which respondents will see your form. Applies to non-customized text, such as default buttons, validation errors, etc.'
+    primaryLanguage: 'Primary language',
+    languageDescription:
+      'Select the primary language in which respondents will see your form. Applies to non-customized text, such as default buttons, validation errors, etc.',
+    languages: 'Translations',
+    translationsDescription:
+      "Automatically translate the form's questions into your chosen languages using <a>OpenAI ChatGPT</a>."
   },
   integration: {
     Categories: 'Categories',

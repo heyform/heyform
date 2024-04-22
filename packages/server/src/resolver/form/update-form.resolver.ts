@@ -2,9 +2,9 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 import { helper, pickValidValues } from '@heyform-inc/utils'
 
-import { Auth, FormGuard, Team } from '@decorator'
+import { Auth, Form, FormGuard } from '@decorator'
 import { UpdateFormInput } from '@graphql'
-import { TeamModel } from '@model'
+import { FormModel } from '@model'
 import { FormService, SubmissionService } from '@service'
 
 @Resolver()
@@ -24,7 +24,7 @@ export class UpdateFormResolver {
   @Mutation(returns => Boolean)
   @FormGuard()
   async updateForm(
-    @Team() team: TeamModel,
+    @Form() form: FormModel,
     @Args('input') input: UpdateFormInput
   ): Promise<boolean> {
     let updates: Record<string, any> = pickValidValues(input as any, [
@@ -46,6 +46,7 @@ export class UpdateFormResolver {
       ['ipLimitTime', 'settings.ipLimitTime'],
       ['enableProgress', 'settings.enableProgress'],
       ['locale', 'settings.locale'],
+      ['languages', 'settings.languages'],
       ['enableClosedMessage', 'settings.enableClosedMessage'],
       ['closedFormTitle', 'settings.closedFormTitle'],
       ['closedFormDescription', 'settings.closedFormDescription'],
@@ -68,6 +69,13 @@ export class UpdateFormResolver {
 
     if (!input.allowArchive) {
       await this.submissionService.deleteByIds(input.formId)
+    }
+
+    if (
+      helper.isValidArray(input.languages) &&
+      !input.languages.every(t => form.settings?.languages?.includes(t))
+    ) {
+      this.formService.addTranslateQueue(input.formId, input.languages!)
     }
 
     return this.formService.update(input.formId, updates)

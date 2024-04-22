@@ -129,3 +129,8 @@ export const ACCOUNT_DELETION_SCHEDULE_INTERVAL: string =
 
 // Unsplash
 export const UNSPLASH_CLIENT_ID: string = process.env.UNSPLASH_CLIENT_ID
+
+// OpenAI
+export const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-3.5-turbo-0125'

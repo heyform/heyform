@@ -15,19 +15,19 @@ export const FORM_LOCALES_OPTIONS = [
     value: 'en'
   },
   {
-    label: 'Deutsch',
+    label: 'German',
     value: 'de'
   },
   {
-    label: 'Français',
+    label: 'French',
     value: 'fr'
   },
   {
-    label: '简体中文',
+    label: 'Chinese (simplified)',
     value: 'zh-cn'
   },
   {
-    label: '繁体中文',
+    label: 'Chinese (traditional)',
     value: 'zh-tw'
   }
 ]

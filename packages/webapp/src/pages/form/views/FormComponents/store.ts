@@ -76,6 +76,7 @@ export interface IState {
   allFields: IFormField[]
   fields: IFormField[]
   hiddenFields: HiddenField[]
+  translations?: Record<string, any>
   query: Record<string, any>
   jumpFieldIds: string[]
   logics?: Logic[]

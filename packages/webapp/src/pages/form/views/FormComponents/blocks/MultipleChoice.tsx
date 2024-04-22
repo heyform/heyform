@@ -13,7 +13,11 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
   const { state } = useStore()
   const { t } = useTranslation()
 
-  const options = useChoicesOption(field.properties?.choices, field.properties?.randomize)
+  const options = useChoicesOption(
+    field.properties?.choices,
+    field.properties?.randomize,
+    state.translations?.[state.locale]?.[field.id]?.choices
+  )
   const { min, max, allowMultiple } = useSelectionRange(
     field.properties?.allowMultiple,
     field.validations?.min,

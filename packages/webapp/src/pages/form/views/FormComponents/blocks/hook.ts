@@ -20,7 +20,11 @@ function resetNumber(num?: number, defaultValue?: number): number {
   return defaultValue!
 }
 
-export function useChoicesOption(choices?: Choice[], randomize = false): any[] {
+export function useChoicesOption(
+  choices?: Choice[],
+  randomize = false,
+  translations: Record<string, any> = {}
+): any[] {
   return useMemo(() => {
     if (!helper.isValidArray(choices)) {
       return []
@@ -32,13 +36,17 @@ export function useChoicesOption(choices?: Choice[], randomize = false): any[] {
       list = list.sort(() => Math.random() - 0.5)
     }
 
-    return list.map((choice, index) => ({
-      keyName: String.fromCharCode(KeyCode.A + index),
-      label: choice.label,
-      value: choice.id,
-      image: choice.image
-    }))
-  }, [choices])
+    return list.map((choice, index) => {
+      const label = translations?.[choice.id]
+
+      return {
+        keyName: String.fromCharCode(KeyCode.A + index),
+        label: label || choice.label,
+        value: choice.id,
+        image: choice.image
+      }
+    })
+  }, [choices, randomize, translations])
 }
 
 export function useSelectionRange(

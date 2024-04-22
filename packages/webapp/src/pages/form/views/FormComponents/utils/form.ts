@@ -1,5 +1,9 @@
 import { htmlUtils, parsePlainAnswer, validateRequiredField } from '@heyform-inc/answer-utils'
-import { FORM_FIELD_KINDS, FieldKindEnum } from '@heyform-inc/shared-types-enums'
+import {
+  FORM_FIELD_KINDS,
+  FieldKindEnum,
+  FormFieldTranslation
+} from '@heyform-inc/shared-types-enums'
 import { helper, type } from '@heyform-inc/utils'
 
 import { KeyCode } from '@/components/ui'
@@ -86,7 +90,10 @@ export function replaceHTML(
   return html
 }
 
-export function parseFields(fields?: IFormField[]): IFormField[] {
+export function parseFields(
+  fields?: IFormField[],
+  translations: FormFieldTranslation = {}
+): IFormField[] {
   const result = fields?.filter(f => FORM_FIELD_KINDS.includes(f.kind))
 
   if (!helper.isValidArray(result)) {
@@ -94,8 +101,10 @@ export function parseFields(fields?: IFormField[]): IFormField[] {
   }
 
   return result!.map(f => {
+    const translation = translations[f.id]
+
     // Adapt with old form structure
-    const title = ((f as unknown as any).titleSchema || f.title) as string[]
+    const title = (translation?.title || (f as unknown as any).titleSchema || f.title) as string[]
 
     if (helper.isArray(title)) {
       f.title = htmlUtils.serialize(title, {
@@ -103,8 +112,10 @@ export function parseFields(fields?: IFormField[]): IFormField[] {
       })
     }
 
-    if (helper.isArray(f.description)) {
-      f.description = htmlUtils.serialize(f.description as string[], {
+    const description = translation?.description || f.description
+
+    if (helper.isArray(description)) {
+      f.description = htmlUtils.serialize(description as string[], {
         livePreview: true
       })
     }

@@ -134,7 +134,7 @@ button.select-button {
 }
 
 .select-option-container {
-  @apply cursor-default relative py-2 pl-3 pr-9 text-slate-900 hover:bg-slate-100;
+  @apply cursor-pointer relative py-2 pl-3 pr-9 text-slate-900 hover:bg-slate-100;
 }
 
 .select-option-text {
