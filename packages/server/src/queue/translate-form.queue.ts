@@ -24,11 +24,6 @@ const LANGUAGES = {
   'zh-tw': 'Traditional Chinese'
 }
 
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-  baseURL: OPENAI_BASE_URL
-})
-
 @Processor('TranslateFormQueue')
 export class TranslateFormQueue extends BaseQueue {
   constructor(private readonly formService: FormService) {
@@ -73,6 +68,11 @@ export class TranslateFormQueue extends BaseQueue {
     })
 
     if (helper.isValid(translations)) {
+      const openai = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+        baseURL: OPENAI_BASE_URL
+      })
+
       const { choices } = await openai.chat.completions.create({
         model: OPENAI_GPT_MODEL,
         response_format: {
