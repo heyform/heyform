@@ -4,20 +4,12 @@ import type { FC } from 'react'
 import { useEffect } from 'react'
 
 import { useStore } from '../store'
-import { replaceHTML } from '../utils'
 import { Branding } from '../views/Branding'
 import type { BlockProps } from './Block'
 import { Block } from './Block'
 
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
-  const { values, fields, query, variables } = state
-
-  const newField: FormField = {
-    ...field,
-    title: replaceHTML(field.title as string, values, fields, query, variables),
-    description: replaceHTML(field.description as string, values, fields, query, variables)
-  }
 
   useEffect(() => {
     if (
@@ -33,7 +25,7 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
     <>
       <Block
         className={clsx('heyform-empty-state heyform-thank-you', className)}
-        field={newField}
+        field={field}
         isScrollable={false}
         {...restProps}
       />

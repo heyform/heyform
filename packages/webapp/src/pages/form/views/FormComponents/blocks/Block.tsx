@@ -1,13 +1,12 @@
 import { FieldLayoutAlignEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
-import type { FC, WheelEvent } from 'react'
-import { useEffect, useState } from 'react'
+import { FC, WheelEvent, useEffect, useMemo, useState } from 'react'
 
 import { Layout } from '../components'
 import { useStore } from '../store'
 import type { IFormField } from '../typings'
-import { questionNumber, removeHeading, useTranslation } from '../utils'
+import { questionNumber, removeHeading, replaceHTML, useTranslation } from '../utils'
 import { useWheelScroll } from './hook'
 
 export interface BlockProps extends IComponentProps {
@@ -25,18 +24,30 @@ const SPLIT_LAYOUTS = [
 
 export const Block: FC<BlockProps> = ({
   className,
-  field,
+  field: rawField,
   paymentBlockIndex,
   isScrollable = true,
   children,
   ...restProps
 }) => {
-  const { state, dispatch } = useStore()
   const { t } = useTranslation()
-  const [isEntered, setIsEntered] = useState(false)
+  const { state, dispatch } = useStore()
+  const { values, fields, query, variables } = state
+
+  const field: IFormField = useMemo(
+    () => ({
+      ...rawField,
+      title: replaceHTML(rawField.title as string, values, fields, query, variables),
+      description: replaceHTML(rawField.description as string, values, fields, query, variables)
+    }),
+    [fields, query, rawField, values, variables]
+  )
+
   const isQuestion = QUESTION_FIELD_KINDS.includes(field.kind)
   const isInlineLayout = field.layout?.align === FieldLayoutAlignEnum.INLINE
   const isSplitLayout = SPLIT_LAYOUTS.includes(field.layout?.align as FieldLayoutAlignEnum)
+
+  const [isEntered, setIsEntered] = useState(false)
   const [isScrolledToTop, setIsScrolledToTop] = useState(true)
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true)
 
