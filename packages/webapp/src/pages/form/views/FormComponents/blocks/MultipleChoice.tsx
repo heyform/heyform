@@ -50,6 +50,8 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
                   if (helper.isEmpty(value)) {
                     return Promise.reject(t('This field is required'))
                   }
+                } else if (helper.isNil(value)) {
+                  return Promise.resolve()
                 }
 
                 const count = value.value.length + helper.isValid(value.other) ? 1 : 0
