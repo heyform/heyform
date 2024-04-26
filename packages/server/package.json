@@ -7,10 +7,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "dev": "nest start --watch",
+    "dev": "cross-env NODE_OPTIONS=--enable-source-maps nest start --watch",
     "debug": "nest start --debug --watch",
     "build": "nest build",
-    "start": "node dist/main.js",
+    "start": "node --enable-source-maps dist/main.js",
     "type-check": "tsc --pretty --noEmit",
     "lint": "eslint \"src/**/*.ts\" --quiet --fix",
     "migrate:seed": "mongoose-cli seed --name apps.ts",

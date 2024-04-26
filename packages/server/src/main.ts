@@ -12,6 +12,7 @@ import { APP_LISTEN_HOSTNAME, APP_LISTEN_PORT, STATIC_DIR, VIEW_DIR } from '@env
 import { Logger, hbs } from '@utils'
 
 import { AppModule } from './app.module'
+import { AllExceptionsFilter } from './common/filter'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -24,6 +25,9 @@ async function bootstrap() {
       forbidUnknownValues: false
     })
   )
+
+  // Catch all exceptions
+  app.useGlobalFilters(new AllExceptionsFilter())
 
   // Enable cookie
   app.use(cookieParser())
