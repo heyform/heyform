@@ -153,10 +153,10 @@ export default {
       delConfirm: 'Are you sure you want to remove this member?',
       remove: 'Remove',
       inputPrompt: 'Please enter at least one valid email address',
-      inviteMember: 'Invite your team mates',
-      send: 'Invitations have been send',
+      inviteMember: 'Invite your teammates',
+      send: 'Invitations have been sent',
       inviteExplain:
-        'You can invite your team mates to join the workspace via email. The invitation valids for 7 days and will expire on',
+        'You can invite your teammates to join the workspace via email. The invitation valids for 7 days and will expire on',
       Add: 'Add more',
       sendBottom: 'Invite',
       member: 'Members',
