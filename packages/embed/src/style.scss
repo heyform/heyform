@@ -1,0 +1,223 @@
+.heyform__embed,
+.heyform__modal {
+  * {
+    &:after,
+    &:before {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.heyform__embed-standard,
+.heyform__embed-fullpage,
+.heyform__iframe-container {
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+    min-height: inherit;
+    transform: translateZ(0);
+  }
+}
+
+.heyform__trigger-button {
+  padding: 8px 24px;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+  background: #fff;
+  color: #020617;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+  transition: opacity .2s ease-in-out;
+  cursor: pointer;
+
+  &.heyform__trigger-button-dark {
+    background: #020617;
+    color: #fff;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.heyform__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .85);
+  transition: opacity .2s ease-in-out;
+  z-index: 10001;
+
+  .heyform__iframe-container {
+    color: #fff;
+  }
+}
+
+.heyform__modal-large {
+  .heyform__iframe-container {
+    width: calc(100% - 80px);
+    height: calc(100% - 80px);
+  }
+}
+
+.heyform__modal-medium {
+  .heyform__iframe-container {
+    width: calc(85% - 80px);
+    height: calc(85% - 80px);
+  }
+}
+
+.heyform__modal-small {
+  .heyform__iframe-container {
+    width: calc(70% - 80px);
+    height: calc(70% - 80px);
+  }
+}
+
+.heyform__close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 2px;
+  cursor: pointer;
+  transition: opacity .2s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.heyform__iframe-container {
+  position: relative;
+  height: 100%;
+
+  &,
+  iframe {
+    overflow: hidden;
+    border-radius: 8px;
+  }
+}
+
+.heyform__popup-button {
+  position: fixed;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #fff;
+  color: #020617;
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .06), 0 2px 4px rgba(0, 0, 0, .08);
+  transition: transform 0.2s ease-in-out;
+  transform-origin: center;
+  z-index: 10000;
+
+  &.heyform__popup-button-dark {
+    background: #020617;
+    color: #fff;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.heyform__popup {
+  .heyform__iframe-container {
+    position: fixed;
+    z-index: 10000;
+    background: #fff;
+    box-shadow: rgba(0, 0, 0, .08) 0 2px 4px, rgba(0, 0, 0, .06) 0 2px 12px;
+  }
+
+  &.heyform__popup-bottom-right {
+    .heyform__popup-button {
+      right: 24px;
+      bottom: 24px;
+    }
+
+    .heyform__iframe-container {
+      right: 24px;
+      bottom: 94px;
+    }
+  }
+
+  &.heyform__popup-bottom-left {
+    .heyform__popup-button {
+      left: 24px;
+      bottom: 24px;
+    }
+
+    .heyform__iframe-container {
+      left: 24px;
+      bottom: 94px;
+    }
+  }
+}
+
+.heyform__loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 24px;
+
+  svg {
+    width: 28px;
+    height: 6px;
+  }
+}
+
+@keyframes heyform__loading {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.heyform__loading-dot {
+  animation-name: heyform__loading;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+}

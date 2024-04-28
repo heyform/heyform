@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HeyForm Embed</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="HeyForm" name="apple-mobile-web-app-title" />
+  <meta content="telephone=no,email=no" name="format-detection" />
+  <style>
+    body {
+      margin: 40px;
+        background: #f5f5f5;
+    }
+
+    .container {
+        max-width: 1180px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .mt-10 {
+        margin-top: 40px;
+    }
+
+    .placeholder {
+        background: #ddd;
+        border-radius: 6px;
+    }
+
+    .placeholder-1 {
+        width: 40%;
+        height: 40px;
+        margin-bottom: 20px;
+    }
+
+    .placeholder-2 {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 60px;
+    }
+
+    .placeholder-3 {
+        width: 100%;
+        height: 120px;
+        margin-top: 60px;
+        margin-bottom: 40px;
+    }
+
+    .flex {
+        display: flex;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .placeholder-4 {
+        flex: 1 1 auto;
+        height: 400px;
+    }
+  </style>
+  <script src="https://www.unpkg.com/@heyform-inc/embed@latest/dist/index.umd.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="placeholder placeholder-1"></div>
+    <div class="placeholder placeholder-2"></div>
+
+    <!-- HeyForm Standard example -->
+    <div
+      data-heyform-id="kmmzY93P"
+      data-heyform-type="standard"
+      data-heyform-width-type="%"
+      data-heyform-width="100"
+      data-heyform-height-type="auto"
+      data-heyform-custom-url="https://heyform.net/f/"
+      data-heyform-hiddenfield-ref="product"
+    ></div>
+
+    <div class="mt-10">
+      <!-- HeyForm Modal example -->
+      <div
+        data-heyform-id="kmmzY93P"
+        data-heyform-type="modal"
+        data-heyform-size="medium"
+        data-heyform-custom-url="https://heyform.net/f/"
+        data-heyform-hiddenfield-ref="product"
+      >
+        <button class="heyform__trigger-button" type="button" onclick="HeyForm.openModal('kmmzY93P')">Open modal</button>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <div
+        data-heyform-id="kmmzY93P"
+        data-heyform-type="popup"
+        data-heyform-open-trigger="delay"
+        data-heyform-open-scroll-percent="30"
+        data-heyform-open-delay="3000"
+        data-heyform-trigger-background="#f43f5e"
+        data-heyform-custom-url="https://heyform.net/f/"
+        data-heyform-hiddenfield-ref="product"
+      >
+      </div>
+    </div>
+
+    <div class="placeholder placeholder-3"></div>
+    <div class="placeholder placeholder-2"></div>
+
+    <div class="flex">
+      <div class="placeholder placeholder-4"></div>
+      <div class="placeholder placeholder-4"></div>
+    </div>
+  </div>
+</body>
+</html>
