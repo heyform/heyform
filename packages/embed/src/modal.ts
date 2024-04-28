@@ -77,19 +77,19 @@ export class Modal<T extends ModalSettings> extends Standard<T> {
       switch (this.settings.openTrigger) {
         case 'loaded':
           return this.onLoaded()
-  
+
         case 'delay':
           return this.onDelay()
-  
+
         case 'exit':
           return this.onExit()
-  
+
         case 'scroll':
           return this.onScroll()
       }
     }
 
-    if (this.settings.autoClose) {
+    if (this.settings.hideAfterSubmit) {
       window.onmessage = ({ data }: MessageEvent) => {
         if (!isPlainObject(data) || data.source !== 'HEYFORM') {
           return
@@ -98,8 +98,11 @@ export class Modal<T extends ModalSettings> extends Standard<T> {
         logger.info('Message event', data)
 
         switch (data.eventName) {
-          case 'AUTO_CLOSE':
-            return this.close()
+          case 'HIDE_EMBED_MODAL':
+          case 'HIDE_EMBED_POPUP':
+            return setTimeout(() => {
+              this.close()
+            }, (this.settings.autoClose || 0) * 1_000)
         }
       }
     }

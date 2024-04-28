@@ -10,7 +10,8 @@ export interface FullPageSettings {
 export interface StandardSettings extends FullPageSettings {
   widthType?: 'px' | '%'
   width?: number
-  heightType?: 'auto' | 'fixed'
+  autoResizeHeight?: boolean
+  heightType?: 'px' | '%'
   height?: number
 }
 
@@ -20,6 +21,7 @@ export interface ModalSettings extends Omit<FullPageSettings, 'transparentBackgr
   openDelay?: number
   openScrollPercent?: number
   triggerBackground?: string
+  hideAfterSubmit?: boolean
   autoClose?: number
 }
 

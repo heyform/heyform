@@ -39,15 +39,15 @@ export class Standard<T extends StandardSettings> {
     this.$container.style('width', `${this.settings.width}${this.settings.widthType}`)
 
     setTimeout(() => {
-      let height = this.settings.height
+      let height = `${this.settings.height}${this.settings.heightType}`
 
-      if (this.settings.heightType === 'auto') {
+      if (this.settings.autoResizeHeight) {
         const rect = this.$container.rect()
 
-        height = isMobile ? window.innerHeight : Math.min(window.innerHeight, rect.width * 0.6)
+        height = (isMobile ? window.innerHeight : Math.min(window.innerHeight, rect.width * 0.6)) + 'px'
       }
 
-      this.$container.style('height', `${height}px`)
+      this.$container.style('height', height)
     }, 0)
 
     this.$container.append(
