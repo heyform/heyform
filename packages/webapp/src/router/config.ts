@@ -13,6 +13,7 @@ export interface CustomRouteConfig {
   path: string
   title?: string
   loginRequired?: boolean
+  redirectIfLogged?: boolean
   layout: any
   component: any
 }
@@ -53,6 +54,7 @@ const config: CustomRouteConfig[] = [
   {
     path: '/login',
     loginRequired: false,
+    redirectIfLogged: true,
     layout: CommonLayout,
     component: Login,
     title: 'Login'
@@ -61,6 +63,7 @@ const config: CustomRouteConfig[] = [
   {
     path: '/sign-up',
     loginRequired: false,
+    redirectIfLogged: true,
     layout: CommonLayout,
     component: SignUp,
     title: 'auth.signup.signUp'
@@ -69,6 +72,7 @@ const config: CustomRouteConfig[] = [
   {
     path: '/forgot-password',
     loginRequired: false,
+    redirectIfLogged: true,
     layout: CommonLayout,
     component: ForgotPassword,
     title: 'Forgot Password'
@@ -77,6 +81,7 @@ const config: CustomRouteConfig[] = [
   {
     path: '/reset-password',
     loginRequired: false,
+    redirectIfLogged: true,
     layout: CommonLayout,
     component: ResetPassword,
     title: 'Reset Password'
@@ -159,6 +164,7 @@ const config: CustomRouteConfig[] = [
     path: '/form/:formId',
     component: FormRender,
     loginRequired: false,
+    redirectIfLogged: false,
     layout: PublicLayout
   },
   {

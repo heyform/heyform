@@ -56,6 +56,7 @@ function sortRoute(pathA: string, pathB: string) {
 
 const CustomRoute: FC<CustomRouteConfig> = ({
   loginRequired = true,
+  redirectIfLogged = true,
   layout: Layout,
   component: Component,
   title
@@ -82,7 +83,7 @@ const CustomRoute: FC<CustomRouteConfig> = ({
       return <Navigate to={`/login?redirect_uri=${encodeURIComponent(redirectUri)}`} replace />
     }
   } else {
-    return !isLoggedIn ? children : <Navigate to="/" replace />
+    return isLoggedIn && redirectIfLogged ? <Navigate to="/" replace /> : children
   }
 }
 
