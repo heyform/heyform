@@ -57,7 +57,7 @@
 .select-native,
 .select-button,
 button.select-button {
-  @apply bg-white relative w-full border border-gray-300 rounded-md pl-3 pr-6 py-2 text-left sm:text-sm cursor-default focus:ring-1 focus:ring-blue-600 focus:border-blue-600;
+  @apply bg-white relative w-full border border-gray-300 rounded-md pl-3 pr-6 py-2 text-left sm:text-sm cursor-pointer focus:ring-1 focus:ring-blue-600 focus:border-blue-600;
 }
 
 .select-button,

@@ -1,5 +1,17 @@
 button.switch {
-  @apply relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer bg-slate-200 transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600;
+  @apply relative inline-flex flex-shrink-0 border-2 border-transparent rounded-full cursor-pointer bg-slate-200 transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600;
+
+	&.switch-normal {
+		@apply h-6 w-11;
+	}
+
+	&.switch-small {
+		@apply h-4 w-8;
+
+		.switch-handle {
+			@apply h-3 w-3;
+		}
+	}
 }
 
 .switch-handle {
@@ -24,6 +36,12 @@ button.switch-checked {
   .switch-handle {
     @apply translate-x-5;
   }
+
+	&.switch-small {
+		.switch-handle {
+			@apply translate-x-4;
+		}
+	}
 }
 
 button.switch-button {

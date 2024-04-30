@@ -73,7 +73,7 @@ const ColorPicker: FC<ColorPickerProps> = ({
       <HexAlphaColorPicker color={value} onChange={handleChange} />
 
       <div className="color-picker-input">
-        <div className="color-picker-value">
+        <div className="color-picker-label">
           <HexColorInput value={value} onChange={handleChange} />
         </div>
         <AlphaInput color={value} onChange={handleAlphaChange} />

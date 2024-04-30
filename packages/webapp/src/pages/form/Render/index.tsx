@@ -152,7 +152,7 @@ const Render = () => {
             customUrlRedirects={true}
             onSubmit={handleSubmit}
           />
-          <CustomCode form={form} />
+          <CustomCode form={form} query={query} />
         </>
       )}
     </Async>

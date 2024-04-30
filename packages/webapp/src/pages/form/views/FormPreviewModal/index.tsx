@@ -64,6 +64,7 @@ export const FormPreviewModal: FC = observer(() => {
           showCloseIcon={false}
         >
           <div className="form-preview-header">
+            <div className="ml-4 text-lg font-medium text-slate-900">Preview</div>
             <div className="flex flex-1 items-center justify-center">
               <Switch.Group
                 className="!hidden text-sm md:!inline-flex"

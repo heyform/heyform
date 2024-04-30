@@ -101,7 +101,12 @@ function getAdaptedColor(color: string, alphaNum = 0.5, step = 20): string {
   return `rgba(${red}, ${green}, ${blue}, ${alphaNum})`
 }
 
-export function getThemeStyle(theme: FormTheme): string {
+export function getThemeStyle(theme: FormTheme, query?: Record<string, any>): string {
+  if (helper.isTrue(query?.transparentBackground)) {
+    theme.backgroundColor = 'transparent'
+    theme.backgroundImage = undefined
+  }
+
   return `
   html {
     --heyform-font-family: ${theme.fontFamily};

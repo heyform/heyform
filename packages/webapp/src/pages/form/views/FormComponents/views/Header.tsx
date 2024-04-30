@@ -1,8 +1,10 @@
+import { helper } from '@heyform-inc/utils'
 import type { FC } from 'react'
 import { useCallback } from 'react'
 
 import { Countdown } from '../components/Countdown'
 import { useStore } from '../store'
+import { sendHideModalMessage } from '../utils'
 import { Progress } from './Progress'
 
 export const Header: FC = () => {
@@ -11,6 +13,10 @@ export const Header: FC = () => {
   async function handleCountdownEnd() {
     // Submit form
     await state.onSubmit?.(state.values, true)
+
+    if (helper.isTrue(state.query.hideAfterSubmit)) {
+      sendHideModalMessage()
+    }
 
     dispatch({
       type: 'setIsSubmitted',

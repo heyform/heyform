@@ -24,6 +24,40 @@ dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(dayOfYear)
 
+const DEFAULT_EMBED_CONFIGS: Record<string, any> = {
+  standard: {
+    widthType: '%',
+    width: 100,
+    heightType: 'px',
+    height: 500,
+    autoResizeHeight: true
+  },
+  modal: {
+    size: 'large',
+    openTrigger: 'click',
+    openDelay: 5,
+    openScrollPercent: 30,
+    triggerBackground: '#1d4ed8',
+    triggerText: 'Open Form',
+    hideAfterSubmit: false,
+    autoClose: 5
+  },
+  popup: {
+    position: 'bottom-right',
+    width: 420,
+    height: 540,
+    openTrigger: 'click',
+    openDelay: 5,
+    openScrollPercent: 30,
+    triggerBackground: '#1d4ed8',
+    hideAfterSubmit: false,
+    autoClose: 5
+  },
+  fullpage: {
+    transparentBackground: false
+  }
+}
+
 export class FormStore {
   activeFormId?: string
 
@@ -32,6 +66,9 @@ export class FormStore {
   customTheme?: FormTheme = {} as any
 
   tempSettings: Partial<TempFormSettings> = {}
+
+  embedType?: string = undefined
+  embedConfigs = DEFAULT_EMBED_CONFIGS
 
   constructor() {
     makeAutoObservable(this)
@@ -51,6 +88,10 @@ export class FormStore {
       })
     }
     return []
+  }
+
+  get currentEmbedConfig() {
+    return this.embedConfigs[this.embedType!] || DEFAULT_EMBED_CONFIGS[this.embedType!]
   }
 
   setCurrent(form?: FormModel) {
@@ -117,5 +158,17 @@ export class FormStore {
       ...this.tempSettings,
       ...updates
     }
+  }
+
+  updateEmbedConfig(updates: any) {
+    this.embedConfigs[this.embedType!] = {
+      ...this.currentEmbedConfig,
+      ...updates
+    }
+  }
+
+  resetEmbed() {
+    this.embedType = undefined
+    this.embedConfigs = DEFAULT_EMBED_CONFIGS
   }
 }

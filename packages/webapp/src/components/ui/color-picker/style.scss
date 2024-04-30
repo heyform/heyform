@@ -46,9 +46,6 @@
   @apply relative h-full;
 }
 
-.color-picker-value {
-}
-
 .color-picker-alpha {
   @apply flex w-28 h-full;
 
@@ -76,7 +73,8 @@
 }
 
 .color-picker-presets {
-  @apply grid grid-cols-8;
+	margin-top: 20px !important;
+  @apply grid grid-cols-8 gap-2;
 }
 
 .color-picker-preset {

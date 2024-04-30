@@ -1,3 +1,4 @@
+import { htmlUtils } from '@heyform-inc/answer-utils'
 import { FieldLayoutAlignEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
@@ -107,7 +108,9 @@ export const Block: FC<BlockProps> = ({
                   number: questionNumber(field.parent!.index)
                 })}
               </div>
-              <h2 className="heyform-block-title">{field.parent.title}</h2>
+              <h2 className="heyform-block-title">
+                {htmlUtils.plain(field.parent.title as string)}
+              </h2>
             </div>
           </div>
         )}

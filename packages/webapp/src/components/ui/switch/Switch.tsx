@@ -6,6 +6,7 @@ import { IComponentProps } from '../typing'
 
 export interface SwitchProps extends Omit<IComponentProps, 'onChange'> {
   loading?: boolean
+  size?: 'small' | 'normal'
   disabled?: boolean
   value?: boolean
   onChange?: (value: boolean) => void
@@ -14,6 +15,7 @@ export interface SwitchProps extends Omit<IComponentProps, 'onChange'> {
 const Switch: FC<SwitchProps> = ({
   className,
   value = false,
+  size = 'normal',
   loading = false,
   disabled,
   onChange,
@@ -27,6 +29,7 @@ const Switch: FC<SwitchProps> = ({
     <button
       className={clsx(
         'switch',
+        `switch-${size}`,
         {
           'switch-checked': value
         },

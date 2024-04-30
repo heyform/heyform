@@ -14,7 +14,12 @@ import { useKey } from '@/utils'
 
 import { Submit } from '../components'
 import { removeStorage, useStore } from '../store'
-import { sliceFieldsByLogics, useTranslation, validateLogicField } from '../utils'
+import {
+  sendHideModalMessage,
+  sliceFieldsByLogics,
+  useTranslation,
+  validateLogicField
+} from '../utils'
 
 interface FormProps extends RCFormProps {
   field: FormField
@@ -144,6 +149,10 @@ export const Form: FC<FormProps> = ({
 
         // Submit form
         await state.onSubmit?.(values, isPartialSubmission, state.stripe)
+
+        if (helper.isTrue(state.query.hideAfterSubmit)) {
+          sendHideModalMessage()
+        }
 
         setLoading(false)
         dispatch({

@@ -8,54 +8,27 @@ import {
 } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
 import { CopyButton } from '@/components'
-import { Button, Modal, Switch, notification } from '@/components/ui'
+import { Button, Modal, Switch, Tooltip, notification } from '@/components/ui'
 import { HOMEPAGE_URL } from '@/consts'
 import { FormService } from '@/service'
 import { useStore } from '@/store'
-import { urlBuilder } from '@/utils'
+import { urlBuilder, useParam } from '@/utils'
+
+import { FORM_EMBED_OPTIONS } from './FormEmbedModal'
 
 function getShareURL(formId?: string) {
   return HOMEPAGE_URL + `/form/${formId}`
 }
 
 export const FormShareModal = observer(() => {
-  const [loading, setLoading] = useState(false)
-  const [loading2, setLoading2] = useState(false)
+  const { workspaceId, projectId, formId } = useParam()
   const formStore = useStore('formStore')
   const appStore = useStore('appStore')
 
   const sharingLinkUrl = getShareURL(formStore.current?.id)
-
-  async function handleChange(requirePassword: boolean) {
-    if (loading) {
-      return
-    }
-
-    setLoading(true)
-
-    await handleUpdate({
-      requirePassword
-    })
-
-    setLoading(false)
-  }
-
-  async function handleClick() {
-    if (loading2) {
-      return
-    }
-
-    setLoading2(true)
-
-    const password = random(4)
-    await handleUpdate({
-      password
-    })
-
-    setLoading2(false)
-  }
 
   async function handleUpdate(updates: IMapType) {
     try {
@@ -102,6 +75,11 @@ export const FormShareModal = observer(() => {
     window.open(url)
   }
 
+  function openEmbedModal(type: string) {
+    appStore.isFormShareModalOpen = false
+    formStore.embedType = type
+  }
+
   return (
     <Modal
       className="share-modal"
@@ -109,65 +87,87 @@ export const FormShareModal = observer(() => {
       visible={appStore.isFormShareModalOpen}
       onClose={handleClose}
     >
-      <div className="space-y-6 text-sm text-slate-700">
+      <div className="space-y-6 text-sm text-slate-900">
         <div className="flex items-center justify-between">
-          <h1 className="text-base font-medium leading-6 text-slate-900">Share this form</h1>
+          <h1 className="text-lg font-bold leading-6 text-slate-900">Share this form</h1>
 
           <button onClick={handleClose}>
             <IconX className="text-slate-700 hover:text-slate-900" />
           </button>
         </div>
 
-        <div>
-          <div className="mb-1 font-medium">Share on social networks</div>
-          <div className="flex items-center gap-2">
-            <Button.Link
-              leading={<IconBrandX className="text-slate-900" />}
-              onClick={handleTwitter}
-            />
-            <Button.Link
-              leading={<IconBrandFacebook className="text-slate-900" />}
-              onClick={handleFacebook}
-            />
-            <Button.Link
-              leading={<IconBrandLinkedin className="text-slate-900" />}
-              onClick={handleLinkedin}
-            />
-            <Button.Link leading={<IconMail className="text-slate-900" />} onClick={handleEmail} />
-          </div>
+        <div className="flex items-center gap-2">
+          <Tooltip ariaLabel="Share on X">
+            <div>
+              <Button.Link
+                leading={<IconBrandX className="text-slate-900" />}
+                onClick={handleTwitter}
+              />
+            </div>
+          </Tooltip>
+
+          <Tooltip ariaLabel="Share on Facebook">
+            <div>
+              <Button.Link
+                leading={<IconBrandFacebook className="text-slate-900" />}
+                onClick={handleFacebook}
+              />
+            </div>
+          </Tooltip>
+
+          <Tooltip ariaLabel="Share on LinkedIn">
+            <div>
+              <Button.Link
+                leading={<IconBrandLinkedin className="text-slate-900" />}
+                onClick={handleLinkedin}
+              />
+            </div>
+          </Tooltip>
+
+          <Tooltip ariaLabel="Share via Email">
+            <div>
+              <Button.Link
+                leading={<IconMail className="text-slate-900" />}
+                onClick={handleEmail}
+              />
+            </div>
+          </Tooltip>
         </div>
 
         <div>
-          <div className="mb-1 font-medium">URL link</div>
+          <div className="mb-1 flex items-center justify-between text-sm">
+            <span className="font-medium">Share link</span>
+            <div className="flex items-center gap-1">
+              <NavLink
+                to={`/workspace/${workspaceId}/project/${projectId}/form/${formId}/settings#form-settings-protection`}
+              >
+                Password protection
+              </NavLink>
+            </div>
+          </div>
           <div className="relative">
             <div className="h-10 rounded-lg border border-slate-200 px-3 leading-10">
               {sharingLinkUrl}
             </div>
             <CopyButton className="!absolute right-2 top-1.5 !p-1" text={sharingLinkUrl} />
           </div>
+        </div>
 
-          <div className="mb-2 mt-6 flex items-center">
-            <div className="flex-1 font-medium">Password protection</div>
-            <Switch
-              value={formStore.current?.settings?.requirePassword}
-              loading={loading}
-              disabled={loading}
-              onChange={handleChange}
-            />
+        <div>
+          <div className="mb-1 text-sm font-medium">Embed form</div>
+          <div className="mb-4 text-sm text-slate-600">
+            Use these options to embed your form into your own website.
           </div>
-          <div className="flex gap-x-2">
-            <div className="relative flex-1">
-              <div className="h-10 rounded-lg border border-slate-200 px-3 leading-10">
-                {formStore.current?.settings?.password}
+
+          <div className="grid grid-cols-4 gap-5">
+            {FORM_EMBED_OPTIONS.map(row => (
+              <div className="cursor-pointer" onClick={() => openEmbedModal(row.type)}>
+                <div className="rounded-md border border-black/10">
+                  <row.icon className="w-full rounded-md" />
+                </div>
+                <div className="mt-1.5 text-center text-sm text-slate-600">{row.label}</div>
               </div>
-              <CopyButton
-                className="!absolute right-2 top-1.5 !p-1"
-                text={formStore.current?.settings?.password || ''}
-              />
-            </div>
-            <Button type="primary" loading={loading2} onClick={handleClick}>
-              Generate
-            </Button>
+            ))}
           </div>
         </div>
       </div>

@@ -298,14 +298,48 @@ export const FORM_THEMES = [
 ]
 
 export const COLOR_PICKER_PRESET_COLORS = [
-  '#0252d7',
+  '#ffffff',
+  '#fef2f2',
+  '#fff7ed',
+  '#fefce8',
+  '#f0fdf4',
+  '#ecfeff',
+  '#eff6ff',
+  '#faf5ff',
+
+  '#e4e4e7',
+  '#fecaca',
+  '#fed7aa',
+  '#fef08a',
+  '#bbf7d0',
+  '#a5f3fc',
+  '#bfdbfe',
+  '#e9d5ff',
+
+  '#a1a1aa',
+  '#f87171',
+  '#fb923c',
+  '#facc15',
+  '#4ade80',
+  '#22d3ee',
+  '#60a5fa',
+  '#c084fc',
+
+  '#71717a',
+  '#ef4444',
+  '#f97316',
+  '#eab308',
   '#22c55e',
   '#06b6d4',
-  '#fbbf24',
-  '#d946ef',
+  '#3b82f6',
+  '#a855f7',
+
+  '#52525b',
   '#dc2626',
-  '#6b21a8',
-  '#854d0e',
-  '#94a3b8',
-  '#000000'
+  '#ea580c',
+  '#ca8a04',
+  '#16a34a',
+  '#0891b2',
+  '#2563eb',
+  '#9333ea'
 ]
