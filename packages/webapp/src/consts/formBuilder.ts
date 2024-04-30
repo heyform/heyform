@@ -1,6 +1,6 @@
 export const GOOGLE_FONTS = [
-  'Public Sans',
   'Inter',
+  'Public Sans',
   'Georgia',
   'Sniglet',
   'Raleway',
@@ -18,7 +18,7 @@ export const GOOGLE_FONTS = [
   'Crimson Text',
   'Cairo',
   'BioRhyme',
-  'Inter',
+  'Rajdhani',
   'Lora',
   'Frank Ruhl Libre',
   'Playfair Display',
