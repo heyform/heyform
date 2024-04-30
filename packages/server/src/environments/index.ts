@@ -1,9 +1,8 @@
 import * as fs from 'fs'
 import { resolve } from 'path'
 
+import { loadEnv } from '@heyooo-inc/env'
 import { bytes, commonFileMimeTypes, helper, mime, toBool } from '@heyform-inc/utils'
-
-import { loadEnv } from '@utils'
 
 // environment
 export const NODE_ENV: string = process.env.NODE_ENV || 'development'

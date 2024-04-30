@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { loadEnv } = require('./dist/utils/env')
+const { loadEnv } = require('@heyooo-inc/env')
 
 loadEnv(process.env.NODE_ENV || 'development', __dirname)
 

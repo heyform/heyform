@@ -43,6 +43,9 @@ importers:
       '@heyform-inc/utils':
         specifier: 1.0.3
         version: 1.0.3
+      '@heyooo-inc/env':
+        specifier: ^0.0.1
+        version: 0.0.1(dotenv-expand@11.0.6)(dotenv@8.2.0)
       '@nestjs/bull':
         specifier: 0.3.1
         version: 0.3.1(@nestjs/common@7.4.4)(@nestjs/core@7.4.4)(bull@3.22.0)
@@ -2093,6 +2096,16 @@ packages:
       slugify: 1.6.6
       uuid: 8.3.2
       validator: 13.11.0
+    dev: false
+
+  /@heyooo-inc/env@0.0.1(dotenv-expand@11.0.6)(dotenv@8.2.0):
+    resolution: {integrity: sha512-Whrvr1zKwic4FA6RC7NJdSlTnzHnq/zVciMFqKx0X8GlrnjW2VYK5GzxmNRSOKLD5pRdJ0qCyvCkWFtwtPrj2g==}
+    peerDependencies:
+      dotenv: ^16.4.5
+      dotenv-expand: ^11.0.6
+    dependencies:
+      dotenv: 8.2.0
+      dotenv-expand: 11.0.6
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -6326,6 +6339,18 @@ packages:
       domelementtype: 2.3.0
       domhandler: 4.3.1
     dev: true
+
+  /dotenv-expand@11.0.6:
+    resolution: {integrity: sha512-8NHi73otpWsZGBSZwwknTXS5pqMOrk9+Ssrna8xCaxkzEpU9OTf9R5ArQGVw03//Zmk9MOwLPng9WwndvpAJ5g==}
+    engines: {node: '>=12'}
+    dependencies:
+      dotenv: 16.4.5
+    dev: false
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+    dev: false
 
   /dotenv@8.2.0:
     resolution: {integrity: sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==}
