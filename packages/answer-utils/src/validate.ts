@@ -258,7 +258,7 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     value.value = []
   }
 
-  if (value.value.length < 1 && helper.isEmpty(value.other)) {
+  if (value.value.length < 1 && helper.isEmpty(value?.other)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -270,7 +270,7 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
   let isOtherExists = false
 
   if (!rule.allowOther) {
-    if (helper.isValid(value.other)) {
+    if (helper.isValid(value?.other)) {
       throw new ValidateError({
         id: rule.id,
         kind: rule.kind,
@@ -279,7 +279,7 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
       })
     }
   } else {
-    if (!(helper.isNil(value.other) || (isOtherExists = helper.isValid(value.other)))) {
+    if (!(helper.isNil(value?.other) || (isOtherExists = helper.isValid(value?.other)))) {
       throw new ValidateError({
         id: rule.id,
         kind: rule.kind,

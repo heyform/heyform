@@ -18,7 +18,7 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
-    "@heyform-inc/answer-utils": "1.0.6",
+    "@heyform-inc/answer-utils": "1.0.8",
     "@heyform-inc/shared-types-enums": "1.1.1",
     "@heyform-inc/utils": "1.0.3",
     "@heyooo-inc/env": "^0.0.1",

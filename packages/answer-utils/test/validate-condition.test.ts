@@ -233,6 +233,46 @@ test('validate multiple choice condition', () => {
   }
 })
 
+test('validate multiple choice condition with undefined', () => {
+  const field: FormField = {
+    id: 'id_multiple_choice',
+    title: 'Multiple choice',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    properties: {
+      allowMultiple: true,
+      choices: [
+        {
+          id: '_a',
+          label: 'A'
+        },
+        {
+          id: '_b',
+          label: 'B'
+        },
+        {
+          id: '_c',
+          label: 'C'
+        }
+      ]
+    }
+  }
+  const values: any = {
+    id_multiple_choice: undefined
+  }
+
+  const comparisons: any[] = [
+    {
+      comparison: ComparisonEnum.CONTAINS,
+      expected: ['_c'],
+      values
+    }
+  ]
+
+  for (const comparison of comparisons) {
+    expect(validateCondition(field, comparison, comparison.values)).toBe(false)
+  }
+})
+
 test('validate multiple choice with other condition', () => {
   const field: FormField = {
     id: 'id_multiple_choice',

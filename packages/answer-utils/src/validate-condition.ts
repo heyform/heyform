@@ -100,7 +100,7 @@ function validateChoice(
   const allowMultiple = helper.isTrue(field.properties?.allowMultiple)
 
   const expected = helper.isArray(rawExpected) ? rawExpected : [rawExpected]
-  const value = [...(rawValue?.value || []), rawValue.other].filter(helper.isValid)
+  const value = [...(rawValue?.value || []), rawValue?.other].filter(helper.isValid)
 
   switch (condition.comparison) {
     case ComparisonEnum.IS:
