@@ -23,6 +23,10 @@ export class DuplicateFormResolver {
     @Args('input') input: FormDetailInput
   ): Promise<string> {
     const fields = [
+      'variables',
+      'logics',
+      'translations',
+      'hiddenFields',
       'fields',
       'kind',
       'interactiveMode',
