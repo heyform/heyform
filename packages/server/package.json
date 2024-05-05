@@ -103,9 +103,7 @@
   },
 	"pnpm": {
 		"overrides": {
-			"@graphql-tools/git-loader": ">=6.2.6",
-			"graphql-tools": ">=6.2.6",
-      "apollo-upload-client": "17",
+			"apollo-upload-client": "17.0.0",
 			"fs-capacitor": "6.2.0",
 			"multer": "1.4.5-lts.1",
 			"express": "4.19.2",
