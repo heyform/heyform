@@ -8,6 +8,10 @@
   <a target="_blank" href="https://heyform.net">Website</a> | <a target="_blank" href="https://docs.heyform.net">Documentation</a> | <a target="_blank" href="https://heyform.net/blog">Blog</a> | <a target="_blank" href="https://twitter.com/HeyformHQ">Twitter</a>
 </p>
 
+<p align="center">
+<a href="https://trendshift.io/repositories/9025" target="_blank"><img src="https://trendshift.io/api/badge/repositories/9025" alt="heyform" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+</p>
+
 <img src="./assets/images/screenshot.png" alt="HeyForm" />
 
 ## Features
