@@ -6,13 +6,11 @@ import {
   UseInterceptors
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { mkdirpSync, pathExistsSync } from 'fs-extra'
-import { diskStorage } from 'multer'
 import { extname } from 'path'
 
-import { nanoid } from '@heyform-inc/utils'
-
-import { APP_HOMEPAGE_URL, UPLOAD_DIR, UPLOAD_FILE_SIZE, UPLOAD_FILE_TYPES } from '@environments'
+import { APP_HOMEPAGE_URL, S3_PUBLIC_URL, UPLOAD_FILE_SIZE, UPLOAD_FILE_TYPES } from '@environments'
+import { getMulterStorage } from '@config'
+import { helper } from '@heyform-inc/utils'
 
 @Controller()
 export class UploadController {
@@ -29,29 +27,24 @@ export class UploadController {
           cb(new BadRequestException(`Unsupported file type ${extname(file.originalname)}`), false)
         }
       },
-      storage: diskStorage({
-        destination: (req: any, file: any, cb: any) => {
-          const uploadPath = UPLOAD_DIR
-
-          if (!pathExistsSync(uploadPath)) {
-            mkdirpSync(uploadPath)
-          }
-
-          cb(null, uploadPath)
-        },
-        filename: (req: any, file: any, cb: any) => {
-          cb(null, `${nanoid(12)}${extname(file.originalname)}`)
-        }
-      })
+      storage: getMulterStorage()
     })
   )
-  async index(
-    @UploadedFile() file: Express.Multer.File
-  ): Promise<{ filename: string; url: string; size: number }> {
+  async index(@UploadedFile() file: any): Promise<{ filename: string; url: string; size: number }> {
+    let url: string = APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${file.filename}`
+
+    if (file.location) {
+      if (helper.isValid(S3_PUBLIC_URL)) {
+        url = `${S3_PUBLIC_URL.replace(/\/+$/, '')}/${file.key}`
+      } else {
+        url = file.location
+      }
+    }
+
     return {
       filename: file.originalname,
       size: file.size,
-      url: APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${file.filename}`
+      url
     }
   }
 }

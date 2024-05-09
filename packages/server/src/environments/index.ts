@@ -133,3 +133,11 @@ export const UNSPLASH_CLIENT_ID: string = process.env.UNSPLASH_CLIENT_ID
 export const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-3.5-turbo-0125'
+
+// S3
+export const S3_ENDPOINT = process.env.S3_ENDPOINT
+export const S3_REGION = process.env.S3_REGION
+export const S3_BUCKET = process.env.S3_BUCKET
+export const S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID
+export const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY
+export const S3_PUBLIC_URL = process.env.S3_PUBLIC_URL

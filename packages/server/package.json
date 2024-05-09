@@ -18,6 +18,7 @@
     "prebuild": "rimraf dist"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.572.0",
     "@heyform-inc/answer-utils": "1.0.8",
     "@heyform-inc/shared-types-enums": "1.1.1",
     "@heyform-inc/utils": "1.0.3",
@@ -61,6 +62,7 @@
     "jsonwebtoken": "8.5.1",
     "mongoose": "5.13.20",
     "multer": "1.4.5-lts.1",
+    "multer-s3": "3.0.1",
     "nodemailer": "6.9.9",
     "openai": "4.38.2",
     "raw-body": "2.4.1",
