@@ -20,7 +20,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "3.572.0",
     "@heyform-inc/answer-utils": "1.0.8",
-    "@heyform-inc/shared-types-enums": "1.1.1",
+    "@heyform-inc/shared-types-enums": "1.1.2",
     "@heyform-inc/utils": "1.0.3",
     "@heyooo-inc/env": "^0.0.1",
     "@nestjs/bull": "0.3.1",

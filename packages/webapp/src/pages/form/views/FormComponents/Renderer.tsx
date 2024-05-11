@@ -189,7 +189,7 @@ export const Renderer: FC<RendererProps> = ({
         >
           <Blocks />
         </div>
-        <Sidebar />
+        {state.settings?.enableQuestionList && <Sidebar />}
       </div>
     </StoreContext.Provider>
   )

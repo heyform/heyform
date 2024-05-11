@@ -33,7 +33,8 @@ export class CreateFormResolver {
         published: true,
         allowArchive: true,
         requirePassword: false,
-        locale: 'en'
+        locale: 'en',
+        enableQuestionList: true
       },
       fields: [
         // Example field

@@ -416,6 +416,10 @@ export class UpdateFormInput extends FormDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
+  enableQuestionList?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
   locale?: string
 
   @Field({ nullable: true })
@@ -776,6 +780,9 @@ export class FormSettingType {
 
   @Field({ nullable: true })
   enableProgress?: boolean
+
+  @Field({ nullable: true })
+  enableQuestionList?: boolean
 
   @Field({ nullable: true })
   locale?: string

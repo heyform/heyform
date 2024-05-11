@@ -297,6 +297,7 @@ export class FormService {
       'captchaKind',
       'requirePassword',
       'enableProgress',
+      'enableQuestionList',
       'locale',
       'languages',
       'enableClosedMessage',

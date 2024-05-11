@@ -39,10 +39,10 @@ importers:
         version: 3.572.0
       '@heyform-inc/answer-utils':
         specifier: 1.0.8
-        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.1)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.1.1
-        version: 1.1.1
+        specifier: 1.1.2
+        version: 1.1.2
       '@heyform-inc/utils':
         specifier: 1.0.3
         version: 1.0.3
@@ -295,10 +295,10 @@ importers:
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
       '@heyform-inc/answer-utils':
         specifier: 1.0.8
-        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.1)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.1.1
-        version: 1.1.1
+        specifier: 1.1.2
+        version: 1.1.2
       '@heyform-inc/utils':
         specifier: 1.0.3
         version: 1.0.3
@@ -2735,7 +2735,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@heyform-inc/answer-utils@1.0.8(@heyform-inc/shared-types-enums@1.1.1)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
+  /@heyform-inc/answer-utils@1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
     resolution: {integrity: sha512-z/lMmcXlIYfdwXBTHDw+CeU7ieVm2Rutp+QT3mO8KU4esFlDAa/MpaDo5wqDItHqYxMPZFBxrVVcEuPbBdQv4A==}
     peerDependencies:
       '@heyform-inc/shared-types-enums': 1.1.1
@@ -2746,7 +2746,7 @@ packages:
       libphonenumber-js: ^1.10.7
       validator: ^13.7.0
     dependencies:
-      '@heyform-inc/shared-types-enums': 1.1.1
+      '@heyform-inc/shared-types-enums': 1.1.2
       '@heyform-inc/utils': 1.0.3
       big.js: 6.2.1
       dayjs: 1.11.10
@@ -2755,8 +2755,8 @@ packages:
       validator: 13.11.0
     dev: false
 
-  /@heyform-inc/shared-types-enums@1.1.1:
-    resolution: {integrity: sha512-WNFKr92N4nY/I7O/WFpwKgJUNuGyxLD/kUbQOAu1MnQSveGxNH7hPN/YYPnEhrQiaZOnoUQw3yYKpNc7C7B4/A==}
+  /@heyform-inc/shared-types-enums@1.1.2:
+    resolution: {integrity: sha512-RkG4BSGwcKmqiUj9kY16SMBXAnP3Y4iCv35hAa7oXxAEkOk3sFRiRZNLQEWRY5ZtauS1YtzlM87kgsnm57pqHw==}
     engines: {node: '>=12.0.0'}
     dev: false
 

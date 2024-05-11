@@ -17,7 +17,7 @@
     "@floating-ui/react": "^0.19.2",
     "@headlessui/react": "^1.6.6",
     "@heyform-inc/answer-utils": "1.0.8",
-    "@heyform-inc/shared-types-enums": "1.1.1",
+    "@heyform-inc/shared-types-enums": "1.1.2",
     "@heyform-inc/utils": "1.0.3",
     "@popperjs/core": "^2.11.5",
     "@tabler/icons-react": "^3.1.0",

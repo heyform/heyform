@@ -398,6 +398,9 @@ export default {
     Day: 'Day',
     progressBar: 'Progress bar',
     progressText: 'You can easily let respondents know how close they are to completing your form.',
+    questionList: 'Question list',
+    questionText:
+      'You can enable the question list to let respondents to go through all the questions.',
     Redirect: 'Redirect on completion',
     redirectText:
       "Take your respondents to another web page once they're done filling in your form.",

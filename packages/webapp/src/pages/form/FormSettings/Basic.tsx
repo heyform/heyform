@@ -93,6 +93,20 @@ export const Basic: FC = observer(() => {
         </Form.Item>
       </div>
 
+      {/* Question list */}
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <div className="text-sm font-medium leading-6 text-slate-900">
+            {t('formSettings.questionList')}
+          </div>
+          <p className="mt-1 text-sm text-slate-500">{t('formSettings.questionText')}</p>
+        </div>
+
+        <Form.Item className="mb-0 ml-4" name="enableQuestionList" rules={[{ required: false }]}>
+          <Switch />
+        </Form.Item>
+      </div>
+
       {/* Time limit */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">

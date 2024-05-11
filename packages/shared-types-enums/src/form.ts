@@ -28,6 +28,7 @@ export interface FormSettings {
   redirectUrl?: string
   redirectOnCompletion?: boolean
   enableQuotaLimit?: boolean
+  enableQuestionList?: boolean
   quotaLimit?: number
   enableIpLimit?: boolean
   ipLimitCount?: number

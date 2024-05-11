@@ -45,6 +45,7 @@ export class UpdateFormResolver {
       ['ipLimitCount', 'settings.ipLimitCount'],
       ['ipLimitTime', 'settings.ipLimitTime'],
       ['enableProgress', 'settings.enableProgress'],
+      ['enableQuestionList', 'settings.enableQuestionList'],
       ['locale', 'settings.locale'],
       ['languages', 'settings.languages'],
       ['enableClosedMessage', 'settings.enableClosedMessage'],

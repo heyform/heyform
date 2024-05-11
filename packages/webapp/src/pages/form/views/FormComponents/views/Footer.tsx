@@ -35,15 +35,17 @@ export const Footer: FC = () => {
 
         <div className="heyform-footer-right">
           <div className="heyform-pagination">
-            <Tooltip ariaLabel={t('Questions')} placement="top">
-              <div>
-                <Button.Link
-                  className="heyform-sidebar-toggle"
-                  trailing={<IconLayoutGrid />}
-                  onClick={handleToggleSidebar}
-                />
-              </div>
-            </Tooltip>
+            {state.settings?.enableQuestionList && (
+              <Tooltip ariaLabel={t('Questions')} placement="top">
+                <div>
+                  <Button.Link
+                    className="heyform-sidebar-toggle"
+                    trailing={<IconLayoutGrid />}
+                    onClick={handleToggleSidebar}
+                  />
+                </div>
+              </Tooltip>
+            )}
 
             <Tooltip ariaLabel={t('Previous question')} placement="top">
               <div>
