@@ -33,6 +33,7 @@
     "dagre": "^0.8.5",
     "dayjs": "^1.11.3",
     "fast-equals": "^3.0.1",
+    "flag-icons": "^7.2.1",
     "i18next": "^21.6.11",
     "js-cookie": "^3.0.1",
     "libphonenumber-js": "^1.10.7",

@@ -344,6 +344,9 @@ importers:
       fast-equals:
         specifier: ^3.0.1
         version: 3.0.3
+      flag-icons:
+        specifier: ^7.2.1
+        version: 7.2.1
       i18next:
         specifier: ^21.9.1
         version: 21.10.0
@@ -8591,6 +8594,10 @@ packages:
       locate-path: 6.0.0
       path-exists: 4.0.0
     dev: true
+
+  /flag-icons@7.2.1:
+    resolution: {integrity: sha512-EaU4XZmFt1BOilz9nMmJKjma5pOaNjzL7somOhadrrilollh4xj6aaXI2M1sd00VUfVWN0E25Q6xaW3SNt0k/Q==}
+    dev: false
 
   /flat-cache@2.0.1:
     resolution: {integrity: sha512-LoQe6yDuUMDzQAEH8sgmh4Md6oZnc/7PjtwjNFSzveXqSHt6ka9fPBuso7IGf9Rz4uqnSnWiFH2B/zj24a5ReA==}
