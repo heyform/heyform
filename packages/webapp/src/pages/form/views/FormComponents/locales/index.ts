@@ -1,6 +1,7 @@
 import de from './de'
 import en from './en'
 import fr from './fr'
+import pl from './pl'
 import zhCn from './zh-cn'
 import zhTw from './zh-tw'
 
@@ -13,6 +14,9 @@ export default {
   },
   de: {
     translation: de
+  },
+	pl: {
+    translation: pl
   },
   'zh-cn': {
     translation: zhCn
