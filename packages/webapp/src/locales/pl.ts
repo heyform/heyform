@@ -777,5 +777,13 @@ export default {
     editHiddenField: 'Edytuj ukryte pole',
     hiddenFieldsTip: 'Dowiedz się więcej o ukrytych polach',
     other: 'Inne'
+  },
+  languages: {
+    en: 'English',
+    zhCn: 'Chinese (simplified)',
+    zhTw: 'Chinese (traditional)',
+    fr: 'French',
+    de: 'German',
+		pl: 'Polski'
   }
 }
