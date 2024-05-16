@@ -22,6 +22,10 @@ export const FORM_LOCALES_OPTIONS = [
     label: 'French',
     value: 'fr'
   },
+	{
+    label: 'Polish',
+    value: 'pl'
+  },
   {
     label: 'Chinese (simplified)',
     value: 'zh-cn'

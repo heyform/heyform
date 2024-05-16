@@ -20,6 +20,7 @@ const LANGUAGES = {
   en: 'English',
   de: 'German',
   fr: 'French',
+	pl: 'Polish',
   'zh-cn': 'Simplified Chinese',
   'zh-tw': 'Traditional Chinese'
 }

@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next'
 import { locales } from '@/pages/form/views/FormComponents'
 
 import en from './en'
+import pl from './pl'
 import zhCn from './zhCn'
 import zhTw from './zhTw'
 
@@ -12,6 +13,12 @@ const resources = {
     translation: {
       ...en,
       ...locales.en.translation
+    }
+  },
+	pl: {
+    translation: {
+      ...pl,
+      ...locales.pl.translation
     }
   },
   'zh-cn': {
