@@ -5,8 +5,9 @@ export default {
     copied: '已复制'
   },
   login: {
-    signIn: '登录您的帐户',
-    startFree: '开始您的免费试用',
+    signIn: '👋 欢迎回來！',
+    logIn: '登录您的账号',
+    startFree: '新建一个账号',
     signWith: '使用以下方式登录',
     noAccount: '没有账号? 立即注册',
     bindAccountDescription: '已有HeyForm账号? 输入账号信息登录立即绑定',
@@ -554,7 +555,8 @@ export default {
     Change: '更换',
     Remove: '删除',
     Search: '搜索 Unsplash 图片',
-    Upload: '上传'
+    Upload: '上传',
+    language: '语言'
   },
   formBuilder: {
     type: '类型',

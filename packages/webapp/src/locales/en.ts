@@ -12,7 +12,6 @@ export default {
     noAccount: "Don't have an account yet?",
     bindAccountDescription: 'Already a HeyForm user? Login and link your account.',
     continueWith: 'Or continue with',
-    rememberMe: 'Remember me',
     forgotPassword: 'Forgot your password?',
     or: 'or',
     Email: 'Email address',
@@ -619,7 +618,8 @@ export default {
     Remove: 'Remove',
     Search: 'Search unsplash images',
     Upload: 'Upload',
-    Unsplash: 'Unsplash'
+    Unsplash: 'Unsplash',
+    language: 'Language'
   },
   formBuilder: {
     type: 'Type',

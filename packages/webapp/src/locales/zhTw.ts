@@ -12,7 +12,6 @@ export default {
     noAccount: '還沒有帳號嗎？',
     bindAccountDescription: '已經是 HeyForm 的使用者了嗎？登入並連結您的帳號。',
     continueWith: '或者繼續使用',
-    rememberMe: '記住我',
     forgotPassword: '忘記您的密碼？',
     or: '或者',
     Email: '電子郵件位址',
@@ -576,7 +575,8 @@ export default {
     Remove: '移除',
     Search: '搜尋 Unsplash 圖片',
     Upload: '上傳',
-    Unsplash: 'Unsplash'
+    Unsplash: 'Unsplash',
+    language: '語言'
   },
   formBuilder: {
     type: '類型',
