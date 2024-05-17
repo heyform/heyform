@@ -96,3 +96,17 @@ body {
   @apply h-[calc(100vh-68px)];
   @extend .scrollbar;
 }
+
+.sidebar-submenu {
+	.menu-item-content {
+		@apply max-w-full;
+
+		svg {
+			@apply -mr-1;
+		}
+	}
+
+	.menu-item-label {
+		@apply overflow-visible;
+	}
+}

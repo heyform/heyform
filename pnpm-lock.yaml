@@ -350,6 +350,9 @@ importers:
       i18next:
         specifier: ^21.9.1
         version: 21.10.0
+      i18next-browser-languagedetector:
+        specifier: ^8.0.0
+        version: 8.0.0
       js-cookie:
         specifier: ^3.0.1
         version: 3.0.5
@@ -9591,6 +9594,12 @@ packages:
     requiresBuild: true
     dependencies:
       ms: 2.1.3
+    dev: false
+
+  /i18next-browser-languagedetector@8.0.0:
+    resolution: {integrity: sha512-zhXdJXTTCoG39QsrOCiOabnWj2jecouOqbchu3EfhtSHxIB5Uugnm9JaizenOy39h7ne3+fLikIjeW88+rgszw==}
+    dependencies:
+      '@babel/runtime': 7.24.1
     dev: false
 
   /i18next@21.10.0:

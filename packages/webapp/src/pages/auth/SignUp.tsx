@@ -45,7 +45,7 @@ const SignUp = () => {
             >
               <Form.Item
                 name="name"
-                label="Name"
+                label={t('auth.signup.Name')}
                 rules={[{ required: true, message: t('auth.signup.nameCant') }]}
               >
                 <Input />
@@ -61,7 +61,7 @@ const SignUp = () => {
 
               <Form.Item
                 name="password"
-                label="Password"
+                label={t('login.Password')}
                 rules={[
                   {
                     required: true,

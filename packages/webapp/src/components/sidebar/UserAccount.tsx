@@ -1,8 +1,11 @@
+import { IconChevronRight } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Avatar, Dropdown, Menus } from '@/components/ui'
+import { LOCALES_OPTIONS } from '@/consts'
+import i18n from '@/locales'
 import { useStore } from '@/store'
 import { clearAuthState } from '@/utils'
 
@@ -27,6 +30,27 @@ export const UserAccount: FC = observer(() => {
   const Overlay = (
     <Menus className="bottom-12" onClick={handleMenuClick}>
       <Menus.Item value="accountSettings" label={t('other.labelList.Account')} />
+      <Menus.Item
+        className="sidebar-submenu !p-0"
+        label={
+          <div className="group relative">
+            <button className="flex w-full items-center justify-between px-4 py-2">
+              <span>{t('other.language')}</span>
+              <IconChevronRight />
+            </button>
+            <Menus className="absolute left-[220px] top-0 !my-0 hidden w-[140px] group-hover:block">
+              {LOCALES_OPTIONS.map(row => (
+                <Menus.Item
+                  key={row.value}
+                  label={row.label}
+                  isChecked={i18n.language === row.value}
+                  onClick={() => i18n.changeLanguage(row.value)}
+                />
+              ))}
+            </Menus>
+          </div>
+        }
+      />
       <Menus.Item value="logout" label={t('other.labelList.Logout')} />
       <Menus.Divider />
       <Menus.Item

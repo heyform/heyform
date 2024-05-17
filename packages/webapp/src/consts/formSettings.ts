@@ -9,6 +9,25 @@ export const CAPTCHA_KIND_OPTIONS = [
   { label: 'GeeTest CAPTCHA', value: CaptchaKindEnum.GEETEST_CAPTCHA }
 ]
 
+export const LOCALES_OPTIONS = [
+  {
+    label: 'English',
+    value: 'en'
+  },
+  {
+    label: 'Polski',
+    value: 'pl'
+  },
+  {
+    label: '简体中文',
+    value: 'zh-cn'
+  },
+  {
+    label: '繁体中文',
+    value: 'zh-tw'
+  }
+]
+
 export const FORM_LOCALES_OPTIONS = [
   {
     label: 'English',
@@ -22,7 +41,7 @@ export const FORM_LOCALES_OPTIONS = [
     label: 'French',
     value: 'fr'
   },
-	{
+  {
     label: 'Polish',
     value: 'pl'
   },
