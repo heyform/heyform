@@ -49,7 +49,7 @@ interface TeamInvitationOptions {
 }
 
 const HTML_EXT = '.html'
-const TEMPLATE_TITLE_REGEX = /-{3,}\ntitle:\s+(.+)\n-{3,}/im
+const TEMPLATE_META_REGEX = /^---([\s\S]*?)---[\n\s\S]\n/
 
 @Injectable()
 export class MailService {
@@ -123,14 +123,24 @@ export class MailService {
     for (const filePath of filePaths) {
       const name = basename(filePath, HTML_EXT)
       const content = readFileSync(filePath).toString('utf8')
-      const matches = content.match(TEMPLATE_TITLE_REGEX)
+      const matches = content.match(TEMPLATE_META_REGEX)
+
+      const html = content.replace(TEMPLATE_META_REGEX, '')
 
       if (matches) {
-        const subject = matches[1]
-        const html = content.replace(TEMPLATE_TITLE_REGEX, '')
+        const metaLines = matches[1].split('\n')
+        const metaObject: Record<string, string> = {}
+
+        metaLines.forEach(line => {
+          const [key, value] = line.split(':')
+
+          if (helper.isValid(key) && helper.isValid(value)) {
+            metaObject[key.trim()] = value.trim()
+          }
+        })
 
         this.emailTemplates[name] = {
-          subject,
+          subject: metaObject.title,
           html
         }
       }
