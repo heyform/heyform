@@ -50,6 +50,11 @@ export const Form: FC<FormProps> = ({
   const [loading, setLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string>()
 
+  const fieldError = useMemo(
+    () => (state.errorFieldId === field.id ? state.errorFieldMessage : undefined),
+    [field.id, state.errorFieldId, state.errorFieldMessage]
+  )
+
   const autoSubmit = useMemo(
     () => (state.alwaysShowNextButton ? false : rawAutoSubmit),
     [rawAutoSubmit, state.alwaysShowNextButton]
@@ -173,7 +178,8 @@ export const Form: FC<FormProps> = ({
             type: 'scrollToField',
             payload: {
               fieldId: err?.response?.id,
-              scrollToField: err?.response?.id
+              errorFieldId: err?.response?.id,
+              errorFieldMessage: err?.response?.message
             }
           })
         } else {
@@ -194,7 +200,8 @@ export const Form: FC<FormProps> = ({
           type: 'scrollToField',
           payload: {
             fieldId: err.response?.id,
-            scrollToField: err?.response?.id
+            errorFieldId: err?.response?.id,
+            errorFieldMessage: err?.response?.message
           }
         })
 
@@ -262,9 +269,6 @@ export const Form: FC<FormProps> = ({
   useEffect(() => {
     if (field.id === state.errorFieldId) {
       form.validateFields()
-      dispatch({
-        type: 'resetErrorField'
-      })
     }
   }, [state.errorFieldId])
 
@@ -281,6 +285,13 @@ export const Form: FC<FormProps> = ({
       {...restProps}
     >
       {children}
+
+      {/* Field validation error */}
+      {fieldError && (
+        <div className="heyform-validation-wrapper">
+          <div className="heyform-validation-error">{fieldError}</div>
+        </div>
+      )}
 
       {/* Submit */}
       {isLastBlock || state.isScrollNextDisabled ? (
