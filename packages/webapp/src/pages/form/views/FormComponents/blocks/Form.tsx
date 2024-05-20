@@ -173,7 +173,8 @@ export const Form: FC<FormProps> = ({
             type: 'scrollToField',
             payload: {
               fieldId: err?.response?.id,
-              scrollToField: err?.response?.id
+              errorFieldId: err?.response?.id,
+              errorFieldMessage: err?.response?.message
             }
           })
         } else {
@@ -194,7 +195,7 @@ export const Form: FC<FormProps> = ({
           type: 'scrollToField',
           payload: {
             fieldId: err.response?.id,
-            scrollToField: err?.response?.id
+            errorFieldId: err?.response?.id
           }
         })
 
@@ -262,9 +263,6 @@ export const Form: FC<FormProps> = ({
   useEffect(() => {
     if (field.id === state.errorFieldId) {
       form.validateFields()
-      dispatch({
-        type: 'resetErrorField'
-      })
     }
   }, [state.errorFieldId])
 
