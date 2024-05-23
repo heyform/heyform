@@ -71,6 +71,10 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 	<img src="https://cdn.jsdelivr.net/gh/labring-actions/templates@main/Deploy-on-Sealos.svg" alt="Deploy on Sealos" height="36" />
 </a>
 
+<a href="https://repocloud.io/details/?app_id=283" style="margin-left:24px">
+	<img src="https://d16t0pc4846x52.cloudfront.net/deploylobe.svg" alt="Deploy to RepoCloud" height="36" />
+</a>
+
 ## Local development
 
 Follow the [local installation instructions](https://docs.heyform.net/local-development) to run the project locally.
