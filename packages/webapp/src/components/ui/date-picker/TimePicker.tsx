@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { deepEqual } from 'fast-equals'
 import { FC, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { stopPropagation } from '../utils'
 import { TimeType } from './common'
@@ -43,6 +44,7 @@ Time.displayName = 'Time'
 export const TimePicker: FC = () => {
   const { value, timeFormat, minDate, maxDate, minutesInterval } = useContext(DatePickerStore)
   const listRef = useRef<any>()
+	const { t } = useTranslation()
 
   const options = useMemo(() => {
     return getTimesBetweenDates(value, minDate, maxDate, minutesInterval)
@@ -60,7 +62,7 @@ export const TimePicker: FC = () => {
 
   return (
     <div className="timepicker-panel" onClick={stopPropagation}>
-      <div className="timepicker-panel-header">Time</div>
+      <div className="timepicker-panel-header">{t('formSettings.time')}</div>
       <ul ref={listRef} className="timepicker-options">
         {options.map(time => (
           <Time key={time.d.toISOString()} time={time} timeFormat={timeFormat!} />

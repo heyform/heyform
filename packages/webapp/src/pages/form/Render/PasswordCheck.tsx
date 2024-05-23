@@ -1,5 +1,6 @@
 import { FormModel } from '@heyform-inc/shared-types-enums'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button, Form, Input } from '@/components/ui'
 import { FormService } from '@/service'
@@ -12,6 +13,7 @@ interface PasswordCheckProps {
 export const PasswordCheck = ({ form, onFinish }: PasswordCheckProps): JSX.Element => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
+	const { t } = useTranslation()
 
   async function handleFinish(values: Record<string, any>): Promise<void> {
     if (loading) {
@@ -42,12 +44,12 @@ export const PasswordCheck = ({ form, onFinish }: PasswordCheckProps): JSX.Eleme
               <div className="heyform-block-main">
                 <div className="mb-20 mt-12 md:mb-36 md:mt-20">
                   <div className="mb-10">
-                    <h1 className="heyform-block-title">Password required</h1>
+                    <h1 className="heyform-block-title">{t('formSettings.passwordRequired')}</h1>
                   </div>
                   <Form onFinish={handleFinish}>
                     <Form.Item
                       name="password"
-                      rules={[{ required: true, message: 'This field is required' }]}
+                      rules={[{ required: true, message: t('formSettings.passwordRequiredError') }]}
                     >
                       <Input />
                     </Form.Item>
@@ -59,7 +61,7 @@ export const PasswordCheck = ({ form, onFinish }: PasswordCheckProps): JSX.Eleme
                     <Form.Item>
                       <div className="heyform-submit-container">
                         <Button type="primary" htmlType="submit" loading={loading}>
-                          Continue
+                          {t('auth.forgotPassword.continue')}
                         </Button>
                       </div>
                     </Form.Item>

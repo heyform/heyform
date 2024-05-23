@@ -99,14 +99,14 @@ const CustomCssHelpModal: FC<IModalProps> = ({ visible, onClose }) => {
         </div>
 
         <div>
-          <h2 className="text-base font-medium text-slate-900">Example</h2>
+          <h2 className="text-base font-medium text-slate-900">{t('formBuilder.example')}</h2>
           <pre className="mt-2 overflow-x-auto rounded bg-slate-100 p-2">
             <code dangerouslySetInnerHTML={{ __html: codeExample }} />
           </pre>
         </div>
 
         <div>
-          <h2 className="text-base font-medium text-slate-900">CSS classes</h2>
+          <h2 className="text-base font-medium text-slate-900">{t('formBuilder.cssClasses')}</h2>
           <Table className="mt-2" columns={columns} data={data} />
         </div>
       </div>

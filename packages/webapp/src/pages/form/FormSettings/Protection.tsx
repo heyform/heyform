@@ -18,10 +18,8 @@ export const Protection: FC = () => {
       <div>
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <div className="text-sm font-medium leading-6 text-slate-900">Password protection</div>
-            <p className="mt-1 text-sm text-slate-500">
-              Secure your form with a single, easy-to-remember password.
-            </p>
+            <div className="text-sm font-medium leading-6 text-slate-900">{t('formSettings.passwordProtection')}</div>
+            <p className="mt-1 text-sm text-slate-500">{t('formSettings.passwordProtectionText')}</p>
           </div>
 
           <Form.Item className="mb-0 ml-4" name="requirePassword">
@@ -33,7 +31,7 @@ export const Protection: FC = () => {
           <Form.Item
             className="mb-0"
             name="password"
-            extra={<p className="text-slate-500">Set the password for this site</p>}
+            extra={<p className="text-slate-500">{t('formSettings.passwordProtectionPlaceholder')}</p>}
           >
             <Input className="w-full lg:w-[280px]" />
           </Form.Item>

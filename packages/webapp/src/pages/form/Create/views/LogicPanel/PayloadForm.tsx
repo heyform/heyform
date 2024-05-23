@@ -153,6 +153,8 @@ export const PayloadList: FC<PayloadListProps> = ({
   selectedField,
   children
 }) => {
+	const { t } = useTranslation()
+
   return (
     <Form.List name={name}>
       {(listFields, { add, remove }) => {
@@ -207,7 +209,7 @@ export const PayloadList: FC<PayloadListProps> = ({
             )}
 
             <Button className="px-4 py-1.5" leading={<IconPlus />} onClick={handleAdd}>
-              Add rule
+              {t('formBuilder.addRule')}
             </Button>
           </div>
         )

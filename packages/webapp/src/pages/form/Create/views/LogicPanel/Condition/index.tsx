@@ -40,6 +40,8 @@ const DefaultCondition: FC<DefaultProps> = ({ value, onComparisonChange }) => {
 }
 
 const TextCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpectedChange }) => {
+	const { t } = useTranslation()
+
   return (
     <>
       <Select
@@ -52,7 +54,7 @@ const TextCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
       <Input
         className="flex-1"
         value={(value as any).expected}
-        placeholder="Value"
+        placeholder={t('formBuilder.value')}
         onChange={onExpectedChange}
       />
     </>
@@ -140,13 +142,14 @@ const MultipleChoiceCondition: FC<DefaultProps & { field: FormField }> = ({
 }
 
 const BoolCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpectedChange }) => {
+	const { t } = useTranslation()
   const options = [
     {
-      label: 'True',
+      label: t('formBuilder.true'),
       value: true
     },
     {
-      label: 'False',
+      label: t('formBuilder.false'),
       value: false
     }
   ]
@@ -172,6 +175,8 @@ const BoolCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
 }
 
 const DateCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpectedChange }) => {
+	const { t } = useTranslation()
+
   return (
     <>
       <Select
@@ -185,7 +190,7 @@ const DateCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
         className="flex-1"
         type="number"
         value={(value as any).expected}
-        placeholder="Value"
+        placeholder={t('formBuilder.value')}
         onChange={onExpectedChange}
       />
     </>
@@ -193,6 +198,8 @@ const DateCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
 }
 
 const NumberCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpectedChange }) => {
+	const { t } = useTranslation()
+
   return (
     <>
       <Select
@@ -206,7 +213,7 @@ const NumberCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpect
         className="flex-1"
         type="number"
         value={(value as any).expected}
-        placeholder="Value"
+        placeholder={t('formBuilder.value')}
         onChange={onExpectedChange}
       />
     </>
