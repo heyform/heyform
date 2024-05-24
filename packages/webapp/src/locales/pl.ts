@@ -237,12 +237,12 @@ export default {
       invited: 'Zostałeś zaproszony do obszaru roboczego użytkownika',
       UsernameAdd: '',
       joinText: 'Dołącz do obszaru roboczego i zacznij pracować wspólnie!',
-      member_zero: 'członeków',
-      member_one: 'członek',
-      member_two: 'członków',
-      member_few: 'członków',
-      member_many: 'członków',
-      member_other: 'członków',
+      member_zero: 'uczestników',
+      member_one: 'uczestnik',
+      member_two: 'uczestników',
+      member_few: 'uczestników',
+      member_many: 'uczestników',
+      member_other: 'uczestników',
       bottom: 'Dołącz'
     }
   },
