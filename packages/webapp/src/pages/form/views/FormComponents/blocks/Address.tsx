@@ -9,13 +9,38 @@ import type { BlockProps } from './Block'
 import { Block } from './Block'
 import { Form } from './Form'
 
+function hasFilled(values: any) {
+  return helper.isValid(values) && Object.values(values).some(helper.isValid)
+}
+
 export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
-  const { state } = useStore()
+  const { state, dispatch } = useStore()
   const { t } = useTranslation()
   const [isDropdownShown, setIsDropdownShown] = useState(false)
 
+  const isRequired = useMemo(() => {
+    if (state.errorFieldId === field.id) {
+      return hasFilled(state.values[field.id])
+    }
+
+    return field.validations?.required
+  }, [field.id, field.validations?.required, state.errorFieldId, state.values])
+
   function getValues(values: any) {
-    return helper.isValid(values?.address1) ? values : undefined
+    return hasFilled(values) ? values : undefined
+  }
+
+  function handleValuesChange(_: any, values: any) {
+    if (!field.validations?.required && !hasFilled(values)) {
+      dispatch({
+        type: 'setValues',
+        payload: {
+          values: {
+            [field.id]: undefined
+          }
+        }
+      })
+    }
   }
 
   return (
@@ -24,13 +49,14 @@ export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
         initialValues={initialValue(state.values[field.id])}
         field={field}
         getValues={getValues}
+        onValuesChange={handleValuesChange}
       >
         <div className="space-y-4">
           <FormField
             name="address1"
             rules={[
               {
-                required: field.validations?.required,
+                required: isRequired,
                 message: t('This field is required')
               }
             ]}
@@ -48,7 +74,7 @@ export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
               name="city"
               rules={[
                 {
-                  required: field.validations?.required,
+                  required: isRequired,
                   message: t('This field is required')
                 }
               ]}
@@ -61,7 +87,7 @@ export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
               name="state"
               rules={[
                 {
-                  required: field.validations?.required,
+                  required: isRequired,
                   message: t('This field is required')
                 }
               ]}
@@ -76,7 +102,7 @@ export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
               name="zip"
               rules={[
                 {
-                  required: field.validations?.required,
+                  required: isRequired,
                   message: t('This field is required')
                 }
               ]}
@@ -89,7 +115,7 @@ export const Address: FC<BlockProps> = ({ field, ...restProps }) => {
               name="country"
               rules={[
                 {
-                  required: field.validations?.required,
+                  required: isRequired,
                   message: t('This field is required')
                 }
               ]}

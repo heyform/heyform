@@ -200,8 +200,7 @@ export const Form: FC<FormProps> = ({
           type: 'scrollToField',
           payload: {
             fieldId: err.response?.id,
-            errorFieldId: err?.response?.id,
-            errorFieldMessage: err?.response?.message
+            errorFieldId: err?.response?.id
           }
         })
 
