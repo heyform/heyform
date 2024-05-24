@@ -1,6 +1,7 @@
 import { helper } from '@heyform-inc/utils'
 import { observer } from 'mobx-react-lite'
 import { FC, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Input, Select, Switch } from '@/components/ui'
 import { ColorPickerDropdown } from '@/pages/form/Create/views/RightSidebar/Design/Customize/ColorPickerField'
@@ -8,22 +9,25 @@ import { useStore } from '@/store'
 
 import { FullpageSettings } from './FullpageSettings'
 
-const SIZE_OPTIONS = [
-  { value: 'small', label: 'Small' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'large', label: 'Large' }
-]
 
-const LAUNCH_OPTIONS = [
-  { value: 'click', label: 'On button click' },
-  { value: 'load', label: 'On page load' },
-  { value: 'delay', label: 'After elapsed time' },
-  { value: 'exit', label: 'On exit intent' },
-  { value: 'scroll', label: 'After scrolling' }
-]
 
 export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
   const formStore = useStore('formStore')
+	const { t } = useTranslation()
+
+	const SIZE_OPTIONS = [
+		{ value: 'small', label: t('share.small') },
+		{ value: 'medium', label: t('share.medium') },
+		{ value: 'large', label: t('share.large') }
+	]
+
+	const LAUNCH_OPTIONS = [
+		{ value: 'click', label: t('share.onButtonClick')},
+		{ value: 'load', label: t('share.onPageLoad') },
+		{ value: 'delay', label: t('share.afterElapsedTime') },
+		{ value: 'exit', label: t('share.onExitIntent') },
+		{ value: 'scroll', label: t('share.afterScrolling') }
+	]
 
   function handleChange(updates: any) {
     formStore.updateEmbedConfig(updates)
@@ -35,7 +39,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
         return (
           <Input
             className="mt-2"
-            trailing="seconds delay"
+            trailing={t('share.secondsDelay')}
             type="number"
             min={0}
             value={formStore.currentEmbedConfig.openDelay}
@@ -47,7 +51,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
         return (
           <Input
             className="mt-2"
-            trailing="% of page scrolled"
+            trailing={t('share.pageScrolled')}
             type="number"
             min={0}
             max={100}
@@ -69,7 +73,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
     <FullpageSettings>
       {formStore.embedType === 'modal' && (
         <div>
-          <div className="mb-1 text-sm font-medium text-slate-700">Modal size</div>
+          <div className="mb-1 text-sm font-medium text-slate-700">{t('share.modalSize')}</div>
           <Select
             options={SIZE_OPTIONS}
             value={formStore.currentEmbedConfig.size}
@@ -79,7 +83,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
       )}
 
       <div>
-        <div className="mb-1 text-sm font-medium text-slate-700">Launch</div>
+        <div className="mb-1 text-sm font-medium text-slate-700">{t('share.launch')}</div>
         <Select
           options={LAUNCH_OPTIONS}
           value={formStore.currentEmbedConfig.openTrigger}
@@ -91,7 +95,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
       {children}
 
       <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-slate-700">Trigger background</div>
+        <div className="text-sm font-medium text-slate-700">{t('share.triggerBackground')}</div>
         <ColorPickerDropdown
           value={formStore.currentEmbedConfig.triggerBackground}
           onChange={triggerBackground => handleChange({ triggerBackground })}
@@ -100,7 +104,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
 
       {formStore.embedType === 'modal' && (
         <div>
-          <div className="mb-1 text-sm font-medium text-slate-700">Trigger text</div>
+          <div className="mb-1 text-sm font-medium text-slate-700">{t('share.triggerText')}</div>
           <Input
             value={formStore.currentEmbedConfig.triggerText}
             maxLength={20}
@@ -111,7 +115,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
 
       <div>
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium text-slate-700">Close on submit</div>
+          <div className="text-sm font-medium text-slate-700">{t('share.closeOnSubmit')}</div>
           <Switch
             size="small"
             value={formStore.currentEmbedConfig.hideAfterSubmit}
@@ -124,7 +128,7 @@ export const ModalSettings: FC<IComponentProps> = observer(({ children }) => {
             className="mt-2"
             type="number"
             min={0}
-            trailing="seconds delay"
+            trailing={t('share.secondsDelay')}
             value={formStore.currentEmbedConfig.autoClose}
             onChange={autoClose => handleChange({ autoClose })}
           />

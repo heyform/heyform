@@ -1,6 +1,7 @@
 import { htmlUtils } from '@heyform-inc/answer-utils'
 import { IconX } from '@tabler/icons-react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button, useForm } from '@/components/ui'
 import { useStoreContext } from '@/pages/form/Create/store'
@@ -14,6 +15,7 @@ export const LogicPanel = () => {
   const payloads = useMemo(() => {
     return logics?.find(l => l.fieldId === selectedField?.id)?.payloads || []
   }, [selectedField, logics])
+	const { t } = useTranslation()
 
   function handleClose() {
     dispatch({
@@ -52,7 +54,7 @@ export const LogicPanel = () => {
     <div className="logic-panel">
       <div className="flex justify-between bg-slate-50 px-4 py-6">
         <div className="flex-1">
-          <h2 className="text-lg font-medium text-slate-900">Rules</h2>
+          <h2 className="text-lg font-medium text-slate-900">{t('formBuilder.rules')}</h2>
           {selectedField && (
             <div className="mt-2 flex flex-1 items-center justify-between">
               <FieldKindIcon
@@ -82,12 +84,12 @@ export const LogicPanel = () => {
 
       <div className="flex items-center justify-between border-t border-gray-200 p-4">
         <Button.Link type="danger" onClick={handleRemoveAll}>
-          Remove all
+          {t('formBuilder.removeAll')}
         </Button.Link>
         <div className="flex items-center">
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>{t('formSettings.Cancel')}</Button>
           <Button className="ml-4" type="primary" onClick={handleSave}>
-            Save changes
+            {t('formBuilder.addRule')}
           </Button>
         </div>
       </div>

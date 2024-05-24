@@ -47,7 +47,7 @@ export const MemberItem: FC<MemberItemProps> = ({ member, onClick }) => {
         disabled={member.isSelf || member.isOwner}
         onClick={handleClick}
       >
-        {member.isAssigned ? 'Remove' : 'Assign'}
+        {member.isAssigned ? t('workspace.members.remove') : t('project.projectMembers.assign')}
       </Button>
     </div>
   )

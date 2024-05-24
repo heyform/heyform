@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { observer } from 'mobx-react-lite'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button, Modal, Spin, Switch, notification, useLockBodyScroll } from '@/components/ui'
 import { STRIPE_PUBLISHABLE_KEY } from '@/consts'
@@ -19,6 +20,7 @@ export const FormPreviewModal: FC = observer(() => {
   const formStore = useStore('formStore')
   const [value, setValue] = useState('mobile')
   const [isLoaded, setIsLoaded] = useState(false)
+	const { t } = useTranslation()
 
   function handleClose() {
     appStore.isFormPreviewOpen = false
@@ -64,7 +66,7 @@ export const FormPreviewModal: FC = observer(() => {
           showCloseIcon={false}
         >
           <div className="form-preview-header">
-            <div className="ml-4 text-lg font-medium text-slate-900">Preview</div>
+            <div className="ml-4 text-lg font-medium text-slate-900">{t('form.preview')}</div>
             <div className="flex flex-1 items-center justify-center">
               <Switch.Group
                 className="!hidden text-sm md:!inline-flex"

@@ -2,6 +2,7 @@ import { helper } from '@heyform-inc/utils'
 import { IconCode, IconX } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import { FC, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CopyButton, FullpageIcon, ModalIcon, PopupIcon, StandardIcon } from '@/components'
 import { Button, Modal, Select, useLockBodyScroll } from '@/components/ui'
@@ -44,6 +45,8 @@ export const FormEmbedModal: FC = observer(() => {
   const formStore = useStore('formStore')
 
   const [visible, openModal, closeModal] = useVisible()
+
+	const { t } = useTranslation()
 
   function handleClose() {
     formStore.resetEmbed()
@@ -103,7 +106,7 @@ ${attributes.join('\n')}
     <>
       <Modal className="form-embed-modal" visible={true} maskClosable={false} showCloseIcon={false}>
         <div className="form-embed-header">
-          <div className="ml-4 text-lg font-medium text-slate-900">Embed</div>
+          <div className="ml-4 text-lg font-medium text-slate-900">{t('share.embed')}</div>
           <Button.Link className="mr-4 p-2" onClick={handleClose}>
             <IconX />
           </Button.Link>
@@ -112,7 +115,7 @@ ${attributes.join('\n')}
         <div className="form-embed-body">
           <div className="scrollbar h-full w-full bg-white px-4 py-6 lg:w-[320px] lg:border-r lg:border-gray-200">
             <div>
-              <div className="text-sm font-semibold text-slate-900">Type</div>
+              <div className="text-sm font-semibold text-slate-900">{t('formBuilder.type')}</div>
               <Select
                 className="mt-4"
                 value={formStore.embedType}
@@ -126,11 +129,11 @@ ${attributes.join('\n')}
                 leading={<IconCode />}
                 onClick={openModal}
               >
-                Get the code
+                {t('share.getTheCode')}
               </Button>
             </div>
 
-            <div className="mt-6 text-sm font-semibold text-slate-900">Settings</div>
+            <div className="mt-6 text-sm font-semibold text-slate-900">{t('form.settings')}</div>
             <div className="mt-4 space-y-4">{children}</div>
           </div>
 
@@ -141,10 +144,10 @@ ${attributes.join('\n')}
       <Modal visible={visible} onClose={closeModal} showCloseIcon>
         <div>
           <h1 className="text-lg font-medium leading-6 text-slate-900">
-            Add HeyForm to your website
+            {t('share.addHeyform')}
           </h1>
           <p className="text-sm text-slate-600">
-            Paste the following code snippet in the body section of your website.
+            {t('share.embedCodeText')}
           </p>
         </div>
         <pre className="my-6 overflow-x-auto rounded bg-slate-700 p-4 text-[13px] text-white">

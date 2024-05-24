@@ -1,6 +1,7 @@
 import { htmlUtils } from '@heyform-inc/answer-utils'
 import { IconCheck } from '@tabler/icons-react'
 import { type FC, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Select } from '@/components/ui'
 import { type FormField } from '@/models'
@@ -13,6 +14,8 @@ interface FieldSelectProps {
 }
 
 export const FieldSelect: FC<FieldSelectProps> = ({ fields, value, onChange }) => {
+	const { t } = useTranslation()
+
   const options = useMemo(
     () =>
       fields.map(field => ({
@@ -56,7 +59,7 @@ export const FieldSelect: FC<FieldSelectProps> = ({ fields, value, onChange }) =
     <Select
       className="field-selector"
       popupClassName="field-selector-popup"
-      placeholder="Select a question"
+      placeholder={t('integration.selectQuestion')}
       options={options}
       value={value as any}
       valueRender={valueRender as unknown as any}
