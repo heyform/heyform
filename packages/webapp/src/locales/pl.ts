@@ -71,11 +71,11 @@ export default {
     }
   },
   setup: {
-    createW: 'Krok 1: utwórz nowe środowisko pracy',
+    createW: 'Krok 1: utwórz nowy obszar roboczy',
     explain:
-      'Środowisko pracy to współdzielone środowisko, w którym członkowie mogą współpracować.',
-    name: 'Nazwa środowiska pracy',
-    logo: 'Logo środowiska pracy',
+      'Obszar roboczy to współdzielone środowisko, w którym uczestnicy mogą razem współpracować.',
+    name: 'Nazwa obszaru roboczego',
+    logo: 'Logo obszaru roboczego',
     create: 'Utwórz'
   },
   project: {
@@ -117,8 +117,8 @@ export default {
     Deleting: 'Usuwanie formularza...',
     Duplicating: 'Duplikowanie formularza...',
     ProjectMembers: {
-      members: 'Członkowie tego projektu',
-      explain: 'Przypisani członkowie mogą współzarządzać działaniami w tym projekcie.',
+      members: 'Uczestnicy tego projektu',
+      explain: 'Przypisani uczestnicy mogą współzarządzać działaniami w tym projekcie.',
       assigned: 'Przypisany',
       notAssigned: 'Nieprzypisany',
       leave: 'Opuść',
@@ -126,8 +126,8 @@ export default {
       assign: 'Przypisz',
       submissions: 'zgłoszenia',
       NoSubmissions: 'Brak zgłoszeń',
-      removeMember: 'Nie można usunąć członka',
-      assignMember: 'Nie można przypisać członka',
+      removeMember: 'Nie można usunąć uczestnika',
+      assignMember: 'Nie można przypisać uczestnika',
       leftP: 'Opuściłeś projekt',
       leaveP: 'Nie udało się opuścić tego projektu',
       you: ' (Ty)'
@@ -150,64 +150,64 @@ export default {
   workspace: {
     members: {
       delMember:
-        'Po potwierdzeniu usunięcia tego członka, nie będzie on miał już dostępu do danych tego środowiska pracy.',
-      delConfirm: 'Czy na pewno chcesz usunąć tego członka?',
+        'Po potwierdzeniu usunięcia tego uczestnika nie będzie on już miał dostępu do danych tego obszaru roboczego.',
+      delConfirm: 'Czy na pewno chcesz usunąć tego uczestnika?',
       remove: 'Usuń',
       inputPrompt: 'Wprowadź co najmniej jeden prawidłowy adres e-mail',
       inviteMember: 'Zaproś swoich współpracowników',
       send: 'Zaproszenia zostały wysłane',
       inviteExplain:
-        'Możesz zaprosić swoich współpracowników do dołączenia do środowiska pracy za pośrednictwem poczty e-mail. Zaproszenie jest ważne przez 7 dni i wygaśnie',
+        'Możesz zaprosić swoich współpracowników do dołączenia do obszaru roboczego za pośrednictwem poczty e-mail. Zaproszenie jest ważne przez 7 dni i wygaśnie',
       Add: 'Dodaj więcej',
       sendBottom: 'Zaproś',
-      member: 'Członkowie',
-      manage: 'Zarządzaj dostępem do środowiska pracy.',
-      leave: 'Czy na pewno chcesz opuścić to środowisko pracy?',
+      member: 'Uczestnicy',
+      manage: 'Zarządzaj dostępem do obszaru roboczego.',
+      leave: 'Czy na pewno chcesz opuścić ten obszar roboczy?',
       leaveExplain:
-        'Po potwierdzeniu opuszczenia tego środowiska pracy, nie będziesz już miał dostępu do jego danych.',
+        'Po potwierdzeniu opuszczenia tego obszaru roboczego nie będziesz już miał dostępu do jego danych.',
       bottomLeave: 'Opuść',
-      transferTitle: 'Czy na pewno chcesz przekazać to środowisko pracy?',
+      transferTitle: 'Czy na pewno chcesz przekazać ten obszar roboczy?',
       transferWorkspace:
-        'Po potwierdzeniu przekazania tego środowiska pracy nie będziesz już jego właścicielem.',
+        'Po potwierdzeniu przekazania tego obszaru roboczego nie będziesz już jego właścicielem.',
       transfer: 'Przekaż',
       Role: 'Rola',
       LastSeen: 'Ostatnio widziany',
       Action: 'Akcja',
       index: {
         owner: 'Właściciel',
-        member: 'Członek',
+        member: 'Uczestnik',
         transfer: 'Przekaż własność',
-        leave: 'Opuść środowisko pracy',
-        invite: 'Zaproś członka'
+        leave: 'Opuść obszar roboczy',
+        invite: 'Zaproś uczestnika'
       }
     },
     workSpace: {
       createP: 'Utwórz nowy projekt',
       workExplain:
-        'Projekty są podgrupami w środowisku pracy, w których możesz dodać swoich członków środowiska pracy do współpracy nad formularzami, grupami odbiorców i integracjami.',
+        'Projekty są podgrupami w obszarze roboczym, do których możesz dodać uczestników środowiska pracy aby współpracowali nad formularzami, grupami odbiorców i integracjami.',
       createBottom: 'Utwórz',
-      assign: 'Przypisz członków',
+      assign: 'Przypisz uczestników',
       createP2: 'Utwórz projekt',
       noProject: 'Nie masz jeszcze żadnych projektów',
-      text: 'Projekt działa jak grupa, w której możesz dodać swoich współpracowników do współpracy nad formularzami, grupami odbiorców oraz integracjami.',
+      text: 'Projekt działa jak grupa, do której możesz dodać współpracowników do pracy nad formularzami, grupami odbiorców oraz integracjami.',
       forms: 'formularze',
       noForms: 'Brak formularzy'
     },
     settings: {
-      WorkSettings: 'Ustawienia środowiska pracy',
-      subTitle: 'Zarządzaj ustawieniami swojego środowiska pracy',
+      WorkSettings: 'Ustawienia obszaru roboczego',
+      subTitle: 'Zarządzaj ustawieniami swojego obszaru roboczego',
       up: 'Aktualizuj',
-      id: 'Identyfikator środowiska pracy',
-      nameW: 'Nazwa środowiska pracy',
+      id: 'Identyfikator obszaru roboczego',
+      nameW: 'Nazwa obszaru roboczego',
       delWorkspace: {
         sendEmail: 'Na Twój adres email został wysłany kod weryfikacyjny',
-        dissolve: 'Rozwiąż środowisko pracy',
+        dissolve: 'Rozwiąż obszar roboczy',
         warning:
-          'Pamiętaj, że tej operacji nie można cofnąć i spowoduje trwałe usunięcie wszystkich danych związanych z tym środowiskiem pracy.',
+          'Pamiętaj, że tej operacji nie można cofnąć i spowoduje ona trwałe usunięcie wszystkich danych związanych z tym obszarem roboczym.',
         warning2:
-          'Po potwierdzeniu rozwiązania środowiska pracy nie będziesz już miał dostępu do jego danych.',
+          'Po potwierdzeniu rozwiązania obszaru roboczego nie będziesz już miał dostępu do jego danych.',
         warning3:
-          'Poprzez rozwiązanie zespołu, wszystkie formularze i dane zostaną usunięte i nie będzie można ich przywrócić! Zachowaj ostrożność!'
+          'Po rozwiązaniu obszaru roboczego, wszystkie formularze i dane zostaną usunięte i nie będzie można ich przywrócić! Zachowaj ostrożność!'
       },
       receive: 'Po przygotowaniu eksportu otrzymasz na swojego e-maila link do pobrania.',
       export: 'Eksportuj zawartość',
@@ -215,21 +215,21 @@ export default {
       exportBottom: 'Zażądaj swoich danych',
 
       logo: 'Logo',
-      pickLogo: 'Wybierz logo dla swojego środowiska pracy'
+      pickLogo: 'Wybierz logo dla swojego obszaru roboczego'
     },
     createWorkspace: {
       optional: 'opcjonalne',
-      newWorkspace: 'Utwórz nowe środowisko pracy',
-      text: 'Środowiska pracy to wspólne środowiska, w których członkowie mogą współpracować. Po utworzeniu środowiska pracy możesz zaprosić innych do dołączenia.',
-      name: 'Nazwa środowiska pracy',
-      logo: 'Logo środowiska pracy',
+      newWorkspace: 'Utwórz nowy obszar roboczy',
+      text: 'Obszary robocze to wspólne środowiska, w których uczestnicy mogą współpracować. Po utworzeniu obszaru roboczego, możesz zaprosić innych do dołączenia.',
+      name: 'Nazwa obszaru roboczego',
+      logo: 'Logo obszaru roboczego',
       create: 'Utwórz'
     },
     join: {
-      invited: 'Zostałeś zaproszony do',
-      UsernameAdd: 'środowiska pracy',
-      joinText: 'Dołącz do środowiska pracy i zacznij pracować razem!',
-      member: 'członków',
+      invited: 'Zostałeś zaproszony do obszaru roboczego użytkownika',
+      UsernameAdd: '',
+      joinText: 'Dołącz do obszaru roboczego i zacznij pracować wspólnie!',
+      member: 'uczestników',
       bottom: 'Dołącz'
     }
   },
@@ -245,17 +245,17 @@ export default {
         sendEmail: 'Na Twój adres email został wysłany kod weryfikacyjny',
         del: 'Usuń konto',
         delText:
-          'Ta akcja nie może zostać cofnięta. Spowoduje to trwałe usunięcie całego Twojego konta. Wszystkie utworzone przez Ciebie środowiska pracy zostaną usunięte, a Ty zostaniesz usunięty ze wszystkich udostępnionych środowisk pracy.',
+          'Ta akcja nie może zostać cofnięta. Spowoduje to trwałe usunięcie całego konta. Wszystkie utworzone przez Ciebie obszary robocze zostaną usunięte, a Ty zostaniesz usunięty ze wszystkich udostępnionych obszarów roboczych.',
         delSure:
           'Jeśli na pewno chcesz kontynuować usuwanie swojego konta, proszę kontynuuj poniżej.',
         delBottom: 'Usuń moje konto',
         delCode: 'Kod weryfikacyjny',
         delAccount: 'Usunięcie konta zaplanowane',
         delSendEmail:
-          'Zaplanowaliśmy usunięcie Twojego konta za 48 godzin. Otrzymasz potwierdzenie e-mailem, kiedy się to zakończy.',
+          'Zaplanowaliśmy usunięcie Twojego konta za 48 godzin. Otrzymasz potwierdzenie e-mailem gdy usunięcie zostanie zrealizowane.',
         loggedOut: 'Teraz zostaniesz wylogowany.',
         delText2:
-          'Spowoduje to trwałe usunięcie całego Twojego konta. Wszystkie Twoje formularze, zgłoszenia i środowiska pracy zostaną usunięte',
+          'Spowoduje to trwałe usunięcie całego konta. Wszystkie Twoje formularze, zgłoszenia i obszary robocze zostaną usunięte',
         danger: 'Strefa niebezpieczna'
       },
       emailAddress: {
@@ -270,11 +270,11 @@ export default {
       },
       phoneNumber: {
         change: 'Zmień swój numer telefonu',
-        description: 'Po zmianie będziesz mógł logować się za pomocą nowego numeru telefonu.'
+        description: 'Po zmianie będziesz mógł się logować za pomocą nowego numeru telefonu.'
       },
       account: 'Ustawienia konta',
       accountText:
-        'Zmiany w ustawieniach konta będą obowiązywać we wszystkich Twoich środowiskach pracy.',
+        'Zmiany w ustawieniach konta będą obowiązywać we wszystkich Twoich obszarach roboczych.',
       password: {
         changeText: 'Twoje hasło zostało zmienione',
         changeP: 'Zmień hasło',
@@ -299,7 +299,7 @@ export default {
     results: 'Wyniki',
     settings: 'Ustawienia',
     published: 'Opublikowany',
-    analytics: 'Analityka',
+    analytics: 'Analizy',
     submissions: 'Zgłoszenia',
     preview: 'Podgląd',
     publish: 'Opublikuj'
@@ -385,17 +385,17 @@ export default {
     Code: 'Kod',
     shared: 'Formularz został pomyślnie udostępniony',
     fetchGroups: 'Nie udało się pobrać grup odbiorców',
-    Analytics: 'Analityka'
+    Analytics: 'Analizy'
   },
-  analityka: {
-    Analytics: 'Analityka',
+  analytics: {
+    Analytics: 'Analizy',
     Report: 'Raport',
     Submissions: 'Zgłoszenia',
     Views: 'Wyświetlenia',
     complete: 'Wskaźnik ukończenia',
     Average: 'Średni czas trwania',
     topAudience: 'Najczęstsze lokalizacje odbiorców',
-    AnalyticsOverview: 'Przegląd analityki',
+    AnalyticsOverview: 'Przegląd analiz',
     time: ['Ostatni tydzień', 'Ostatni miesiąc', 'Ostatnie 3 miesiące', 'Ostatni rok'],
     Responses: 'Odpowiedzi'
   },
@@ -431,7 +431,7 @@ export default {
     timeLimit: 'Limit czasu',
 		time: 'Czas',
     timeText:
-      'Możesz ustawić tutaj dopuszczalny czas, jeśli chcesz zablokować zgłoszenia po upływie odliczania.',
+      'Możesz ustawić tutaj dopuszczalny czas, jeśli chcesz zablokować zgłoszenia po upływie pewnego czasu.',
     dataError: 'Wprowadź prawidłową liczbę',
     Hour: 'Godzina',
     Minute: 'Minuta',
@@ -439,12 +439,12 @@ export default {
     Day: 'Dzień',
     progressBar: 'Pasek postępu',
     progressText:
-      'W łatwy sposób możesz poinformować respondentów, jak blisko są ukończenia Twojego formularza.',
+      'W łatwy sposób możesz poinformować respondentów, jak blisko są ukończenia formularza.',
     questionList: 'Lista pytań',
     questionText:
-      'Możesz włączyć listę pytań, aby respondenci mogli przejść przez wszystkie pytania.',
+      'Możesz włączyć listę pytań, aby respondenci mogli przejrzeć przez wszystkie pytania.',
     Redirect: 'Przekieruj po zakończeniu',
-    redirectText: 'Przekieruj respondentów na inną stronę po wypełnieniu Twojego formularza.',
+    redirectText: 'Przekieruj respondentów na inną stronę po wypełnieniu formularza.',
     Update: 'Aktualizuj',
     Basic: 'Podstawowe',
     formUpdated: 'Ustawienia formularza zostały pomyślnie zaktualizowane',
@@ -459,19 +459,19 @@ export default {
     closedFormDescription: 'Opis',
     expiration: 'Zamknij formularz po wygaśnięciu',
     expirationText:
-      'Jeśli chcesz otrzymywać zgłoszenia w określonym przedziale dat, możesz tutaj ustawić daty początku i końca.',
+      'Jeśli chcesz otrzymywać zgłoszenia w określonym przedziale dat, możesz tutaj ustawić daty rozpoczęcia i zakończenia.',
     to: 'do',
     dateErr: 'Data zamknięcia musi być późniejsza niż data rozpoczęcia',
     submission: 'Ogranicz liczbę zgłoszeń',
     submissionText: 'Pozwala ustawić maksymalną liczbę dozwolonych zgłoszeń dla tego formularza.',
-    IpLimit: 'Ogranicz częstotliwość przesyłania z tego samego adresu IP',
+    IpLimit: 'Ogranicz częstotliwość zgłaszania z tego samego adresu IP',
     IpLimitText:
-      'Możesz tutaj ustawić limit liczby przesłań z tego samego adresu IP w określonym czasie.',
+      'Możesz tutaj ustawić limit liczby zgłoszeń z tego samego adresu IP w określonym czasie.',
     Protection: 'Ochrona',
     Anti: 'Antyspam',
-    AntiText: 'Włącz, aby zapobiec zgłoszeniom spamowym.',
+    AntiText: 'Włącz, aby zapobiec spamowym zgłoszeniom.',
     Bots: 'Zapobieganie botom',
-    BotsText: 'Zapobiegaj zgłoszeniom z botów, włączając captchę.',
+    BotsText: 'Zapobiegaj zgłoszeniom od botów włączając captchę.',
     deleteForm: 'Usuń ten formularz',
     deleteFormText:
       'Usunięcie formularza spowoduje usunięcie wszelkich śladów tego formularza z naszych baz danych, w tym wszystkich zgłoszeń.',
@@ -484,12 +484,12 @@ export default {
     timesInEvery: 'razy w każdym',
 		times: 'razy',
 		inEvery: 'na',
-    primaryLanguage: 'Język podstawowy',
+    primaryLanguage: 'Główny język',
     languageDescription:
-      'Wybierz język podstawowy, w którym odbiorcy zobaczą Twój formularz. Dotyczy niestandardowego tekstu, takiego jak domyślne przyciski, błędy walidacji itp.',
+      'Wybierz główny język, w którym respondenci zobaczą Twój formularz. Dotyczy niestandardowego tekstu, takiego jak domyślne przyciski, błędy walidacji itp.',
     languages: 'Tłumaczenia',
     translationsDescription:
-      'Automatycznie przetłumacz pytania formularza na wybrane przez Ciebie języki, używając <a>OpenAI ChatGPT</a>.',
+      'Automatycznie przetłumacz pytania formularza na wybrane języki używając <a>OpenAI ChatGPT</a>.'
 		passwordProtection: 'Ochrona hasłem',
 		passwordProtectionText: 'Zabezpiecz swój formularz prostym do zapamiętania hasłem.',
 		passwordProtectionPlaceholder: 'Ustaw hasło do tej strony',
@@ -499,7 +499,7 @@ export default {
 		closeDate: 'Data końcowa',
 		timeZone: 'Strefa czasowa',
   },
-  integracja: {
+  integration: {
     Categories: 'Kategorie',
     connectText: 'Połącz dane z formularza z ulubionymi aplikacjami, zapoznaj się z ',
     help: 'centrum pomocy',
@@ -523,7 +523,7 @@ export default {
     tableText3:
       'Mapuj pola HeyForm na pola Airtable. Kluczowe jest wpisanie dokładnie takich samych nazw pól Airtable, jak pojawiają się w Twojej tabeli. Jeśli zmienisz nazwę pola w Airtable, zaktualizuj ją też tutaj, w przeciwnym razie integracja nie będzie działać prawidłowo.',
     DropboxText:
-      'Folder, w którym umieścić plik, jeśli dodałeś komponent "Przesyłanie pliku" w swoim formularzu.',
+      'Folder, w którym umieścić plik, jeśli dodałeś komponent "Przesyłanie plików" w swoim formularzu.',
     select: 'Wybierz folder',
     Connect: 'Połącz',
     coming: 'Wkrótce',
@@ -532,17 +532,17 @@ export default {
     Add: 'Dodaj',
     toTelegram: 'do swojej grupy na Telegramie, wpisz',
     inTelegram: 'w grupie otrzymasz wiadomość z ID Czatu.',
-    labelWeb: 'Niestandardowy URL Webhooka',
-    labelSlack: 'URL Webhooka',
+    labelWeb: "Niestandardowy URL Webhook'a",
+    labelSlack: "URL Webhook'a",
     createS: 'Utwórz swoją',
     appSlack: 'aplikację Slack',
-    pasteSlack: 'włącz Przychodzące Webhooki i wklej tutaj URL Webhooka.',
+    pasteSlack: "włącz Przychodzące Webhooki i wklej tutaj URL Webhook'a.",
     trackingCode: 'Kod śledzenia',
     copyGoogle: 'Skopiuj i wklej poniżej swój kod śledzenia Google Analytics.',
     link: 'Jak znaleźć mój kod śledzenia?',
     addA: 'Dodaj',
     customBots: 'niestandardowego bota',
-    customBotText: 'w swojej grupie i wklej tutaj URL Webhooka z ustawień bota.',
+    customBotText: "w swojej grupie i wklej tutaj URL Webhook'a z ustawień bota.",
     PixelID: 'ID Piksela',
     copyId: 'Skopiuj i wklej poniżej swój ID Pixela na Facebooku.',
     findId: 'Jak znaleźć mój ID Piksela?',
@@ -556,7 +556,7 @@ export default {
     SelectGroup: 'Wybierz grupę',
     selectGroup: 'Możesz wybrać własną grupę lub grupy, z którymi jesteś połączony.',
     selectProject: 'Wybierz projekt',
-    selectMember: 'Wybierz członka (opcjonalnie)',
+    selectMember: 'Wybierz uczestnika (opcjonalnie)',
     selectLabel: 'Wybierz etykietę (opcjonalnie)',
     selectMilestone: 'Wybierz kamień milowy (opcjonalnie)',
     issueTitle: 'Tytuł zgłoszenia',
@@ -570,7 +570,7 @@ export default {
     with: 'z którymi jesteś połączony.',
     SelectFolder: 'Wybierz folder',
     GoogleText:
-      'Folder, w którym umieścić plik, jeśli dodałeś komponent "Przesyłanie pliku" w swoim formularzu.',
+      'Folder, w którym umieścić plik, jeśli dodałeś komponent "Przesyłanie plików" w swoim formularzu.',
     SelectSpreadsheet: 'Wybierz arkusz kalkulacyjny',
     SelectWorksheet: 'Wybierz arkusz roboczy',
     MapFields: 'Mapuj pola',
@@ -624,7 +624,7 @@ export default {
     Status: 'Status',
     ChooseStatus: 'Wybierz status',
     Authorization: 'Autoryzacja',
-    AuthorizationText: 'Przede wszystkim, autoryzuj HeyForm do dostępu do twoich danych',
+    AuthorizationText: 'Przede wszystkim autoryzuj HeyForm do dostępu do twoich danych',
     login: 'Zaloguj się do',
     loginGoogle: 'Zaloguj się przez Google'
   },
@@ -635,11 +635,11 @@ export default {
   },
   createForm: {
     typeText:
-      'Wybierz rodzaj formularza zgodnie z jego przeznaczeniem. Po utworzeniu formularza rodzaj formularza nie może zostać zmieniony.',
+      'Wybierz rodzaj formularza zgodnie z jego przeznaczeniem. Po utworzeniu formularza jego rodzaj nie może już zostać zmieniony.',
     createNew: 'Utwórz nowy formularz od podstaw',
     ClassicForm: 'Formularz klasyczny',
     templatesForm: 'Utwórz nowy formularz z szablonów',
-    URLForm: 'Importuj formularz z zewnętrznego URL-a'
+    URLForm: 'Importuj formularz z zewnętrznego URLa'
   },
   other: {
     DragUploader: {
@@ -652,7 +652,7 @@ export default {
       TeamMembers: 'Zespół',
       Audiences: 'Odbiorcy',
       Billing: 'Faktury',
-      Workspace: 'Ustawienia przestrzeni roboczej',
+      Workspace: 'Ustawienia obszaru roboczego',
       Projects: 'Projekty',
       Resources: 'Zasoby',
       GettingStarted: 'Pierwsze kroki',
@@ -662,7 +662,7 @@ export default {
       View: 'Wyświetl profil',
       Account: 'Ustawienia konta',
       Logout: 'Wyloguj się',
-      CreateWorkspace: 'Utwórz nową przestrzeń roboczą',
+      CreateWorkspace: 'Utwórz nowy obszar roboczy',
       Version: 'Wersja'
     },
     Change: 'Zmień',
@@ -675,7 +675,7 @@ export default {
 		closeSidebar: 'Zamknij panel boczny',
   },
   formBuilder: {
-    type: 'Rodzaj',
+    type: 'Typ',
     settings: 'Ustawienia',
     required: 'Wymagane',
     dateFormat: 'Format daty',
@@ -710,16 +710,16 @@ export default {
     question: 'Pytanie',
     questionPlaceholder: 'Wpisz pytanie',
     descriptionPlaceholder: 'Dodaj opis (opcjonalnie)',
-    recommended: 'Polecane',
+    recommended: 'Zalecane',
     contactInfo: 'Informacje kontaktowe',
     choices: 'Wybory',
     text: 'Tekst',
     legalConsent: 'Zgoda prawna',
     formStructure: 'Struktura formularza',
-    Content: 'Zawartość',
-    searchFieldType: 'Znajdź rodzaj pytania',
-    allFieldTypes: 'Wszystkie rodzaje pytań',
-    welcome: 'Witaj',
+    Content: 'Treść',
+    searchFieldType: 'Znajdź typ pytania',
+    allFieldTypes: 'Wszystkie typy pytań',
+    welcome: 'Witamy',
     thankYou: 'Dziękujemy',
     multipleChoice: 'Wielokrotny wybór',
     phoneNumber: 'Numer telefonu',
@@ -737,7 +737,7 @@ export default {
     dateTime: 'Data i czas',
     dateRange: 'Zakres dat',
     number: 'Liczba',
-    fileUpload: 'Przesyłanie pliku',
+    fileUpload: 'Przesyłanie plików',
     payment: 'Płatność',
 		paymentConnectText: 'Odbieraj i otrzymuj płatności bezpośrenio na swoje konto w banku dzięki',
     address: 'Adres',
@@ -763,14 +763,14 @@ export default {
     lastName: 'Nazwisko',
     accept: 'Akceptuję',
     dontAccept: 'Nie akceptuję',
-    yourAnswer: 'Twoja odpowiedź tutaj',
+    yourAnswer: 'Tutaj wpisz odpowiedź',
     hitTip: 'Naciśnij Shift ⇧ + Enter ↵, aby dodać nową linię',
     addChoice: 'Dodaj wybór',
     choicePlaceholder: 'wybór',
     drawSignature: 'Narysuj swój podpis powyżej',
     clearSignature: 'Wyczyść',
     data: 'Dane',
-    inputTable: 'Tabela wejściowa',
+    inputTable: 'Tabela',
     addColumn: 'Dodaj kolumnę',
     columnPlaceholder: 'Kol {{index}}',
     design: 'Projekt',
@@ -788,8 +788,8 @@ export default {
 			variable: 'Zmienna',
       title: 'Zmienne',
       description:
-        'Zmienna formularza reprezentuje ukrytą obliczoną wartość opartą na odpowiedziach respondentów w Twoim formularzu. Na przykład obliczanie wyniku quizu.',
-      empty: 'Nie ma jeszcze zmiennych, możesz kliknąć "Dodaj zmienną", aby dodać jedną.',
+        'Zmienna reprezentuje ukrytą obliczoną wartość opartą na odpowiedziach respondentów w Twoim formularzu. Na przykład obliczanie wyniku quizu.',
+      empty: 'Nie ma jeszcze zmiennych, możesz kliknąć "Dodaj zmienną", aby dodać pierwszą.',
       add: 'Dodaj zmienną',
       update: 'Aktualizuj zmienną',
       edit: 'Edytuj zmienną',
@@ -814,17 +814,17 @@ export default {
 		addRule: 'Dodaj regułę',
     deleteRule: 'Usuń regułę',
     rulePlaceholder:
-      'Nie ma jeszcze żadnych reguł. Wybierz pytanie w lewej podglądzie i dodaj regułę w panelu wyskakującym. Możesz również kliknąć "Masowa edycja", aby zbiorczo edytować wszystkie reguły.',
+      'Nie ma jeszcze żadnych reguł. Wybierz pytanie w podglądzie po lewej i dodaj regułę w panelu, który się otworzy. Możesz również kliknąć "Masowa edycja", aby zbiorczo edytować wszystkie reguły.',
     singleRule: 'Ustawiono 1 regułę',
-    multipleRules: '{{count}} reguł ustawiono',
+    multipleRules: 'Ustawione reguły: {{count}}',
     redirect: 'Przekieruj po zakończeniu',
     buttonLinkUrl: 'URL przycisku linku',
     CustomCSS: 'Niestandardowy CSS',
     CustomCSSDescription:
-      'Jeśli ani motyw, ani dostosowane style nie spełniają Twoich potrzeb, możesz wstawić niestandardowy CSS, aby dostosować go do swoich pożądanych stylów.',
+      'Jeśli ani Motyw, ani ustawienia z zakładki Dostosuj nie spełniają Twoich potrzeb, możesz wstawić niestandardowe style CSS, aby dostosować formularz tak jak chcesz.',
     customCssTableDescription: 'Opis',
     customCssTableClass: 'Klasa CSS',
-    ConnectStripe: 'Połącz z stripe',
+    ConnectStripe: 'Połącz ze Stripe',
     price: 'Cena',
     currency: 'Waluta',
     hiddenFields: 'Ukryte pola',

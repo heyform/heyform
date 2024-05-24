@@ -1,5 +1,5 @@
 export default {
-  'Made with': 'Wykonano z',
+  'Made with': 'Wykonano w',
   'This field is required': 'To pole jest wymagane',
   'File type is not supported': 'Typ pliku nie jest obsługiwany',
   "File size can't exceed {{size}}": "Rozmiar pliku nie może przekraczać {{size}}",
@@ -23,7 +23,7 @@ export default {
   'Select a country': 'Wybierz kraj',
   'I accept': 'Akceptuję',
   "I don't accept": 'Nie akceptuję',
-  'Your answer goes here': 'Twoja odpowiedź tutaj',
+  'Your answer goes here': 'Wpisz swoją odpowiedź',
   'Choose up to {{max}} choices': 'Wybierz do {{max}} opcji',
   'Choose at least {{min}} choices': 'Wybierz co najmniej {{min}} opcji',
   'Choose {{max}} choices': 'Wybierz {{max}} opcji',
