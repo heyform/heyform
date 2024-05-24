@@ -1,5 +1,6 @@
 import { IconMenu2 } from '@tabler/icons-react'
 import type { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import CreateWorkspaceModal from '@/pages/form/views/CreateWorkspaceModal'
 import WorkspaceSettings from '@/pages/workspace/WorkspaceSettings'
@@ -15,6 +16,7 @@ export const WorkspaceLayout: FC<IComponentProps> = ({ children }) => {
 
   const [workspaceSettingsVisible, openWorkspaceSettings, closeWorkspaceSettings] = useVisible()
   const [createWorkspaceVisible, openCreateWorkspace, closeCreateWorkspace] = useVisible()
+	const { t } = useTranslation()
 
   function handleSidebarOpen() {
     appStore.isSidebarOpen = true
@@ -34,7 +36,7 @@ export const WorkspaceLayout: FC<IComponentProps> = ({ children }) => {
               className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-slate-500 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               onClick={handleSidebarOpen}
             >
-              <span className="sr-only">Open sidebar</span>
+              <span className="sr-only">{t('other.openSidebar')}</span>
               <IconMenu2 className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>

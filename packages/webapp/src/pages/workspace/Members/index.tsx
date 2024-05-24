@@ -42,7 +42,7 @@ const Members = observer(() => {
             </div>
             <div className="flex-1 px-4">
               <p className="truncate text-sm font-semibold text-slate-800">
-                {record.name} {userStore.user.id === record.id && <span>(You)</span>}
+                {record.name} {userStore.user.id === record.id && <span>{t('project.ProjectMembers.you')}</span>}
               </p>
               <p className="mt-0.5 flex items-center text-sm font-normal text-slate-500">
                 <span className="truncate">{record.email}</span>

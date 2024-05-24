@@ -69,7 +69,7 @@ export const ConnectStripeModal: FC<IModalProps> = observer(({ visible, onClose 
 
         <div className="space-y-2">
           <p>
-            Collect and receive payments directly on your bank account provided by{' '}
+            {t('formBuilder.paymentConnectText')}{' '}
             <a href="https://stripe.com/">Stripe</a>.
           </p>
         </div>
@@ -86,7 +86,7 @@ export const ConnectStripeModal: FC<IModalProps> = observer(({ visible, onClose 
         )}
 
         <div className="flex items-center justify-between">
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('formBuilder.cancel')}</Button>
           <Button
             type="primary"
             trailing={<IconExternalLink />}

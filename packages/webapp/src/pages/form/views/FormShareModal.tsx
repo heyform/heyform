@@ -8,6 +8,7 @@ import {
 } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 
 import { CopyButton } from '@/components'
@@ -29,6 +30,7 @@ export const FormShareModal = observer(() => {
   const appStore = useStore('appStore')
 
   const sharingLinkUrl = getShareURL(formStore.current?.id)
+	const { t } = useTranslation()
 
   async function handleUpdate(updates: IMapType) {
     try {
@@ -89,7 +91,7 @@ export const FormShareModal = observer(() => {
     >
       <div className="space-y-6 text-sm text-slate-900">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold leading-6 text-slate-900">Share this form</h1>
+          <h1 className="text-lg font-bold leading-6 text-slate-900">{t('share.title')}</h1>
 
           <button onClick={handleClose}>
             <IconX className="text-slate-700 hover:text-slate-900" />
@@ -136,12 +138,12 @@ export const FormShareModal = observer(() => {
 
         <div>
           <div className="mb-1 flex items-center justify-between text-sm">
-            <span className="font-medium">Share link</span>
+            <span className="font-medium">{t('share.shareLink')}</span>
             <div className="flex items-center gap-1">
               <NavLink
                 to={`/workspace/${workspaceId}/project/${projectId}/form/${formId}/settings#form-settings-protection`}
               >
-                Password protection
+                {t('share.passwordProtection')}
               </NavLink>
             </div>
           </div>
@@ -154,9 +156,9 @@ export const FormShareModal = observer(() => {
         </div>
 
         <div>
-          <div className="mb-1 text-sm font-medium">Embed form</div>
+          <div className="mb-1 text-sm font-medium">{t('share.embedForm')}</div>
           <div className="mb-4 text-sm text-slate-600">
-            Use these options to embed your form into your own website.
+            {t('share.embedOptionsText')}
           </div>
 
           <div className="grid grid-cols-4 gap-5">
@@ -165,7 +167,7 @@ export const FormShareModal = observer(() => {
                 <div className="rounded-md border border-black/10">
                   <row.icon className="w-full rounded-md" />
                 </div>
-                <div className="mt-1.5 text-center text-sm text-slate-600">{row.label}</div>
+                <div className="mt-1.5 text-center text-sm text-slate-600">{t(`share.${row.type}`)}</div>
               </div>
             ))}
           </div>

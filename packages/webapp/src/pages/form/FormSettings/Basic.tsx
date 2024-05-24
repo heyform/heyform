@@ -17,7 +17,7 @@ export const Basic: FC = observer(() => {
       id="form-settings-basic"
       className="form-settings-selection space-y-6 bg-white px-6 pb-8 pt-6 shadow sm:rounded-md"
     >
-      <div className="text-lg font-medium text-slate-900">Basic</div>
+      <div className="text-lg font-medium text-slate-900">{t('formSettings.Basic')}</div>
 
       {/* Language */}
       <div className="flex items-center justify-between">
@@ -156,10 +156,10 @@ export const Basic: FC = observer(() => {
                 }
               ]}
             >
-              <Input className="w-32" type="number" trailing="times" />
+              <Input className="w-32" type="number" trailing={t('formSettings.times')} />
             </Form.Item>
 
-            <span className="px-2 text-sm text-slate-500"> in every </span>
+            <span className="px-2 text-sm text-slate-500"> {t('formSettings.inEvery')} </span>
 
             <Form.Item
               className="mb-0"

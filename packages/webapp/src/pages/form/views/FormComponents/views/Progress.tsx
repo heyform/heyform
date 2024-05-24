@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 
 import { useStore } from '../store'
+import { useTranslation } from 'react-i18next'
 
 interface CircularProgressbarProps {
   current: number
@@ -74,11 +75,12 @@ const CircularProgressbar: FC<CircularProgressbarProps> = ({
 
 export const Progress: FC = () => {
   const { state } = useStore()
+	const { t } = useTranslation()
 
   return (
     <div className="heyform-progress">
       <CircularProgressbar current={state.percentage} />
-      <span>{state.percentage}% answered</span>
+      <span>{state.percentage}{t('formBuilder.percentAnswered')}</span>
     </div>
   )
 }

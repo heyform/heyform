@@ -2,6 +2,7 @@ import { IconX } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import type { FC } from 'react'
 import { CSSTransition } from 'react-transition-group'
+import { useTranslation } from 'react-i18next'
 
 import { useStore } from '@/store'
 
@@ -18,6 +19,7 @@ interface SidebarProps {
 export const Sidebar: FC<SidebarProps> = observer(
   ({ onCreateWorkspace, onWorkspaceSettingsOpen }) => {
     const appStore = useStore('appStore')
+		const { t } = useTranslation()
 
     function handleClose() {
       appStore.isSidebarOpen = false
@@ -62,7 +64,7 @@ export const Sidebar: FC<SidebarProps> = observer(
                   className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                   onClick={handleClose}
                 >
-                  <span className="sr-only">Close sidebar</span>
+                  <span className="sr-only">{t('other.closeSidebar')}</span>
                   <IconX className="h-6 w-6 text-white" aria-hidden="true" />
                 </button>
               </div>

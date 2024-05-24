@@ -2,6 +2,7 @@ import { helper } from '@heyform-inc/utils'
 import { IconTrash } from '@tabler/icons-react'
 import type { FC } from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ImageIcon, PhotoPicker } from '@/components'
 import { Button, Tooltip } from '@/components/ui'
@@ -14,6 +15,7 @@ interface BackgroundImageProps {
 export const BackgroundImage: FC<BackgroundImageProps> = ({ value, onChange }) => {
   const [visible, setVisible] = useState(false)
   const isEnabled = helper.isURL(value)
+	const { t } = useTranslation()
 
   function handleOpen() {
     setVisible(true)
@@ -35,7 +37,7 @@ export const BackgroundImage: FC<BackgroundImageProps> = ({ value, onChange }) =
   return (
     <>
       <div className="right-sidebar__cover-image flex items-center justify-between">
-        <label className="form-item-label">Background image</label>
+        <label className="form-item-label">{t('BackgroundImage')}</label>
         {isEnabled ? (
           <div className="flex items-center">
             <Tooltip ariaLabel="Change">
@@ -57,7 +59,7 @@ export const BackgroundImage: FC<BackgroundImageProps> = ({ value, onChange }) =
           </div>
         ) : (
           <Button className="px-2 py-1" onClick={handleOpen}>
-            Add
+            {t('formBuilder.addImage')}
           </Button>
         )}
       </div>

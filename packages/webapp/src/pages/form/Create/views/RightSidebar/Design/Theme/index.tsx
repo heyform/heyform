@@ -1,6 +1,7 @@
 import { FormTheme } from '@heyform-inc/shared-types-enums'
 import type { FC } from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Spin, notification } from '@/components/ui'
 import { cropImage } from '@/components/ui/image'
@@ -13,6 +14,7 @@ const ThemeItem: FC<{ theme: FormTheme }> = ({ theme }) => {
   const { formId } = useParam()
   const [loading, setLoading] = useState(false)
   const formStore = useStore('formStore')
+	const { t } = useTranslation()
 
   async function handleClick() {
     if (loading) {
@@ -57,7 +59,7 @@ const ThemeItem: FC<{ theme: FormTheme }> = ({ theme }) => {
           color: theme.questionTextColor
         }}
       >
-        Question
+				{t('Question')}
       </div>
       <div
         className="theme-item-answer"
@@ -65,7 +67,7 @@ const ThemeItem: FC<{ theme: FormTheme }> = ({ theme }) => {
           color: theme.answerTextColor
         }}
       >
-        Answer
+        {t('Answer')}
       </div>
       <div
         className="theme-item-button"
