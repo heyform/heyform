@@ -83,7 +83,7 @@ const JoinWorkspace = () => {
             <div className="ml-4 flex-auto">
               <p className="truncate text-sm font-medium text-slate-700">{workspace?.name}</p>
               <p className="truncate text-sm text-slate-500">
-                {workspace?.memberCount} {t('workspace.join.member')}
+                {workspace?.memberCount} {t('workspace.join.member', { count: workspace?.memberCount })}
               </p>
             </div>
 

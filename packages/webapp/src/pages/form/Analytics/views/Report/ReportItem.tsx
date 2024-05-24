@@ -47,7 +47,7 @@ const Choices: FC<ChoicesProps> = ({ chooses }) => {
               {row.label} · {total > 0 ? Math.round((row.count * 100) / total) : 0}%
             </div>
             <div className="text-[13px] text-[#b0b7c3]">
-              {row.count} {t('report.responses')}
+              {row.count} {t('report.responses', { count: row.count })}
             </div>
           </div>
           <Progress
@@ -108,7 +108,7 @@ const Rating: FC<RatingProps> = ({ length, leftLabel, rightLabel, chooses }) => 
                 {total > 0 ? Math.round((num * 100) / total) : 0}%
               </div>
               <div className="text-[13px] text-[#b0b7c3]">
-                {num} {t('report.responses')}
+                {num} {t('report.responses', { count: num })}
               </div>
             </div>
             <Progress className="!h-1 w-full" barClassName="!h-1" percent={(num * 100) / total} />
@@ -128,7 +128,7 @@ export const ReportItem: FC<ReportItemProps> = ({ index, response }) => {
         {index}. {response.title}
       </div>
       <div className="mb-6 text-[#8a94a6]">
-        {response.count} {t('report.responses')}
+        {response.count} {t('report.responses', {count: response.count})}
         <RatingAverage kind={response.kind} average={response.average} />
       </div>
       {(() => {

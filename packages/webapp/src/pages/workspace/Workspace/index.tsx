@@ -48,14 +48,14 @@ const Item: FC<ItemProps> = ({ project, users, isOwner, onRename, onDelete }) =>
         onRename(project)
         break
 
-      case 'delete':
+				case 'delete':
         onDelete(project)
         break
-    }
+			}
   }
 
   const Overlay = (
-    <Menus onClick={handleMenuClick}>
+		<Menus onClick={handleMenuClick}>
       <Menus.Item value="rename" label={t('project.rename')} icon={<IconPencil />} />
       {isOwner && <Menus.Item value="delete" label={t('project.del')} icon={<IconTrash />} />}
     </Menus>
@@ -70,7 +70,7 @@ const Item: FC<ItemProps> = ({ project, users, isOwner, onRename, onDelete }) =>
         <h3 className="truncate text-base font-medium text-slate-900">{project.name}</h3>
         <p className="mt-1 truncate text-sm text-slate-500">
           {project.formCount > 0
-            ? `${project.formCount} ${t('workspace.workSpace.forms')}`
+            ? `${project.formCount} ${t('workspace.workSpace.forms', { count: project.formCount })}`
             : t('workspace.workSpace.noForms')}
         </p>
         <div className="mt-4 flex items-center justify-between">
@@ -136,7 +136,7 @@ const Workspace = observer(() => {
             circular
           />
         }
-        description={`${workspaceStore.workspace?.memberCount} ${t('workspace.join.member')}`}
+        description={`${workspaceStore.workspace?.memberCount} ${t('workspace.join.member', { count: workspaceStore.workspace?.memberCount })}`}
         actions={
           workspaceStore.workspace?.projects.length > 0 && (
             <Button type="primary" onClick={openCreateProject}>
