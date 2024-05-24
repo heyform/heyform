@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui'
 import { useStore } from '@/store'
@@ -16,6 +17,7 @@ export const FormNavbar: FC<IComponentProps> = observer(() => {
   const { workspaceId, projectId } = useParam()
   const workspaceStore = useStore('workspaceStore')
   const navigate = useNavigate()
+	const { t } = useTranslation()
 
   const [visible, open, close] = useVisible()
 
@@ -81,7 +83,7 @@ export const FormNavbar: FC<IComponentProps> = observer(() => {
                 className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 onClick={close}
               >
-                <span className="sr-only">Close sidebar</span>
+                <span className="sr-only">{t('other.closeSidebar')}</span>
                 <IconX className="h-6 w-6 text-white" aria-hidden="true" />
               </button>
             </div>

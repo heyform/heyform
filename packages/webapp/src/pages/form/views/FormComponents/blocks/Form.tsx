@@ -50,6 +50,11 @@ export const Form: FC<FormProps> = ({
   const [loading, setLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string>()
 
+  const fieldError = useMemo(
+    () => (state.errorFieldId === field.id ? state.errorFieldMessage : undefined),
+    [field.id, state.errorFieldId, state.errorFieldMessage]
+  )
+
   const autoSubmit = useMemo(
     () => (state.alwaysShowNextButton ? false : rawAutoSubmit),
     [rawAutoSubmit, state.alwaysShowNextButton]
@@ -279,6 +284,13 @@ export const Form: FC<FormProps> = ({
       {...restProps}
     >
       {children}
+
+      {/* Field validation error */}
+      {fieldError && (
+        <div className="heyform-validation-wrapper">
+          <div className="heyform-validation-error">{fieldError}</div>
+        </div>
+      )}
 
       {/* Submit */}
       {isLastBlock || state.isScrollNextDisabled ? (

@@ -94,6 +94,7 @@ export interface IState {
   scrollTo?: ScrollDestination
   isScrollNextDisabled?: boolean
   errorFieldId?: string
+  errorFieldMessage?: string
   // Is the user ever submitted
   isSubmitTouched?: boolean
   // Start after welcome page
@@ -202,7 +203,11 @@ const actions: any = {
 
   setStripe: (state: IState, { stripe }: any) => ({ ...state, stripe }),
 
-  resetErrorField: (state: IState) => ({ ...state, errorFieldId: undefined }),
+  resetErrorField: (state: IState) => ({
+    ...state,
+    errorFieldId: undefined,
+    errorFieldMessage: undefined
+  }),
 
   scrollPrevious: (state: IState) => {
     if (state.scrollIndex! < 1) {
@@ -232,7 +237,7 @@ const actions: any = {
     })
   },
 
-  scrollToField(state: IState, { fieldId, errorFieldId }: any) {
+  scrollToField(state: IState, { fieldId, errorFieldId, errorFieldMessage }: any) {
     const index = state.fields.findIndex(f => f.id === fieldId)
 
     if (index < 0) {
@@ -243,7 +248,8 @@ const actions: any = {
       scrollIndex: index,
       scrollTo:
         !helper.isNil(state.scrollIndex) && index >= state.scrollIndex! ? 'next' : 'previous',
-      errorFieldId
+      errorFieldId,
+      errorFieldMessage
     })
   },
 
@@ -277,7 +283,7 @@ const actions: any = {
     })
   },
 
-  scrollTo(state: IState, { scrollIndex, scrollTo, errorFieldId }: any) {
+  scrollTo(state: IState, { scrollIndex, scrollTo, errorFieldId, errorFieldMessage }: any) {
     const { fields, values, variables } = state
     const field = fields[scrollIndex]
 
@@ -296,7 +302,8 @@ const actions: any = {
       scrollIndex,
       scrollTo,
       isScrollNextDisabled: false,
-      errorFieldId
+      errorFieldId,
+      errorFieldMessage
     }
   }
 }

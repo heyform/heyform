@@ -2,17 +2,18 @@ import { observer } from 'mobx-react-lite'
 
 import { Input, Select } from '@/components/ui'
 import { useStore } from '@/store'
+import { useTranslation } from 'react-i18next'
 
 import { ModalSettings } from './ModalSettings'
 
-const POSITION_OPTIONS = [
-  { value: 'bottom-left', label: 'Bottom left corner' },
-  { value: 'bottom-right', label: 'Bottom right corner' }
-]
-
 export const PopupSettings = observer(() => {
   const formStore = useStore('formStore')
+	const { t } = useTranslation()
 
+	const POSITION_OPTIONS = [
+		{ value: 'bottom-left', label: t('share.bottomLeftCorner') },
+		{ value: 'bottom-right', label: t('share.bottomRightCorner') }
+	]
   function handleChange(updates: any) {
     formStore.updateEmbedConfig(updates)
   }
@@ -20,7 +21,7 @@ export const PopupSettings = observer(() => {
   return (
     <ModalSettings>
       <div>
-        <div className="mb-1 text-sm font-medium text-slate-700">Position</div>
+        <div className="mb-1 text-sm font-medium text-slate-700">{t('share.position')}</div>
         <Select
           options={POSITION_OPTIONS}
           value={formStore.currentEmbedConfig.position}
@@ -29,7 +30,7 @@ export const PopupSettings = observer(() => {
       </div>
 
       <div>
-        <div className="mb-1 text-sm font-medium text-slate-700">Width</div>
+        <div className="mb-1 text-sm font-medium text-slate-700">{t('share.width')}</div>
         <Input
           trailing={<span className="text-slate-500">px</span>}
           type="number"
@@ -40,7 +41,7 @@ export const PopupSettings = observer(() => {
       </div>
 
       <div>
-        <div className="mb-1 text-sm font-medium text-slate-700">Height</div>
+        <div className="mb-1 text-sm font-medium text-slate-700">{t('share.height')}</div>
         <Input
           trailing={<span className="text-slate-500">px</span>}
           type="number"

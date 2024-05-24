@@ -3,6 +3,7 @@ import { IconHelp } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
 import type { FC } from 'react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   Button,
@@ -30,6 +31,7 @@ export const Customize: FC = observer(() => {
   const [form] = useForm()
   const [loading, setLoading] = useState(false)
   const [modalVisible, openModal, closeModal] = useVisible()
+	const { t } = useTranslation()
 
   function handleValuesChange(changedValues: any) {
     formStore.updateCustomTheme(changedValues)
@@ -85,23 +87,23 @@ export const Customize: FC = observer(() => {
             </Form.Item>
 
             <Form.Item name="questionTextColor">
-              <ColorPickerField label="Questions" />
+              <ColorPickerField label={t('Questions')} />
             </Form.Item>
 
             <Form.Item name="answerTextColor">
-              <ColorPickerField label="Answers" />
+              <ColorPickerField label={t('Answers')} />
             </Form.Item>
 
             <Form.Item name="buttonBackground">
-              <ColorPickerField label="Buttons" />
+              <ColorPickerField label={t('Buttons')} />
             </Form.Item>
 
             <Form.Item name="buttonTextColor">
-              <ColorPickerField label="Button text" />
+              <ColorPickerField label={t('ButtonText')} />
             </Form.Item>
 
             <Form.Item name="backgroundColor">
-              <ColorPickerField label="Background" />
+              <ColorPickerField label={t('Background')} />
             </Form.Item>
           </div>
 
@@ -124,7 +126,7 @@ export const Customize: FC = observer(() => {
               name="customCSS"
               label={
                 <div className="flex items-center">
-                  <span>Custom CSS</span>
+                  <span>{t('formBuilder.customCSS')}</span>
                   <Tooltip ariaLabel="Learn more about custom css">
                     <Button.Link
                       className="custom-css-help"
@@ -142,9 +144,9 @@ export const Customize: FC = observer(() => {
 
         <Form.Item className="customize-bottom">
           <div className="flex items-center">
-            <Button onClick={handleRevert}>Revert</Button>
+            <Button onClick={handleRevert}>{t('Revert')}</Button>
             <Button className="ml-4 flex-1" type="primary" htmlType="submit" loading={loading}>
-              Save changes
+              {t('formBuilder.saveChanges')}
             </Button>
           </div>
         </Form.Item>

@@ -132,19 +132,19 @@ export const Action: FC<ActionProps> = ({
             labelKey="name"
             valueKey="id"
             value={value.variable}
-            placeholder="Variable"
+            placeholder={t('formBuilder.variable.variable')}
             onChange={handleVariableChange}
           />
           <Select
             className="w-auto flex-1"
             options={OPERATOR_OPTIONS}
             value={value.operator}
-            placeholder="Operator"
+            placeholder={t('formBuilder.operator')}
             onChange={handleOperatorChange}
           />
           <Input
             type={htmlType}
-            placeholder="Value"
+            placeholder={t('formBuilder.value')}
             className="flex-1"
             value={value.value}
             onChange={handleInputChange}

@@ -36,8 +36,8 @@ export const SubmissionArchive: FC<SubmissionArchiveProps> = ({ value, onChange 
         title={t('formSettings.archive')}
         description={
           <p>
-            Once you confirm to disable Submission Archive,{' '}
-            <strong className="text-red-500">all submissions will be deleted</strong>.
+            {t('formSettings.archiveDisableText1')}{' '}
+            <strong className="text-red-500">{t('formSettings.archiveDisableText2')}</strong>.
           </p>
         }
         cancelLabel={t('formSettings.Cancel')}
