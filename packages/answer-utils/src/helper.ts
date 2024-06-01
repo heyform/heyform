@@ -1,11 +1,8 @@
 import { helper } from '@heyform-inc/utils'
 import dayjs from 'dayjs'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
-import _isNumeric, { IsNumericOptions } from 'validator/lib/isNumeric'
 
 export { htmlToText } from '@heyform-inc/utils'
-export { default as isEmail } from 'validator/lib/isEmail'
-export { default as isURL } from 'validator/lib/isURL'
 
 export function isNumber(arg: any): boolean {
   return Number.isFinite(arg)
@@ -62,10 +59,6 @@ export function isDate(input: string, format = 'MM/DD/YYYY'): boolean {
   )
 }
 
-export function isNumeric(arg: unknown, options?: IsNumericOptions): boolean {
-  return isNumber(arg) || (helper.isString(arg) && _isNumeric(arg as string, options))
-}
-
 export function isEqual(arg1: unknown, arg2: unknown): boolean {
   if (helper.isArray(arg1) && helper.isArray(arg2)) {
     return arg1.length === arg2.length && arg1.every(e => arg2.includes(e))
@@ -91,19 +84,19 @@ export function isEndsWith(arg1: unknown, arg2: unknown): boolean {
 }
 
 export function isGreaterThan(arg1: unknown, arg2: unknown): boolean {
-  return isNumeric(arg1) && isNumeric(arg2) && Number(arg1) > Number(arg2)
+  return helper.isNumeric(arg1) && helper.isNumeric(arg2) && Number(arg1) > Number(arg2)
 }
 
 export function isLessThan(arg1: unknown, arg2: unknown): boolean {
-  return isNumeric(arg1) && isNumeric(arg2) && Number(arg1) < Number(arg2)
+  return helper.isNumeric(arg1) && helper.isNumeric(arg2) && Number(arg1) < Number(arg2)
 }
 
 export function isGreaterOrEqualThan(arg1: unknown, arg2: unknown): boolean {
-  return isNumeric(arg1) && isNumeric(arg2) && Number(arg1) >= Number(arg2)
+  return helper.isNumeric(arg1) && helper.isNumeric(arg2) && Number(arg1) >= Number(arg2)
 }
 
 export function isLessOrEqualThan(arg1: unknown, arg2: unknown): boolean {
-  return isNumeric(arg1) && isNumeric(arg2) && Number(arg1) <= Number(arg2)
+  return helper.isNumeric(arg1) && helper.isNumeric(arg2) && Number(arg1) <= Number(arg2)
 }
 
 const DEFAULT_DATE_FORMAT = 'YYYY-MM-DD'

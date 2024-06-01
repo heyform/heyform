@@ -38,14 +38,14 @@ importers:
         specifier: 3.572.0
         version: 3.572.0
       '@heyform-inc/answer-utils':
-        specifier: 1.0.8
-        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        specifier: 1.0.9
+        version: 1.0.9(@heyform-inc/shared-types-enums@1.1.3)(@heyform-inc/utils@1.0.7)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.1.2
-        version: 1.1.2
+        specifier: 1.1.3
+        version: 1.1.3
       '@heyform-inc/utils':
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 1.0.7
+        version: 1.0.7
       '@heyooo-inc/env':
         specifier: ^0.0.1
         version: 0.0.1(dotenv-expand@11.0.6)(dotenv@8.2.0)
@@ -294,14 +294,14 @@ importers:
         specifier: ^1.6.6
         version: 1.7.18(react-dom@18.2.0)(react@18.2.0)
       '@heyform-inc/answer-utils':
-        specifier: 1.0.8
-        version: 1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
+        specifier: 1.0.9
+        version: 1.0.9(@heyform-inc/shared-types-enums@1.1.3)(@heyform-inc/utils@1.0.7)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0)
       '@heyform-inc/shared-types-enums':
-        specifier: 1.1.2
-        version: 1.1.2
+        specifier: 1.1.3
+        version: 1.1.3
       '@heyform-inc/utils':
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 1.0.7
+        version: 1.0.7
       '@popperjs/core':
         specifier: ^2.11.5
         version: 2.11.8
@@ -2738,19 +2738,19 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@heyform-inc/answer-utils@1.0.8(@heyform-inc/shared-types-enums@1.1.2)(@heyform-inc/utils@1.0.3)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
-    resolution: {integrity: sha512-z/lMmcXlIYfdwXBTHDw+CeU7ieVm2Rutp+QT3mO8KU4esFlDAa/MpaDo5wqDItHqYxMPZFBxrVVcEuPbBdQv4A==}
+  /@heyform-inc/answer-utils@1.0.9(@heyform-inc/shared-types-enums@1.1.3)(@heyform-inc/utils@1.0.7)(big.js@6.2.1)(dayjs@1.11.10)(html5parser@2.0.2)(libphonenumber-js@1.10.59)(validator@13.11.0):
+    resolution: {integrity: sha512-J+rQZ1teLJX6VKOyyHjtUGqDaM/g2BpnpmTD5tMw/rb/hpWmEGpgPvx7XUdftu7qHISLqLrGAocskaoOvRjjxA==}
     peerDependencies:
-      '@heyform-inc/shared-types-enums': 1.1.1
-      '@heyform-inc/utils': 1.0.3
+      '@heyform-inc/shared-types-enums': 1.1.2
+      '@heyform-inc/utils': 1.0.5
       big.js: ^6.2.1
       dayjs: ^1.11.3
       html5parser: ^2.0.2
       libphonenumber-js: ^1.10.7
       validator: ^13.7.0
     dependencies:
-      '@heyform-inc/shared-types-enums': 1.1.2
-      '@heyform-inc/utils': 1.0.3
+      '@heyform-inc/shared-types-enums': 1.1.3
+      '@heyform-inc/utils': 1.0.7
       big.js: 6.2.1
       dayjs: 1.11.10
       html5parser: 2.0.2
@@ -2758,13 +2758,13 @@ packages:
       validator: 13.11.0
     dev: false
 
-  /@heyform-inc/shared-types-enums@1.1.2:
-    resolution: {integrity: sha512-RkG4BSGwcKmqiUj9kY16SMBXAnP3Y4iCv35hAa7oXxAEkOk3sFRiRZNLQEWRY5ZtauS1YtzlM87kgsnm57pqHw==}
+  /@heyform-inc/shared-types-enums@1.1.3:
+    resolution: {integrity: sha512-gJ79pfsZrmToh6vZ1kWYJo8MwDSBDay4XgzO+XLLzv7jX7PTGztta4QqhB1bXb1kJk8YtBu60fL5VMTLmo5Wrw==}
     engines: {node: '>=12.0.0'}
     dev: false
 
-  /@heyform-inc/utils@1.0.3:
-    resolution: {integrity: sha512-E6SB582IfTS6omw0Bb22u1B4DHjCpq/DsSUXzjRQlAPrQpfOVew1JyMNGLueTKpHy1iWNXN6K3YgspuP/FZ8Pg==}
+  /@heyform-inc/utils@1.0.7:
+    resolution: {integrity: sha512-xjCJIq0WMiW6zkSg1kv8etxT8Rk3mISaaZKsRI03OMGGr/zINDeCGJ75SFfHYW9wktWpJJyuwSoxuaxrfPX7sA==}
     dependencies:
       '@types/clone': 0.1.30
       '@types/mime-types': 2.1.4
@@ -2774,6 +2774,7 @@ packages:
       clone: 2.1.2
       dayjs: 1.11.10
       deep-object-diff: 1.1.9
+      fast-equals: 5.0.1
       humanize-bytes: 1.0.1
       mime-types: 1.0.2
       nanoid: 3.3.7
@@ -8414,6 +8415,11 @@ packages:
 
   /fast-equals@3.0.3:
     resolution: {integrity: sha512-NCe8qxnZFARSHGztGMZOO/PC1qa5MIFB5Hp66WdzbCRAz8U8US3bx1UTgLS49efBQPcUtO9gf5oVEY8o7y/7Kg==}
+    dev: false
+
+  /fast-equals@5.0.1:
+    resolution: {integrity: sha512-WF1Wi8PwwSY7/6Kx0vKXtw8RwuSGoM1bvDaJbu7MxDlR1vovZjIAKrnzyrThgAjm6JDTu0fVgWXDlMGspodfoQ==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /fast-fifo@1.3.2:
