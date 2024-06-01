@@ -1,7 +1,7 @@
 {
   "name": "@heyform-inc/utils",
   "description": "HeyForm utils",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -28,6 +28,7 @@
     "clone": "^2.1.2",
     "dayjs": "^1.8.35",
     "deep-object-diff": "^1.1.0",
+    "fast-equals": "^5.0.1",
     "humanize-bytes": "^1.0.1",
     "mime-types": "1.0.2",
     "nanoid": "^3.1.12",

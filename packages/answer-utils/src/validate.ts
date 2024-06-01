@@ -1,5 +1,5 @@
 import { fieldsToValidateRules, FieldsToValidateRules } from './fields-to-validate-rules'
-import { isDate, isEmail, isMobilePhone, isNumeric, isURL } from './helper'
+import { isDate, isMobilePhone } from './helper'
 import { AnswerValue, FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import dayjs from 'dayjs'
@@ -160,7 +160,7 @@ function validateText(rule: FieldsToValidateRules, value: AnswerValue) {
 }
 
 function validateNumber(rule: FieldsToValidateRules, value: AnswerValue) {
-  if (!isNumeric(String(value))) {
+  if (!helper.isNumeric(String(value))) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -200,7 +200,7 @@ function validateEmail(rule: FieldsToValidateRules, value: AnswerValue) {
     })
   }
 
-  if (!isEmail(value)) {
+  if (!helper.isEmail(value)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -220,7 +220,7 @@ function validateUrl(rule: FieldsToValidateRules, value: AnswerValue) {
     })
   }
 
-  if (!isURL(value)) {
+  if (!helper.isURL(value)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,

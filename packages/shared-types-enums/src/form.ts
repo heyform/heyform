@@ -27,6 +27,8 @@ export interface FormSettings {
   // Move to "Thank You" settings
   redirectUrl?: string
   redirectOnCompletion?: boolean
+  customDomain?: string
+  removeBranding?: boolean
   enableQuotaLimit?: boolean
   enableQuestionList?: boolean
   quotaLimit?: number
@@ -249,6 +251,8 @@ export interface ChoiceValue {
 
 export interface FileUploadValue {
   filename: string
+  key: string
+  urlPrefix: string
   url: string
   size: number
 }
