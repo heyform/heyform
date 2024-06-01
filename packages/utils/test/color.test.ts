@@ -10,6 +10,7 @@ import {
 } from '../src'
 
 test('invalid hex', () => {
+  expect(hexToRgb('')).toStrictEqual([])
   expect(hexToRgb('invalid')).toStrictEqual([])
 })
 

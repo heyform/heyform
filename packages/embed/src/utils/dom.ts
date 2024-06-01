@@ -72,6 +72,18 @@ export class Dom {
     return this.elements[index]
   }
 
+  on(event: string, callback: EventListener) {
+    this.elements.forEach(el => el.addEventListener(event, callback))
+
+    return this
+  }
+
+  off(event: string, callback: EventListener) {
+    this.elements.forEach(el => el.removeEventListener(event, callback))
+
+    return this
+  }
+
   rect() {
     return this.elements[0].getBoundingClientRect()
   }

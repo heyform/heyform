@@ -1,7 +1,7 @@
 {
   "name": "@heyform-inc/answer-utils",
   "description": "HeyForm Answer Utils",
-  "version": "1.0.8",
+  "version": "1.0.11",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -21,8 +21,8 @@
     "prebuild": "npm run clean"
   },
   "peerDependencies": {
-		"@heyform-inc/shared-types-enums": "1.1.2",
-		"@heyform-inc/utils": "1.0.3",
+		"@heyform-inc/shared-types-enums": "^1.1.4",
+		"@heyform-inc/utils": "^1.0.9",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",
@@ -30,8 +30,8 @@
     "validator": "^13.7.0"
   },
   "dependencies": {
-    "@heyform-inc/shared-types-enums": "1.1.2",
-		"@heyform-inc/utils": "1.0.3",
+    "@heyform-inc/shared-types-enums": "^1.1.4",
+		"@heyform-inc/utils": "^1.0.9",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",

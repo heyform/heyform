@@ -6,4 +6,5 @@ test('nanoid length', () => {
 
 test('nanoid custom alphabet', () => {
   expect(nanoidCustomAlphabet('a', 6)).toBe('aaaaaa')
+  expect(nanoidCustomAlphabet('b')).toBe('bbbbbbbbbbbbbbbbbbbbb')
 })

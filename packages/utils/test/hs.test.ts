@@ -1,4 +1,4 @@
-import { hs, ms } from '../src'
+import { hs, toSecond, toMillisecond } from '../src'
 
 test('parse 5 seconds', () => {
   expect(hs('5s')).toBe(5)
@@ -13,7 +13,7 @@ test('parse 5 hours', () => {
 })
 
 test('parse 1 day', () => {
-  expect(hs('1d')).toBe(86400)
+  expect(hs('1day')).toBe(86400)
 })
 
 test('parse 5 weeks', () => {
@@ -21,7 +21,7 @@ test('parse 5 weeks', () => {
 })
 
 test('parse 5 years', () => {
-  expect(hs('5y')).toBe(5 * 365 * 86400)
+  expect(hs('5y')).toBe(5 * 365.25 * 86400)
 })
 
 test('parse invalid foramt y5', () => {
@@ -45,9 +45,9 @@ test('parse invalid foramt 5_000s', () => {
 })
 
 test('parse empty string', () => {
-  expect(hs('  ')).toBe(undefined)
+  expect(toSecond('  ')).toBe(undefined)
 })
 
 test('parse 5 seconds to ms', () => {
-  expect(ms('5s')).toBe(5000)
+  expect(toMillisecond('5s')).toBe(5000)
 })

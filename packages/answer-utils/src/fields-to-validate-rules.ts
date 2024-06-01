@@ -1,4 +1,4 @@
-import { getDateFormat, isNumeric } from './helper'
+import { getDateFormat } from './helper'
 import { htmlUtils } from './html-utils'
 import {
   FieldKindEnum,
@@ -68,14 +68,14 @@ function convert(field: FormField): FieldsToValidateRules {
 
   if (
     helper.isValid(field.validations?.min) &&
-    isNumeric(String(field.validations?.min), { no_symbols: true })
+    helper.isNumeric(String(field.validations?.min), { no_symbols: true })
   ) {
     rule.min = field.validations!.min
   }
 
   if (
     helper.isValid(field.validations?.max) &&
-    isNumeric(String(field.validations?.max), { no_symbols: true })
+    helper.isNumeric(String(field.validations?.max), { no_symbols: true })
   ) {
     rule.max = field.validations!.max
   }
@@ -99,14 +99,14 @@ function convert(field: FormField): FieldsToValidateRules {
   }
 
   // Payment
-  if (isNumeric(String(field.properties?.price))) {
+  if (helper.isNumeric(String(field.properties?.price))) {
     rule.price = field.properties!.price
   }
 
   // Rating, payment and opinion_scale
   if (
     helper.isValid(field.properties?.total) &&
-    isNumeric(String(field.properties?.total), { no_symbols: true })
+    helper.isNumeric(String(field.properties?.total), { no_symbols: true })
   ) {
     rule.total = field.properties!.total
   }

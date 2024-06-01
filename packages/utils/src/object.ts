@@ -9,6 +9,8 @@ import {
 } from './helper'
 import * as objectPath from 'object-path'
 
+export { deepEqual } from 'fast-equals'
+
 export function pickObject(
   target: Record<string, any>,
   fields: Array<string | string[]>,
@@ -58,6 +60,13 @@ export function pickObject(
     })
 
   return newObj
+}
+
+export function excludeObject(
+  target: Record<string, any>,
+  excludes: Array<string> = []
+): Record<string, any> {
+  return pickObject(target, [], excludes)
 }
 
 export function pickValidValues<T = string | number | boolean>(

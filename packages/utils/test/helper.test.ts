@@ -97,6 +97,14 @@ test('new Map() is Map', () => {
   expect(helper.isMap(new Map())).toBe(true)
 })
 
+test('new WeakSet() is WeakSet', () => {
+  expect(helper.isWeakSet(new WeakSet())).toBe(true)
+})
+
+test('new WeakMap() is WeakMap', () => {
+  expect(helper.isWeakMap(new WeakMap())).toBe(true)
+})
+
 test("Symbol('hello') is Symbol", () => {
   expect(helper.isSymbol(Symbol('hello'))).toBe(true)
 })
@@ -208,4 +216,54 @@ test('ti10 is not number', () => {
 
 test('3.1.4 is not number', () => {
   expect(helper.isNumeric('3.1.4')).toBe(false)
+})
+
+test('foo+bar@bar.com is email', () => {
+  expect(helper.isEmail('foo+bar@bar.com')).toBe(true)
+})
+
+test('test|123@m端ller.com is email', () => {
+  expect(helper.isEmail('test|123@m端ller.com')).toBe(true)
+})
+
+test('"  foo  m端ller "@example.com is email', () => {
+  expect(helper.isEmail('"  foo  m端ller "@example.com')).toBe(true)
+})
+
+test('test10@invalid.co m is not email', () => {
+  expect(helper.isEmail('test10@invalid.co m')).toBe(false)
+})
+
+test('multiple..dots@stillinvalid.com is not email', () => {
+  expect(helper.isEmail('multiple..dots@stillinvalid.com')).toBe(false)
+})
+
+test('wrong()[]",:;<>@@gmail.com is not email', () => {
+  expect(helper.isEmail('wrong()[]",:;<>@@gmail.com')).toBe(false)
+})
+
+test('HTTPS://WWW.FOOBAR.COM/ is url', () => {
+  expect(helper.isURL('HTTPS://WWW.FOOBAR.COM/')).toBe(true)
+})
+
+test('http://xn------eddceddeftq7bvv7c4ke4c.xn--p1ai is url', () => {
+  expect(helper.isURL('http://xn------eddceddeftq7bvv7c4ke4c.xn--p1ai')).toBe(
+    true
+  )
+})
+
+test('test.com?ref=http://test2.com is url', () => {
+  expect(helper.isURL('test.com?ref=http://test2.com')).toBe(true)
+})
+
+test('http://кулік.укр is url', () => {
+  expect(helper.isURL('http://кулік.укр')).toBe(true)
+})
+
+test('http://кулік. is not url', () => {
+  expect(helper.isURL('http://кулік.')).toBe(false)
+})
+
+test('http://*.foo.com is not url', () => {
+  expect(helper.isURL('http://*.foo.com')).toBe(false)
 })

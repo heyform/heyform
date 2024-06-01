@@ -4,7 +4,7 @@ import { Standard } from './standard'
 import { ModalSettings } from './type'
 import { $, Dom, colorIsDark, isPlainObject, logger } from './utils'
 
-const POPUP_TEMPLATE = `
+const MODAL_TEMPLATE = `
   <div id="{containerId}" class="heyform__modal heyform__modal-{size}">
     <div class="heyform__iframe-container">
       <iframe src="{src}" allow="microphone; camera"></iframe>
@@ -22,12 +22,18 @@ export class Modal<T extends ModalSettings> extends Standard<T> {
   override render() {
     const $button = this.$container.find('.heyform__trigger-button')
 
-    if ($button.exists() && this.settings.triggerBackground) {
-      $button.style('background', this.settings.triggerBackground)
+    if ($button.exists()) {
+      if (this.settings.triggerBackground) {
+        $button.style('background', this.settings.triggerBackground)
 
-      if (colorIsDark(this.settings.triggerBackground)) {
-        $button.addClass('heyform__trigger-button-dark')
+        if (colorIsDark(this.settings.triggerBackground)) {
+          $button.addClass('heyform__trigger-button-dark')
+        }
       }
+
+      $button.on('click', () => {
+        this.open()
+      })
     }
 
     this.handleEvents()
@@ -40,7 +46,7 @@ export class Modal<T extends ModalSettings> extends Standard<T> {
       return
     }
 
-    Dom.template(POPUP_TEMPLATE, {
+    Dom.template(MODAL_TEMPLATE, {
       containerId: this.containerId,
       formId: this.formId,
       src: this.formUrl,

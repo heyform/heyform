@@ -42,8 +42,6 @@ export function random(
     case RandomType.ALPHANUMERIC:
       alphabet = lower + upper + numeric
       break
-    default:
-      break
   }
 
   let str = ''

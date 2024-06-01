@@ -2,7 +2,9 @@ import {
   pickObject,
   pickValidValues,
   removeObjectNil,
-  copyObjectValues
+  copyObjectValues,
+  deepEqual,
+  excludeObject
 } from '../src'
 
 const obj = {
@@ -50,9 +52,22 @@ test('pick fields from non object', () => {
 })
 
 test('pick plain object', () => {
-  expect(pickValidValues(obj, ['a', 'b', ['c', 'c.0']])).toStrictEqual({
-    'c.0': 'hello'
+  expect(pickValidValues({ ...obj, list: [1, 2, 3, 4, 5] }, ['a', 'b', 'list', ['c', 'c.0']])).toStrictEqual({
+    'c.0': 'hello', 
+    list: [1, 2, 3, 4, 5]
   })
+})
+
+
+test('copy invalid values', () => {
+  const dist = {}
+  copyObjectValues('' as any, dist, ['a'])
+  
+  const dist2 = {}
+  copyObjectValues(null as any, dist2, ['a'])
+
+  expect(dist2).toStrictEqual({})
+  expect(dist).toStrictEqual({})
 })
 
 test('copy values to dist object', () => {
@@ -80,4 +95,16 @@ test('copy values to dist object', () => {
     j: 'world'
   })
   expect(dist === dist).toBe(true)
+})
+
+test('deep equal', () => {
+  expect(deepEqual({x: {y: [{z: 10}]}}, {x: {y: [{z: 10}]}})).toBe(true)
+})
+
+test('exclude object', () => {
+  expect(excludeObject(obj, ['b', 'nan'])).toStrictEqual({
+    a: null,
+    c: 'hello',
+    d: [1, 2, 3]
+  })
 })

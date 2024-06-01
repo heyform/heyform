@@ -27,15 +27,27 @@ export interface FormSettings {
   // Move to "Thank You" settings
   redirectUrl?: string
   redirectOnCompletion?: boolean
+  customDomain?: string
+  removeBranding?: boolean
   enableQuotaLimit?: boolean
-  enableQuestionList?: boolean
   quotaLimit?: number
   enableIpLimit?: boolean
   ipLimitCount?: number
   ipLimitTime?: number
   enableProgress?: boolean
+
+  // Translation
   locale?: string
   languages?: string[]
+
+  // Question navigation
+  enableQuestionList?: boolean
+  enableNavigationArrows?: boolean
+
+  // Metadata
+  metaTitle?: string
+  metaDescription?: string
+  metaOGImageUrl?: string
 
   // Custom closed form message
   enableClosedMessage?: boolean
@@ -240,6 +252,7 @@ export interface FormModel {
     googleanalytics: string
     facebookpixel: string
   }
+  updatedAt: number
 }
 
 export interface ChoiceValue {
@@ -249,6 +262,8 @@ export interface ChoiceValue {
 
 export interface FileUploadValue {
   filename: string
+  key: string
+  urlPrefix: string
   url: string
   size: number
 }

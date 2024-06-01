@@ -64,20 +64,24 @@ export const CHOICES_FIELD_KINDS = [
   FieldKindEnum.PICTURE_CHOICE
 ]
 
-export const CUSTOM_COLUMN_CHOICE_KINDS = [
-  FieldKindEnum.CUSTOM_SINGLE,
-  FieldKindEnum.CUSTOM_MULTIPLE
-]
-
-export const CUSTOM_COLUMN_KINDS = [
-  ...CUSTOM_COLUMN_CHOICE_KINDS,
-  FieldKindEnum.CUSTOM_TEXT,
-  FieldKindEnum.CUSTOM_DATE,
-  FieldKindEnum.CUSTOM_NUMBER,
-  FieldKindEnum.CUSTOM_CHECKBOX
-]
-
 export const FORM_FIELD_KINDS = [
   ...QUESTION_FIELD_KINDS,
   ...STATEMENT_FIELD_KINDS
+]
+
+export const CHOICE_FIELD_KINDS = [
+  FieldKindEnum.YES_NO, 
+  ...CHOICES_FIELD_KINDS
+]
+
+export const RATING_FIELD_KINDS = [
+  FieldKindEnum.RATING, 
+  FieldKindEnum.OPINION_SCALE
+]
+
+export const UNSELECTABLE_FIELD_KINDS = [
+  FieldKindEnum.WELCOME,
+  FieldKindEnum.THANK_YOU,
+  FieldKindEnum.GROUP,
+  FieldKindEnum.STATEMENT
 ]
