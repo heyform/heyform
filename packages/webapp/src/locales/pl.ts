@@ -489,7 +489,7 @@ export default {
       'Wybierz główny język, w którym respondenci zobaczą Twój formularz. Dotyczy niestandardowego tekstu, takiego jak domyślne przyciski, błędy walidacji itp.',
     languages: 'Tłumaczenia',
     translationsDescription:
-      'Automatycznie przetłumacz pytania formularza na wybrane języki używając <a>OpenAI ChatGPT</a>.'
+      'Automatycznie przetłumacz pytania formularza na wybrane języki używając <a>OpenAI ChatGPT</a>.',
 		passwordProtection: 'Ochrona hasłem',
 		passwordProtectionText: 'Zabezpiecz swój formularz prostym do zapamiętania hasłem.',
 		passwordProtectionPlaceholder: 'Ustaw hasło do tej strony',
