@@ -51,7 +51,7 @@ const WorkspaceItem: FC<WorkspaceItemProps> = ({ workspace, onClick }) => {
       <div className="ml-4 flex-auto">
         <p className="truncate text-sm font-medium text-slate-700">{workspace.name}</p>
         <p className="truncate text-sm text-slate-500">
-          {workspace.memberCount} {t('workspace.join.member')}
+          {workspace.memberCount} {t('workspace.join.member', { count: workspace.memberCount })}
         </p>
       </div>
 
@@ -99,7 +99,7 @@ const CurrentWorkspace = observer(() => {
               {workspaceStore.workspace?.name}
             </span>
             <span className="truncate text-sm text-slate-500">
-              {workspaceStore.workspace?.memberCount} {t('workspace.join.member')}
+              {workspaceStore.workspace?.memberCount} {t('workspace.join.member', {count: workspaceStore.workspace?.memberCount})}
             </span>
           </span>
         </span>

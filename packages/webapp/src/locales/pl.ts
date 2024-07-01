@@ -124,7 +124,11 @@ export default {
       leave: 'Opuść',
       remove: 'Usuń',
       assign: 'Przypisz',
-      submissions: 'zgłoszenia',
+      submissions_zero: 'zgłoszeń',
+      submissions_one: 'zgłoszenie',
+      submissions_two: 'zgłoszenia',
+      submissions_few: 'zgłoszenia',
+      submissions_many: 'zgłoszeń',
       NoSubmissions: 'Brak zgłoszeń',
       removeMember: 'Nie można usunąć uczestnika',
       assignMember: 'Nie można przypisać uczestnika',
@@ -190,7 +194,11 @@ export default {
       createP2: 'Utwórz projekt',
       noProject: 'Nie masz jeszcze żadnych projektów',
       text: 'Projekt działa jak grupa, do której możesz dodać współpracowników do pracy nad formularzami, grupami odbiorców oraz integracjami.',
-      forms: 'formularze',
+      forms_zero: 'formularzy',
+      forms_one: 'formularz',
+      forms_two: 'formularze',
+      forms_few: 'formularze',
+      forms_many: 'formularzy',
       noForms: 'Brak formularzy'
     },
     settings: {
@@ -229,7 +237,12 @@ export default {
       invited: 'Zostałeś zaproszony do obszaru roboczego użytkownika',
       UsernameAdd: '',
       joinText: 'Dołącz do obszaru roboczego i zacznij pracować wspólnie!',
-      member: 'uczestników',
+      member_zero: 'uczestników',
+      member_one: 'uczestnik',
+      member_two: 'uczestników',
+      member_few: 'uczestników',
+      member_many: 'uczestników',
+      member_other: 'uczestników',
       bottom: 'Dołącz'
     }
   },
@@ -403,7 +416,11 @@ export default {
     Responses: 'Odpowiedzi',
     Questions: 'Pytania',
     Print: 'Drukuj',
-    responses: 'odpowiedzi',
+    responses_zero: 'odpowiedzi',
+    responses_one: 'odpowiedź',
+    responses_two: 'odpowiedzi',
+    responses_few: 'odpowiedzi',
+    responses_many: 'odpowiedzi',
     seeAll: 'Zobacz wszystkie {{count}} odpowiedzi',
     noSubmission:
       'Nie ma jeszcze żadnych zgłoszeń. Możesz udostępnić ten formularz większej liczbie osób.',
@@ -489,7 +506,7 @@ export default {
       'Wybierz główny język, w którym respondenci zobaczą Twój formularz. Dotyczy niestandardowego tekstu, takiego jak domyślne przyciski, błędy walidacji itp.',
     languages: 'Tłumaczenia',
     translationsDescription:
-      'Automatycznie przetłumacz pytania formularza na wybrane języki używając <a>OpenAI ChatGPT</a>.'
+      'Automatycznie przetłumacz pytania formularza na wybrane języki używając <a>OpenAI ChatGPT</a>.',
 		passwordProtection: 'Ochrona hasłem',
 		passwordProtectionText: 'Zabezpiecz swój formularz prostym do zapamiętania hasłem.',
 		passwordProtectionPlaceholder: 'Ustaw hasło do tej strony',

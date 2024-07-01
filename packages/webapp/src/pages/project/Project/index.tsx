@@ -128,7 +128,7 @@ const Project = observer(() => {
             <p className="mt-0.5 flex items-center text-sm font-normal text-slate-500">
               <span className="truncate">
                 {record.submissionCount && record.submissionCount > 0
-                  ? `${record.submissionCount} ${t('project.ProjectMembers.submissions')}`
+                  ? `${record.submissionCount} ${t('project.ProjectMembers.submissions', {count: record.submissionCount})}`
                   : t('project.ProjectMembers.NoSubmissions')}
               </span>
             </p>
