@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { qs } from '../src'
 
 const obj = {

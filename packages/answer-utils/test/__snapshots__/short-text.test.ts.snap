@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`correct value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "SHORT_TEXT",
     "kind": "short_text",
-    "properties": Object {},
+    "properties": {},
     "title": "short-text.test",
     "value": "hello world",
   },
@@ -13,11 +13,11 @@ Array [
 `;
 
 exports[`empty value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "SHORT_TEXT",
     "kind": "short_text",
-    "properties": Object {},
+    "properties": {},
     "title": "short-text.test",
     "value": "",
   },
@@ -25,11 +25,11 @@ Array [
 `;
 
 exports[`should be verified if value length greater then 5 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "SHORT_TEXT",
     "kind": "short_text",
-    "properties": Object {},
+    "properties": {},
     "title": "short-text.test",
     "value": "hello world",
   },
@@ -37,11 +37,11 @@ Array [
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "SHORT_TEXT",
     "kind": "short_text",
-    "properties": Object {},
+    "properties": {},
     "title": "short-text.test",
     "value": "",
   },

@@ -1,10 +1,10 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`parse html 1`] = `
-Array [
-  Array [
+[
+  [
     "b",
-    Array [
+    [
       "Make any website your Mac desktop wallpaper.&nbsp;",
     ],
   ],
@@ -12,31 +12,31 @@ Array [
 `;
 
 exports[`parse html with block tags 1`] = `
-Array [
-  Array [
+[
+  [
     "b",
-    Array [
+    [
       "Make any website your Mac desktop wallpaper.&nbsp;",
     ],
   ],
-  Array [
+  [
     "div",
-    Array [
-      Array [
+    [
+      [
         "b",
       ],
     ],
   ],
-  Array [
+  [
     "div",
-    Array [
+    [
       "Plash enables you to have a highly dynamic ",
-      Array [
+      [
         "a",
-        Array [
+        [
           "desktop wallpaper.",
         ],
-        Object {
+        {
           "href": "https://github.com",
           "style": "",
         },
@@ -49,4 +49,4 @@ Array [
 
 exports[`serialize html 1`] = `"<b>Make any website your Mac desktop wallpaper.&nbsp;</b>"`;
 
-exports[`serialize html with block tags 1`] = `"<b>Make any website your Mac desktop wallpaper.&nbsp;</b><div><b></b></div><div>Plash enables you to have a highly dynamic <a href=\\"https://github.com\\" style=\\"\\">desktop wallpaper.</a> You could display your favorite news site, Facebook feed, or a random beautiful scenery photo.</div>"`;
+exports[`serialize html with block tags 1`] = `"<b>Make any website your Mac desktop wallpaper.&nbsp;</b><div><b></b></div><div>Plash enables you to have a highly dynamic <a href="https://github.com" style="">desktop wallpaper.</a> You could display your favorite news site, Facebook feed, or a random beautiful scenery photo.</div>"`;

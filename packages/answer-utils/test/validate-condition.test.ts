@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { validateCondition } from '../src'
 import { ComparisonEnum, FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
 

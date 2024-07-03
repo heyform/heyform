@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { applyLogicToFields } from '../src'
 import {
   ActionEnum,

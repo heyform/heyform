@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`correct value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "FULL_NAME",
     "kind": "full_name",
-    "properties": Object {},
+    "properties": {},
     "title": "full_name.test",
-    "value": Object {
+    "value": {
       "firstName": "firstName",
       "lastName": "lastName",
     },
@@ -30,11 +30,11 @@ firstName lastName"
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "FULL_NAME",
     "kind": "full_name",
-    "properties": Object {},
+    "properties": {},
     "title": "full_name.test",
     "value": "",
   },

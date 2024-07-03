@@ -1,4 +1,4 @@
-import { helper } from '@heyform-inc/utils'
+import { helper, htmlToText } from '@heyform-inc/utils'
 import { parse as html5Parse } from 'html5parser'
 import { IAttribute } from 'html5parser/src/types'
 
@@ -209,15 +209,7 @@ function plain(html: string, limit = 0) {
     return ''
   }
 
-  const result = html
-    .replace(/<style[^<>]*>((?!<\/).)*<\/style>/gi, '')
-    .replace(/<script[^<>]*>((?!<\/).)*<\/script>/gi, '')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&quot;/g, '"')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
+  const result = htmlToText(html, 0)
 
   if (limit > 0) {
     let sliced = result.slice(0, limit)

@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { nanoid, nanoidCustomAlphabet } from '../src'
 
 test('nanoid length', () => {

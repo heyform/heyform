@@ -1,74 +1,74 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should convert partial submission value to answer 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "vyLu2NkN70xkS",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "F7XrAjByBk2w",
           "label": "Group Choice 1",
         },
-        Object {
+        {
           "id": "cFEkKnnXmBP6",
           "label": "Group Choice 2",
         },
       ],
     },
     "title": "Group Multiple Choose ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "F7XrAjByBk2w",
         "cFEkKnnXmBP6",
       ],
     },
   },
-  Object {
+  {
     "id": "bcFvi1syrp66",
     "kind": "phone_number",
-    "properties": Object {
-      "choices": Array [],
+    "properties": {
+      "choices": [],
       "defaultCountry": "US",
     },
     "title": "☎️  Your MobilePhone ",
     "value": "+12015551023",
   },
-  Object {
+  {
     "id": "yLxkSvkN7u2N",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "kF7XrAjByB2w",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "BP6cFEkKnnXm",
           "label": "Choice 2",
         },
       ],
     },
     "title": "🧱 Multiple Choose ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "BP6cFEkKnnXm",
       ],
     },
   },
-  Object {
+  {
     "id": "X9F47wrnJImk",
     "kind": "yes_no",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "adUm2Hhr1OOW",
           "label": "Yes",
         },
-        Object {
+        {
           "id": "QMR1nZV0u84M",
           "label": "No",
         },
@@ -77,23 +77,23 @@ Array [
     "title": "👍 Do you agree with us ",
     "value": "QMR1nZV0u84M",
   },
-  Object {
+  {
     "id": "EF9tbsJj3CNZ",
     "kind": "picture_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": false,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "XKV4vls1pkAX",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679926__0-I_F2_OBINdzLx39o3nvZfzXwepkYO9mey0__doge.jpeg",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "FN5cCteg6SOa",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679934__iAGYraz-j8J7gIxaC8GDJi017YJWUS16EzU7__p640.jpg",
           "label": "Choice 2",
         },
-        Object {
+        {
           "id": "1Fl7MP9Nv2TM",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679940__IKke45HeAlbu-v_yqOvbUjQHffRQRFSdl8OJ__p225-2.jpeg",
           "label": "Choice 3",
@@ -101,218 +101,218 @@ Array [
       ],
     },
     "title": "🐶 Choose the dog ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "1Fl7MP9Nv2TM",
       ],
     },
   },
-  Object {
+  {
     "id": "qCpteNRi2SiO",
     "kind": "file_upload",
-    "properties": Object {},
+    "properties": {},
     "title": "🈴️ Upload you avatar ",
-    "value": Object {
+    "value": {
       "filename": "avatar.jpg",
       "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
     },
   },
-  Object {
+  {
     "id": "NqCpSqCpteiO",
     "kind": "file_upload",
-    "properties": Object {},
+    "properties": {},
     "title": "You sig here",
     "value": "https://heyform.net/sig.jpg",
   },
-  Object {
+  {
     "id": "qFN5cteg6SOa",
     "kind": "rating",
-    "properties": Object {
+    "properties": {
       "total": 10,
     },
     "title": "🪐 Rate here ",
     "value": 5,
   },
-  Object {
+  {
     "id": "g6Oayu81jkdqcte",
     "kind": "full_name",
-    "properties": Object {},
+    "properties": {},
     "title": "Full name",
-    "value": Object {
+    "value": {
       "firstName": "Ivan",
       "lastName": "Woods",
     },
   },
-  Object {
+  {
     "id": "NteSqF9g5cOa6",
     "kind": "input_table",
-    "properties": Object {
-      "tableColumns": Array [
-        Object {
+    "properties": {
+      "tableColumns": [
+        {
           "id": "name",
           "title": "Name",
         },
-        Object {
+        {
           "id": "age",
           "title": "Age",
         },
       ],
     },
     "title": "Input table",
-    "value": Array [
-      Object {
+    "value": [
+      {
         "age": "16",
         "name": "Ivan",
       },
-      Object {
+      {
         "age": "24",
         "name": "Jack Smith",
       },
     ],
   },
-  Object {
+  {
     "id": "u1NyLxkSvkN7",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "krAjByF7XB2w",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "P6cnBFEkKnXm",
           "label": "Choice 2",
         },
       ],
     },
     "title": "✈ Multiple Choose with other",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [
+      "value": [
         "P6cnBFEkKnXm",
       ],
     },
   },
-  Object {
+  {
     "id": "Svky0NLxkN7u",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": false,
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "kB2wF7XrAjBy",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "BPnXm6cFEkKn",
           "label": "Choice 2",
         },
       ],
     },
     "title": "🎉 Single Choose with other",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [],
+      "value": [],
     },
   },
 ]
 `;
 
 exports[`should convert value to answer 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "vyLu2NkN70xkS",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "F7XrAjByBk2w",
           "label": "Group Choice 1",
         },
-        Object {
+        {
           "id": "cFEkKnnXmBP6",
           "label": "Group Choice 2",
         },
       ],
     },
     "title": "Group Multiple Choose ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "F7XrAjByBk2w",
         "cFEkKnnXmBP6",
       ],
     },
   },
-  Object {
+  {
     "id": "bcFvi1syrp66",
     "kind": "phone_number",
-    "properties": Object {
-      "choices": Array [],
+    "properties": {
+      "choices": [],
       "defaultCountry": "US",
     },
     "title": "☎️  Your MobilePhone ",
     "value": "+12015551023",
   },
-  Object {
+  {
     "id": "yLxkSvkN7u2N",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "kF7XrAjByB2w",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "BP6cFEkKnnXm",
           "label": "Choice 2",
         },
       ],
     },
     "title": "🧱 Multiple Choose ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "BP6cFEkKnnXm",
       ],
     },
   },
-  Object {
+  {
     "id": "MVlZfnmjZlye",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": false,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "14wZu5EyC73q",
           "label": "🍫 Chocolate",
         },
-        Object {
+        {
           "id": "MesZoaRCdR5Y",
           "label": "🍍 Pineapple",
         },
       ],
     },
     "title": "👋 Just choose one",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "MesZoaRCdR5Y",
       ],
     },
   },
-  Object {
+  {
     "id": "X9F47wrnJImk",
     "kind": "yes_no",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "adUm2Hhr1OOW",
           "label": "Yes",
         },
-        Object {
+        {
           "id": "QMR1nZV0u84M",
           "label": "No",
         },
@@ -321,23 +321,23 @@ Array [
     "title": "👍 Do you agree with us ",
     "value": "QMR1nZV0u84M",
   },
-  Object {
+  {
     "id": "EF9tbsJj3CNZ",
     "kind": "picture_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": false,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "XKV4vls1pkAX",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679926__0-I_F2_OBINdzLx39o3nvZfzXwepkYO9mey0__doge.jpeg",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "FN5cCteg6SOa",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679934__iAGYraz-j8J7gIxaC8GDJi017YJWUS16EzU7__p640.jpg",
           "label": "Choice 2",
         },
-        Object {
+        {
           "id": "1Fl7MP9Nv2TM",
           "image": "http://qej6l0046.bkt.clouddn.com/form/5f2b64476481e3096526715b/1596679940__IKke45HeAlbu-v_yqOvbUjQHffRQRFSdl8OJ__p225-2.jpeg",
           "label": "Choice 3",
@@ -345,121 +345,121 @@ Array [
       ],
     },
     "title": "🐶 Choose the dog ",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "1Fl7MP9Nv2TM",
       ],
     },
   },
-  Object {
+  {
     "id": "qCpteNRi2SiO",
     "kind": "file_upload",
-    "properties": Object {},
+    "properties": {},
     "title": "🈴️ Upload you avatar ",
-    "value": Object {
+    "value": {
       "filename": "avatar.jpg",
       "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
     },
   },
-  Object {
+  {
     "id": "NqCpSqCpteiO",
     "kind": "file_upload",
-    "properties": Object {},
+    "properties": {},
     "title": "You sig here",
     "value": "https://heyform.net/sig.jpg",
   },
-  Object {
+  {
     "id": "qFN5cteg6SOa",
     "kind": "rating",
-    "properties": Object {
+    "properties": {
       "total": 10,
     },
     "title": "🪐 Rate here ",
     "value": 5,
   },
-  Object {
+  {
     "id": "g6Oayu81jkdqcte",
     "kind": "full_name",
-    "properties": Object {},
+    "properties": {},
     "title": "Full name",
-    "value": Object {
+    "value": {
       "firstName": "Ivan",
       "lastName": "Woods",
     },
   },
-  Object {
+  {
     "id": "NteSqF9g5cOa6",
     "kind": "input_table",
-    "properties": Object {
-      "tableColumns": Array [
-        Object {
+    "properties": {
+      "tableColumns": [
+        {
           "id": "name",
           "title": "Name",
         },
-        Object {
+        {
           "id": "age",
           "title": "Age",
         },
       ],
     },
     "title": "Input table",
-    "value": Array [
-      Object {
+    "value": [
+      {
         "age": "16",
         "name": "Ivan",
       },
-      Object {
+      {
         "age": "24",
         "name": "Jack Smith",
       },
     ],
   },
-  Object {
+  {
     "id": "u1NyLxkSvkN7",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "krAjByF7XB2w",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "P6cnBFEkKnXm",
           "label": "Choice 2",
         },
       ],
     },
     "title": "✈ Multiple Choose with other",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [
+      "value": [
         "P6cnBFEkKnXm",
       ],
     },
   },
-  Object {
+  {
     "id": "Svky0NLxkN7u",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": false,
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "kB2wF7XrAjBy",
           "label": "Choice 1",
         },
-        Object {
+        {
           "id": "BPnXm6cFEkKn",
           "label": "Choice 2",
         },
       ],
     },
     "title": "🎉 Single Choose with other",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [],
+      "value": [],
     },
   },
 ]

@@ -1,30 +1,30 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`multiple values should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "MULTIPLE_CHOICE",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "id_a",
           "label": "A",
         },
-        Object {
+        {
           "id": "id_b",
           "label": "B",
         },
-        Object {
+        {
           "id": "id_c",
           "label": "C",
         },
       ],
     },
     "title": "multiple-choice.test",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "id_a",
         "id_b",
       ],
@@ -34,32 +34,32 @@ Array [
 `;
 
 exports[`multiple values with other should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "MULTIPLE_CHOICE",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowMultiple": true,
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "id_a",
           "label": "A",
         },
-        Object {
+        {
           "id": "id_b",
           "label": "B",
         },
-        Object {
+        {
           "id": "id_c",
           "label": "C",
         },
       ],
     },
     "title": "multiple-choice.test",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [
+      "value": [
         "id_a",
         "id_b",
       ],
@@ -69,29 +69,29 @@ Array [
 `;
 
 exports[`single value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "MULTIPLE_CHOICE",
     "kind": "multiple_choice",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "id_a",
           "label": "A",
         },
-        Object {
+        {
           "id": "id_b",
           "label": "B",
         },
-        Object {
+        {
           "id": "id_c",
           "label": "C",
         },
       ],
     },
     "title": "multiple-choice.test",
-    "value": Object {
-      "value": Array [
+    "value": {
+      "value": [
         "id_a",
       ],
     },
@@ -100,60 +100,60 @@ Array [
 `;
 
 exports[`single value with other should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "MULTIPLE_CHOICE",
     "kind": "multiple_choice",
-    "properties": Object {
+    "properties": {
       "allowOther": true,
-      "choices": Array [
-        Object {
+      "choices": [
+        {
           "id": "id_a",
           "label": "A",
         },
-        Object {
+        {
           "id": "id_b",
           "label": "B",
         },
-        Object {
+        {
           "id": "id_c",
           "label": "C",
         },
       ],
     },
     "title": "multiple-choice.test",
-    "value": Object {
+    "value": {
       "other": "Other answer",
-      "value": Array [],
+      "value": [],
     },
   },
 ]
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "MULTIPLE_CHOICE",
     "kind": "multiple_choice",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "id_a",
           "label": "A",
         },
-        Object {
+        {
           "id": "id_b",
           "label": "B",
         },
-        Object {
+        {
           "id": "id_c",
           "label": "C",
         },
       ],
     },
     "title": "multiple-choice.test",
-    "value": Object {
-      "value": Array [],
+    "value": {
+      "value": [],
     },
   },
 ]

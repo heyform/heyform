@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { random, RandomType } from '../src'
 
 const len = 6

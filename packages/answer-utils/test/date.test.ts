@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { isDate } from '../src/helper'
 
 const validDates = [
@@ -18,16 +19,14 @@ const invalidDates = [
   ['2000-02-13 80:30', 'YYYY-MM-DD HH:mm']
 ]
 
-describe('date', () => {
-  test('valid dates', () => {
-    validDates.forEach(([date, format]) => {
-      expect(isDate(date, format)).toBe(true)
-    })
+test('valid dates', () => {
+  validDates.forEach(([date, format]) => {
+    expect(isDate(date, format)).toBe(true)
   })
+})
 
-  test('invalid date', () => {
-    invalidDates.forEach(([date, format]) => {
-      expect(isDate(date, format)).toBe(false)
-    })
+test('invalid date', () => {
+  invalidDates.forEach(([date, format]) => {
+    expect(isDate(date, format)).toBe(false)
   })
 })

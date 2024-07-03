@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { helper } from '../src'
 
 test("' ' is empty", () => {
@@ -174,6 +175,9 @@ test('unique invalid array', () => {
   expect(helper.uniqueArray({})).toStrictEqual([])
 })
 
+/**
+ * @jest-environment jsdom
+ */
 test('window.FormData is form data', () => {
   expect(helper.isFormData(new window.FormData())).toBe(true)
 })

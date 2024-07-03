@@ -1,11 +1,11 @@
-import visUUID from 'validator/lib/isUUID'
-import visFQDN from 'validator/lib/isFQDN'
+import _isUUID from 'validator/lib/isUUID'
+import _isFQDN from 'validator/lib/isFQDN'
 import {
-  default as visNumeric,
+  default as _isNumeric,
   IsNumericOptions
 } from 'validator/lib/isNumeric'
-import { default as visEmail, IsEmailOptions } from 'validator/lib/isEmail'
-import { default as visURL, IsURLOptions } from 'validator/lib/isURL'
+import { default as _isEmail, IsEmailOptions } from 'validator/lib/isEmail'
+import { default as _isURL, IsURLOptions } from 'validator/lib/isURL'
 
 import { type } from './type'
 
@@ -13,8 +13,8 @@ import { type } from './type'
 const whiteSpaceRegx =
   /^[\s\f\n\r\t\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\ufeff\x09\x0a\x0b\x0c\x0d\x20\xa0]+$/
 
-export const isUUID = visUUID
-export const isFQDN = visFQDN
+export const isUUID = _isUUID
+export const isFQDN = _isFQDN
 
 export function isBoolean(arg: any): boolean {
   return type(arg) === 'boolean'
@@ -172,15 +172,15 @@ export function uniqueArray(arg: any): any[] {
 }
 
 export function isNumeric(arg: any, options?: IsNumericOptions): boolean {
-  return isNumber(arg) || (isString(arg) && visNumeric(arg, options))
+  return isNumber(arg) || (isString(arg) && _isNumeric(arg, options))
 }
 
 export function isURL(arg: any, options?: IsURLOptions): boolean {
-  return isValid(arg) && isString(arg) && visURL(arg, options)
+  return isValid(arg) && isString(arg) && _isURL(arg, options)
 }
 
 export function isEmail(arg: any, options?: IsEmailOptions): boolean {
-  return isValid(arg) && isString(arg) && visEmail(arg, options)
+  return isValid(arg) && isString(arg) && _isEmail(arg, options)
 }
 
 export default {

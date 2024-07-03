@@ -1,25 +1,25 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`apply to group fields 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "id_short_text",
     "index": 1,
     "isTouched": true,
     "kind": "short_text",
     "title": "Short Text",
   },
-  Object {
+  {
     "id": "id_group",
     "index": 2,
     "kind": "group",
     "title": "Group",
   },
-  Object {
+  {
     "id": "id_number",
     "index": 1,
     "kind": "number",
-    "parent": Object {
+    "parent": {
       "id": "id_group",
       "index": 2,
       "kind": "group",
@@ -27,17 +27,17 @@ Array [
     },
     "title": "Number",
   },
-  Object {
+  {
     "id": "id_statement2",
     "kind": "statement",
-    "parent": Object {
+    "parent": {
       "id": "id_group",
       "kind": "group",
       "title": "Group",
     },
     "title": "Statement2",
   },
-  Object {
+  {
     "id": "id_date",
     "index": 3,
     "kind": "date",

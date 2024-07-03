@@ -1,4 +1,6 @@
 import { IParseOptions, IStringifyOptions, parse, stringify } from 'qs'
+import { convert } from 'html-to-text'
+
 import {
   isEmpty,
   isBoolean,
@@ -194,4 +196,23 @@ export function toURLQuery(
   }
 
   return query
+}
+
+export function htmlToText(html: string, limit = 100) {
+  const value = convert(html, {
+    selectors: [
+      { selector: 'a', options: { ignoreHref: true } },
+      { selector: 'img', format: 'skip' },
+      { selector: 'picture', format: 'skip' },
+      { selector: 'video', format: 'skip' },
+      { selector: 'audio', format: 'skip' },
+      { selector: 'iframe', format: 'skip' }
+    ],
+  }).replace(/\n/g, ' ')
+
+  if (limit > 0 && value.length > limit) {
+    return value.slice(0, limit)
+  }
+
+  return value
 }

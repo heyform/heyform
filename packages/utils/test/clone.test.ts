@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { clone } from '../src'
 
 const obj = {

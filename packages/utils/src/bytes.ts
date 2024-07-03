@@ -9,11 +9,12 @@ const PB = TB * 1024
 const regx = /^(-?(?:\d+)?\.?\d+)(b|kb|mb|gb|tb|pb)$/i
 
 export function parseBytes(value: string | number): number | undefined {
-  if (isEmpty(value)) {
+  const str = String(value)
+
+  if (isEmpty(value) || str.length > 100) {
     return
   }
 
-  const str = String(value)
   const matches = str.match(regx)
 
   if (!matches) {

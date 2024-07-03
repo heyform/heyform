@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { fieldsToValidateRules, validate } from '../src'
 import { FieldKindEnum, NumberPrice } from '@heyform-inc/shared-types-enums'
 

@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { validatePayload } from '../src/validate-payload'
 import {
   ActionEnum,

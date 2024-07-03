@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`common file mime type 1`] = `
-Array [
+[
   "image/jpeg",
   "image/png",
   "image/bmp",
   "image/webp",
   "image/gif",
   "text/plain",
-  "text/x-markdown",
+  "text/markdown",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.ms-excel",
@@ -24,7 +24,7 @@ Array [
 `;
 
 exports[`common image mime type 1`] = `
-Array [
+[
   "image/jpeg",
   "image/png",
   "image/bmp",

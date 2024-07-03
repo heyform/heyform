@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { date, datePeriod, isDateExpired, timestamp, unixDiff } from '../src'
 
 test('unix timestamp', () => {

@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`correct value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "PHONE_NUMBER",
     "kind": "phone_number",
-    "properties": Object {},
+    "properties": {},
     "title": "phone-number.test",
     "value": "+12015550123",
   },
@@ -13,11 +13,11 @@ Array [
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "PHONE_NUMBER",
     "kind": "phone_number",
-    "properties": Object {},
+    "properties": {},
     "title": "phone-number.test",
     "value": "",
   },

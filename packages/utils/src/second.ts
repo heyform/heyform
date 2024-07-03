@@ -1,4 +1,4 @@
-import vms from 'ms'
+import _ms from 'ms'
 
 export function hs(arg: string): number | undefined {
   const value = ms(arg)
@@ -9,7 +9,7 @@ export function hs(arg: string): number | undefined {
 }
 
 export function ms(arg: string): number | undefined {
-  return vms(arg)
+  return _ms(arg)
 }
 
 export const toSecond = hs

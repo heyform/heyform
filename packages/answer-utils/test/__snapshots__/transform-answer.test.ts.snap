@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should convert value to api object 1`] = `
-Object {
+{
   "(ID: EF9tbsJj3CNZ) 🐶 Choose the dog ": "Choice 3",
   "(ID: MVlZfnmjZlye) 👋 Just choose one": "🍍 Pineapple",
   "(ID: NqCpSqCpteiO) You sig here": " (https://heyform.net/sig.jpg)",
@@ -20,7 +20,7 @@ Jack Smith, 24",
 `;
 
 exports[`should convert value to flat json 1`] = `
-Object {
+{
   "EF9tbsJj3CNZ": "Choice 3",
   "MVlZfnmjZlye": "🍍 Pineapple",
   "NqCpSqCpteiO": " (https://heyform.net/sig.jpg)",
@@ -109,19 +109,19 @@ Jack Smith, 24</p>
 `;
 
 exports[`should convert value to json 1`] = `
-Object {
+{
   "EF9tbsJj3CNZ": "Choice 3",
   "MVlZfnmjZlye": "🍍 Pineapple",
-  "NqCpSqCpteiO": Object {
+  "NqCpSqCpteiO": {
     "filename": "",
     "url": "https://heyform.net/sig.jpg",
   },
-  "NteSqF9g5cOa6": Array [
-    Object {
+  "NteSqF9g5cOa6": [
+    {
       "age": "16",
       "name": "Ivan",
     },
-    Object {
+    {
       "age": "24",
       "name": "Jack Smith",
     },
@@ -129,11 +129,11 @@ Object {
   "Svky0NLxkN7u": "Other answer",
   "X9F47wrnJImk": "No",
   "bcFvi1syrp66": "+12015551023",
-  "g6Oayu81jkdqcte": Object {
+  "g6Oayu81jkdqcte": {
     "firstName": "Ivan",
     "lastName": "Woods",
   },
-  "qCpteNRi2SiO": Object {
+  "qCpteNRi2SiO": {
     "filename": "avatar.jpg",
     "url": "https://heyformhq.com/qCpteNRi2SiO_avatar.jpg",
   },

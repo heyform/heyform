@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`correct value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "NUMBER",
     "kind": "number",
-    "properties": Object {},
+    "properties": {},
     "title": "number.test",
     "value": 5,
   },
@@ -13,11 +13,11 @@ Array [
 `;
 
 exports[`should be verified if value greater then 5 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "NUMBER",
     "kind": "number",
-    "properties": Object {},
+    "properties": {},
     "title": "number.test",
     "value": 7,
   },
@@ -25,11 +25,11 @@ Array [
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "NUMBER",
     "kind": "number",
-    "properties": Object {},
+    "properties": {},
     "title": "number.test",
     "value": "",
   },

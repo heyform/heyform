@@ -1,17 +1,17 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`correct value should be verified 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "YES_NO",
     "kind": "yes_no",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "id_yes",
           "label": "Yes",
         },
-        Object {
+        {
           "id": "id_no",
           "label": "No",
         },
@@ -24,17 +24,17 @@ Array [
 `;
 
 exports[`undefined value should be verified if not required 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "YES_NO",
     "kind": "yes_no",
-    "properties": Object {
-      "choices": Array [
-        Object {
+    "properties": {
+      "choices": [
+        {
           "id": "id_yes",
           "label": "Yes",
         },
-        Object {
+        {
           "id": "id_no",
           "label": "No",
         },

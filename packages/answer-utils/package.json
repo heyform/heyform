@@ -1,7 +1,7 @@
 {
   "name": "@heyform-inc/answer-utils",
   "description": "HeyForm Answer Utils",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -13,16 +13,16 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "jest",
-    "cov": "jest --coverage",
+    "test": "vitest",
+    "cov": "vitest run --coverage",
     "lint": "eslint . --ext .ts --quiet --fix",
     "type-check": "tsc --pretty --noEmit",
     "clean": "rimraf dist",
     "prebuild": "npm run clean"
   },
   "peerDependencies": {
-		"@heyform-inc/shared-types-enums": "^1.1.4",
-		"@heyform-inc/utils": "^1.0.9",
+    "@heyform-inc/shared-types-enums": "^1.1.8",
+    "@heyform-inc/utils": "^1.2.0",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",
@@ -30,8 +30,8 @@
     "validator": "^13.7.0"
   },
   "dependencies": {
-    "@heyform-inc/shared-types-enums": "^1.1.4",
-		"@heyform-inc/utils": "^1.0.9",
+    "@heyform-inc/shared-types-enums": "^1.1.8",
+    "@heyform-inc/utils": "^1.2.0",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",
     "html5parser": "^2.0.2",
@@ -41,35 +41,21 @@
   "devDependencies": {
     "@types/big.js": "^6.1.6",
     "@types/jest": "^26.0.3",
-    "@types/markdown-it": "^12.2.3",
     "@types/node": "^20.12.2",
     "@types/validator": "^13.7.3",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
-    "coveralls": "^3.1.1",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitest/coverage-v8": "^1.6.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^26.1.0",
-    "prettier": "^2.6.2",
-    "rimraf": "^3.0.2",
-    "ts-jest": "^26.1.0",
+    "prettier": "^3.3.2",
+    "rimraf": "^5.0.7",
     "tslib": "^2.4.0",
     "tsup": "^8.0.2",
-    "typescript": "4.9.5"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testRegex": "(/tests/.*|(\\.|/)test)\\.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json",
-      "node"
-    ]
+    "typescript": "5.5.3",
+    "vitest": "^1.6.0"
   }
 }
