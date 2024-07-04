@@ -55,7 +55,7 @@ Choosing our hosted version not only saves a significant amount of time and reso
 
 ## Self-hosting
 
-Interested in self-hosting HeyForm on your server? Take a look at the [self-hosting installation instructions](https://docs.heyform.net/self-hosting).
+Interested in self-hosting HeyForm on your server? Take a look at the [self-hosting installation instructions](https://docs.heyform.net/open-source/self-hosting).
 
 ### One Click Deployment
 
@@ -80,7 +80,7 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 Follow the [local installation instructions](https://docs.heyform.net/open-source/local-development) to run the project locally.
 
 ## How to Contribute
-You are awesome, let's build great software together. Head over to the [contribute docs](https://docs.heyform.net/contribute) to get started. 💪
+You are awesome, let's build great software together. Head over to the [contribute docs](https://docs.heyform.net/open-source/contribute) to get started. 💪
 
 ## Support & Community
 
@@ -91,4 +91,4 @@ You'll find a lot of resources to help you get started with HeyForm in the [help
 
 ## License
 
-HeyForm is open-source under the GNU Affero General Public License v3.0 (AGPL-3.0), you will find more information about the license and how to comply with it [here](https://docs.heyform.net/license).
+HeyForm is open-source under the GNU Affero General Public License v3.0 (AGPL-3.0), you will find more information about the license and how to comply with it [here](https://docs.heyform.net/open-source/license).
