@@ -77,7 +77,7 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 
 ## Local development
 
-Follow the [local installation instructions](https://docs.heyform.net/local-development) to run the project locally.
+Follow the [local installation instructions](https://docs.heyform.net/open-source/local-development) to run the project locally.
 
 ## How to Contribute
 You are awesome, let's build great software together. Head over to the [contribute docs](https://docs.heyform.net/contribute) to get started. 💪
