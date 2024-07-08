@@ -13,6 +13,7 @@ import type { FC } from 'react'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 
 import { ClosedMessage } from './blocks/ClosedMessage'
+import { SuspendedMessage } from './blocks/SuspendedMessage'
 import type { IState, IStripe } from './store'
 import { getStorage, StoreContext, StoreReducer } from './store'
 import { getTheme } from './theme'
@@ -139,7 +140,13 @@ export const FormRenderer: FC<FormRendererProps> = ({
   )
   const [state, dispatch] = useReducer(StoreReducer, memoState)
 
-  if (!helper.isValidArray(form.fields)) {
+  // Form suspended
+  if (form.suspended) {
+    return <SuspendedMessage />
+  }
+
+  // No questions in a form
+  else if (!helper.isValidArray(form.fields)) {
     return <ClosedMessage form={form} />
   }
 

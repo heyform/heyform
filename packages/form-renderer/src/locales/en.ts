@@ -54,6 +54,8 @@ export default {
   'Form unavailable': 'Form unavailable',
   'Create a heyform': 'Create a heyform',
   "The form can't receive new submissions now.": "The form can't receive new submissions now.",
+  "This page doesn't exist": "This page doesn't exist",
+  'If you have any questions, please contact us.': 'If you have any questions, please contact us.',
   Questions: 'Questions',
   'Search country': 'Search country',
   'Previous question': 'Previous question',

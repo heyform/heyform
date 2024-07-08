@@ -55,6 +55,8 @@ export default {
   'Create a heyform': 'Créer un heyform',
   "The form can't receive new submissions now.":
     'Le formulaire ne peut pas recevoir de nouvelles soumissions maintenant.',
+  "This page doesn't exist": "Cette page n'existe pas",
+  'If you have any questions, please contact us.': 'Si vous avez des questions, veuillez nous contacter.',
   Questions: 'Questions',
   'Search country': 'Rechercher un pays',
   'Previous question': 'Question précédente',

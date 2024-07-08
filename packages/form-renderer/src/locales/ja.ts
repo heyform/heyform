@@ -55,6 +55,8 @@ export default {
   'Create a heyform': 'heyformを作成する',
   "The form can't receive new submissions now.":
     'このフォームは現在新しい送信を受け付けていません。',
+  "This page doesn't exist": "このページは存在しません",
+  'If you have any questions, please contact us.': 'ご質問がある場合は、お問い合わせください。',
   Questions: '質問',
   'Search country': '国を検索',
   'Previous question': '前の質問',

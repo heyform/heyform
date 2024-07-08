@@ -54,6 +54,8 @@ export default {
   'Form unavailable': '表单不可用',
   'Create a heyform': '创建一个 heyform',
   "The form can't receive new submissions now.": '该表单现在无法接收新的提交。',
+  "This page doesn't exist": "此页面不存在",
+  'If you have any questions, please contact us.': '如果您有任何问题，请联系我们。',
   Questions: '问题',
   'Search country': '搜索国家',
   'Previous question': '上一个问题',
