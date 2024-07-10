@@ -1463,6 +1463,11 @@ button.button-icon-only {
   }
 }
 
+.heyform-tooltip-content {
+  background-color: var(--heyform-button-color);
+  color: var(--heyform-button-text-color);
+}
+
 .heyform-pagination {
   .tooltip-trigger {
     @apply flex;
@@ -1635,6 +1640,16 @@ button.heyform-submit-button {
     margin-right: -0.3125rem;
     outline: none;
     box-shadow: none;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+      background: transparent;
+    }
+
+    svg {
+      color: var(--heyform-question-color);
+    }
   }
 
   .button-leading {

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTransition } from 'react-transition-state'
 
 import { Button, CollapseIcon, XIcon } from '../components'
-import { MOTION_UNMOUNTED_STATES } from '../consts'
+import { TRANSITION_UNMOUNTED_STATES } from '../consts'
 import { useStore } from '../store'
 import type { IPartialFormField } from '../typings'
 import { questionNumber, sliceFieldsByLogics, treeFields, useTranslation } from '../utils'
@@ -129,7 +129,7 @@ export const Sidebar: FC = () => {
     toggle(state.isSidebarOpen)
   }, [state.isSidebarOpen])
 
-  if (!state.isSidebarOpen || MOTION_UNMOUNTED_STATES.includes(transitionState.status)) {
+  if (!state.isSidebarOpen || TRANSITION_UNMOUNTED_STATES.includes(transitionState.status)) {
     return null
   }
 

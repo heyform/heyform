@@ -8,6 +8,7 @@ import { useTransition } from 'react-transition-state'
 
 import { IComponentProps } from '../typings'
 import { stopEvent } from '../utils'
+import { TRANSITION_UNMOUNTED_STATES } from '../consts'
 
 interface PortalProps {
   visible?: boolean
@@ -55,19 +56,12 @@ export const Popup: FC<PopupProps> = ({
     styles: { popper: styles }
   } = usePopper(referenceRef, popperRef, popperOptions)
 
-  function handleStateChange({ state }: any) {
-    if (state === 'unmounted') {
-      onExited?.()
-    }
-  }
-
-  const [state, toggle] = useTransition({
+  const [transitionState, toggle] = useTransition({
     timeout: duration,
     initialEntered: visible,
     preEnter: true,
     preExit: true,
-    unmountOnExit: true,
-    onChange: handleStateChange
+    unmountOnExit: true
   })
 
   function handleMaskClick(event: any) {
@@ -81,6 +75,12 @@ export const Popup: FC<PopupProps> = ({
   const handleMaskClickCallback = useCallback(handleMaskClick, [])
 
   useEffect(() => {
+    if (transitionState.status === 'unmounted') {
+      onExited?.()
+    }
+  }, [transitionState.status])
+
+  useEffect(() => {
     toggle(visible)
   }, [visible])
 
@@ -92,7 +92,7 @@ export const Popup: FC<PopupProps> = ({
     }
 
     return (
-      <div className={clsx('popup', `${transitionName}-${state}`, className)} {...restProps}>
+      <div className={clsx('popup', `${transitionName}-${transitionState.status}`, className)} {...restProps}>
         {mask && <div className="popup-mask" onClick={handleMaskClickCallback} />}
         <div
           ref={setPopperRef}
@@ -107,8 +107,8 @@ export const Popup: FC<PopupProps> = ({
         </div>
       </div>
     )
-  }, [children, state, styles, attributes])
+  }, [children, transitionState.status, styles, attributes])
   const memoPortal = useMemo(() => <Portal visible={true}>{memoPopup}</Portal>, [memoPopup])
 
-  return <>{state !== 'unmounted' && state !== 'exited' && memoPortal}</>
+  return <>{!TRANSITION_UNMOUNTED_STATES.includes(transitionState.status) && memoPortal}</>
 }
