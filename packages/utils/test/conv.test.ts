@@ -88,6 +88,7 @@ test('bool', () => {
 })
 
 test('fixed', () => {
+  expect(toFixed(null as any)).toBe(undefined)
   expect(toFixed(0.1023)).toBe('0.1')
   expect(toFixed(10.023)).toBe('10.02')
   expect(toFixed(1.006)).toBe('1.01')

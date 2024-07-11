@@ -108,7 +108,6 @@ export const Popup: FC<PopupProps> = ({
       </div>
     )
   }, [children, transitionState.status, styles, attributes])
-  const memoPortal = useMemo(() => <Portal visible={true}>{memoPopup}</Portal>, [memoPopup])
 
-  return <>{!TRANSITION_UNMOUNTED_STATES.includes(transitionState.status) && memoPortal}</>
+  return <>{!TRANSITION_UNMOUNTED_STATES.includes(transitionState.status) && <Portal visible={visible}>{memoPopup}</Portal>}</>
 }

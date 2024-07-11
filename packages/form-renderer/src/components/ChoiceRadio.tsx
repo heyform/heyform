@@ -1,10 +1,9 @@
-import { helper } from '@heyform-inc/utils'
 import { IconCheck, IconPhoto } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { FC, ReactNode, useCallback, useMemo } from 'react'
 
 import { IComponentProps } from '../typings'
-import { stopEvent, useKey, useTranslation } from '../utils'
+import { isURL, stopEvent, useKey, useTranslation } from '../utils'
 import { Input } from './Input'
 
 export interface ChoiceRadioOption {
@@ -101,7 +100,7 @@ export const ChoiceRadio: FC<ChoiceRadioProps> = ({
       <div className="heyform-radio-container">
         {enableImage && (
           <div className="heyform-radio-image">
-            {helper.isURL(image) ? (
+            {isURL(image) ? (
               <img src={image} alt={label} />
             ) : icon ? (
               icon

@@ -1,10 +1,9 @@
-import { helper } from '@heyform-inc/utils'
 import { IconCheck, IconPhoto } from '@tabler/icons-react'
 import clsx from 'clsx'
 import type { FC, ReactNode } from 'react'
 
 import { IComponentProps } from '../typings'
-import { useKey } from '../utils'
+import { isURL, useKey } from '../utils'
 
 export interface RadioOption {
   keyName?: string
@@ -59,7 +58,7 @@ export const Radio: FC<RadioProps> = ({
       <div className="heyform-radio-container">
         {enableImage && (
           <div className="heyform-radio-image">
-            {helper.isURL(image) ? (
+            {isURL(image) ? (
               <img src={image} alt={label} />
             ) : icon ? (
               icon

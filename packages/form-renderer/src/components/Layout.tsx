@@ -3,6 +3,8 @@ import { deepEqual, helper } from '@heyform-inc/utils'
 import type { FC } from 'react'
 import { memo } from 'react'
 
+import { isURL } from '../utils'
+
 function filterStyle(brightness?: number) {
   if (!brightness) {
     return undefined
@@ -22,7 +24,7 @@ function filterStyle(brightness?: number) {
 }
 
 const LayoutComponent: FC<FormLayout> = props => {
-  if (helper.isEmpty(props) || !helper.isURL(props!.mediaUrl)) {
+  if (helper.isEmpty(props) || !isURL(props!.mediaUrl)) {
     return null
   }
 

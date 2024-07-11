@@ -464,6 +464,10 @@ button.button-icon-only {
   @apply w-full;
 }
 
+.heyform-select-popup input.heyform-input {
+  @apply pl-2;
+}
+
 .heyform-select-container {
   @apply flex items-center pb-2 cursor-pointer;
   color: var(--heyform-answer-color);
@@ -681,7 +685,7 @@ button.button-icon-only {
 }
 
 .heyform-block-wrapper {
-  @apply mt-16 mb-24 md:mt-20 md:mb-36;
+  @apply mt-12 mb-24 md:mt-20 md:mb-36;
 }
 
 .heyform-block-header {
@@ -689,7 +693,7 @@ button.button-icon-only {
 }
 
 .heyform-block-title {
-  @apply text-2xl;
+  @apply text-xl md:text-2xl mb-2 font-medium;
   color: var(--heyform-question-color);
 }
 
@@ -1423,7 +1427,7 @@ button.button-icon-only {
 // ----------------------------------------------------------------------------
 // Footer
 .heyform-footer {
-  @apply absolute left-0 bottom-0 w-full p-4 z-20 pointer-events-none;
+  @apply absolute left-0 bottom-0 w-full p-4 z-20 pointer-events-none backdrop-blur-sm bg-white/30 md:backdrop-filter-none md:bg-transparent;
 }
 
 .heyform-footer-wrapper,
@@ -1711,10 +1715,6 @@ button.heyform-submit-button {
 .heyform-branding {
   background-color: var(--heyform-button-color);
   color: var(--heyform-button-text-color);
-
-  svg {
-    @apply hidden;
-  }
 }
 
 .heyform-is-welcome {
@@ -1728,10 +1728,10 @@ button.heyform-submit-button {
     }
   
     .heyform-branding {
-      @apply w-full flex items-center justify-center gap-4 text-base font-medium;
+      @apply w-full flex items-center justify-center gap-2 text-base font-medium;
 
       svg {
-        @apply block w-6 h-auto;
+        @apply block w-5 h-auto;
       }
     }
   }

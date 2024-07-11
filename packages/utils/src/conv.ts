@@ -68,7 +68,9 @@ export function toFloat(
 }
 
 export function toFixed(value: number, precision = 2) {
-  return value.toFixed(precision).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')
+  if (isNumber(value)) {
+    return value.toFixed(precision).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')
+  }
 }
 
 export function toJSON<T extends object>(

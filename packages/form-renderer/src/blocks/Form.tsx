@@ -287,7 +287,7 @@ export const Form: FC<FormProps> = ({
             <div className="heyform-submit-warn">
               {t('Never submit passwords!')} -{' '}
               <a
-                href={state.reportAbuseURL || 'https://docs.heyform.net/report-abuse'}
+                href={state.reportAbuseURL}
                 target="_blank"
               >
                 {t('Report Abuse')}

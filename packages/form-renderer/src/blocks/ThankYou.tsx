@@ -6,17 +6,24 @@ import { useStore } from '../store'
 import { WelcomeBranding } from '../views/Branding'
 import type { BlockProps } from './Block'
 import { Block } from './Block'
+import { isURL } from '../utils'
 
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
 
   useEffect(() => {
+    let redirectUrl = field.properties?.redirectUrl
+
     if (
       state.customUrlRedirects &&
       field.properties?.redirectOnCompletion &&
-      field.properties?.redirectUrl
+      redirectUrl
     ) {
-      window.location.href = field.properties.redirectUrl
+      if (!isURL(redirectUrl)) {
+        redirectUrl = 'https://' + redirectUrl
+      }
+
+      window.location.href = redirectUrl
     }
   }, [])
 

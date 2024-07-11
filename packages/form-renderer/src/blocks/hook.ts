@@ -54,17 +54,19 @@ export function useSelectionRange(
   max?: number
 ): SelectionRange {
   return useMemo(() => {
+    const isMulti = !!allowMultiple
+
     const range: SelectionRange = {
-      allowMultiple: allowMultiple ?? false,
+      allowMultiple: isMulti ?? false,
       min: 1,
       max: 1
     }
 
-    if (allowMultiple) {
+    if (isMulti) {
       range.min = resetNumber(min, 0)
       range.max = resetNumber(max, 0)
 
-      if (range.min > range.max) {
+      if (range.max > 0 && range.min > range.max) {
         range.min = 0
       }
     }

@@ -1,5 +1,5 @@
 export default {
-  'Made with {{name}}': '{{name}}で作成',
+  'Made with HeyForm': '<icon></icon> <span>HeyForm</span> で作成',
   'This field is required': 'この項目は必須です',
   'File type is not supported': 'ファイルタイプはサポートされていません',
   "File size can't exceed {{size}}": 'ファイルサイズは{{size}}を超えてはいけません',

@@ -1,57 +1,41 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": 2020,
+    "ecmaVersion": 2021,
     "sourceType": "module",
     "project": "./tsconfig.json"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "prettier",
+    "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
   "plugins": [
     "react",
     "react-hooks",
-    "@typescript-eslint",
-    "jest",
-    "import"
+    "@typescript-eslint"
   ],
   "env": {
     "browser": true,
     "es2021": true,
-    "jest": true
+    "node": true
   },
   "rules": {
-    "@typescript-eslint/no-unused-expressions": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "import/no-unresolved": "error",
     "prettier/prettier": "error"
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "project": "."
-      },
-      "node": {
-        "extensions": [
-          ".ts"
-        ],
-        "moduleDirectory": [
-          "node_modules",
-          "."
-        ]
-      }
-    }
   }
 }

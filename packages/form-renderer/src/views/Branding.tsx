@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { Trans } from 'react-i18next'
 
 import { LogoIcon } from '../components'
 import { useStore } from '../store'
@@ -14,7 +15,14 @@ export const Branding: FC = () => {
 
   return (
     <a className="heyform-branding" href="https://heyform.net/?ref=badge" target="_blank">
-      <LogoIcon /> {t('Made with {{name}}', { name: 'HeyForm' })}
+      <Trans 
+        t={t}
+        i18nKey="Made with HeyForm"
+        components={{
+          icon: <LogoIcon className="w-4 h-4 inline" />,
+          span: <span className='font-bold' />
+        }}
+       />
     </a>
   )
 }

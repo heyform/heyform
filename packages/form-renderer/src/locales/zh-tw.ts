@@ -1,5 +1,5 @@
 export default {
-  'Made with {{name}}': '採用 {{name}} 製作',
+  'Made with HeyForm': '採用 <icon></icon> <span>HeyForm</span>',
   'This field is required': '此欄位是必需的',
   'File type is not supported': '不支援的檔案類型',
   "File size can't exceed {{size}}": '檔案大小不能超過{{size}}',

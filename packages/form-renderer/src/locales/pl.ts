@@ -1,5 +1,5 @@
 export default {
-  'Made with {{name}}': 'Wykonano w {{name}}',
+  'Made with HeyForm': 'Wykonano w <icon></icon> <span>HeyForm</span>',
   'This field is required': 'To pole jest wymagane',
   'File type is not supported': 'Typ pliku nie jest obsługiwany',
   "File size can't exceed {{size}}": 'Rozmiar pliku nie może przekraczać {{size}}',
