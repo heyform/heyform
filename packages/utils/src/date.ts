@@ -1,14 +1,13 @@
 import { hs } from './second'
 import { OpUnitType, QUnitType } from 'dayjs'
-import dayjs from 'dayjs'
+import _dayjs from 'dayjs'
 
 export function timestamp(): number {
   return Math.floor(Date.now() / 1e3)
 }
 
-export function date(str?: string, format?: string) {
-  return dayjs(str, format)
-}
+export const dayjs = _dayjs
+export const date = dayjs
 
 export function unixDate(t: number) {
   return dayjs.unix(t)
