@@ -24,11 +24,7 @@ const EXCLUDE_KINDS = [
 
   // Rating
   FieldKindEnum.RATING,
-  FieldKindEnum.OPINION_SCALE,
-
-  // Custom choice
-  FieldKindEnum.CUSTOM_SINGLE,
-  FieldKindEnum.CUSTOM_MULTIPLE
+  FieldKindEnum.OPINION_SCALE
 ]
 
 @Resolver()

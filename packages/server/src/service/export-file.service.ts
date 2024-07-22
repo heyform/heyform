@@ -107,14 +107,6 @@ export class ExportFileService {
     }
 
     switch (answer?.kind) {
-      case FieldKindEnum.CUSTOM_MULTIPLE:
-      case FieldKindEnum.CUSTOM_SINGLE:
-        const choices = answer?.properties?.choices
-          .filter(choice => value.value.includes(choice.id))
-          .map(choice => choice.label)
-        result = choices.join(',')
-        break
-
       case FieldKindEnum.FILE_UPLOAD:
         result = helper.isObject(value) ? value.url : helper.isString(value) ? value : ''
         break

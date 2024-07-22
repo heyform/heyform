@@ -83,36 +83,23 @@ const Summary: FC = () => {
     const result = await FormService.analytic(formId, range)
 
     if (helper.isValid(result)) {
-      setSummary(formatSummaryData(result))
+      const _summary = {
+        totalVisits: result.totalVisits,
+        submissionCount: result.submissionCount,
+        averageDuration: formatSeconds(result.averageTime),
+        completeRate: 0
+      }
+
+      if (result.submissionCount && result.submissionCount > result.totalVisits) {
+        _summary.completeRate = 100
+      } else if (result.totalVisits) {
+        _summary.completeRate = Math.ceil((result.submissionCount * 100) / result.totalVisits)
+      }
+
+      setSummary(_summary)
     }
 
     setLoading(false)
-  }
-
-  function formatSummaryData(summary: any[]) {
-    const data = clone(DEFAULT_SUMMARY_DATA)
-
-    if (helper.isValid(summary)) {
-      let totalDuration = 0
-
-      summary!.forEach((row: any) => {
-        data.totalVisits += row.totalVisits
-        data.submissionCount += row.submissionCount
-
-        if (row.submissionCount > 0) {
-          totalDuration += row.submissionCount * row.averageTime
-        }
-      })
-
-      data.completeRate = Math.ceil((data.submissionCount * 100) / data.totalVisits)
-
-      if (data.submissionCount > 0) {
-        const duration = Math.ceil(totalDuration / data.submissionCount)
-        data.averageDuration = formatSeconds(duration)
-      }
-    }
-
-    return data
   }
 
   function handleRangeChange(range: any) {

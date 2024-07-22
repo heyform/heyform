@@ -318,8 +318,6 @@ export const FORM_ANALYTIC_GQL = gql`
       totalVisits
       submissionCount
       averageTime
-      createdAt
-      updatedAt
     }
   }
 `

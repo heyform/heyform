@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { date } from '@heyform-inc/utils'
+import { date, helper } from '@heyform-inc/utils'
 
 import { FormAnalyticModel } from '@model'
+import { SubmissionService } from './submission.service'
 
 interface FormAnalyticOptions {
   formId: string
@@ -16,25 +17,56 @@ interface FormAnalyticOptions {
 export class FormAnalyticService {
   constructor(
     @InjectModel(FormAnalyticModel.name)
-    private readonly formAnalyticModel: Model<FormAnalyticModel>
+    private readonly formAnalyticModel: Model<FormAnalyticModel>,
+    private readonly submissionService: SubmissionService
   ) {}
 
-  public async summary({
-    formId,
-    endAt,
-    range
-  }: FormAnalyticOptions): Promise<FormAnalyticModel[]> {
-    return this.formAnalyticModel
-      .find({
+  public async summary({ formId, endAt, range }: FormAnalyticOptions) {
+    const startAt = date(endAt).subtract(range, 'days').startOf('day').toDate()
+
+    const [avgTotalVisits, result] = await Promise.all([
+      this.getAverageTotalVisits(formId, startAt, endAt),
+      this.submissionService.analytic(
         formId,
-        createdAt: {
-          $lte: endAt
+        Math.floor(startAt.getTime() / 1000),
+        Math.floor(endAt.getTime() / 1000)
+      )
+    ])
+
+    const analytic = {
+      totalVisits: avgTotalVisits,
+      submissionCount: 0,
+      averageTime: 0
+    }
+
+    if (helper.isValidArray(result)) {
+      analytic.submissionCount = result[0].submissionCount
+      analytic.averageTime = result[0].averageTime
+    }
+
+    return analytic
+  }
+
+  public async getAverageTotalVisits(formId: string, startAt: Date, endAt: Date): Promise<number> {
+    const result = await this.formAnalyticModel.aggregate([
+      {
+        $match: {
+          formId,
+          createdAt: {
+            $gte: startAt,
+            $lte: endAt
+          }
         }
-      })
-      .limit(range)
-      .sort({
-        createdAt: -1
-      })
+      },
+      {
+        $group: {
+          _id: null,
+          avgTotalVisits: { $avg: '$totalVisits' }
+        }
+      }
+    ])
+
+    return result[0]?.avgTotalVisits || 0
   }
 
   /**
@@ -57,52 +89,7 @@ export class FormAnalyticService {
     } else {
       await this.formAnalyticModel.create({
         formId,
-        totalVisits: 1,
-        submissionCount: 0,
-        averageTime: 0
-      } as any)
-    }
-  }
-
-  /**
-   * Update submission count and calculate average time
-   *
-   * @param formId
-   * @param duration
-   */
-  public async updateCountAndAverageTime(formId: string, duration: number): Promise<void> {
-    const formAnalytic = await this.findFormAnalyticInToday(formId)
-
-    let submissionCount = 0
-    let prevAverageTime = 0
-
-    if (formAnalytic) {
-      submissionCount = formAnalytic?.submissionCount || 0
-      prevAverageTime = formAnalytic?.averageTime || 0
-    }
-
-    const averageTime = Math.floor(
-      (duration + submissionCount * prevAverageTime) / (submissionCount + 1)
-    )
-
-    if (formAnalytic) {
-      await this.formAnalyticModel.updateOne(
-        {
-          _id: formAnalytic.id
-        },
-        {
-          $inc: {
-            submissionCount: 1
-          },
-          averageTime
-        }
-      )
-    } else {
-      await this.formAnalyticModel.create({
-        formId,
-        totalVisits: 1,
-        submissionCount: 1,
-        averageTime
+        totalVisits: 1
       } as any)
     }
   }

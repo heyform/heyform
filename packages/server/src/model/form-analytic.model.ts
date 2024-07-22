@@ -10,12 +10,6 @@ export class FormAnalyticModel extends Document {
 
   @Prop({ required: true })
   totalVisits: number
-
-  @Prop({ required: true })
-  submissionCount: number
-
-  @Prop({ required: true })
-  averageTime: number
 }
 
 export const FormAnalyticSchema = SchemaFactory.createForClass(FormAnalyticModel)

@@ -90,8 +90,6 @@ export class FormReportService {
           case FieldKindEnum.YES_NO:
           case FieldKindEnum.MULTIPLE_CHOICE:
           case FieldKindEnum.PICTURE_CHOICE:
-          case FieldKindEnum.CUSTOM_SINGLE:
-          case FieldKindEnum.CUSTOM_MULTIPLE:
             const choices = field.properties.choices
 
             if (helper.isValidArray(choices)) {

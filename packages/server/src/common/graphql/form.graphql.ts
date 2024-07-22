@@ -983,12 +983,6 @@ export class FormAnalyticType {
 
   @Field()
   averageTime: number
-
-  @Field()
-  createdAt: Date
-
-  @Field()
-  updatedAt: Date
 }
 
 @ObjectType()

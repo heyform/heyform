@@ -93,8 +93,7 @@ export class FormService {
           formId,
           range
         }
-      },
-      fetchPolicy: 'cache-first'
+      }
     })
   }
 

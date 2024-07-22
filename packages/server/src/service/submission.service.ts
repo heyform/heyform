@@ -440,4 +440,25 @@ export class SubmissionService {
       ])
       .exec()
   }
+
+  async analytic(formId: string, startAt: number, endAt: number) {
+    return this.submissionModel.aggregate([
+      {
+        $match: {
+          formId: formId,
+          startAt: { $gte: startAt },
+          endAt: { $lte: endAt }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          averageTime: {
+            $avg: { $subtract: ['$endAt', '$startAt'] }
+          },
+          submissionCount: { $sum: 1 }
+        }
+      }
+    ])
+  }
 }

@@ -16,7 +16,6 @@ import { CompleteSubmissionInput, CompleteSubmissionType } from '@graphql'
 import { EndpointAnonymousIdGuard } from '@guard'
 import {
   EndpointService,
-  FormAnalyticService,
   FormReportService,
   FormService,
   IntegrationService,
@@ -35,7 +34,6 @@ export class CompleteSubmissionResolver {
     private readonly formService: FormService,
     private readonly submissionService: SubmissionService,
     private readonly submissionIpLimitService: SubmissionIpLimitService,
-    private readonly formAnalyticService: FormAnalyticService,
     private readonly formReportService: FormReportService,
     private readonly integrationService: IntegrationService,
     private readonly paymentService: PaymentService
@@ -185,10 +183,6 @@ export class CompleteSubmissionResolver {
         }
       })
     }
-
-    // Update analytic
-    const duration = endAt - startAt
-    this.formAnalyticService.updateCountAndAverageTime(form.id, duration)
 
     // Form report Queue
     this.formReportService.addQueue(form.id)
