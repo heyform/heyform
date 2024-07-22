@@ -14,10 +14,10 @@ import store2 from 'store2'
 
 import type { AnyMap, IFormField } from './typings'
 import {
+  LRU,
   createStoreContext,
   createStoreReducer,
   isFile,
-  LRU,
   progressPercentage,
   replaceHTML,
   validateLogicField
@@ -80,7 +80,8 @@ export interface IState {
   formId: string
   instanceId: string
   welcomeField?: IFormField
-  thankYouField?: IFormField
+  thankYouFieldId?: string
+  thankYouFields: IFormField[]
   allFields: IFormField[]
   fields: IFormField[]
   hiddenFields: HiddenField[]
@@ -136,7 +137,7 @@ const actions: any = {
     }
 
     const { fields, variables } = applyLogicToFields(
-      [...state.allFields, state.thankYouField].filter(Boolean) as FormField[],
+      [...state.allFields, ...state.thankYouFields].filter(Boolean) as FormField[],
       state.logics,
       state.parameters,
       newValues
@@ -175,10 +176,11 @@ const actions: any = {
 
   setIsSubmitTouched: (state: IState, { isSubmitTouched }: any) => ({ ...state, isSubmitTouched }),
 
-  setIsSubmitted: (state: IState, { isSubmitted }: any) => ({
+  setIsSubmitted: (state: IState, { isSubmitted, thankYouFieldId }: any) => ({
     ...state,
     isSubmitted,
-    isSidebarOpen: false
+    isSidebarOpen: false,
+    thankYouFieldId
   }),
 
   setIsSidebarOpen: (state: IState, { isSidebarOpen }: any) => ({ ...state, isSidebarOpen }),
@@ -259,6 +261,7 @@ export const StoreContext = createStoreContext<IState>({
   formId: '',
   allFields: [],
   fields: [],
+  thankYouFields: [],
   hiddenFields: [],
   query: {},
   jumpFieldIds: [],

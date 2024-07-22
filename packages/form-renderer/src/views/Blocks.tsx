@@ -150,7 +150,9 @@ export const Blocks = () => {
   }
 
   if (state.isSubmitted) {
-    const field: any = state.thankYouField || {
+    const thankYouField = state.thankYouFields?.find(f => f.id === state.thankYouFieldId)
+
+    const field: any = thankYouField || {
       title: t('Thank you!'),
       description: t('Thanks for completing this form. Now create your own form.'),
       properties: {

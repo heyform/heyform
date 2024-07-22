@@ -1,7 +1,7 @@
-import { validateFields } from '@heyform-inc/answer-utils'
+import { applyLogicToFields, validateFields } from '@heyform-inc/answer-utils'
 import type { FormField } from '@heyform-inc/shared-types-enums'
 import { FieldKindEnum, NumberPrice } from '@heyform-inc/shared-types-enums'
-import { helper } from '@heyform-inc/utils'
+import { clone, helper } from '@heyform-inc/utils'
 import { IconChevronRight } from '@tabler/icons-react'
 import Big from 'big.js'
 import clsx from 'clsx'
@@ -12,6 +12,7 @@ import { FC, ReactNode, useEffect, useMemo, useState } from 'react'
 import { Submit } from '../components'
 import { removeStorage, useStore } from '../store'
 import {
+  getNavigateFieldId,
   sendHideModalMessage,
   sliceFieldsByLogics,
   useEnterKey,
@@ -149,10 +150,27 @@ export const Form: FC<FormProps> = ({
         }
 
         setLoading(false)
+
+        const { variables } = applyLogicToFields(
+          clone([...state.allFields, ...state.thankYouFields].filter(Boolean) as FormField[]),
+          state.logics,
+          state.parameters,
+          values
+        )
+
+        const thankYouFieldId = getNavigateFieldId(
+          field,
+          state.logics,
+          state.parameters,
+          values,
+          variables
+        )
+
         dispatch({
           type: 'setIsSubmitted',
           payload: {
-            isSubmitted: true
+            isSubmitted: true,
+            thankYouFieldId: thankYouFieldId || state.thankYouFields[0]?.id
           }
         })
 
@@ -286,10 +304,7 @@ export const Form: FC<FormProps> = ({
           {isLastBlock && (
             <div className="heyform-submit-warn">
               {t('Never submit passwords!')} -{' '}
-              <a
-                href={state.reportAbuseURL}
-                target="_blank"
-              >
+              <a href={state.reportAbuseURL} target="_blank" rel="noreferrer">
                 {t('Report Abuse')}
               </a>
             </div>
@@ -300,12 +315,20 @@ export const Form: FC<FormProps> = ({
           {submitVisible && (
             <Field shouldUpdate={true}>
               {state.alwaysShowNextButton ? (
-                <Submit className="!mt-0" text={field.properties?.buttonText || t('Next')} icon={NextIcon} />
+                <Submit
+                  className="!mt-0"
+                  text={field.properties?.buttonText || t('Next')}
+                  icon={NextIcon}
+                />
               ) : (
                 (_, __, { getFieldsError }) => {
                   return (
                     !getFieldsError().some(({ errors }) => errors.length) && (
-                      <Submit className="!mt-0" text={field.properties?.buttonText || t('Next')} icon={NextIcon} />
+                      <Submit
+                        className="!mt-0"
+                        text={field.properties?.buttonText || t('Next')}
+                        icon={NextIcon}
+                      />
                     )
                   )
                 }

@@ -3,10 +3,10 @@ import type { FC } from 'react'
 import { useEffect } from 'react'
 
 import { useStore } from '../store'
+import { isURL } from '../utils'
 import { WelcomeBranding } from '../views/Branding'
 import type { BlockProps } from './Block'
 import { Block } from './Block'
-import { isURL } from '../utils'
 
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
@@ -14,11 +14,7 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
   useEffect(() => {
     let redirectUrl = field.properties?.redirectUrl
 
-    if (
-      state.customUrlRedirects &&
-      field.properties?.redirectOnCompletion &&
-      redirectUrl
-    ) {
+    if (state.customUrlRedirects && field.properties?.redirectOnCompletion && redirectUrl) {
       if (!isURL(redirectUrl)) {
         redirectUrl = 'https://' + redirectUrl
       }

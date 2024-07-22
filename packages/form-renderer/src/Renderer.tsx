@@ -49,7 +49,7 @@ function initStore(
   const list = parseFields(form.fields, form.translations?.[locale])
 
   const welcomeField = list.find(f => f.kind === FieldKindEnum.WELCOME)
-  const thankYouField = list.find(f => f.kind === FieldKindEnum.THANK_YOU)
+  const thankYouFields = list.filter(f => f.kind === FieldKindEnum.THANK_YOU)
 
   let allFields = flattenFieldsWithGroups(list.filter(f => !OTHER_FIELD_KINDS.includes(f.kind)))
 
@@ -63,7 +63,7 @@ function initStore(
 
   const values = getStorage(form.id, autoSave)
   const { fields, variables } = applyLogicToFields(
-    [...allFields, thankYouField].filter(Boolean) as FormField[],
+    [...allFields, ...thankYouFields].filter(Boolean) as FormField[],
     form.logics,
     form.variables,
     values
@@ -76,7 +76,7 @@ function initStore(
     // Preventing hydration mismatch errors
     instanceId: ssr ? '' : nanoid(8),
     welcomeField,
-    thankYouField,
+    thankYouFields,
     allFields,
     fields,
     hiddenFields: form.hiddenFields || [],

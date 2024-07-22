@@ -1,5 +1,18 @@
-import { htmlUtils, parsePlainAnswer, validateRequiredField } from '@heyform-inc/answer-utils'
-import { FieldKindEnum, FORM_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import {
+  htmlUtils,
+  parsePlainAnswer,
+  validateCondition,
+  validateRequiredField
+} from '@heyform-inc/answer-utils'
+import {
+  ActionEnum,
+  FORM_FIELD_KINDS,
+  FieldKindEnum,
+  FormField,
+  Logic,
+  NavigateAction,
+  Variable
+} from '@heyform-inc/shared-types-enums'
 import { helper, type } from '@heyform-inc/utils'
 
 import { CHAR_A_KEY_CODE } from '../consts'
@@ -231,4 +244,46 @@ export function questionNumber(number?: number | string, parentNumber?: number |
 
 export function removeHeading(title?: string) {
   return (title || '').replace(/<h\d>/gi, '<span>').replace(/<\/h\d>/gi, '</span>')
+}
+
+export function getNavigateFieldId(
+  field: FormField,
+  logics: Logic[] = [],
+  variables: Variable[] = [],
+  fieldValues: Record<string, any> = {},
+  variableValues: Record<string, any> = {}
+) {
+  const logic = logics.find(l => l.fieldId === field.id)
+
+  if (logic) {
+    const { payloads } = logic
+    const result = payloads.filter(p => p.action.kind === ActionEnum.NAVIGATE)
+
+    for (const payload of result) {
+      const { condition, action } = payload
+      const isValidated = validateCondition(field, condition, fieldValues)
+
+      if (isValidated) {
+        return (action as NavigateAction).fieldId
+      }
+    }
+  }
+
+  // Check variables
+  for (const variable of variables) {
+    if (helper.isValidArray(variable.logics)) {
+      for (const { condition, action } of variable.logics) {
+        const _field: any = {
+          id: variable.id,
+          kind: variable.kind === 'number' ? FieldKindEnum.NUMBER : FieldKindEnum.SHORT_TEXT
+        }
+
+        const isValidated = validateCondition(_field, condition, variableValues)
+
+        if (isValidated) {
+          return (action as NavigateAction).fieldId
+        }
+      }
+    }
+  }
 }
