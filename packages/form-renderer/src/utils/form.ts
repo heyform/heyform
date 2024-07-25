@@ -219,7 +219,7 @@ export function progressPercentage(valueLength: number, questionCount: number) {
   return Math.round((valueLength / questionCount) * 100)
 }
 
-function numberToChars(number: number, radix = 26): string {
+export function numberToChar(number: number, radix = 26): string {
   const arrays: number[] = []
 
   while (number > radix) {
@@ -236,7 +236,7 @@ function numberToChars(number: number, radix = 26): string {
 
 export function questionNumber(number?: number | string, parentNumber?: number | string): string {
   if (number) {
-    return parentNumber ? [parentNumber, numberToChars(number! as number)].join('') : String(number)
+    return parentNumber ? [parentNumber, numberToChar(number! as number)].join('') : String(number)
   }
 
   return ''
