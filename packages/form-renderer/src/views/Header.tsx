@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 
 import { Countdown } from '../components/Countdown'
 import { useStore } from '../store'
-import { sendHideModalMessage } from '../utils'
+import { sendMessageToParent } from '../utils'
 import { Progress } from './Progress'
 
 export const Header: FC = () => {
@@ -15,7 +15,7 @@ export const Header: FC = () => {
     await state.onSubmit?.(state.values, true)
 
     if (helper.isTrue(state.query.hideAfterSubmit)) {
-      sendHideModalMessage()
+      sendMessageToParent('HIDE_EMBED_MODAL')
     }
 
     dispatch({

@@ -13,7 +13,7 @@ import { Submit } from '../components'
 import { removeStorage, useStore } from '../store'
 import {
   getNavigateFieldId,
-  sendHideModalMessage,
+  sendMessageToParent,
   sliceFieldsByLogics,
   useEnterKey,
   useTranslation,
@@ -146,7 +146,7 @@ export const Form: FC<FormProps> = ({
         await state.onSubmit?.(values, isPartialSubmission, state.stripe)
 
         if (helper.isTrue(state.query.hideAfterSubmit)) {
-          sendHideModalMessage()
+          sendMessageToParent('HIDE_EMBED_MODAL')
         }
 
         setLoading(false)

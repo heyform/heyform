@@ -1,8 +1,8 @@
-export function sendHideModalMessage() {
+export function sendMessageToParent(eventName: string) {
   window.parent?.postMessage(
     {
       source: 'HEYFORM',
-      eventName: 'HIDE_EMBED_MODAL'
+      eventName
     },
     '*'
   )
