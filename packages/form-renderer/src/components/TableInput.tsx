@@ -67,11 +67,7 @@ export const TableInput: FC<TableInputProps> = ({
     <div className="heyform-table-root" {...restProps}>
       <table>
         <thead className="heyform-table-header">
-          <tr>
-            {columns?.map(column => (
-              <th key={column.id}>{column.label}</th>
-            ))}
-          </tr>
+          <tr>{columns?.map(column => <th key={column.id}>{column.label}</th>)}</tr>
         </thead>
         <tbody>
           {rows.map((_, rowIdx) => (

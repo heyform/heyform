@@ -60,6 +60,7 @@ export default {
   'Search country': 'Search country',
   'Previous question': 'Previous question',
   'Next question': 'Next question',
+  'Choice {{index}}': 'Choice {{index}}',
   Other: 'Other',
   'Type your answer': 'Type your answer',
   'Your credit card will be charged': 'Your credit card will be charged',

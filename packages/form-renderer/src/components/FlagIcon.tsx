@@ -8,5 +8,5 @@ export interface FlagIconProps extends IComponentProps {
 }
 
 export const FlagIcon: FC<FlagIconProps> = ({ className, countryCode = 'US' }) => {
-  return <span className={clsx(`bg-black/10 fi fi-${countryCode?.toLowerCase()}`, className)} />
+  return <span className={clsx(`fi bg-black/10 fi-${countryCode?.toLowerCase()}`, className)} />
 }

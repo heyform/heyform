@@ -56,11 +56,13 @@ export default {
   "The form can't receive new submissions now.":
     'Le formulaire ne peut pas recevoir de nouvelles soumissions maintenant.',
   "This page doesn't exist": "Cette page n'existe pas",
-  'If you have any questions, please contact us.': 'Si vous avez des questions, veuillez nous contacter.',
+  'If you have any questions, please contact us.':
+    'Si vous avez des questions, veuillez nous contacter.',
   Questions: 'Questions',
   'Search country': 'Rechercher un pays',
   'Previous question': 'Question précédente',
   'Next question': 'Question suivante',
+  'Choice {{index}}': 'Choix {{index}}',
   Other: 'Autre',
   'Type your answer': 'Tapez votre réponse',
   'Your credit card will be charged': 'Votre carte de crédit sera débitée',

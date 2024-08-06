@@ -6,7 +6,7 @@ export const SuspendedMessage = () => {
 
   const field: any = {
     title: t("This page doesn't exist"),
-    description: t("If you have any questions, please contact us.")
+    description: t('If you have any questions, please contact us.')
   }
 
   return <ThankYou field={field} />

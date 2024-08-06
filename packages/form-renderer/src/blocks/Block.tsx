@@ -2,7 +2,7 @@ import { htmlUtils } from '@heyform-inc/answer-utils'
 import { FieldLayoutAlignEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
-import { FC, useEffect, useMemo, useState, WheelEvent } from 'react'
+import { FC, WheelEvent, useEffect, useMemo, useState } from 'react'
 
 import { Layout } from '../components'
 import { useStore } from '../store'
@@ -133,21 +133,20 @@ export const Block: FC<BlockProps> = ({
                   <div className="heyform-block-wrapper">
                     <div className="heyform-block-header">
                       {isQuestion && (
-                      <div
-                        className={clsx(
-                          'heyform-block-number',
-                          `heyform-block-number-${questionNumber(
-                            field.index,
-                            field.parent?.index
-                          )}`
-                        )}
-                      >
-                        {t('Question {{number}}', {
-                          number: questionNumber(field.index, field.parent?.index)
-                        })}{' '}
-                        {field.validations?.required && <span className="text-red-700">*</span>}
-                      </div>
-
+                        <div
+                          className={clsx(
+                            'heyform-block-number',
+                            `heyform-block-number-${questionNumber(
+                              field.index,
+                              field.parent?.index
+                            )}`
+                          )}
+                        >
+                          {t('Question {{number}}', {
+                            number: questionNumber(field.index, field.parent?.index)
+                          })}{' '}
+                          {field.validations?.required && <span className="text-red-700">*</span>}
+                        </div>
                       )}
                       {field.title && (
                         <h1

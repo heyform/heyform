@@ -25,7 +25,7 @@ export const FullName: FC<BlockProps> = ({ field, ...restProps }) => {
         field={field}
         getValues={getValues}
       >
-        <div className="flex items-start justify-items-stretch w-full space-x-4">
+        <div className="flex w-full items-start justify-items-stretch space-x-4">
           <FormField
             className="flex-1"
             name="firstName"

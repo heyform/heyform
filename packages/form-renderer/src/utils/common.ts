@@ -1,4 +1,4 @@
-import { Context, createContext, LegacyRef, MutableRefObject, RefCallback } from 'react'
+import { Context, LegacyRef, MutableRefObject, RefCallback, createContext } from 'react'
 
 import { AnyMap } from '../typings'
 

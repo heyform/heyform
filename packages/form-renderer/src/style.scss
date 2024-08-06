@@ -1,64 +1,64 @@
-@import "flag-icons/css/flag-icons.css";
+@import 'flag-icons/css/flag-icons.css';
 
 @mixin heyform-scrollbar() {
   &::-webkit-scrollbar {
     height: 12px;
-    width: 12px
+    width: 12px;
   }
 
   &::-webkit-scrollbar-thumb:vertical {
     background-color: transparent;
-    border-radius: 6px
+    border-radius: 6px;
   }
 
   &:hover::-webkit-scrollbar-thumb:vertical {
     border: 3px solid transparent;
-    background-color: rgba(0, 0, 0, .2);
+    background-color: rgba(0, 0, 0, 0.2);
     background-clip: content-box;
   }
 
   &::-webkit-scrollbar-button:vertical {
-    display: block
+    display: block;
   }
 
   &::-webkit-scrollbar-button:start:decrement {
-    display: block
+    display: block;
   }
 
   &::-webkit-scrollbar-button:end:increment {
-    display: block
+    display: block;
   }
 
   &::-webkit-scrollbar-button:vertical:start:increment {
-    display: none
+    display: none;
   }
 
   &::-webkit-scrollbar-button:vertical:end:decrement {
-    display: none
+    display: none;
   }
 
   &::-webkit-scrollbar-button:vertical:increment {
-    display: none
+    display: none;
   }
 
   &::-webkit-scrollbar-button:vertical:decrement {
-    display: none
+    display: none;
   }
 
   &::-webkit-scrollbar-track:vertical {
-    display: none
+    display: none;
   }
 
   &::-webkit-scrollbar-track-piece {
-    background-color: transparent
+    background-color: transparent;
   }
 
   &::-webkit-scrollbar-corner:vertical {
-    background-color: transparent
+    background-color: transparent;
   }
 
   &::-webkit-scrollbar-resizer:vertical {
-    background-color: transparent
+    background-color: transparent;
   }
 }
 
@@ -98,7 +98,7 @@
 }
 
 button.button {
-  @apply relative border border-gray-300 px-4 py-2 sm:text-sm font-medium text-slate-700;
+  @apply relative border border-gray-300 px-4 py-2 font-medium text-slate-700 sm:text-sm;
 
   &,
   .button-loader {
@@ -120,7 +120,7 @@ button.button {
 
 button.button {
   &:not(:disabled) {
-    @apply hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 active:bg-slate-100;
+    @apply hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 active:bg-slate-100;
   }
 
   .spin {
@@ -142,7 +142,7 @@ button.button {
   }
 
   .button-trailing {
-    @apply ml-2 -mr-1;
+    @apply -mr-1 ml-2;
   }
 }
 
@@ -199,7 +199,7 @@ button.button-danger {
 button.button-link {
   &,
   .button-loader {
-    @apply p-0 bg-transparent border-none shadow-none hover:text-slate-800 hover:bg-transparent;
+    @apply border-none bg-transparent p-0 shadow-none hover:bg-transparent hover:text-slate-800;
   }
 
   &.button-primary {
@@ -209,7 +209,7 @@ button.button-link {
     }
 
     &:not(:disabled) {
-      @apply hover:text-blue-700 hover:bg-transparent;
+      @apply hover:bg-transparent hover:text-blue-700;
     }
   }
 
@@ -220,7 +220,7 @@ button.button-link {
     }
 
     &:not(:disabled) {
-      @apply hover:text-green-700 hover:bg-transparent;
+      @apply hover:bg-transparent hover:text-green-700;
     }
   }
 
@@ -231,7 +231,7 @@ button.button-link {
     }
 
     &:not(:disabled) {
-      @apply hover:text-red-700 hover:bg-transparent;
+      @apply hover:bg-transparent hover:text-red-700;
     }
   }
 }
@@ -259,7 +259,7 @@ button.button-icon-only {
   @apply relative z-0 inline-flex rounded-md;
 
   & > button.button {
-    @apply relative rounded-none shadow-none focus:z-10 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:border-blue-600 -ml-px;
+    @apply relative -ml-px rounded-none shadow-none focus:z-10 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-offset-0;
 
     &:nth-of-type(1) {
       @apply ml-0 rounded-l-md;
@@ -284,7 +284,7 @@ button.button-icon-only {
 }
 
 .popup-mask {
-  @apply fixed z-20 inset-0;
+  @apply fixed inset-0 z-20;
 }
 
 .popup-content {
@@ -336,20 +336,20 @@ button.button-icon-only {
 .popup-transition-preEnter,
 .popup-transition-exiting {
   .popup-content {
-    @apply transform opacity-0 scale-95;
+    @apply scale-95 transform opacity-0;
   }
 }
 
 .popup-transition-preExit,
 .popup-transition-entering {
   .popup-content {
-    @apply transform opacity-100 scale-100;
+    @apply scale-100 transform opacity-100;
   }
 }
 
 .popup-transition-exited {
   .popup-content {
-    @apply transform opacity-0 scale-95;
+    @apply scale-95 transform opacity-0;
   }
 }
 
@@ -367,7 +367,7 @@ button.button-icon-only {
 }
 
 .heyform-radio-container {
-  @apply flex w-full p-2 rounded transition;
+  @apply flex w-full rounded p-2 transition;
 
   background-color: var(--heyform-answer-opacity-10-color);
   color: var(--heyform-answer-color);
@@ -379,21 +379,21 @@ button.button-icon-only {
 }
 
 .heyform-radio-hotkey {
-  @apply flex items-center justify-center w-6 h-6 bg-white text-xs font-bold rounded-sm;
+  @apply flex h-6 w-6 items-center justify-center rounded-sm bg-white text-xs font-bold;
   background-color: var(--heyform-background-color);
   box-shadow: var(--heyform-answer-opacity-60-color) 0 0 0 1px inset;
 }
 
 .heyform-radio-label {
-  @apply flex-1 ml-2 mr-2;
+  @apply ml-2 mr-2 flex-1;
 }
 
 .heyform-radio-other {
-	.heyform-radio-label-text,
-	.input input {
-		@apply text-base py-2;
-		color: var(--heyform-answer-color);
-	}
+  .heyform-radio-label-text,
+  .input input {
+    @apply py-2 text-base;
+    color: var(--heyform-answer-color);
+  }
 
   .heyform-radio-label-text {
     @apply py-0;
@@ -401,16 +401,16 @@ button.button-icon-only {
 }
 
 .heyform-radio-icon {
-  @apply flex items-center justify-center opacity-0 invisible;
+  @apply invisible flex items-center justify-center opacity-0;
 
   svg {
-    @apply w-6 h-6;
+    @apply h-6 w-6;
   }
 }
 
 .heyform-radio-selected {
   .heyform-radio-icon {
-    @apply opacity-100 visible;
+    @apply visible opacity-100;
   }
 }
 
@@ -427,10 +427,10 @@ button.button-icon-only {
 }
 
 .heyform-radio-image {
-  @apply flex w-full h-40 items-center justify-center;
+  @apply flex h-[9.375rem] w-full items-center justify-center;
 
   img {
-    @apply block min-w-full max-h-full min-h-0 object-cover;
+    @apply block max-h-full max-w-full;
   }
 }
 
@@ -447,7 +447,7 @@ button.button-icon-only {
 
 .heyform-radio-group-disabled {
   .heyform-radio:not(.heyform-radio-selected) {
-    @apply opacity-50 cursor-auto;
+    @apply cursor-auto opacity-50;
 
     .heyform-radio-container {
       &:hover {
@@ -456,7 +456,6 @@ button.button-icon-only {
     }
   }
 }
-
 
 // ----------------------------------------------------------------------------
 // CountrySelect
@@ -469,7 +468,7 @@ button.button-icon-only {
 }
 
 .heyform-select-container {
-  @apply flex items-center pb-2 cursor-pointer;
+  @apply flex cursor-pointer items-center pb-2;
   color: var(--heyform-answer-color);
   border-bottom: 1px solid var(--heyform-answer-opacity-80-color);
 }
@@ -481,7 +480,7 @@ button.button-icon-only {
 }
 
 .heyform-select-value {
-  @apply h-8 flex flex-1 items-center;
+  @apply flex h-8 flex-1 items-center;
 
   .fi {
     @apply h-4 bg-black bg-opacity-5;
@@ -493,9 +492,9 @@ button.button-icon-only {
   color: var(--heyform-answer-color);
 
   &:before {
-    content: attr(placeholder);
+    content: attr(data-placeholder);
     color: var(--heyform-answer-opacity-30-color);
-    @apply absolute hidden truncate pointer-events-none text-2xl;
+    @apply pointer-events-none absolute hidden truncate text-2xl;
   }
 
   &:empty:before {
@@ -503,19 +502,19 @@ button.button-icon-only {
   }
 
   &:empty:after {
-    content: "";
+    content: '';
     @apply inline-block;
   }
 }
 
 .heyform-select-arrow-icon {
   svg {
-    @apply w-6 h-6;
+    @apply h-6 w-6;
   }
 }
 
 .heyform-select-popup {
-  @apply pt-2 bg-transparent max-h-60 overflow-auto focus:outline-none;
+  @apply max-h-60 overflow-auto bg-transparent pt-2 focus:outline-none;
   background-color: var(--heyform-background-color);
 
   .heyform-input {
@@ -536,12 +535,12 @@ button.button-icon-only {
 // ----------------------------------------------------------------------------
 // Blocks
 .heyform-render-root {
-	@apply w-screen h-screen overflow-hidden;
+  @apply h-screen w-screen overflow-hidden;
 }
 
 .heyform-root,
 .heyform-wrapper {
-  @apply relative w-full h-full;
+  @apply relative h-full w-full;
 }
 
 .heyform-root {
@@ -560,8 +559,25 @@ button.button-icon-only {
   will-change: width;
 
   &,
-  h1, h2, h3 {
-    font-family: var(--heyform-font-family), Public Sans, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  h1,
+  h2,
+  h3 {
+    font-family:
+      var(--heyform-font-family),
+      Public Sans,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      Segoe UI,
+      Roboto,
+      Helvetica Neue,
+      Arial,
+      Noto Sans,
+      sans-serif,
+      Apple Color Emoji,
+      Segoe UI Emoji,
+      Segoe UI Symbol,
+      Noto Color Emoji;
   }
 }
 
@@ -575,7 +591,7 @@ button.button-icon-only {
 
 .heyform-body,
 .heyform-block-container {
-  @apply absolute top-0 left-0 w-full h-full overflow-hidden;
+  @apply absolute left-0 top-0 h-full w-full overflow-hidden;
   z-index: 6;
 }
 
@@ -588,7 +604,7 @@ button.button-icon-only {
 
   &.heyform-dropdown-visible {
     .heyform-submit-container {
-      @apply opacity-0 pointer-events-none;
+      @apply pointer-events-none opacity-0;
     }
   }
 
@@ -598,7 +614,7 @@ button.button-icon-only {
 }
 
 .heyform-block {
-  @apply relative h-full md:absolute md:inset-0 md:h-auto z-10;
+  @apply relative z-10 h-full md:absolute md:inset-0 md:h-auto;
 
   &.heyform-block-float_left,
   &.heyform-block-split_left,
@@ -627,13 +643,15 @@ button.button-icon-only {
 
 .heyform-block-scroll,
 .heyform-scroll-wrapper {
-  @apply w-full h-full;
+  @apply h-full w-full;
 }
 
 .heyform-scroll-wrapper {
-  @apply relative px-6 md:px-20 overflow-x-hidden;
+  @apply relative overflow-x-hidden px-6 md:px-20;
   @extend .heyform-scrollbar;
-  transition: transform 500ms ease 0s, opacity 200ms ease 0s;
+  transition:
+    transform 500ms ease 0s,
+    opacity 200ms ease 0s;
   will-change: transform, opacity;
   z-index: 6;
 
@@ -676,7 +694,7 @@ button.button-icon-only {
 }
 
 .heyform-scroll-container {
-  @apply flex flex-col items-center justify-center min-h-full;
+  @apply flex min-h-full flex-col items-center justify-center;
 }
 
 .heyform-block-main {
@@ -685,7 +703,7 @@ button.button-icon-only {
 }
 
 .heyform-block-wrapper {
-  @apply mt-12 mb-24 md:mt-20 md:mb-36;
+  @apply mb-24 mt-12 md:mb-36 md:mt-20;
 }
 
 .heyform-block-header {
@@ -693,7 +711,7 @@ button.button-icon-only {
 }
 
 .heyform-block-title {
-  @apply text-xl md:text-2xl mb-2 font-medium;
+  @apply mb-2 text-xl font-medium md:text-2xl;
   color: var(--heyform-question-color);
 }
 
@@ -710,12 +728,12 @@ button.button-icon-only {
 }
 
 .heyform-block-number {
-  @apply text-base mb-1;
+  @apply mb-1 text-base;
   color: var(--heyform-label-color);
 }
 
 .heyform-skip-button {
-  @apply text-base px-3 py-2;
+  @apply px-3 py-2 text-base;
   color: var(--heyform-label-color);
 
   &:hover {
@@ -726,11 +744,11 @@ button.button-icon-only {
 // ----------------------------------------------------------------------------
 // Layout
 .heyform-layout {
-  @apply relative md:absolute rounded-lg pointer-events-none;
+  @apply pointer-events-none relative rounded-lg md:absolute;
   z-index: 4;
 
   img {
-    @apply block w-full h-full object-cover object-center rounded-lg;
+    @apply block h-full w-full rounded-lg object-cover object-center;
   }
 }
 
@@ -739,7 +757,7 @@ button.button-icon-only {
     @apply relative mb-8;
 
     img {
-      @apply inline-block w-auto h-auto rounded-none;
+      @apply inline-block h-auto w-auto rounded-none;
       max-width: 75%;
       max-height: 20rem;
     }
@@ -759,10 +777,10 @@ button.button-icon-only {
   @apply flex items-center justify-center;
 
   img {
-    @apply w-full h-full object-cover rounded-none;
+    @apply h-full w-full rounded-none object-cover;
 
     @media (min-width: 800px) {
-      @apply w-auto h-auto max-w-full;
+      @apply h-auto w-auto max-w-full;
       max-height: 70%;
     }
   }
@@ -770,7 +788,7 @@ button.button-icon-only {
 
 .heyform-layout-float_left,
 .heyform-layout-split_left {
-  @apply left-0 top-0 w-full md:w-1/2 h-64 md:h-full;
+  @apply left-0 top-0 h-64 w-full md:h-full md:w-1/2;
 }
 
 .heyform-layout-float_left {
@@ -788,7 +806,7 @@ button.button-icon-only {
 
 .heyform-layout-float_right,
 .heyform-layout-split_right {
-  @apply left-auto right-0 w-full md:w-1/2 h-64 md:h-full;
+  @apply left-auto right-0 h-64 w-full md:h-full md:w-1/2;
 }
 
 .heyform-layout-float_right {
@@ -804,11 +822,10 @@ button.button-icon-only {
   }
 }
 
-
 // ----------------------------------------------------------------------------
 // Group
 .heyform-block-group-container {
-  @apply flex items-center w-full mx-auto;
+  @apply mx-auto flex w-full items-center;
   max-width: 45rem;
   min-height: 3.75rem;
 
@@ -817,7 +834,7 @@ button.button-icon-only {
   }
 
   .heyform-block-title {
-    @apply flex-1 truncate ml-4 mb-0 text-xl;
+    @apply mb-0 ml-4 flex-1 truncate text-xl;
   }
 }
 
@@ -825,7 +842,7 @@ button.button-icon-only {
 // Welcome
 .heyform-empty-state {
   .heyform-block-title {
-    @apply text-3xl lg:text-4xl font-medium mb-5;
+    @apply mb-5 text-3xl font-medium lg:text-4xl;
   }
 
   .heyform-layout-inline img {
@@ -848,11 +865,11 @@ button.button-icon-only {
 // ----------------------------------------------------------------------------
 // Short text
 .heyform-input,
-.heyform-input[type="email"],
-.heyform-input[type="number"],
-.heyform-input[type="tel"],
+.heyform-input[type='email'],
+.heyform-input[type='number'],
+.heyform-input[type='tel'],
 .heyform-textarea {
-  @apply w-full p-0 pb-2 border-none bg-transparent text-2xl transition outline-none shadow-none;
+  @apply w-full border-none bg-transparent p-0 pb-2 text-2xl shadow-none outline-none transition;
   color: var(--heyform-answer-color);
   border-radius: 0;
   border-bottom: 1px solid var(--heyform-answer-opacity-80-color);
@@ -875,8 +892,8 @@ button.button-icon-only {
   min-height: 2.5rem;
 
   &:empty:before {
-    @apply absolute truncate pointer-events-none text-2xl;
-    content: attr(placeholder);
+    @apply pointer-events-none absolute truncate text-2xl;
+    content: attr(data-placeholder);
     color: var(--heyform-answer-opacity-30-color);
   }
 }
@@ -898,7 +915,7 @@ button.button-icon-only {
   }
 
   .heyform-radio {
-    @apply flex-none md:flex-1 mx-1 md:mx-0 w-14 md:w-auto h-14;
+    @apply mx-1 h-14 w-14 flex-none md:mx-0 md:w-auto md:flex-1;
   }
 
   .heyform-radio-container {
@@ -918,7 +935,7 @@ button.button-icon-only {
 }
 
 .heyform-opinion-scale-labels {
-  @apply flex items-center mt-1;
+  @apply mt-1 flex items-center;
   color: var(--heyform-answer-color);
 }
 
@@ -945,17 +962,17 @@ button.button-icon-only {
 
 .heyform-radio-label {
   .input {
-    @apply text-base p-0;
+    @apply p-0 text-base;
   }
 
   .input,
   .input-focused {
-    @apply px-0 border-none outline-none shadow-none;
+    @apply border-none px-0 shadow-none outline-none;
     box-shadow: none;
   }
 
   input {
-    @apply text-lg w-full;
+    @apply w-full text-lg;
     color: var(--heyform-answer-color);
 
     &::placeholder {
@@ -968,11 +985,11 @@ button.button-icon-only {
 // Picture choice
 .heyform-picture-choice {
   .heyform-radio-group {
-    @apply flex flex-wrap -mx-1 -mb-2 items-stretch;
+    @apply -mx-1 -mb-2 flex flex-wrap items-stretch;
   }
 
   .heyform-radio {
-    @apply w-1/2 md:w-1/4 px-1 mb-2;
+    @apply mb-2 w-1/2 px-1 md:w-1/4;
     height: 12rem;
 
     &:hover {
@@ -983,7 +1000,7 @@ button.button-icon-only {
   }
 
   .heyform-radio-container {
-    @apply relative flex-col p-2.5 w-full h-full;
+    @apply relative h-full w-full flex-col p-2.5;
   }
 
   .heyform-radio-content {
@@ -991,10 +1008,10 @@ button.button-icon-only {
   }
 
   .heyform-radio-image {
-    @apply py-2.5;
+    @apply pb-2.5;
 
     svg {
-      @apply w-8 h-8;
+      @apply h-8 w-8;
       color: var(--heyform-answer-opacity-60-color);
     }
   }
@@ -1003,13 +1020,13 @@ button.button-icon-only {
     @apply absolute right-0 top-0;
 
     svg {
-      @apply absolute top-1/2 left-1/2 -ml-7 mt-0.5;
+      @apply absolute left-1/2 top-1/2 -ml-7 mt-0.5;
       color: var(--heyform-background-color);
     }
 
     &:before {
-      @apply absolute right-0 top-0 w-0 h-0 rounded-r border;
-      content: "";
+      @apply absolute right-0 top-0 h-0 w-0 rounded-r border;
+      content: '';
       border-width: 1.5rem;
       border-style: solid;
       border-image: initial;
@@ -1022,7 +1039,7 @@ button.button-icon-only {
 // -----------------------------------------------------------------------------
 // File upload
 .heyform-file-uploader {
-  @apply flex items-center justify-center h-72 rounded transition cursor-pointer;
+  @apply flex h-72 cursor-pointer items-center justify-center rounded transition;
   color: var(--heyform-answer-opacity-60-color);
   border: 1px dashed var(--heyform-answer-color);
   background-color: var(--heyform-answer-opacity-10-color);
@@ -1034,7 +1051,7 @@ button.button-icon-only {
 
 .heyform-upload-file {
   color: var(--heyform-answer-color);
-  @apply px-4 break-all text-center;
+  @apply break-all px-4 text-center;
 }
 
 .heyform-file-uploader-dragging {
@@ -1042,11 +1059,11 @@ button.button-icon-only {
 }
 
 .heyform-upload-wrapper {
-  @apply flex flex-col items-center pointer-events-none;
+  @apply pointer-events-none flex flex-col items-center;
 }
 
 .heyform-upload-icon {
-  @apply w-20 h-20;
+  @apply h-20 w-20;
   color: var(--heyform-answer-opacity-30-color);
 
   path {
@@ -1063,12 +1080,11 @@ button.button-icon-only {
   @apply text-center;
 
   span {
-    @apply inline-block px-2 py-1 rounded text-sm;
+    @apply inline-block rounded px-2 py-1 text-sm;
     color: var(--heyform-answer-opacity-80-color);
     background-color: var(--heyform-answer-opacity-10-color);
   }
 }
-
 
 // -----------------------------------------------------------------------------
 // Signature
@@ -1078,12 +1094,12 @@ button.button-icon-only {
 
   &,
   canvas {
-    @apply w-full h-40 rounded;
+    @apply h-40 w-full rounded;
   }
 }
 
 .heyform-signature-bottom {
-  @apply flex items-center justify-between mt-2;
+  @apply mt-2 flex items-center justify-between;
 
   &,
   button.button {
@@ -1101,7 +1117,6 @@ button.button-icon-only {
   }
 }
 
-
 // ----------------------------------------------------------------------------
 // Rating
 .heyform-rating {
@@ -1110,11 +1125,11 @@ button.button-icon-only {
   }
 
   .rate-item {
-    @apply flex flex-col mx-1 md:mx-0 w-16 cursor-pointer;
+    @apply mx-1 flex w-16 cursor-pointer flex-col md:mx-0;
   }
 
   .heyform-icon {
-    @apply w-16 h-16 mb-2;
+    @apply mb-2 h-16 w-16;
   }
 
   .heyform-icon-stroke {
@@ -1143,7 +1158,7 @@ button.button-icon-only {
 // Phone number
 .heyform-phone-number {
   .heyform-input {
-    @apply w-80 ml-4;
+    @apply ml-4 w-80;
   }
 
   .heyform-select {
@@ -1152,7 +1167,7 @@ button.button-icon-only {
 
   .heyform-select-arrow-icon {
     svg {
-      @apply w-4 h-4;
+      @apply h-4 w-4;
     }
   }
 
@@ -1178,7 +1193,7 @@ button.button-icon-only {
 
   .heyform-date-divider {
     @media (max-width: 500px) {
-      @apply text-xl mb-2.5 mr-2 ml-2;
+      @apply mb-2.5 ml-2 mr-2 text-xl;
     }
   }
 
@@ -1203,7 +1218,7 @@ button.button-icon-only {
 }
 
 .heyform-date-label {
-  @apply text-sm mb-2;
+  @apply mb-2 text-sm;
   color: var(--heyform-answer-color);
 }
 
@@ -1224,7 +1239,7 @@ button.button-icon-only {
 
 .heyform-date-divider,
 .heyform-range-divider {
-  @apply text-2xl mb-2 mr-4 ml-5;
+  @apply mb-2 ml-5 mr-4 text-2xl;
   color: var(--heyform-answer-color);
 }
 
@@ -1250,7 +1265,7 @@ button.button-icon-only {
   .heyform-date-divider,
   .heyform-range-divider {
     @media (max-width: 500px) {
-      @apply text-xl mb-2.5 mr-2 ml-2;
+      @apply mb-2.5 ml-2 mr-2 text-xl;
     }
   }
 
@@ -1277,9 +1292,8 @@ button.button-icon-only {
 }
 
 .heyform-range-divider {
-  @apply pb-2 mx-12 mt-7;
+  @apply mx-12 mt-7 pb-2;
 }
-
 
 // ----------------------------------------------------------------------------
 // Input table
@@ -1302,7 +1316,7 @@ button.button-icon-only {
 
   tr {
     td {
-      @apply h-12 mb-1;
+      @apply mb-1 h-12;
       background: var(--heyform-answer-opacity-10-color);
       border-right: 1px solid var(--heyform-answer-opacity-10-color);
 
@@ -1320,14 +1334,14 @@ button.button-icon-only {
 
 .heyform-table-header {
   th {
-    @apply text-lg text-center;
+    @apply text-center text-lg;
     color: var(--heyform-answer-color);
   }
 }
 
 .heyform-table-row {
   .heyform-input {
-    @apply w-full h-full px-3 py-2 text-xl border-0 bg-transparent;
+    @apply h-full w-full border-0 bg-transparent px-3 py-2 text-xl;
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
 
@@ -1362,18 +1376,17 @@ button.button-icon-only {
   }
 }
 
-
 // ----------------------------------------------------------------------------
 // Payment
 .heyform-payment-header {
 }
 
 .heyform-payment-body {
-  @apply mt-8 px-8 pt-10 pb-0 rounded-xl;
+  @apply mt-8 rounded-xl px-8 pb-0 pt-10;
   background-color: var(--heyform-answer-opacity-10-color);
 
   .StripeElement {
-    @apply pt-1 pb-2;
+    @apply pb-2 pt-1;
     max-height: 2.625rem;
     border: none;
     border-bottom: 1px solid var(--heyform-answer-opacity-80-color);
@@ -1392,7 +1405,7 @@ button.button-icon-only {
   }
 
   .heyform-validation-wrapper {
-    @apply mt-2
+    @apply mt-2;
   }
 }
 
@@ -1406,18 +1419,17 @@ button.button-icon-only {
 }
 
 .heyform-payment-wrapper {
-  @apply flex items-start justify-items-stretch w-full space-x-4;
+  @apply flex w-full items-start justify-items-stretch space-x-4;
 
   .heyform-form-field {
     @apply flex-1;
   }
 }
 
-
 // ----------------------------------------------------------------------------
 // Header
 .heyform-header {
-  @apply absolute left-0 top-0 w-full px-4 py-2 md:py-4 z-20;
+  @apply absolute left-0 top-0 z-20 w-full px-4 py-2 md:py-4;
 }
 
 .heyform-header-wrapper {
@@ -1427,7 +1439,7 @@ button.button-icon-only {
 // ----------------------------------------------------------------------------
 // Footer
 .heyform-footer {
-  @apply absolute left-0 bottom-0 w-full p-4 z-20 pointer-events-none backdrop-blur-sm bg-white/30 md:backdrop-filter-none md:bg-transparent;
+  @apply pointer-events-none absolute bottom-0 left-0 z-20 w-full bg-white/30 p-4 backdrop-blur-sm md:bg-transparent md:backdrop-filter-none;
 }
 
 .heyform-footer-wrapper,
@@ -1438,7 +1450,7 @@ button.button-icon-only {
 }
 
 .heyform-footer-wrapper {
-  @apply justify-between pointer-events-none;
+  @apply pointer-events-none justify-between;
 }
 
 .heyform-footer-left,
@@ -1456,7 +1468,7 @@ button.button-icon-only {
 .heyform-countdown,
 .heyform-branding,
 .heyform-pagination button.button {
-  @apply px-2.5 py-2.5 md:py-0.5 shadow-none text-sm;
+  @apply px-2.5 py-2.5 text-sm shadow-none md:py-0.5;
   min-height: 1.875rem;
   background-color: var(--heyform-button-color);
   color: var(--heyform-button-text-color);
@@ -1488,12 +1500,12 @@ button.button-icon-only {
   @apply flex items-center;
 
   span {
-    @apply hidden md:block ml-2;
+    @apply ml-2 hidden md:block;
   }
 }
 
 .heyform-circular-progressbar {
-  @apply w-6 h-6 md:w-4 md:h-4;
+  @apply h-6 w-6 md:h-4 md:w-4;
 }
 
 .heyform-circular-circle {
@@ -1526,12 +1538,12 @@ button.button-icon-only {
     color: var(--heyform-button-text-color);
 
     svg {
-      @apply w-6 h-6;
+      @apply h-6 w-6;
     }
   }
 
   &[disabled] {
-    @apply opacity-100 cursor-default;
+    @apply cursor-default opacity-100;
 
     .button-trailing {
       @apply opacity-60;
@@ -1552,8 +1564,8 @@ button.heyform-pagination-previous {
   @apply relative rounded-r-none;
 
   &:after {
-    @apply absolute right-0 top-0 w-px h-full opacity-30;
-    content: "";
+    @apply absolute right-0 top-0 h-full w-px opacity-30;
+    content: '';
     background-color: var(--heyform-button-text-color);
   }
 }
@@ -1565,15 +1577,15 @@ button.heyform-pagination-previous {
 }
 
 .heyform-validation-error {
-  @apply inline-block px-2 py-1 text-red-600 bg-red-600 bg-opacity-10 rounded text-sm;
+  @apply inline-block rounded bg-red-600 bg-opacity-10 px-2 py-1 text-sm text-red-600;
 }
 
 .heyform-submit-container {
-  @apply flex items-center mt-8 transition-opacity duration-500;
+  @apply mt-8 flex items-center transition-opacity duration-500;
 }
 
 button.heyform-submit-button {
-  @apply relative inline-flex items-center justify-center px-5 py-1.5 text-lg font-medium shadow-none outline-none rounded-md;
+  @apply relative inline-flex items-center justify-center rounded-md px-5 py-1.5 text-lg font-medium shadow-none outline-none;
   min-width: 7.5rem;
   background-color: var(--heyform-button-color);
   color: var(--heyform-button-text-color);
@@ -1583,7 +1595,7 @@ button.heyform-submit-button {
   }
 
   svg {
-    @apply ml-2 -mr-1 h-5 w-5;
+    @apply -mr-1 ml-2 h-5 w-5;
   }
 
   .spin {
@@ -1611,7 +1623,7 @@ button.heyform-submit-button {
 // ----------------------------------------------------------------------------
 // Sidebar
 .heyform-sidebar {
-  @apply absolute top-0 right-0 w-80 h-full border-l z-10;
+  @apply absolute right-0 top-0 z-10 h-full w-80 border-l;
   background-color: var(--heyform-background-color);
   border-left-color: var(--heyform-group-background-color);
   transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1) 0s;
@@ -1619,7 +1631,7 @@ button.heyform-submit-button {
   will-change: transform;
 
   @media (max-width: 800px) {
-    @apply inset-0 w-full z-30 border-none;
+    @apply inset-0 z-30 w-full border-none;
   }
 }
 
@@ -1634,11 +1646,11 @@ button.heyform-submit-button {
 }
 
 .heyform-sidebar-container {
-  @apply flex flex-col h-full;
+  @apply flex h-full flex-col;
 }
 
 .heyform-sidebar-heading {
-  @apply flex items-center justify-between px-6 pt-6 pb-4;
+  @apply flex items-center justify-between px-6 pb-4 pt-6;
 
   button.button {
     margin-right: -0.3125rem;
@@ -1671,7 +1683,7 @@ button.heyform-submit-button {
 }
 
 .heyform-sidebar-question {
-  @apply pl-2 pr-6 py-1 cursor-pointer;
+  @apply cursor-pointer py-1 pl-2 pr-6;
 
   &.heyform-sidebar-question-selected {
     & > .heyform-sidebar-question-root {
@@ -1702,7 +1714,7 @@ button.heyform-submit-button {
 }
 
 .heyform-sidebar-question-toggle-collapse {
-  @apply flex items-center justify-center w-4 pr-2 text-gray-500 min-h-0 h-full;
+  @apply flex h-full min-h-0 w-4 items-center justify-center pr-2 text-gray-500;
   min-height: 1.5rem;
 }
 
@@ -1722,23 +1734,23 @@ button.heyform-submit-button {
     .heyform-footer {
       @apply border-t border-slate-100 bg-white;
     }
-  
+
     .heyform-footer-right {
       @apply justify-center;
     }
-  
+
     .heyform-branding {
-      @apply w-full flex items-center justify-center gap-2 text-base font-medium;
+      @apply flex w-full items-center justify-center gap-2 text-base font-medium;
 
       svg {
-        @apply block w-5 h-auto;
+        @apply block h-auto w-5;
       }
     }
   }
 }
 
 .heyform-select-clear {
-  @apply w-8 h-8 flex items-center justify-center mr-2 hover:opacity-80;
+  @apply mr-2 flex h-8 w-8 items-center justify-center hover:opacity-80;
 }
 
 // ----------------------------------------------------------------------------
@@ -1796,7 +1808,7 @@ button.heyform-submit-button {
   .heyform-block.heyform-block-float_right,
   .heyform-block.heyform-block-split_right {
     .heyform-scroll-wrapper {
-      @apply w-full min-h-0;
+      @apply min-h-0 w-full;
     }
   }
 
@@ -1927,7 +1939,7 @@ button.heyform-submit-button {
   }
 
   .heyform-block-wrapper {
-    @apply mt-12 mb-20;
+    @apply mb-20 mt-12;
   }
 
   .heyform-welcome-footer {
@@ -1940,13 +1952,13 @@ button.heyform-submit-button {
     .heyform-footer {
       @apply border-t border-gray-200;
     }
-  
+
     .heyform-footer-right {
       @apply justify-center;
     }
-  
+
     .heyform-branding {
-      @apply w-full bg-transparent text-black text-base font-bold text-center;
+      @apply w-full bg-transparent text-center text-base font-bold text-black;
     }
   }
 }

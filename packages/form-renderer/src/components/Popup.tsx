@@ -6,9 +6,9 @@ import { createPortal } from 'react-dom'
 import { usePopper } from 'react-popper'
 import { useTransition } from 'react-transition-state'
 
+import { TRANSITION_UNMOUNTED_STATES } from '../consts'
 import { IComponentProps } from '../typings'
 import { stopEvent } from '../utils'
-import { TRANSITION_UNMOUNTED_STATES } from '../consts'
 
 interface PortalProps {
   visible?: boolean
@@ -92,7 +92,10 @@ export const Popup: FC<PopupProps> = ({
     }
 
     return (
-      <div className={clsx('popup', `${transitionName}-${transitionState.status}`, className)} {...restProps}>
+      <div
+        className={clsx('popup', `${transitionName}-${transitionState.status}`, className)}
+        {...restProps}
+      >
         {mask && <div className="popup-mask" onClick={handleMaskClickCallback} />}
         <div
           ref={setPopperRef}
@@ -109,5 +112,11 @@ export const Popup: FC<PopupProps> = ({
     )
   }, [children, transitionState.status, styles, attributes])
 
-  return <>{!TRANSITION_UNMOUNTED_STATES.includes(transitionState.status) && <Portal visible={visible}>{memoPopup}</Portal>}</>
+  return (
+    <>
+      {!TRANSITION_UNMOUNTED_STATES.includes(transitionState.status) && (
+        <Portal visible={visible}>{memoPopup}</Portal>
+      )}
+    </>
+  )
 }

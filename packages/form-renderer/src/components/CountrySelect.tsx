@@ -139,7 +139,7 @@ export const CountrySelect: FC<CountrySelectProps> = ({
   const [highlighted, setHighlighted] = useState<string>()
   const [triggerStyle, setTriggerStyle] = useState<CSSProperties>()
   const [keyword, setKeyword] = useState<string>()
-  const [countries, setCountries] = useState<Array<typeof COUNTRIES[number]>>(COUNTRIES)
+  const [countries, setCountries] = useState<Array<(typeof COUNTRIES)[number]>>(COUNTRIES)
 
   const selected = useMemo(() => {
     return COUNTRIES.find(option => option.value === value)
@@ -299,7 +299,7 @@ export const CountrySelect: FC<CountrySelectProps> = ({
             {enableLabel && (
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              <span className="heyform-select-label" placeholder={placeholder}>
+              <span className="heyform-select-label" data-placeholder={placeholder}>
                 {selected && t(selected.label)}
               </span>
             )}

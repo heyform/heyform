@@ -1,3 +1,4 @@
+import { helper } from '@heyform-inc/utils'
 import { IconCheck, IconPhoto } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { FC, ReactNode, useCallback, useMemo } from 'react'
@@ -101,7 +102,10 @@ export const ChoiceRadio: FC<ChoiceRadioProps> = ({
         {enableImage && (
           <div className="heyform-radio-image">
             {isURL(image) ? (
-              <img src={image} alt={label} />
+              <img
+                src={image}
+                alt={helper.isValid(label) ? label : t('Choice {{index}}', { index: keyName })}
+              />
             ) : icon ? (
               icon
             ) : (

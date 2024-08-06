@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+
 import { IComponentProps } from '../../typings'
 
 export const LogoIcon: FC<IComponentProps<HTMLOrSVGElement>> = props => (

@@ -45,7 +45,7 @@ const Question: FC<QuestionProps> = ({ field, parent, selectedId, onClick }) => 
           {isGroup && (
             <CollapseIcon
               className={clsx({
-                'transform -rotate-90': isCollapsed
+                '-rotate-90 transform': isCollapsed
               })}
             />
           )}

@@ -55,12 +55,14 @@ export default {
   'Create a heyform': 'Utwórz heyform',
   "The form can't receive new submissions now.":
     'Formularz nie może teraz przyjmować nowych zgłoszeń.',
-  "This page doesn't exist": "Ta strona nie istnieje",
-  'If you have any questions, please contact us.': 'Jeśli masz jakieś pytania, skontaktuj się z nami.',
+  "This page doesn't exist": 'Ta strona nie istnieje',
+  'If you have any questions, please contact us.':
+    'Jeśli masz jakieś pytania, skontaktuj się z nami.',
   Questions: 'Pytania',
   'Search country': 'Wyszukaj kraj',
   'Previous question': 'Poprzednie pytanie',
   'Next question': 'Następne pytanie',
+  'Choice {{index}}': 'Wybór {{index}}',
   Other: 'Inne',
   'Type your answer': 'Wpisz swoją odpowiedź',
   'Your credit card will be charged': 'Twoja karta kredytowa zostanie obciążona',

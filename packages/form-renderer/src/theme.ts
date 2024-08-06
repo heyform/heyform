@@ -62,13 +62,17 @@ export const DEFAULT_THEME: FormTheme = {
 }
 
 export function getWebFontURL(name?: string | string[]) {
-  const fontNames = ((helper.isArray(name) ? name : [name]) as string[]).filter(row => row && GOOGLE_FONTS.includes(row))
+  const fontNames = ((helper.isArray(name) ? name : [name]) as string[]).filter(
+    row => row && GOOGLE_FONTS.includes(row)
+  )
 
   if (helper.isEmpty(fontNames)) {
     fontNames.push(DEFAULT_THEME.fontFamily!)
   }
 
-  const families = fontNames.map(name => `family=${name.replace(/\s+/g, '+')}:wght@400;500;600;700;800`)
+  const families = fontNames.map(
+    name => `family=${name.replace(/\s+/g, '+')}:wght@400;500;600;700;800`
+  )
 
   return `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap`
 }

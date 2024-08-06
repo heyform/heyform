@@ -25,20 +25,21 @@ export const Submit: FC<SubmitProps> = ({
 }) => {
   return (
     <div className={clsx('heyform-submit-container', className)}>
-      <button
-        className="heyform-submit-button"
-        type="submit"
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {loading && <div className="absolute inset-0 flex items-center justify-center"><Loader /></div>}
-        <div className={clsx('w-full flex items-center justify-center', {
-          'justify-between': !!icon,
-          'opacity-0': loading
-        })}>
-          <span>{text}</span>
+      <button className="heyform-submit-button" type="submit" disabled={disabled} onClick={onClick}>
+        {loading && (
+          <span className="absolute inset-0 flex items-center justify-center">
+            <Loader />
+          </span>
+        )}
+        <span
+          className={clsx('flex w-full items-center justify-center', {
+            'justify-between': !!icon,
+            'opacity-0': loading
+          })}
+        >
+          {text}
           {icon}
-        </div>
+        </span>
       </button>
       {helper}
     </div>
