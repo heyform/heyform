@@ -723,6 +723,7 @@ button.button-icon-only {
 .heyform-block-title,
 .heyform-block-description {
   a {
+    @apply underline;
     color: var(--heyform-answer-color);
   }
 }
@@ -911,7 +912,7 @@ button.button-icon-only {
   }
 
   .heyform-radio-group {
-    @apply flex flex-wrap items-center justify-center md:justify-start md:space-x-2;
+    @apply flex flex-wrap items-center md:space-x-2;
   }
 
   .heyform-radio {
@@ -1121,7 +1122,7 @@ button.button-icon-only {
 // Rating
 .heyform-rating {
   .rate {
-    @apply flex-wrap justify-center md:justify-start md:space-x-2;
+    @apply flex-wrap md:space-x-2;
   }
 
   .rate-item {
@@ -1831,7 +1832,6 @@ button.heyform-submit-button {
   }
 
   .heyform-opinion-scale .heyform-radio-group {
-    justify-content: center;
     @apply space-x-0;
   }
 
