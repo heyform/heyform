@@ -181,6 +181,9 @@ function serialize(schemas?: any[], option?: HTMLWalkOptions): string {
             contenteditable: 'false',
             'data-variable': attributes.id
           }
+        } else if (tag === 'a') {
+          attributes.target = '_blank'
+          attributes.rel = 'noreferrer'
         }
 
         property = Object.keys(attributes!)
