@@ -155,7 +155,7 @@ export function getThemeStyle(theme: FormTheme, query?: Record<string, any>): st
     background-position: center;
     pointer-events: none;
     background-color: var(--heyform-background-color);
-    ${theme.backgroundImage ? `background-image: url(${theme.backgroundImage});` : ''}
+    ${theme.backgroundImage ? (helper.isURL(theme.backgroundImage) ? `background-image: url(${theme.backgroundImage});` : `background-image: ${theme.backgroundImage}`) : ''}
   }
 
   .heyform-block-group {
