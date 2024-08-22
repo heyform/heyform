@@ -216,7 +216,7 @@ export interface FormTheme {
 }
 
 export interface ThemeSettings {
-  themeId?: string
+  logo?: string
   theme?: FormTheme
 }
 
