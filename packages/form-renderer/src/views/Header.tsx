@@ -31,10 +31,20 @@ export const Header: FC = () => {
   return (
     <div className="heyform-header">
       <div className="heyform-header-wrapper">
-        {state.settings?.enableTimeLimit && state.settings.timeLimit && (
-          <Countdown settings={state.settings!} onEnd={handleCountdownEndCallback} />
-        )}
-        {state.settings?.enableProgress && <Progress />}
+        <div className="heyform-header-left">
+          {(state.settings as any)?.whitelabelBranding && state.logo && (
+            <div className="heyform-logo">
+              <img src={state.logo} alt="" />
+            </div>
+          )}
+        </div>
+
+        <div className="heyform-header-right">
+          {state.settings?.enableTimeLimit && state.settings.timeLimit && (
+            <Countdown settings={state.settings!} onEnd={handleCountdownEndCallback} />
+          )}
+          {state.settings?.enableProgress && <Progress />}
+        </div>
       </div>
     </div>
   )

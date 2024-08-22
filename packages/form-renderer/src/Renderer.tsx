@@ -95,7 +95,8 @@ function initStore(
     settings: form.settings,
     autoSave,
     locale,
-    theme: getTheme(form.themeSettings?.theme)
+    theme: getTheme(form.themeSettings?.theme),
+    logo: form.themeSettings?.logo
   }
 }
 

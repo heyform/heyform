@@ -1434,7 +1434,20 @@ button.button-icon-only {
 }
 
 .heyform-header-wrapper {
-  @apply flex items-center justify-end;
+  @apply flex items-center justify-between;
+}
+
+.heyform-header-left,
+.heyform-header-right {
+  @apply flex items-center;
+}
+
+.heyform-logo {
+  @apply pt-2 pl-2;
+
+  img {
+    @apply block h-10 w-auto sm:h-8;
+  }
 }
 
 // ----------------------------------------------------------------------------

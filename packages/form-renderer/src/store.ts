@@ -110,6 +110,7 @@ export interface IState {
   alwaysShowNextButton?: boolean
   enableQuestionList?: boolean
   enableNavigationArrows?: boolean
+  logo?: string
   theme: FormTheme
   stripe?: IStripe
   onSubmit?: (values: Record<string, any>, isPartial?: boolean, stripe?: IStripe) => Promise<void>

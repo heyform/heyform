@@ -1,6 +1,6 @@
 {
   "name": "@heyform-inc/form-renderer",
-  "version": "0.2.6",
+  "version": "0.2.8",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -30,7 +30,7 @@
   },
   "peerDependencies": {
     "@heyform-inc/answer-utils": "^1.1.1",
-    "@heyform-inc/shared-types-enums": "^1.1.10",
+    "@heyform-inc/shared-types-enums": "^1.2.0",
     "@heyform-inc/utils": "^1.2.2",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-tooltip": "^1.1.2",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@heyform-inc/answer-utils": "^1.1.1",
-    "@heyform-inc/shared-types-enums": "^1.1.10",
+    "@heyform-inc/shared-types-enums": "^1.2.0",
     "@heyform-inc/utils": "^1.2.2",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-tooltip": "^1.1.2",
