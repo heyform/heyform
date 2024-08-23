@@ -32,6 +32,13 @@ export * from './image.controller'
 export * from './upload.controller'
 
 /**
+ * Form
+ *
+ * /form/* (must be put before dashboard controller)
+ */
+export * from './form.controller'
+
+/**
  * The dashboard controller must be put at the end,
  * cause the dashboard route is "/*"
  */
