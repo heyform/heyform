@@ -31,7 +31,8 @@ export class UploadController {
     })
   )
   async index(@UploadedFile() file: any): Promise<{ filename: string; url: string; size: number }> {
-    let url: string = APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${file.filename}`
+    let url: string =
+      APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${encodeURIComponent(file.filename)}`
 
     if (file.location) {
       if (helper.isValid(S3_PUBLIC_URL)) {
