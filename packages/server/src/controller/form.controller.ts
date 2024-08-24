@@ -5,6 +5,8 @@ import { Response } from 'express'
 export class FormController {
   @Get('/form/*')
   index(@Res() res: Response) {
-    return res.render('index')
+    return res.render('index', {
+      rendererData: {}
+    })
   }
 }
