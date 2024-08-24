@@ -1,4 +1,3 @@
-import type { FormField } from '@heyform-inc/shared-types-enums'
 import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect } from 'react'
@@ -8,16 +7,20 @@ import { Branding } from '../views/Branding'
 import type { BlockProps } from './Block'
 import { Block } from './Block'
 
+const isURL = (arg: any) => /^https?:\/\//i.test(arg)
+
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
 
   useEffect(() => {
-    if (
-      state.customUrlRedirects &&
-      field.properties?.redirectOnCompletion &&
-      field.properties?.redirectUrl
-    ) {
-      window.location.href = field.properties.redirectUrl
+    let redirectUrl = field.properties?.redirectUrl
+
+    if (state.customUrlRedirects && field.properties?.redirectOnCompletion && redirectUrl) {
+      if (!isURL(redirectUrl)) {
+        redirectUrl = 'https://' + redirectUrl
+      }
+
+      window.location.href = redirectUrl
     }
   }, [])
 
