@@ -1,10 +1,11 @@
 import { helper } from '@heyform-inc/utils'
-import type { ChangeEvent, FC } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import type { ChangeEvent, FC, KeyboardEvent, CompositionEvent, Ref } from 'react'
+import { useEffect, useRef, useState, useImperativeHandle } from 'react'
 
 import { IComponentProps } from '../typings'
 
-interface InputProps extends IComponentProps {
+interface InputProps extends Omit<IComponentProps, 'onKeyDown'> {
+  ref?: Ref<InputRef>
   type?: 'text' | 'email' | 'number' | 'tel'
   disabled?: boolean
   autoFocus?: boolean
@@ -12,23 +13,31 @@ interface InputProps extends IComponentProps {
   max?: number
   value?: any
   placeholder?: string
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>, isCompositionStart: boolean) => void
   onChange?: (value?: any) => void
 }
 
+export interface InputRef {
+  focus: () => void
+  blur: () => void
+}
+
 export const Input: FC<InputProps> = ({
+  ref,
   type,
   value: rawValue = '',
   disabled,
   autoFocus,
+  onKeyDown,
   onChange,
   ...restProps
 }) => {
-  const ref = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const lockRef = useRef(false)
 
   const [value, setValue] = useState(rawValue)
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+  function getValue(event: any) {
     let newValue: any = event.target.value
 
     /**
@@ -47,24 +56,44 @@ export const Input: FC<InputProps> = ({
       }
     }
 
+    return newValue
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const newValue = getValue(event)
+
     setValue(newValue)
-
-    /**
-     * see https://developer.mozilla.org/en-US/docs/Web/API/Element/compositionstart_event
-     */
-    if (event.type === 'compositionstart') {
-      lockRef.current = true
-      return
-    }
-
-    if (event.type === 'compositionend') {
-      lockRef.current = false
-    }
 
     if (!lockRef.current) {
       onChange?.(newValue)
     }
   }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    onKeyDown?.(event, lockRef.current)
+  }
+
+  function handleCompositionStart() {
+    lockRef.current = true
+  }
+
+  function handleCompositionEnd(event: CompositionEvent<HTMLInputElement>) {
+    lockRef.current = false
+    onChange?.(getValue(event))
+  }
+
+  useImperativeHandle<InputRef, InputRef>(
+    ref,
+    () => ({
+      focus() {
+        inputRef.current?.focus()
+      },
+      blur() {
+        inputRef.current?.blur()
+      }
+    }),
+    []
+  )
 
   useEffect(() => {
     if (rawValue !== value) {
@@ -74,19 +103,22 @@ export const Input: FC<InputProps> = ({
   }, [rawValue])
 
   useEffect(() => {
-    if (ref.current && autoFocus) {
-      ref.current.focus()
+    if (inputRef.current && autoFocus) {
+      inputRef.current.focus()
     }
-  }, [ref])
+  }, [inputRef])
 
   return (
     <input
-      ref={ref}
+      ref={inputRef}
       className="input heyform-input"
       type={type}
       value={value as string}
       disabled={disabled}
       onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
       {...restProps}
     />
   )
