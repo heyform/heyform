@@ -18,7 +18,8 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
   const options = useChoicesOption(
     field.properties?.choices,
     field.properties?.randomize,
-    state.translations?.[state.locale]?.[field.id]?.choices
+    state.translations?.[state.locale]?.[field.id]?.choices,
+    field.properties?.badge
   )
   const { min, max, allowMultiple } = useSelectionRange(
     field.properties?.allowMultiple,
@@ -94,6 +95,8 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
             options={options}
             allowMultiple={field.properties?.allowMultiple}
             allowOther={field.properties?.allowOther}
+            badge={field.properties?.badge}
+            verticalAlignment={field.properties?.verticalAlignment}
             isOtherFilled={isOtherFilled}
             max={field.validations?.max ?? 0}
           />

@@ -1,9 +1,9 @@
-import type { Choice } from '@heyform-inc/shared-types-enums'
+import { type Choice, ChoiceBadgeEnum } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 import type { WheelEvent } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
-import { CHAR_A_KEY_CODE } from '../consts'
+import { CHAR_A_KEY_CODE, NUMBER_ONE_KEY_CODE } from '../consts'
 import { GlobalTimeout } from '../utils'
 
 interface SelectionRange {
@@ -19,10 +19,19 @@ function resetNumber(num?: number, defaultValue?: number): number {
   return defaultValue!
 }
 
+export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
+  if (badge === ChoiceBadgeEnum.NUMBER) {
+    return String.fromCharCode(NUMBER_ONE_KEY_CODE + index)
+  }
+
+  return String.fromCharCode(CHAR_A_KEY_CODE + index)
+}
+
 export function useChoicesOption(
   choices?: Choice[],
   randomize = false,
-  translations: Record<string, any> = {}
+  translations: Record<string, any> = {},
+  badge = ChoiceBadgeEnum.LETTER
 ): any[] {
   return useMemo(() => {
     if (!helper.isValidArray(choices)) {
@@ -39,7 +48,7 @@ export function useChoicesOption(
       const label = translations?.[choice.id]
 
       return {
-        keyName: String.fromCharCode(CHAR_A_KEY_CODE + index),
+        keyName: getChoiceKeyName(badge, index),
         label: label || choice.label,
         value: choice.id,
         image: choice.image

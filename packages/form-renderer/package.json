@@ -1,6 +1,6 @@
 {
   "name": "@heyform-inc/form-renderer",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -30,7 +30,7 @@
   },
   "peerDependencies": {
     "@heyform-inc/answer-utils": "^1.1.1",
-    "@heyform-inc/shared-types-enums": "^1.2.0",
+    "@heyform-inc/shared-types-enums": "^1.2.2",
     "@heyform-inc/utils": "^1.2.2",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-tooltip": "^1.1.2",
@@ -41,8 +41,8 @@
     "i18next": "^23.12.2",
     "libphonenumber-js": "^1.11.5",
     "rc-field-form": "^2.2.1",
-    "react": "^18.2.0 || ^19",
-    "react-dom": "^18.2.0 || ^19",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-i18next": "^15.0.0",
     "react-popper": "^2.3.0",
     "react-transition-state": "^2.1.1",
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@heyform-inc/answer-utils": "^1.1.1",
-    "@heyform-inc/shared-types-enums": "^1.2.0",
+    "@heyform-inc/shared-types-enums": "^1.2.2",
     "@heyform-inc/utils": "^1.2.2",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-tooltip": "^1.1.2",

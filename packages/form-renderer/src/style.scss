@@ -948,6 +948,26 @@ button.button-icon-only {
     flex-flow: column wrap;
     -webkit-box-align: stretch;
     align-items: stretch;
+
+    &.heyform-radio-group-horizontal {
+      @apply sm:w-full sm:flex-row sm:gap-2;
+
+      .heyform-radio {
+        @apply sm:flex-1 sm:max-w-[calc(33.33%-0.5rem)] sm:mb-0 sm:self-stretch;
+      }
+
+      .heyform-radio-container {
+        @apply sm:h-full;
+      }
+
+      .heyform-radio-hotkey {
+        @apply sm:self-start;
+      }
+
+      .heyform-radio-label {
+        @apply sm:leading-[1.2];
+      }
+    }
   }
 
   .heyform-radio {
