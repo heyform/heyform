@@ -2,6 +2,7 @@ import type {
   ActionEnum,
   CalculateEnum,
   CaptchaKindEnum,
+  ChoiceBadgeEnum,
   ComparisonEnum,
   FieldKindEnum,
   FieldLayoutAlignEnum,
@@ -111,6 +112,8 @@ export interface Property {
   choices?: Choice[]
   randomize?: boolean
   other?: string
+  badge?: ChoiceBadgeEnum // default is ChoiceBadgeEnum.LETTER
+  verticalAlignment?: boolean
 
   // Only for group
   fields?: FormField[]

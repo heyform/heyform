@@ -72,6 +72,11 @@ export enum FieldKindEnum {
   HIDDEN_CHECKBOX = 'hidden_checkbox'
 }
 
+export enum ChoiceBadgeEnum {
+  LETTER = 'letter',
+  NUMBER = 'number'
+}
+
 export enum FieldLayoutAlignEnum {
   INLINE = 'inline',
   FLOAT_LEFT = 'float_left',
