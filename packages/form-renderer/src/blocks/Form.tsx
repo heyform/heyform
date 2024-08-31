@@ -160,6 +160,7 @@ export const Form: FC<FormProps> = ({
 
         const thankYouFieldId = getNavigateFieldId(
           field,
+          state.thankYouFields,
           state.logics,
           state.parameters,
           values,

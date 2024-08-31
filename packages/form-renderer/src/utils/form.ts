@@ -248,11 +248,16 @@ export function removeHeading(title?: string) {
 
 export function getNavigateFieldId(
   field: FormField,
+  thankYouFields: FormField[] = [],
   logics: Logic[] = [],
   variables: Variable[] = [],
   fieldValues: Record<string, any> = {},
   variableValues: Record<string, any> = {}
 ) {
+  if (helper.isEmpty(thankYouFields)) {
+    return
+  }
+
   const logic = logics.find(l => l.fieldId === field.id)
 
   if (logic) {
@@ -264,7 +269,12 @@ export function getNavigateFieldId(
       const isValidated = validateCondition(field, condition, fieldValues)
 
       if (isValidated) {
-        return (action as NavigateAction).fieldId
+        const { fieldId } = action as NavigateAction
+        const index = thankYouFields.findIndex(f => f.id === fieldId)
+
+        if (index > -1) {
+          return fieldId
+        }
       }
     }
   }
@@ -281,7 +291,12 @@ export function getNavigateFieldId(
         const isValidated = validateCondition(_field, condition, variableValues)
 
         if (isValidated) {
-          return (action as NavigateAction).fieldId
+          const { fieldId } = action as NavigateAction
+          const index = thankYouFields.findIndex(f => f.id === fieldId)
+  
+          if (index > -1) {
+            return fieldId
+          }
         }
       }
     }
