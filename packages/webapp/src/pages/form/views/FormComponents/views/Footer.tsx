@@ -71,8 +71,6 @@ export const Footer: FC = () => {
               </div>
             </Tooltip>
           </div>
-
-          <Branding />
         </div>
       </div>
     </div>

@@ -20,7 +20,6 @@ export const Welcome: FC<BlockProps> = ({ field, ...restProps }) => {
   return (
     <>
       <EmptyState {...restProps} className="heyform-welcome" field={field} onClick={handleClick} />
-      <Branding />
     </>
   )
 }

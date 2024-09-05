@@ -18,8 +18,6 @@ const WorkspaceSettings: FC<IModalProps> = ({ visible, onClose }) => {
           <p className="mt-1 text-sm text-slate-500">{t('workspace.settings.subTitle')}</p>
         </div>
 
-        <Branding />
-
         <div className="border-t-blue-gray-200 mt-6 border-t" />
 
         {/* Delete workspace */}

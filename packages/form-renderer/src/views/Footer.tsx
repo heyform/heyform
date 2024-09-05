@@ -68,8 +68,6 @@ export const Footer: FC = () => {
               </>
             )}
           </div>
-
-          <Branding />
         </div>
       </div>
     </div>
