@@ -3,8 +3,7 @@ import { helper } from '@heyform-inc/utils'
 import type { WheelEvent } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
-import { CHAR_A_KEY_CODE, NUMBER_ONE_KEY_CODE } from '../consts'
-import { GlobalTimeout } from '../utils'
+import { GlobalTimeout, getChoiceKeyName } from '../utils'
 
 interface SelectionRange {
   allowMultiple: boolean
@@ -18,15 +17,6 @@ function resetNumber(num?: number, defaultValue?: number): number {
   }
   return defaultValue!
 }
-
-export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
-  if (badge === ChoiceBadgeEnum.NUMBER) {
-    return String.fromCharCode(NUMBER_ONE_KEY_CODE + index)
-  }
-
-  return String.fromCharCode(CHAR_A_KEY_CODE + index)
-}
-
 export function useChoicesOption(
   choices?: Choice[],
   randomize = false,

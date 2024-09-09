@@ -3,9 +3,8 @@ import { helper } from '@heyform-inc/utils'
 import clsx from 'clsx'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getChoiceKeyName } from '../blocks/hook'
 import { IComponentProps } from '../typings'
-import { useTranslation } from '../utils'
+import { getChoiceKeyName, useTranslation } from '../utils'
 import type { ChoiceRadioOption } from './ChoiceRadio'
 import { ChoiceRadio } from './ChoiceRadio'
 

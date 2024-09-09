@@ -6,6 +6,7 @@ import {
 } from '@heyform-inc/answer-utils'
 import {
   ActionEnum,
+  ChoiceBadgeEnum,
   FORM_FIELD_KINDS,
   FieldKindEnum,
   FormField,
@@ -15,7 +16,7 @@ import {
 } from '@heyform-inc/shared-types-enums'
 import { helper, type } from '@heyform-inc/utils'
 
-import { CHAR_A_KEY_CODE } from '../consts'
+import { CHAR_A_KEY_CODE, NUMBER_ONE_KEY_CODE } from '../consts'
 import type { AnyMap, IFormField, IPartialFormField } from '../typings'
 
 const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
@@ -293,7 +294,7 @@ export function getNavigateFieldId(
         if (isValidated) {
           const { fieldId } = action as NavigateAction
           const index = thankYouFields.findIndex(f => f.id === fieldId)
-  
+
           if (index > -1) {
             return fieldId
           }
@@ -301,4 +302,12 @@ export function getNavigateFieldId(
       }
     }
   }
+}
+
+export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
+  if (badge === ChoiceBadgeEnum.NUMBER) {
+    return String.fromCharCode(NUMBER_ONE_KEY_CODE + index)
+  }
+
+  return String.fromCharCode(CHAR_A_KEY_CODE + index)
 }
