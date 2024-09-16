@@ -76,42 +76,6 @@ export class ExportFileService {
     })
   }
 
-  exportCsv(formFields: FormField[], submissions: SubmissionModel[]): string {
-    const fields = formFields.filter(field => !STATEMENT_FIELD_KINDS.includes(field.kind))
-
-    const header: string[] = [
-      '#',
-      ...fields.map(field => `"${field.title}"`),
-      'Start Date (UTC)',
-      'Submit Date (UTC)'
-    ]
-    const records: string[] = [header.join(',')]
-
-    for (const submission of submissions) {
-      const record: string[] = [submission.id]
-
-      for (const field of fields) {
-        const answer = submission.answers.find(answer => answer.id === field.id)
-
-        if (helper.isEmpty(answer)) {
-          record.push('')
-        } else {
-          record.push(this.parseAnswer(answer))
-        }
-      }
-
-      const startAt = submission.startAt ? unixDate(submission.startAt!).toISOString() : ''
-      const endAt = submission.startAt ? unixDate(submission.endAt!).toISOString() : ''
-
-      record.push(startAt)
-      record.push(endAt)
-
-      records.push(record.join(','))
-    }
-
-    return records.join('\n')
-  }
-
   private parseAnswer(answer: Answer): string {
     const value = answer.value
     let result = ''
