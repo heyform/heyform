@@ -35,7 +35,11 @@ export class ExportSubmissionsController {
       throw new BadRequestException('The submissions does not exist')
     }
 
-    const data = await this.exportFileService.csv(flattenFields(form.fields), submissions)
+    const data = await this.exportFileService.csv(
+      flattenFields(form.fields),
+      form.hiddenFields,
+      submissions
+    )
     const dateStr = date().format('YYYY-MM-DD')
     const filename = `${encodeURIComponent(form.name)}-${dateStr}.csv`
 
