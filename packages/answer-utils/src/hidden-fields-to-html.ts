@@ -7,7 +7,7 @@ export function hiddenFieldsToHtml(hiddenFields: HiddenFieldAnswer[]): string {
     .map(hiddenField => {
       return `
 <li>
-  <h3>${hiddenField.title}</h3>
+  <h3>${hiddenField.name}</h3>
   <p>${hiddenField.value}</p>
 </li>
 `
