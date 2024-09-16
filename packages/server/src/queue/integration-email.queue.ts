@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 
-import { answersToHtml } from '@heyform-inc/answer-utils'
+import { answersToHtml, hiddenFieldsToHtml } from '@heyform-inc/answer-utils'
 
 import { APP_HOMEPAGE_URL } from '@environments'
 import { FormService, IntegrationService, MailService, SubmissionService } from '@service'
@@ -28,7 +28,10 @@ export class IntegrationEmailQueue extends BaseQueue {
     ])
     const form = await this.formService.findById(submission.formId)
 
-    const html = answersToHtml(submission.answers)
+    const html = [
+      answersToHtml(submission.answers),
+      hiddenFieldsToHtml(submission.hiddenFields)
+    ].join('')
     const { email } = mapToObject(integration.attributes)
 
     await this.mailService.submissionNotification(email, {
