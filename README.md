@@ -75,6 +75,10 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 	<img src="https://d16t0pc4846x52.cloudfront.net/deploylobe.svg" alt="Deploy to RepoCloud" height="36" />
 </a>
 
+<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-a47e56f0ea9f460d8d33" style="margin-left:24px">
+	<img src="https://svgshare.com/i/1AVg.svg" alt="Deploy to Alibaba Cloud" height="36" />
+</a>
+
 ## Local development
 
 Follow the [local installation instructions](https://docs.heyform.net/open-source/local-development) to run the project locally.
