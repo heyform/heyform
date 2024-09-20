@@ -1,4 +1,11 @@
 /**
+ * Health
+ *
+ * /health
+ */
+export * from './health.controller'
+
+/**
  * App connect
  *
  * /connect/stripe/callback
