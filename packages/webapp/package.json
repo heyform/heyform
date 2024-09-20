@@ -16,7 +16,7 @@
     "@apollo/client": "^3.5.9",
     "@floating-ui/react": "^0.19.2",
     "@headlessui/react": "^1.6.6",
-    "@heyform-inc/answer-utils": "^1.0.11",
+    "@heyform-inc/answer-utils": "^1.2.0",
     "@heyform-inc/shared-types-enums": "^1.1.4",
     "@heyform-inc/utils": "^1.0.9",
     "@popperjs/core": "^2.11.5",
