@@ -1,6 +1,7 @@
 import { FieldKindEnum, FileUploadValue, FormModel } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 
+import { flattenFieldsWithGroups } from '@/pages/form/views/FormComponents'
 import { AppService } from '@/service'
 
 interface UploaderField {
@@ -12,13 +13,10 @@ interface UploaderField {
 const UPLOAD_FIELD_KINDS = [FieldKindEnum.SIGNATURE, FieldKindEnum.FILE_UPLOAD]
 
 export class Uploader {
-  private readonly formId!: string
   private fields: UploaderField[] = []
 
   constructor(form: FormModel, values: any) {
-    this.formId = form.id
-
-    form.fields!.forEach(row => {
+    flattenFieldsWithGroups(form.fields!).forEach(row => {
       if (UPLOAD_FIELD_KINDS.includes(row.kind)) {
         let value = values[row.id]
 
