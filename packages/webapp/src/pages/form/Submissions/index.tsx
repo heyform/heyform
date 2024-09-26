@@ -1,10 +1,10 @@
 import { Answer, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
 import { helper, parseNumber } from '@heyform-inc/utils'
-import { IconClipboardCheck, IconDatabase } from '@tabler/icons-react'
+import { IconDatabase } from '@tabler/icons-react'
 import throttle from 'lodash/throttle'
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { Async, Pagination } from '@/components'
 import { Button, EmptyStates, Spin, notification } from '@/components/ui'
@@ -23,9 +23,9 @@ const Submissions: FC = () => {
   const navigate = useNavigate()
   const { workspaceId, projectId, formId, category: rawCategory } = useParam()
   const category: any = helper.isValid(rawCategory) ? rawCategory : SubmissionCategoryEnum.INBOX
-  const { page: rawPage } = useQuery()
+  const [searchParams] = useSearchParams()
   const pageSize = 30
-  const page = parseNumber(rawPage, 1)!
+  const page = useMemo(() => parseNumber(searchParams.get('page'), 1)!, [searchParams])
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set())
   const [form, setForm] = useState<FormModel | null>(null)
   const [total, setTotal] = useState(0)
