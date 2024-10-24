@@ -16,7 +16,7 @@ import {
 } from '@heyform-inc/shared-types-enums'
 import { helper, type } from '@heyform-inc/utils'
 
-import { CHAR_A_KEY_CODE, NUMBER_ONE_KEY_CODE } from '../consts'
+import { CHAR_A_KEY_CODE } from '../consts'
 import type { AnyMap, IFormField, IPartialFormField } from '../typings'
 
 const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
@@ -306,8 +306,15 @@ export function getNavigateFieldId(
 
 export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
   if (badge === ChoiceBadgeEnum.NUMBER) {
-    return String.fromCharCode(NUMBER_ONE_KEY_CODE + index)
+    return index + 1
   }
 
-  return String.fromCharCode(CHAR_A_KEY_CODE + index)
+  if (index >= 26) {
+    const prefix = String.fromCharCode(CHAR_A_KEY_CODE + Math.floor((index - 26) / 10))
+    const suffix = (index - 26) % 10
+
+    return `${prefix}${suffix}`
+  } else {
+    return String.fromCharCode(CHAR_A_KEY_CODE + index)
+  }
 }
