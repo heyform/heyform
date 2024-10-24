@@ -15,11 +15,15 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
     let redirectUrl = field.properties?.redirectUrl
 
     if (state.customUrlRedirects && field.properties?.redirectOnCompletion && redirectUrl) {
+      const delay = (field.properties?.redirectDelay || 0) * 1_000
+
       if (!isURL(redirectUrl)) {
         redirectUrl = 'https://' + redirectUrl
       }
 
-      window.location.href = redirectUrl
+      setTimeout(() => {
+        window.location.href = redirectUrl as string
+      }, delay)
     }
   }, [])
 
