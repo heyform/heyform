@@ -1,6 +1,7 @@
 export * from './components/Button'
 export * from './components/FlagIcon'
 export * from './components/Input'
+export { AutoResizeTextarea } from './components/Textarea'
 export * from './components/Rate'
 export * from './consts'
 export * from './blocks/SuspendedMessage'

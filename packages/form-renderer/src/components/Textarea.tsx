@@ -1,5 +1,8 @@
-import type { ClipboardEvent, FC, KeyboardEvent } from 'react'
-import { startTransition, useCallback, useEffect, useRef, useState } from 'react'
+import type { ClipboardEvent, FC, KeyboardEvent, ChangeEvent, CompositionEvent, Ref } from 'react'
+import { startTransition, useCallback, useEffect, useRef, useState, useImperativeHandle } from 'react'
+
+import { IComponentProps } from '../typings'
+import { InputRef } from './Input'
 
 import { preventDefault, stopPropagation, useTranslation } from '../utils'
 
@@ -7,6 +10,16 @@ interface TextareaProps {
   disabled?: boolean
   value?: any
   placeholder?: string
+  onChange?: (value?: any) => void
+}
+
+interface AutoResizeTextareaProps extends Omit<IComponentProps, 'onKeyDown'> {
+  ref?: Ref<InputRef>
+  disabled?: boolean
+  autoFocus?: boolean
+  value?: any
+  placeholder?: string
+  onKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>, isCompositionStart: boolean) => void
   onChange?: (value?: any) => void
 }
 
@@ -92,5 +105,87 @@ export const Textarea: FC<TextareaProps> = ({ value: rawValue, onChange, ...rest
         <div className="heyform-textarea-tip">{t('Hit Shift ⇧ + Enter ↵ for new line')}</div>
       )}
     </>
+  )
+}
+
+export const AutoResizeTextarea: FC<AutoResizeTextareaProps> = ({
+  ref,
+  value: rawValue = '',
+  disabled,
+  autoFocus,
+  onKeyDown,
+  onChange,
+  ...restProps
+}) => {
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const lockRef = useRef(false)
+
+  const [value, setValue] = useState(rawValue)
+
+  function getValue(event: any) {
+    return event.target.value
+  }
+
+  function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    const newValue = getValue(event)
+
+    setValue(newValue)
+
+    if (!lockRef.current) {
+      onChange?.(newValue)
+    }
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    onKeyDown?.(event, lockRef.current)
+  }
+
+  function handleCompositionStart() {
+    lockRef.current = true
+  }
+
+  function handleCompositionEnd(event: CompositionEvent<HTMLTextAreaElement>) {
+    lockRef.current = false
+    onChange?.(getValue(event))
+  }
+
+  useImperativeHandle<InputRef, InputRef>(
+    ref,
+    () => ({
+      focus() {
+        inputRef.current?.focus()
+      },
+      blur() {
+        inputRef.current?.blur()
+      }
+    }),
+    []
+  )
+
+  useEffect(() => {
+    if (rawValue !== value) {
+      lockRef.current = false
+      setValue(rawValue)
+    }
+  }, [rawValue])
+
+  useEffect(() => {
+    if (inputRef.current && autoFocus) {
+      inputRef.current.focus()
+    }
+  }, [inputRef])
+
+  return (
+    <textarea
+      ref={inputRef}
+      className="heyform-autoresize-textarea"
+      value={value as string}
+      disabled={disabled}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
+      {...restProps}
+    />
   )
 }

@@ -869,7 +869,8 @@ button.button-icon-only {
 .heyform-input[type='email'],
 .heyform-input[type='number'],
 .heyform-input[type='tel'],
-.heyform-textarea {
+.heyform-textarea,
+.heyform-autoresize-textarea {
   @apply w-full border-none bg-transparent p-0 pb-2 text-2xl shadow-none outline-none transition;
   color: var(--heyform-answer-color);
   border-radius: 0;
@@ -902,6 +903,10 @@ button.button-icon-only {
 .heyform-textarea-tip {
   @apply mt-1.5 text-xs;
   color: var(--heyform-answer-color);
+}
+
+.heyform-autoresize-textarea {
+  field-sizing: content;
 }
 
 // ----------------------------------------------------------------------------
