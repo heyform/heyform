@@ -949,11 +949,15 @@ button.button-icon-only {
     -webkit-box-align: stretch;
     align-items: stretch;
 
+    .heyform-radio-label {
+      @apply break-all;
+    }
+
     &.heyform-radio-group-horizontal {
       @apply sm:w-full sm:flex-row sm:gap-2;
 
       .heyform-radio {
-        @apply sm:flex-1 sm:max-w-[calc(33.33%-0.5rem)] sm:mb-0 sm:self-stretch;
+        @apply sm:flex-1 sm:max-w-[calc(50%-0.5rem)] lg:max-w-[calc(33.33%-0.5rem)] sm:mb-0 sm:self-stretch;
       }
 
       .heyform-radio-container {
@@ -1010,7 +1014,7 @@ button.button-icon-only {
   }
 
   .heyform-radio {
-    @apply mb-2 w-1/2 px-1 md:w-1/4;
+    @apply mb-2 w-1/2 px-1 md:w-1/3 lg:w-1/4 self-stretch;
     height: 12rem;
 
     &:hover {
@@ -1035,6 +1039,10 @@ button.button-icon-only {
       @apply h-8 w-8;
       color: var(--heyform-answer-opacity-60-color);
     }
+  }
+
+  .heyform-radio-label {
+    @apply truncate;
   }
 
   .heyform-radio-icon {
