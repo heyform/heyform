@@ -161,6 +161,7 @@ export interface Property {
   buttonLinkUrl?: string
   redirectUrl?: string
   redirectOnCompletion?: boolean
+  redirectDelay?: number
 }
 
 export interface Validation {
