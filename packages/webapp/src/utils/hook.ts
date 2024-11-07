@@ -34,7 +34,8 @@ export function useQuery(options?: IMapType): IMapType {
   return useMemo(() => {
     const value = qs.parse(location.search, {
       decode: true,
-      separator: ','
+      separator: ',',
+      ignoreQueryPrefix: true
     })
 
     if (options) {
