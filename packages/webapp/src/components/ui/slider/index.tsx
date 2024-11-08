@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import type { ChangeEvent, FC } from 'react'
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 
 import { IComponentProps } from '../typing'
 
@@ -26,10 +26,12 @@ const Slider: FC<SliderProps> = ({
   const [value, setValue] = useState(rawValue)
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const newValue = Number(event.target.value)
+    startTransition(() => {
+      const newValue = Number(event.target.value)
 
-    setValue(newValue)
-    onChange?.(newValue)
+      setValue(newValue)
+      onChange?.(newValue)
+    })
   }
 
   return (
