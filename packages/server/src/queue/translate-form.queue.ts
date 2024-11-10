@@ -21,6 +21,7 @@ const LANGUAGES = {
   de: 'German',
   fr: 'French',
 	pl: 'Polish',
+  tr: 'Turkish',
   'zh-cn': 'Simplified Chinese',
   'zh-tw': 'Traditional Chinese'
 }

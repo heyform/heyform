@@ -6,6 +6,7 @@ import { locales } from '@/pages/form/views/FormComponents'
 
 import en from './en'
 import pl from './pl'
+import tr from './tr'
 import zhCn from './zhCn'
 import zhTw from './zhTw'
 
@@ -20,6 +21,12 @@ const resources = {
     translation: {
       ...pl,
       ...locales.pl.translation
+    }
+  },
+  tr: {
+    translation: {
+      ...tr,
+      ...locales.tr.translation
     }
   },
   'zh-cn': {
