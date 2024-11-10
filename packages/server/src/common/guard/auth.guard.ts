@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate {
 
           if (now - Number(user.loginAt) > expire / 2) {
             await this.authService.renew(user.id, user.browserId)
-            await this.authService.setSession(req.res, {
+            this.authService.setSession(req.res, {
               ...user,
               loginAt: now
             })
