@@ -1,5 +1,5 @@
 export default {
-    'Made with HeyForm': 'HeyForm ile yapılmıştır <icon></icon> <span>HeyForm</span>',
+  'Made with HeyForm': 'HeyForm ile yapılmıştır <icon></icon> <span>HeyForm</span>',
   'This field is required': 'Bu alan zorunludur',
   'File type is not supported': 'Dosya türü desteklenmiyor',
   "File size can't exceed {{size}}": "Dosya boyutu {{size}}'ı geçemez",
@@ -313,5 +313,5 @@ export default {
   Yemen: 'Yemen',
   Zambia: 'Zambiya',
   Zimbabwe: 'Zimbabve'
-  }
+}
   
