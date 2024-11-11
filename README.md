@@ -10,7 +10,6 @@
 
 <p align="center">
 <a href="https://trendshift.io/repositories/9025" target="_blank"><img src="https://trendshift.io/api/badge/repositories/9025" alt="heyform" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-<a href="https://gurubase.io/g/heyform" target="_blank"><img src="https://img.shields.io/badge/Gurubase-Ask%20HeyForm%20Guru-006BFF" alt="Gurubase"/></a>
 </p>
 
 <img src="./assets/images/screenshot.png" alt="HeyForm" />
@@ -93,6 +92,7 @@ You'll find a lot of resources to help you get started with HeyForm in the [help
 
 - Have a question? Join the [Discord server](https://discord.gg/sgT4v4GSTe) and get instant help.
 - Found a bug? [Create an issue](https://github.com/heyform/heyform/issues/new/choose)
+- You can also [Ask HeyForm Guru](https://gurubase.io/g/heyform), it is a HeyForm-focused AI to answer your questions.
 
 ## License
 
