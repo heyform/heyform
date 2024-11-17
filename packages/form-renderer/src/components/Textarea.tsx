@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { ClipboardEvent, FC, KeyboardEvent, ChangeEvent, CompositionEvent, Ref } from 'react'
 import { startTransition, useCallback, useEffect, useRef, useState, useImperativeHandle } from 'react'
 
@@ -178,7 +179,9 @@ export const AutoResizeTextarea: FC<AutoResizeTextareaProps> = ({
   return (
     <textarea
       ref={inputRef}
-      className="heyform-autoresize-textarea"
+      className={clsx("heyform-autoresize-textarea", {
+        'heyform-autoresize-invalid': !window.CSS.supports('field-sizing', 'content')
+      })}
       value={value as string}
       disabled={disabled}
       onChange={handleChange}
