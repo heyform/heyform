@@ -38,6 +38,7 @@ export default {
       signIn: '使用現有帳號登入',
       signWith: '使用以下方式開始',
       continueWith: '或者繼續使用',
+      Name: '名稱',
       nameCant: '名稱為必填',
       invalidEmail: '無效的電子郵件位址',
       PasswordViolation:
