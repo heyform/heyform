@@ -40,6 +40,7 @@ export default {
       signIn: 'mevcut hesapla giriş yap',
       signWith: 'İle başla',
       continueWith: 'Veya şununla devam et',
+      Name: 'İsim',
       nameCant: 'İsim gereklidir',
       invalidEmail: 'Geçersiz e-posta adresi',
       PasswordViolation:

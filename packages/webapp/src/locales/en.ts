@@ -39,6 +39,7 @@ export default {
       signIn: 'sign in with existing one',
       signWith: 'Start with',
       continueWith: 'Or continue with',
+      Name: 'Name',
       nameCant: 'Name is required',
       invalidEmail: 'Invalid email address',
       PasswordViolation:
