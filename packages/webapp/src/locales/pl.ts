@@ -41,6 +41,7 @@ export default {
       signIn: 'zaloguj się na istniejące konto',
       signWith: 'Zacznij z',
       continueWith: 'Lub kontynuuj z',
+      Name: 'Nazwa',
       nameCant: 'Nazwa jest wymagana',
       invalidEmail: 'Nieprawidłowy adres email',
       PasswordViolation:
