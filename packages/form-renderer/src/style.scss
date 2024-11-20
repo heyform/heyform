@@ -614,7 +614,7 @@ button.button-icon-only {
 }
 
 .heyform-block {
-  @apply relative z-10 h-full md:absolute md:inset-0 md:h-auto;
+  @apply relative z-10 h-full overflow-hidden md:absolute md:inset-0 md:h-auto;
 
   &.heyform-block-float_left,
   &.heyform-block-split_left,
