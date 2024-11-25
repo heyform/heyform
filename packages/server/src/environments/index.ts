@@ -66,6 +66,7 @@ export const SMTP_HOST: string = process.env.SMTP_HOST
 export const SMTP_PORT: number = +process.env.SMTP_PORT
 export const SMTP_USER: string = process.env.SMTP_USER
 export const SMTP_PASSWORD: string = process.env.SMTP_PASSWORD
+export const SMTP_SERVERNAME: string = process.env.SMTP_SERVERNAME || null
 export const SMTP_SECURE: boolean = helper.isTrue(process.env.SMTP_SECURE)
 export const SMTP_IGNORE_CERT: boolean = helper.isTrue(process.env.SMTP_IGNORE_CERT)
 

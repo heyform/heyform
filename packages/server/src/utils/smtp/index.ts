@@ -6,6 +6,7 @@ export interface SmtpOptions {
   user: string
   password: string
   secure: boolean
+  servername: string
   ignoreCert: boolean
   pool: boolean
   logger: any
@@ -31,6 +32,7 @@ export async function smtpSendMail(
       pass: options.password
     },
     tls: {
+      servername: options.servername,
       rejectUnauthorized: options.ignoreCert
     },
     pool: options.pool,
