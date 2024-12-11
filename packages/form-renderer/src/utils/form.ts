@@ -306,7 +306,7 @@ export function getNavigateFieldId(
 
 export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
   if (badge === ChoiceBadgeEnum.NUMBER) {
-    return index + 1
+    return String(index + 1)
   }
 
   if (index >= 26) {
