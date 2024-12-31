@@ -1,5 +1,6 @@
 import de from './de'
 import en from './en'
+import es from './es'
 import fr from './fr'
 import pl from './pl'
 import tr from './tr'
@@ -16,7 +17,10 @@ export default {
   de: {
     translation: de
   },
-	pl: {
+  es: {
+    translation: es
+  },
+  pl: {
     translation: pl
   },
   tr: {

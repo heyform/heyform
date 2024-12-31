@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next'
 import { locales } from '@/pages/form/views/FormComponents'
 
 import en from './en'
+import es from './es'
 import pl from './pl'
 import tr from './tr'
 import zhCn from './zhCn'
@@ -42,7 +43,13 @@ const resources = {
     }
   },
   fr: locales.fr,
-  de: locales.de
+  de: locales.de,
+  es: {
+    translation: {
+      ...es,
+      ...locales.es.translation
+    }
+  },
 }
 
 const LANG_ALIASES: Record<string, string> = {
