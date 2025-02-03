@@ -67,7 +67,7 @@ export default {
     'Name on card': 'Jméno na kartě',
     'Card number': 'Číslo karty',
     'Expiry date': 'Datum platnosti',
-    '{{number}}% answered': '{{number}}% odpovědí',
+    '{{number}}% answered': '{{number}}% vyplněno',
     'Please enter a valid mobile phone number': 'Zadejte platné číslo mobilního telefonu',
     'Please enter a valid email address': 'Zadejte platnou e-mailovou adresu',
     'Please enter a valid url': 'Zadejte platnou URL adresu',
