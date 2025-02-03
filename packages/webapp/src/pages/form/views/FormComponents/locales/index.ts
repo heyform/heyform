@@ -7,6 +7,7 @@ import ptBr from './pt-br'
 import tr from './tr'
 import zhCn from './zh-cn'
 import zhTw from './zh-tw'
+import cs from './cs'
 
 export default {
   en: {
@@ -35,5 +36,8 @@ export default {
   },
   'zh-tw': {
     translation: zhTw
-  }
+  },
+  cs: {
+    translation: cs
+  },
 }
