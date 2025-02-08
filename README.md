@@ -76,7 +76,7 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 </a>
 
 <a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-a47e56f0ea9f460d8d33" style="margin-left:24px">
-	<img src="https://svgshare.com/i/1AVg.svg" alt="Deploy to Alibaba Cloud" height="36" />
+	<img src="https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg" alt="Deploy on Alibaba Cloud" height="36" />
 </a>
 
 ## Local development
