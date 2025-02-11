@@ -101,6 +101,7 @@
     "ts-loader": "8.0.3"
   },
   "pnpm": {
+    "neverBuiltDependencies": [],
     "overrides": {
       "apollo-upload-client": "17.0.0",
       "fs-capacitor": "6.2.0",
