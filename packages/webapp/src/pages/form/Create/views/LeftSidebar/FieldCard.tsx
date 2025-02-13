@@ -188,7 +188,8 @@ export const FieldCard: FC<FieldCardProps> = ({
     ? htmlUtils.parse(
       field.title
           .replace(/&nbsp;/g, ' ') // Replace &nbsp; with a space
-          .replace(/<br\s*\/?>/g, '') // Remove <br /> tags
+          // .replace(/<br\s*\/?>/g, '') // Remove <br /> tags
+          .replace(/<\/?[^>]+(>|$)/g, "") // Remove the tags
     )
     : "";
   
