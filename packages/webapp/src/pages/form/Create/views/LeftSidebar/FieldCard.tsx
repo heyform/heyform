@@ -184,6 +184,14 @@ export const FieldCard: FC<FieldCardProps> = ({
     )
   }, [field.properties?.fields, selectedId])
 
+  const displayTitle = (typeof field.title === 'string' && field.title !== "<br />")
+    ? htmlUtils.parse(
+      field.title
+          .replace(/&nbsp;/g, ' ') // Replace &nbsp; with a space
+          .replace(/<br\s*\/?>/g, '') // Remove <br /> tags
+    )
+    : "";
+  
   return (
     <div
       className={clsx('field-card-root', {
@@ -214,7 +222,7 @@ export const FieldCard: FC<FieldCardProps> = ({
         </div>
         <FieldKindIcon kind={field.kind} parentIndex={parentField?.index} index={field.index} />
         <div className="field-card-title ml-3 flex-1 text-xs">
-          {htmlUtils.plain(field.title as string)}
+          {displayTitle}
         </div>
         <Dropdown
           className="opacity-0 group-hover:opacity-100"
