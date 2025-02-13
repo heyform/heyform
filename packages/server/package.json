@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.0.15",
+  "version": "0.0.17",
   "homepage": "https://heyform.net",
   "author": "Heyooo, Inc.",
   "license": "AGPL-3.0",
@@ -101,6 +101,7 @@
     "ts-loader": "8.0.3"
   },
   "pnpm": {
+    "neverBuiltDependencies": [],
     "overrides": {
       "apollo-upload-client": "17.0.0",
       "fs-capacitor": "6.2.0",
