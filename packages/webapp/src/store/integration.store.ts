@@ -27,18 +27,20 @@ export class IntegrationStore {
   }
 
   setIntegrations(integrations: IntegrationModel[]) {
-    this.integrations = integrations
+    this.integrations = [...this.integrations, ...integrations]
   }
 
   addIntegrations(formId: string, appId: string, data: Record<string, any>) {
     this.integrations.push({ formId: formId, appId: appId, attributes: data, status: 1 })
   }
 
-  updateIntegrations(appId: string, updates: Partial<AppModel>) {
-    const integrations = this.integrations.find(w => w.appId === appId)
-    
-    if (integrations) {
-      Object.assign(integrations, updates)
+  deleteIntegrations(appId: string, updates: Record<string, any>) {
+    const app = this.apps.find(w => w.id === appId)
+
+    if (app) {
+      Object.assign(app, updates)
+    } else {
+      console.log('App not found')
     }
   }
 }

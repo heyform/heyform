@@ -162,8 +162,8 @@ export const FormShareModal = observer(() => {
           </div>
 
           <div className="grid grid-cols-4 gap-5">
-            {FORM_EMBED_OPTIONS.map(row => (
-              <div className="cursor-pointer" onClick={() => openEmbedModal(row.type)}>
+            {FORM_EMBED_OPTIONS.map((row, key) => (
+              <div className="cursor-pointer" onClick={() => openEmbedModal(row.type)} key={key}>
                 <div className="rounded-md border border-black/10">
                   <row.icon className="w-full rounded-md" />
                 </div>

@@ -1,29 +1,30 @@
 import { helper } from '@heyform-inc/utils'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button, Switch } from '@/components/ui'
 import { AppModel, IntegrationStatusEnum } from '@/models'
 import { IntegrationService } from '@/service'
-import { useParam } from '@/utils'
 import { useStore } from '@/store'
+import { useParam } from '@/utils'
 
 interface AppItemProps extends Omit<IComponentProps, 'onClick'> {
   app: AppModel
   onClick: (app?: any) => void
-  onDelete: () => void
 }
 
-const AppItemAction: FC<AppItemProps> = ({ app, onClick, onDelete }) => {
+const AppItemAction: FC<AppItemProps> = ({ app, onClick }) => {
   const { t } = useTranslation()
   const { formId } = useParam()
   const isIntegrated = helper.isValid(app.integration?.attributes)
   const integrationStore = useStore('integrationStore')
   const [loading, setLoading] = useState(false)
   const [loading2, setLoading2] = useState(false)
-  const [active, setActive] = useState(
-    isIntegrated && app.integration?.status === IntegrationStatusEnum.ACTIVE
-  )
+  const [active, setActive] = useState(false)
+
+  useEffect(() => {
+    setActive(isIntegrated && app.integration?.status === IntegrationStatusEnum.ACTIVE)
+  }, [isIntegrated, app.integration?.status])
 
   async function handleUpdateStatus(active: boolean) {
     if (loading) {
@@ -54,11 +55,10 @@ const AppItemAction: FC<AppItemProps> = ({ app, onClick, onDelete }) => {
     try {
       await IntegrationService.deleteSettings(formId, app.id)
 
-      integrationStore.updateIntegrations(app.id, {
+      integrationStore.deleteIntegrations(app.id, {
         integration: undefined
       })
 
-      onDelete()
     } catch (err: any) {
       console.error(err)
     }
@@ -84,7 +84,7 @@ const AppItemAction: FC<AppItemProps> = ({ app, onClick, onDelete }) => {
   }
 }
 
-export const AppItem: FC<AppItemProps> = ({ app, onClick, onDelete, ...restProps }) => {
+export const AppItem: FC<AppItemProps> = ({ app, onClick, ...restProps }) => {
   const { t } = useTranslation()
 
   function handleClick() {
@@ -101,7 +101,7 @@ export const AppItem: FC<AppItemProps> = ({ app, onClick, onDelete, ...restProps
         <div className="ml-4 mr-8 flex-1">
           <div className="mb-1 text-base font-semibold text-slate-900">{t(app.name)}</div>
         </div>
-        <AppItemAction app={app} onClick={handleClick} onDelete={onDelete} />
+        <AppItemAction app={app} onClick={handleClick} />
       </div>
       <div className="text-slate-600">{t(app.description as any)}</div>
     </div>
