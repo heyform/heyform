@@ -57,7 +57,11 @@ export const SettingsWrapper: FC<SettingsWrapperProps> = ({
       await IntegrationService.updateSettings(formId, app!.id, {
         [app!.uniqueId]: values
       })
-      await fetchIntegrations()
+      
+      integrationStore.addIntegrations(formId, app!.id, {
+        ...values
+      })
+      
       onFinish && onFinish()
     } catch (err: any) {
       setError(err)
@@ -65,18 +69,6 @@ export const SettingsWrapper: FC<SettingsWrapperProps> = ({
     }
 
     onRequest?.(false)
-  }
-
-  async function fetchIntegrations() {
-    const [result1, result2] = await Promise.all([
-      AppService.apps(),
-      FormService.integrations(formId)
-    ])
-
-    integrationStore.setApps(result1)
-    integrationStore.setIntegrations(result2)
-
-    return true
   }
 
   return (

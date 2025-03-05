@@ -6,6 +6,7 @@ import { Button, Switch } from '@/components/ui'
 import { AppModel, IntegrationStatusEnum } from '@/models'
 import { IntegrationService } from '@/service'
 import { useParam } from '@/utils'
+import { useStore } from '@/store'
 
 interface AppItemProps extends Omit<IComponentProps, 'onClick'> {
   app: AppModel
@@ -17,6 +18,7 @@ const AppItemAction: FC<AppItemProps> = ({ app, onClick, onDelete }) => {
   const { t } = useTranslation()
   const { formId } = useParam()
   const isIntegrated = helper.isValid(app.integration?.attributes)
+  const integrationStore = useStore('integrationStore')
   const [loading, setLoading] = useState(false)
   const [loading2, setLoading2] = useState(false)
   const [active, setActive] = useState(
@@ -51,6 +53,11 @@ const AppItemAction: FC<AppItemProps> = ({ app, onClick, onDelete }) => {
 
     try {
       await IntegrationService.deleteSettings(formId, app.id)
+
+      integrationStore.updateIntegrations(app.id, {
+        integration: undefined
+      })
+
       onDelete()
     } catch (err: any) {
       console.error(err)
