@@ -14,5 +14,6 @@ export interface AppModel {
 export interface IntegrationModel {
   appId: string
   attributes?: IMapType
+  formId: string
   status: number
 }

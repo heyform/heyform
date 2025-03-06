@@ -107,7 +107,6 @@ const Integration: FC = observer(() => {
                       key={index}
                       app={app}
                       onClick={handleClick}
-                      onDelete={fetchIntegrations}
                     />
                   ))}
               </div>

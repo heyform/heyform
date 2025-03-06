@@ -27,6 +27,20 @@ export class IntegrationStore {
   }
 
   setIntegrations(integrations: IntegrationModel[]) {
-    this.integrations = integrations
+    this.integrations = [...this.integrations, ...integrations]
+  }
+
+  addIntegrations(formId: string, appId: string, data: Record<string, any>) {
+    this.integrations.push({ formId: formId, appId: appId, attributes: data, status: 1 })
+  }
+
+  deleteIntegrations(appId: string, updates: Record<string, any>) {
+    const app = this.apps.find(w => w.id === appId)
+
+    if (app) {
+      Object.assign(app, updates)
+    } else {
+      console.log('App not found')
+    }
   }
 }
