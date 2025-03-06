@@ -61,8 +61,6 @@ const Integration: FC = observer(() => {
     setVisible(true)
   }
 
-  console.log(integrationStore.integratedApps, "integrationStore.integratedApps");
-  
   return (
     <div className="form-content-container">
       <div className="flex justify-center">
