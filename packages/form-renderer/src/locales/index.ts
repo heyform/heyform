@@ -9,6 +9,7 @@ import zhTw from './zh-tw'
 import es from './es'
 import ptBr from './pt-br'
 import cs from './cs'
+import it from './it'
 
 export const locales: Record<string, any> = {
   en: {
@@ -43,5 +44,8 @@ export const locales: Record<string, any> = {
   },
   cs: {
     translation: cs
-  }
+  },
+	it: {
+		translation: it
+	}
 }
