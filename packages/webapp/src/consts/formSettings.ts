@@ -15,8 +15,8 @@ export const LOCALES_OPTIONS = [
     value: 'en'
   },
   {
-    label: 'Portugues',
-    value: 'pt'
+    label: 'Português brasileiro',
+    value: 'pt-br'
   },
   {
     label: 'Polski',
@@ -42,8 +42,8 @@ export const FORM_LOCALES_OPTIONS = [
     value: 'en'
   },
   {
-    label: 'Portugues',
-    value: 'pt'
+    label: 'Português brasileiro',
+    value: 'pt-br'
   },
   {
     label: 'German',
