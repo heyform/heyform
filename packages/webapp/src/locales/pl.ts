@@ -845,6 +845,7 @@ export default {
   },
   languages: {
     en: 'English',
+    pt: 'Portugues',
     zhCn: 'Chinese (simplified)',
     zhTw: 'Chinese (traditional)',
     fr: 'French',
