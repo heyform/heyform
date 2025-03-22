@@ -1,8 +1,7 @@
 import { Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, User } from '@decorator'
-import { UserModel } from '@model'
 import { RedisService, UserService } from '@service'
+import { UserModel } from '@model'
 
 @Resolver()
 @Auth()

@@ -1,8 +1,7 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard } from '@decorator'
 import { FormDetailInput, FormIntegrationType } from '@graphql'
 import { IntegrationModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { IntegrationService } from '@service'
 
 @Resolver()
@@ -12,7 +11,9 @@ export class FormIntegrationsResolver {
 
   @Query(returns => [FormIntegrationType])
   @FormGuard()
-  async formIntegrations(@Args('input') input: FormDetailInput): Promise<IntegrationModel[]> {
+  async formIntegrations(
+    @Args('input') input: FormDetailInput
+  ): Promise<IntegrationModel[]> {
     return this.integrationService.findAllInForm(input.formId)
   }
 }

@@ -1,9 +1,11 @@
-import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common'
-
 import { PermissionGuard, PermissionScopeEnum } from '@guard'
+import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
 
 export function TeamGuard(): any {
-  return applyDecorators(SetMetadata('scope', PermissionScopeEnum.team), UseGuards(PermissionGuard))
+  return applyDecorators(
+    SetMetadata('scope', PermissionScopeEnum.team),
+    UseGuards(PermissionGuard)
+  )
 }
 
 export function ProjectGuard(): any {
@@ -14,5 +16,8 @@ export function ProjectGuard(): any {
 }
 
 export function FormGuard(): any {
-  return applyDecorators(SetMetadata('scope', PermissionScopeEnum.form), UseGuards(PermissionGuard))
+  return applyDecorators(
+    SetMetadata('scope', PermissionScopeEnum.form),
+    UseGuards(PermissionGuard)
+  )
 }

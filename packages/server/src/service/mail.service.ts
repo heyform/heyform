@@ -1,13 +1,11 @@
+import { SMTP_FROM } from '@environments'
+import { helper } from '@heyform-inc/utils'
+import { EmailTemplateModel, UserLangEnum } from '@model'
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
 import { JobOptions, Queue } from 'bull'
-import { readFileSync } from 'fs'
-import { basename } from 'path'
-
-import { helper } from '@heyform-inc/utils'
-
-import { EMAIL_TEMPLATES_DIR, SMTP_FROM } from '@environments'
-import { readDirSync } from '@utils'
+import { Model } from 'mongoose'
 
 interface JoinWorkspaceAlertOptions {
   teamName: string
@@ -48,16 +46,20 @@ interface TeamInvitationOptions {
   link: string
 }
 
-const HTML_EXT = '.html'
-const TEMPLATE_META_REGEX = /^---([\s\S]*?)---[\n\s\S]\n/
+interface UserSecurityAlertOptions {
+  deviceModel: string
+  ip: string
+  loginAt: string
+  geoLocation: string
+}
 
 @Injectable()
 export class MailService {
-  private readonly emailTemplates: Record<string, { subject: string; html: string }> = {}
-
-  constructor(@InjectQueue('MailQueue') private readonly mailQueue: Queue) {
-    this.init()
-  }
+  constructor(
+    @InjectQueue('MailQueue') private readonly mailQueue: Queue,
+    @InjectModel(EmailTemplateModel.name)
+    private readonly emailTemplateModel: Model<EmailTemplateModel>
+  ) {}
 
   async accountDeletionAlert(to: string) {
     await this.addQueue('account_deletion_alert', to)
@@ -75,6 +77,12 @@ export class MailService {
     })
   }
 
+  async formInvitation(to: string, link: string) {
+    await this.addQueue('form_invitation', to, {
+      link
+    })
+  }
+
   async joinWorkspaceAlert(to: string, options: JoinWorkspaceAlertOptions) {
     await this.addQueue('join_workspace_alert', to, options)
   }
@@ -87,7 +95,10 @@ export class MailService {
     await this.addQueue('project_deletion_alert', to, options)
   }
 
-  async projectDeletionRequest(to: string, options: ProjectDeletionRequestOptions) {
+  async projectDeletionRequest(
+    to: string,
+    options: ProjectDeletionRequestOptions
+  ) {
     await this.addQueue('project_deletion_request', to, options)
   }
 
@@ -98,8 +109,17 @@ export class MailService {
     })
   }
 
-  async submissionNotification(to: string, options: SubmissionNotificationOptions) {
+  async submissionNotification(
+    to: string,
+    options: SubmissionNotificationOptions
+  ) {
     await this.addQueue('submission_notification', to, options)
+  }
+
+  async teamDataExportReady(to: string, link: string) {
+    await this.addQueue('team_data_export_ready', to, {
+      link
+    })
   }
 
   async teamDeletionAlert(to: string, options: TeamDeletionAlertOptions) {
@@ -117,34 +137,8 @@ export class MailService {
     })
   }
 
-  private init() {
-    const filePaths = readDirSync(EMAIL_TEMPLATES_DIR, HTML_EXT)
-
-    for (const filePath of filePaths) {
-      const name = basename(filePath, HTML_EXT)
-      const content = readFileSync(filePath).toString('utf8')
-      const matches = content.match(TEMPLATE_META_REGEX)
-
-      const html = content.replace(TEMPLATE_META_REGEX, '')
-
-      if (matches) {
-        const metaLines = matches[1].split('\n')
-        const metaObject: Record<string, string> = {}
-
-        metaLines.forEach(line => {
-          const [key, value] = line.split(':')
-
-          if (helper.isValid(key) && helper.isValid(value)) {
-            metaObject[key.trim()] = value.trim()
-          }
-        })
-
-        this.emailTemplates[name] = {
-          subject: metaObject.title,
-          html
-        }
-      }
-    }
+  async userSecurityAlert(to: string, options: UserSecurityAlertOptions) {
+    await this.addQueue('user_security_alert', to, options)
   }
 
   private async addQueue(
@@ -153,7 +147,10 @@ export class MailService {
     replacements?: Record<string, any>,
     options?: JobOptions
   ) {
-    const result = this.emailTemplates[templateName]
+    const result = await this.emailTemplateModel.findOne({
+      name: templateName,
+      lang: UserLangEnum.EN
+    })
 
     if (helper.isEmpty(result)) {
       return
@@ -161,6 +158,7 @@ export class MailService {
 
     let subject = result!.subject
     let html = result!.html
+    let text = result!.text
 
     if (helper.isValid(replacements) && helper.isPlainObject(replacements)) {
       Object.keys(replacements!).forEach(key => {
@@ -169,6 +167,7 @@ export class MailService {
 
         subject = subject.replace(regex, value)
         html = html?.replace(regex, value)
+        text = text?.replace(regex, value)
       })
     }
 
@@ -176,9 +175,10 @@ export class MailService {
       {
         queueName: 'MailQueue',
         data: {
-          from: SMTP_FROM,
+          from: result!.from || SMTP_FROM,
           to,
           subject,
+          text,
           html
         }
       },

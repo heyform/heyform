@@ -1,7 +1,6 @@
+import { Choice, FieldKindEnum, Property } from '@heyform-inc/shared-types-enums'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-
-import { Choice, FieldKindEnum, Property } from '@heyform-inc/shared-types-enums'
 
 interface Choose extends Choice {
   count: number
@@ -15,6 +14,10 @@ export interface FormReportResponse {
   properties?: Property
   chooses?: Choose[]
 
+  /**
+   * Discard
+   * Render all there 3 fields from form fields
+   */
   kind?: FieldKindEnum
   title?: string
   description?: string

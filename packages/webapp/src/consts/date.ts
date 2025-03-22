@@ -1,1296 +1,1754 @@
-import dayjs from 'dayjs'
-
-export const TIME_ZONE_OPTIONS: IOptionType[] = [
-  { label: '(GMT-11:00) Niue', value: 'Pacific/Niue' },
+export const TIMEZONES = [
   {
-    label: '(GMT-11:00) Samoa',
+    label: 'timezones.niue',
+    gmt: '-11:00',
+    value: 'Pacific/Niue'
+  },
+  {
+    label: 'timezones.samoa',
+    gmt: '-11:00',
     value: 'Pacific/Pago_Pago'
   },
   {
-    label: '(GMT-10:00) Cook Islands',
+    label: 'timezones.cookislands',
+    gmt: '-10:00',
     value: 'Pacific/Rarotonga'
   },
   {
-    label: '(GMT-10:00) Hawaii-Aleutian',
+    label: 'timezones.hawaiialeutian',
+    gmt: '-10:00',
     value: 'Pacific/Honolulu'
   },
-  { label: '(GMT-10:00) Tahiti', value: 'Pacific/Tahiti' },
   {
-    label: '(GMT-09:30) Marquesas',
+    label: 'timezones.tahiti',
+    gmt: '-10:00',
+    value: 'Pacific/Tahiti'
+  },
+  {
+    label: 'timezones.marquesas',
+    gmt: '-09:30',
     value: 'Pacific/Marquesas'
   },
   {
-    label: '(GMT-09:00) Gambier',
+    label: 'timezones.gambier',
+    gmt: '-09:00',
     value: 'Pacific/Gambier'
   },
   {
-    label: '(GMT-09:00) Hawaii-Aleutian (Adak)',
+    label: 'timezones.hawaiialeutianadak',
+    gmt: '-09:00',
     value: 'America/Adak'
   },
   {
-    label: '(GMT-08:00) Anchorage',
+    label: 'timezones.anchorage',
+    gmt: '-08:00',
     value: 'America/Anchorage'
   },
   {
-    label: '(GMT-08:00) Juneau',
+    label: 'timezones.juneau',
+    gmt: '-08:00',
     value: 'America/Juneau'
   },
   {
-    label: '(GMT-08:00) Metlakatla',
+    label: 'timezones.metlakatla',
+    gmt: '-08:00',
     value: 'America/Metlakatla'
   },
   {
-    label: '(GMT-08:00) Nome',
+    label: 'timezones.nome',
+    gmt: '-08:00',
     value: 'America/Nome'
   },
   {
-    label: '(GMT-08:00) Sitka',
+    label: 'timezones.sitka',
+    gmt: '-08:00',
     value: 'America/Sitka'
   },
   {
-    label: '(GMT-08:00) Yakutat',
+    label: 'timezones.yakutat',
+    gmt: '-08:00',
     value: 'America/Yakutat'
   },
   {
-    label: '(GMT-08:00) Pitcairn',
+    label: 'timezones.pitcairn',
+    gmt: '-08:00',
     value: 'Pacific/Pitcairn'
   },
   {
-    label: '(GMT-07:00) Mexican Pacific',
+    label: 'timezones.mexicanpacific',
+    gmt: '-07:00',
     value: 'America/Hermosillo'
   },
   {
-    label: '(GMT-07:00) Dawson Creek',
+    label: 'timezones.dawsoncreek',
+    gmt: '-07:00',
     value: 'America/Dawson_Creek'
   },
   {
-    label: '(GMT-07:00) Fort Nelson',
+    label: 'timezones.fortnelson',
+    gmt: '-07:00',
     value: 'America/Fort_Nelson'
   },
   {
-    label: '(GMT-07:00) Phoenix',
+    label: 'timezones.phoenix',
+    gmt: '-07:00',
     value: 'America/Phoenix'
   },
   {
-    label: '(GMT-07:00) Los Angeles',
+    label: 'timezones.losangeles',
+    gmt: '-07:00',
     value: 'America/Los_Angeles'
   },
   {
-    label: '(GMT-07:00) Tijuana',
+    label: 'timezones.tijuana',
+    gmt: '-07:00',
     value: 'America/Tijuana'
   },
   {
-    label: '(GMT-07:00) Vancouver',
+    label: 'timezones.vancouver',
+    gmt: '-07:00',
     value: 'America/Vancouver'
   },
   {
-    label: '(GMT-07:00) Dawson',
+    label: 'timezones.dawson',
+    gmt: '-07:00',
     value: 'America/Dawson'
   },
   {
-    label: '(GMT-07:00) Whitehorse',
+    label: 'timezones.whitehorse',
+    gmt: '-07:00',
     value: 'America/Whitehorse'
   },
   {
-    label: '(GMT-06:00) Belize',
+    label: 'timezones.belize',
+    gmt: '-06:00',
     value: 'America/Belize'
   },
   {
-    label: '(GMT-06:00) Costa Rica',
+    label: 'timezones.costarica',
+    gmt: '-06:00',
     value: 'America/Costa_Rica'
   },
   {
-    label: '(GMT-06:00) El Salvador',
+    label: 'timezones.elsalvador',
+    gmt: '-06:00',
     value: 'America/El_Salvador'
   },
   {
-    label: '(GMT-06:00) Guatemala',
+    label: 'timezones.guatemala',
+    gmt: '-06:00',
     value: 'America/Guatemala'
   },
   {
-    label: '(GMT-06:00) Managua',
+    label: 'timezones.managua',
+    gmt: '-06:00',
     value: 'America/Managua'
   },
   {
-    label: '(GMT-06:00) Regina',
+    label: 'timezones.regina',
+    gmt: '-06:00',
     value: 'America/Regina'
   },
   {
-    label: '(GMT-06:00) Swift Current',
+    label: 'timezones.swiftcurrent',
+    gmt: '-06:00',
     value: 'America/Swift_Current'
   },
   {
-    label: '(GMT-06:00) Tegucigalpa',
+    label: 'timezones.tegucigalpa',
+    gmt: '-06:00',
     value: 'America/Tegucigalpa'
   },
-  { label: '(GMT-06:00) Easter Island', value: 'Pacific/Easter' },
   {
-    label: '(GMT-06:00) Galapagos',
+    label: 'timezones.easterisland',
+    gmt: '-06:00',
+    value: 'Pacific/Easter'
+  },
+  {
+    label: 'timezones.galapagos',
+    gmt: '-06:00',
     value: 'Pacific/Galapagos'
   },
   {
-    label: '(GMT-06:00) Chihuahua',
+    label: 'timezones.chihuahua',
+    gmt: '-06:00',
     value: 'America/Chihuahua'
   },
   {
-    label: '(GMT-06:00) Mazatlan',
+    label: 'timezones.mazatlan',
+    gmt: '-06:00',
     value: 'America/Mazatlan'
   },
   {
-    label: '(GMT-06:00) Boise',
+    label: 'timezones.boise',
+    gmt: '-06:00',
     value: 'America/Boise'
   },
   {
-    label: '(GMT-06:00) Cambridge Bay',
+    label: 'timezones.cambridgebay',
+    gmt: '-06:00',
     value: 'America/Cambridge_Bay'
   },
   {
-    label: '(GMT-06:00) Denver',
+    label: 'timezones.denver',
+    gmt: '-06:00',
     value: 'America/Denver'
   },
   {
-    label: '(GMT-06:00) Edmonton',
+    label: 'timezones.edmonton',
+    gmt: '-06:00',
     value: 'America/Edmonton'
   },
   {
-    label: '(GMT-06:00) Inuvik',
+    label: 'timezones.inuvik',
+    gmt: '-06:00',
     value: 'America/Inuvik'
   },
   {
-    label: '(GMT-06:00) Ojinaga',
+    label: 'timezones.ojinaga',
+    gmt: '-06:00',
     value: 'America/Ojinaga'
   },
   {
-    label: '(GMT-06:00) Yellowknife',
+    label: 'timezones.yellowknife',
+    gmt: '-06:00',
     value: 'America/Yellowknife'
   },
   {
-    label: '(GMT-05:00) Eirunepe',
+    label: 'timezones.eirunepe',
+    gmt: '-05:00',
     value: 'America/Eirunepe'
   },
   {
-    label: '(GMT-05:00) Rio Branco',
+    label: 'timezones.riobranco',
+    gmt: '-05:00',
     value: 'America/Rio_Branco'
   },
   {
-    label: '(GMT-05:00) Bahia Banderas',
+    label: 'timezones.bahiabanderas',
+    gmt: '-05:00',
     value: 'America/Bahia_Banderas'
   },
   {
-    label: '(GMT-05:00) Beulah, North Dakota',
+    label: 'timezones.beulahnorthdakota',
+    gmt: '-05:00',
     value: 'America/North_Dakota/Beulah'
   },
   {
-    label: '(GMT-05:00) Center, North Dakota',
+    label: 'timezones.centernorthdakota',
+    gmt: '-05:00',
     value: 'America/North_Dakota/Center'
   },
   {
-    label: '(GMT-05:00) Chicago',
+    label: 'timezones.chicago',
+    gmt: '-05:00',
     value: 'America/Chicago'
   },
   {
-    label: '(GMT-05:00) Knox, Indiana',
+    label: 'timezones.knoxindiana',
+    gmt: '-05:00',
     value: 'America/Indiana/Knox'
   },
   {
-    label: '(GMT-05:00) Matamoros',
+    label: 'timezones.matamoros',
+    gmt: '-05:00',
     value: 'America/Matamoros'
   },
   {
-    label: '(GMT-05:00) Menominee',
+    label: 'timezones.menominee',
+    gmt: '-05:00',
     value: 'America/Menominee'
   },
   {
-    label: '(GMT-05:00) Merida',
+    label: 'timezones.merida',
+    gmt: '-05:00',
     value: 'America/Merida'
   },
   {
-    label: '(GMT-05:00) Mexico City',
+    label: 'timezones.mexicocity',
+    gmt: '-05:00',
     value: 'America/Mexico_City'
   },
   {
-    label: '(GMT-05:00) Monterrey',
+    label: 'timezones.monterrey',
+    gmt: '-05:00',
     value: 'America/Monterrey'
   },
   {
-    label: '(GMT-05:00) New Salem, North Dakota',
+    label: 'timezones.newsalemnorthdakota',
+    gmt: '-05:00',
     value: 'America/North_Dakota/New_Salem'
   },
   {
-    label: '(GMT-05:00) Rainy River',
+    label: 'timezones.rainyriver',
+    gmt: '-05:00',
     value: 'America/Rainy_River'
   },
   {
-    label: '(GMT-05:00) Rankin Inlet',
+    label: 'timezones.rankininlet',
+    gmt: '-05:00',
     value: 'America/Rankin_Inlet'
   },
   {
-    label: '(GMT-05:00) Resolute',
+    label: 'timezones.resolute',
+    gmt: '-05:00',
     value: 'America/Resolute'
   },
   {
-    label: '(GMT-05:00) Tell City, Indiana',
+    label: 'timezones.tellcityindiana',
+    gmt: '-05:00',
     value: 'America/Indiana/Tell_City'
   },
   {
-    label: '(GMT-05:00) Winnipeg',
+    label: 'timezones.winnipeg',
+    gmt: '-05:00',
     value: 'America/Winnipeg'
   },
   {
-    label: '(GMT-05:00) Colombia',
+    label: 'timezones.colombia',
+    gmt: '-05:00',
     value: 'America/Bogota'
   },
   {
-    label: '(GMT-05:00) Cancun',
+    label: 'timezones.cancun',
+    gmt: '-05:00',
     value: 'America/Cancun'
   },
   {
-    label: '(GMT-05:00) Jamaica',
+    label: 'timezones.jamaica',
+    gmt: '-05:00',
     value: 'America/Jamaica'
   },
   {
-    label: '(GMT-05:00) Panama',
+    label: 'timezones.panama',
+    gmt: '-05:00',
     value: 'America/Panama'
   },
-  { label: '(GMT-05:00) Ecuador', value: 'America/Guayaquil' },
   {
-    label: '(GMT-05:00) Peru',
+    label: 'timezones.ecuador',
+    gmt: '-05:00',
+    value: 'America/Guayaquil'
+  },
+  {
+    label: 'timezones.peru',
+    gmt: '-05:00',
     value: 'America/Lima'
   },
   {
-    label: '(GMT-04:00) Boa Vista',
+    label: 'timezones.boavista',
+    gmt: '-04:00',
     value: 'America/Boa_Vista'
   },
   {
-    label: '(GMT-04:00) Campo Grande',
+    label: 'timezones.campogrande',
+    gmt: '-04:00',
     value: 'America/Campo_Grande'
   },
   {
-    label: '(GMT-04:00) Cuiaba',
+    label: 'timezones.cuiaba',
+    gmt: '-04:00',
     value: 'America/Cuiaba'
   },
   {
-    label: '(GMT-04:00) Manaus',
+    label: 'timezones.manaus',
+    gmt: '-04:00',
     value: 'America/Manaus'
   },
   {
-    label: '(GMT-04:00) Porto Velho',
+    label: 'timezones.portovelho',
+    gmt: '-04:00',
     value: 'America/Porto_Velho'
   },
   {
-    label: '(GMT-04:00) Barbados',
+    label: 'timezones.barbados',
+    gmt: '-04:00',
     value: 'America/Barbados'
   },
   {
-    label: '(GMT-04:00) Martinique',
+    label: 'timezones.martinique',
+    gmt: '-04:00',
     value: 'America/Martinique'
   },
   {
-    label: '(GMT-04:00) Puerto Rico',
+    label: 'timezones.puertorico',
+    gmt: '-04:00',
     value: 'America/Puerto_Rico'
   },
   {
-    label: '(GMT-04:00) Santo Domingo',
+    label: 'timezones.santodomingo',
+    gmt: '-04:00',
     value: 'America/Santo_Domingo'
   },
-  { label: '(GMT-04:00) Bolivia', value: 'America/La_Paz' },
   {
-    label: '(GMT-04:00) Chile',
+    label: 'timezones.bolivia',
+    gmt: '-04:00',
+    value: 'America/La_Paz'
+  },
+  {
+    label: 'timezones.chile',
+    gmt: '-04:00',
     value: 'America/Santiago'
   },
-  { label: '(GMT-04:00) Cuba', value: 'America/Havana' },
   {
-    label: '(GMT-04:00) Detroit',
+    label: 'timezones.cuba',
+    gmt: '-04:00',
+    value: 'America/Havana'
+  },
+  {
+    label: 'timezones.detroit',
+    gmt: '-04:00',
     value: 'America/Detroit'
   },
   {
-    label: '(GMT-04:00) Grand Turk',
+    label: 'timezones.grandturk',
+    gmt: '-04:00',
     value: 'America/Grand_Turk'
   },
   {
-    label: '(GMT-04:00) Indianapolis',
+    label: 'timezones.indianapolis',
+    gmt: '-04:00',
     value: 'America/Indiana/Indianapolis'
   },
   {
-    label: '(GMT-04:00) Iqaluit',
+    label: 'timezones.iqaluit',
+    gmt: '-04:00',
     value: 'America/Iqaluit'
   },
   {
-    label: '(GMT-04:00) Louisville',
+    label: 'timezones.louisville',
+    gmt: '-04:00',
     value: 'America/Kentucky/Louisville'
   },
   {
-    label: '(GMT-04:00) Marengo, Indiana',
+    label: 'timezones.marengoindiana',
+    gmt: '-04:00',
     value: 'America/Indiana/Marengo'
   },
   {
-    label: '(GMT-04:00) Monticello, Kentucky',
+    label: 'timezones.monticellokentucky',
+    gmt: '-04:00',
     value: 'America/Kentucky/Monticello'
   },
   {
-    label: '(GMT-04:00) New York',
+    label: 'timezones.newyork',
+    gmt: '-04:00',
     value: 'America/New_York'
   },
   {
-    label: '(GMT-04:00) Nipigon',
+    label: 'timezones.nipigon',
+    gmt: '-04:00',
     value: 'America/Nipigon'
   },
   {
-    label: '(GMT-04:00) Pangnirtung',
+    label: 'timezones.pangnirtung',
+    gmt: '-04:00',
     value: 'America/Pangnirtung'
   },
   {
-    label: '(GMT-04:00) Petersburg, Indiana',
+    label: 'timezones.petersburgindiana',
+    gmt: '-04:00',
     value: 'America/Indiana/Petersburg'
   },
   {
-    label: '(GMT-04:00) Port-au-Prince',
+    label: 'timezones.portauprince',
+    gmt: '-04:00',
     value: 'America/Port-au-Prince'
   },
   {
-    label: '(GMT-04:00) Thunder Bay',
+    label: 'timezones.thunderbay',
+    gmt: '-04:00',
     value: 'America/Thunder_Bay'
   },
   {
-    label: '(GMT-04:00) Toronto',
+    label: 'timezones.toronto',
+    gmt: '-04:00',
     value: 'America/Toronto'
   },
   {
-    label: '(GMT-04:00) Vevay, Indiana',
+    label: 'timezones.vevayindiana',
+    gmt: '-04:00',
     value: 'America/Indiana/Vevay'
   },
   {
-    label: '(GMT-04:00) Vincennes, Indiana',
+    label: 'timezones.vincennesindiana',
+    gmt: '-04:00',
     value: 'America/Indiana/Vincennes'
   },
   {
-    label: '(GMT-04:00) Winamac, Indiana',
+    label: 'timezones.winamacindiana',
+    gmt: '-04:00',
     value: 'America/Indiana/Winamac'
   },
-  { label: '(GMT-04:00) Guyana', value: 'America/Guyana' },
   {
-    label: '(GMT-04:00) Paraguay',
+    label: 'timezones.guyana',
+    gmt: '-04:00',
+    value: 'America/Guyana'
+  },
+  {
+    label: 'timezones.paraguay',
+    gmt: '-04:00',
     value: 'America/Asuncion'
   },
   {
-    label: '(GMT-04:00) Venezuela',
+    label: 'timezones.venezuela',
+    gmt: '-04:00',
     value: 'America/Caracas'
   },
   {
-    label: '(GMT-03:00) Buenos Aires',
+    label: 'timezones.buenosaires',
+    gmt: '-03:00',
     value: 'America/Argentina/Buenos_Aires'
   },
   {
-    label: '(GMT-03:00) Catamarca',
+    label: 'timezones.catamarca',
+    gmt: '-03:00',
     value: 'America/Argentina/Catamarca'
   },
   {
-    label: '(GMT-03:00) Cordoba',
+    label: 'timezones.cordoba',
+    gmt: '-03:00',
     value: 'America/Argentina/Cordoba'
   },
   {
-    label: '(GMT-03:00) Jujuy',
+    label: 'timezones.jujuy',
+    gmt: '-03:00',
     value: 'America/Argentina/Jujuy'
   },
   {
-    label: '(GMT-03:00) La Rioja',
+    label: 'timezones.larioja',
+    gmt: '-03:00',
     value: 'America/Argentina/La_Rioja'
   },
   {
-    label: '(GMT-03:00) Mendoza',
+    label: 'timezones.mendoza',
+    gmt: '-03:00',
     value: 'America/Argentina/Mendoza'
   },
   {
-    label: '(GMT-03:00) Rio Gallegos',
+    label: 'timezones.riogallegos',
+    gmt: '-03:00',
     value: 'America/Argentina/Rio_Gallegos'
   },
   {
-    label: '(GMT-03:00) Salta',
+    label: 'timezones.salta',
+    gmt: '-03:00',
     value: 'America/Argentina/Salta'
   },
   {
-    label: '(GMT-03:00) San Juan',
+    label: 'timezones.sanjuan',
+    gmt: '-03:00',
     value: 'America/Argentina/San_Juan'
   },
   {
-    label: '(GMT-03:00) San Luis',
+    label: 'timezones.sanluis',
+    gmt: '-03:00',
     value: 'America/Argentina/San_Luis'
   },
   {
-    label: '(GMT-03:00) Tucuman',
+    label: 'timezones.tucuman',
+    gmt: '-03:00',
     value: 'America/Argentina/Tucuman'
   },
   {
-    label: '(GMT-03:00) Ushuaia',
+    label: 'timezones.ushuaia',
+    gmt: '-03:00',
     value: 'America/Argentina/Ushuaia'
   },
   {
-    label: '(GMT-03:00) Bermuda',
+    label: 'timezones.bermuda',
+    gmt: '-03:00',
     value: 'Atlantic/Bermuda'
   },
   {
-    label: '(GMT-03:00) Glace Bay',
+    label: 'timezones.glacebay',
+    gmt: '-03:00',
     value: 'America/Glace_Bay'
   },
   {
-    label: '(GMT-03:00) Goose Bay',
+    label: 'timezones.goosebay',
+    gmt: '-03:00',
     value: 'America/Goose_Bay'
   },
   {
-    label: '(GMT-03:00) Halifax',
+    label: 'timezones.halifax',
+    gmt: '-03:00',
     value: 'America/Halifax'
   },
   {
-    label: '(GMT-03:00) Moncton',
+    label: 'timezones.moncton',
+    gmt: '-03:00',
     value: 'America/Moncton'
   },
   {
-    label: '(GMT-03:00) Thule',
+    label: 'timezones.thule',
+    gmt: '-03:00',
     value: 'America/Thule'
   },
   {
-    label: '(GMT-03:00) Araguaina',
+    label: 'timezones.araguaina',
+    gmt: '-03:00',
     value: 'America/Araguaina'
   },
   {
-    label: '(GMT-03:00) Bahia',
+    label: 'timezones.bahia',
+    gmt: '-03:00',
     value: 'America/Bahia'
   },
   {
-    label: '(GMT-03:00) Belem',
+    label: 'timezones.belem',
+    gmt: '-03:00',
     value: 'America/Belem'
   },
   {
-    label: '(GMT-03:00) Fortaleza',
+    label: 'timezones.fortaleza',
+    gmt: '-03:00',
     value: 'America/Fortaleza'
   },
   {
-    label: '(GMT-03:00) Maceio',
+    label: 'timezones.maceio',
+    gmt: '-03:00',
     value: 'America/Maceio'
   },
   {
-    label: '(GMT-03:00) Recife',
+    label: 'timezones.recife',
+    gmt: '-03:00',
     value: 'America/Recife'
   },
   {
-    label: '(GMT-03:00) Santarem',
+    label: 'timezones.santarem',
+    gmt: '-03:00',
     value: 'America/Santarem'
   },
   {
-    label: '(GMT-03:00) Sao Paulo',
+    label: 'timezones.saopaulo',
+    gmt: '-03:00',
     value: 'America/Sao_Paulo'
   },
   {
-    label: '(GMT-03:00) Falkland Islands',
+    label: 'timezones.falklandislands',
+    gmt: '-03:00',
     value: 'Atlantic/Stanley'
   },
-  { label: '(GMT-03:00) French Guiana', value: 'America/Cayenne' },
   {
-    label: '(GMT-03:00) Palmer',
+    label: 'timezones.frenchguiana',
+    gmt: '-03:00',
+    value: 'America/Cayenne'
+  },
+  {
+    label: 'timezones.palmer',
+    gmt: '-03:00',
     value: 'Antarctica/Palmer'
   },
   {
-    label: '(GMT-03:00) Punta Arenas',
+    label: 'timezones.puntaarenas',
+    gmt: '-03:00',
     value: 'America/Punta_Arenas'
   },
-  { label: '(GMT-03:00) Rothera', value: 'Antarctica/Rothera' },
   {
-    label: '(GMT-03:00) Suriname',
+    label: 'timezones.rothera',
+    gmt: '-03:00',
+    value: 'Antarctica/Rothera'
+  },
+  {
+    label: 'timezones.suriname',
+    gmt: '-03:00',
     value: 'America/Paramaribo'
   },
   {
-    label: '(GMT-03:00) Uruguay',
+    label: 'timezones.uruguay',
+    gmt: '-03:00',
     value: 'America/Montevideo'
   },
   {
-    label: '(GMT-02:30) Newfoundland',
+    label: 'timezones.newfoundland',
+    gmt: '-02:30',
     value: 'America/St_Johns'
   },
   {
-    label: '(GMT-02:00) Fernando de Noronha',
+    label: 'timezones.fernandodenoronha',
+    gmt: '-02:00',
     value: 'America/Noronha'
   },
   {
-    label: '(GMT-02:00) South Georgia',
+    label: 'timezones.southgeorgia',
+    gmt: '-02:00',
     value: 'Atlantic/South_Georgia'
   },
   {
-    label: '(GMT-02:00) St Pierre & Miquelon',
+    label: 'timezones.stpierremiquelon',
+    gmt: '-02:00',
     value: 'America/Miquelon'
   },
   {
-    label: '(GMT-02:00) West Greenland',
+    label: 'timezones.westgreenland',
+    gmt: '-02:00',
     value: 'America/Nuuk'
   },
   {
-    label: '(GMT-01:00) Cape Verde',
+    label: 'timezones.capeverde',
+    gmt: '-01:00',
     value: 'Atlantic/Cape_Verde'
   },
   {
-    label: '(GMT+00:00) Azores',
+    label: 'timezones.azores',
+    gmt: '+00:00',
     value: 'Atlantic/Azores'
   },
   {
-    label: '(GMT+00:00) Coordinated Universal',
+    label: 'timezones.coordinateduniversal',
+    gmt: '+00:00',
     value: 'UTC'
   },
   {
-    label: '(GMT+00:00) East Greenland',
+    label: 'timezones.eastgreenland',
+    gmt: '+00:00',
     value: 'America/Scoresbysund'
   },
   {
-    label: '(GMT+00:00) Greenwich Mean',
+    label: 'timezones.greenwichmean',
+    gmt: '+00:00',
     value: 'Etc/GMT'
   },
   {
-    label: '(GMT+00:00) Abidjan',
+    label: 'timezones.abidjan',
+    gmt: '+00:00',
     value: 'Africa/Abidjan'
   },
   {
-    label: '(GMT+00:00) Bissau',
+    label: 'timezones.bissau',
+    gmt: '+00:00',
     value: 'Africa/Bissau'
   },
   {
-    label: '(GMT+00:00) Danmarkshavn',
+    label: 'timezones.danmarkshavn',
+    gmt: '+00:00',
     value: 'America/Danmarkshavn'
   },
   {
-    label: '(GMT+00:00) Monrovia',
+    label: 'timezones.monrovia',
+    gmt: '+00:00',
     value: 'Africa/Monrovia'
   },
   {
-    label: '(GMT+00:00) Reykjavik',
+    label: 'timezones.reykjavik',
+    gmt: '+00:00',
     value: 'Atlantic/Reykjavik'
   },
   {
-    label: '(GMT+00:00) São Tomé',
+    label: 'timezones.sãotomé',
+    gmt: '+00:00',
     value: 'Africa/Sao_Tome'
   },
   {
-    label: '(GMT+01:00) Algiers',
+    label: 'timezones.algiers',
+    gmt: '+01:00',
     value: 'Africa/Algiers'
   },
   {
-    label: '(GMT+01:00) Tunis',
+    label: 'timezones.tunis',
+    gmt: '+01:00',
     value: 'Africa/Tunis'
   },
-  { label: '(GMT+01:00) Ireland', value: 'Europe/Dublin' },
   {
-    label: '(GMT+01:00) Morocco',
+    label: 'timezones.ireland',
+    gmt: '+01:00',
+    value: 'Europe/Dublin'
+  },
+  {
+    label: 'timezones.morocco',
+    gmt: '+01:00',
     value: 'Africa/Casablanca'
   },
   {
-    label: '(GMT+01:00) United Kingdom',
+    label: 'timezones.unitedkingdom',
+    gmt: '+01:00',
     value: 'Europe/London'
   },
   {
-    label: '(GMT+01:00) Lagos',
+    label: 'timezones.lagos',
+    gmt: '+01:00',
     value: 'Africa/Lagos'
   },
   {
-    label: '(GMT+01:00) Ndjamena',
+    label: 'timezones.ndjamena',
+    gmt: '+01:00',
     value: 'Africa/Ndjamena'
   },
   {
-    label: '(GMT+01:00) Canary',
+    label: 'timezones.canary',
+    gmt: '+01:00',
     value: 'Atlantic/Canary'
   },
   {
-    label: '(GMT+01:00) Faroe',
+    label: 'timezones.faroe',
+    gmt: '+01:00',
     value: 'Atlantic/Faroe'
   },
   {
-    label: '(GMT+01:00) Lisbon',
+    label: 'timezones.lisbon',
+    gmt: '+01:00',
     value: 'Europe/Lisbon'
   },
   {
-    label: '(GMT+01:00) Madeira',
+    label: 'timezones.madeira',
+    gmt: '+01:00',
     value: 'Atlantic/Madeira'
   },
   {
-    label: '(GMT+01:00) Western Sahara',
+    label: 'timezones.westernsahara',
+    gmt: '+01:00',
     value: 'Africa/El_Aaiun'
   },
   {
-    label: '(GMT+02:00) Juba',
+    label: 'timezones.juba',
+    gmt: '+02:00',
     value: 'Africa/Juba'
   },
   {
-    label: '(GMT+02:00) Khartoum',
+    label: 'timezones.khartoum',
+    gmt: '+02:00',
     value: 'Africa/Khartoum'
   },
   {
-    label: '(GMT+02:00) Maputo',
+    label: 'timezones.maputo',
+    gmt: '+02:00',
     value: 'Africa/Maputo'
   },
   {
-    label: '(GMT+02:00) Windhoek',
+    label: 'timezones.windhoek',
+    gmt: '+02:00',
     value: 'Africa/Windhoek'
   },
   {
-    label: '(GMT+02:00) Amsterdam',
+    label: 'timezones.amsterdam',
+    gmt: '+02:00',
     value: 'Europe/Amsterdam'
   },
   {
-    label: '(GMT+02:00) Andorra',
+    label: 'timezones.andorra',
+    gmt: '+02:00',
     value: 'Europe/Andorra'
   },
   {
-    label: '(GMT+02:00) Belgrade',
+    label: 'timezones.belgrade',
+    gmt: '+02:00',
     value: 'Europe/Belgrade'
   },
   {
-    label: '(GMT+02:00) Berlin',
+    label: 'timezones.berlin',
+    gmt: '+02:00',
     value: 'Europe/Berlin'
   },
   {
-    label: '(GMT+02:00) Brussels',
+    label: 'timezones.brussels',
+    gmt: '+02:00',
     value: 'Europe/Brussels'
   },
   {
-    label: '(GMT+02:00) Budapest',
+    label: 'timezones.budapest',
+    gmt: '+02:00',
     value: 'Europe/Budapest'
   },
   {
-    label: '(GMT+02:00) Ceuta',
+    label: 'timezones.ceuta',
+    gmt: '+02:00',
     value: 'Africa/Ceuta'
   },
   {
-    label: '(GMT+02:00) Copenhagen',
+    label: 'timezones.copenhagen',
+    gmt: '+02:00',
     value: 'Europe/Copenhagen'
   },
   {
-    label: '(GMT+02:00) Gibraltar',
+    label: 'timezones.gibraltar',
+    gmt: '+02:00',
     value: 'Europe/Gibraltar'
   },
   {
-    label: '(GMT+02:00) Luxembourg',
+    label: 'timezones.luxembourg',
+    gmt: '+02:00',
     value: 'Europe/Luxembourg'
   },
   {
-    label: '(GMT+02:00) Madrid',
+    label: 'timezones.madrid',
+    gmt: '+02:00',
     value: 'Europe/Madrid'
   },
   {
-    label: '(GMT+02:00) Malta',
+    label: 'timezones.malta',
+    gmt: '+02:00',
     value: 'Europe/Malta'
   },
   {
-    label: '(GMT+02:00) Monaco',
+    label: 'timezones.monaco',
+    gmt: '+02:00',
     value: 'Europe/Monaco'
   },
   {
-    label: '(GMT+02:00) Oslo',
+    label: 'timezones.oslo',
+    gmt: '+02:00',
     value: 'Europe/Oslo'
   },
   {
-    label: '(GMT+02:00) Paris',
+    label: 'timezones.paris',
+    gmt: '+02:00',
     value: 'Europe/Paris'
   },
   {
-    label: '(GMT+02:00) Prague',
+    label: 'timezones.prague',
+    gmt: '+02:00',
     value: 'Europe/Prague'
   },
   {
-    label: '(GMT+02:00) Rome',
+    label: 'timezones.rome',
+    gmt: '+02:00',
     value: 'Europe/Rome'
   },
   {
-    label: '(GMT+02:00) Stockholm',
+    label: 'timezones.stockholm',
+    gmt: '+02:00',
     value: 'Europe/Stockholm'
   },
   {
-    label: '(GMT+02:00) Tirane',
+    label: 'timezones.tirane',
+    gmt: '+02:00',
     value: 'Europe/Tirane'
   },
   {
-    label: '(GMT+02:00) Vienna',
+    label: 'timezones.vienna',
+    gmt: '+02:00',
     value: 'Europe/Vienna'
   },
   {
-    label: '(GMT+02:00) Warsaw',
+    label: 'timezones.warsaw',
+    gmt: '+02:00',
     value: 'Europe/Warsaw'
   },
   {
-    label: '(GMT+02:00) Zurich',
+    label: 'timezones.zurich',
+    gmt: '+02:00',
     value: 'Europe/Zurich'
   },
   {
-    label: '(GMT+02:00) Cairo',
+    label: 'timezones.cairo',
+    gmt: '+02:00',
     value: 'Africa/Cairo'
   },
   {
-    label: '(GMT+02:00) Kaliningrad',
+    label: 'timezones.kaliningrad',
+    gmt: '+02:00',
     value: 'Europe/Kaliningrad'
   },
   {
-    label: '(GMT+02:00) Tripoli',
+    label: 'timezones.tripoli',
+    gmt: '+02:00',
     value: 'Africa/Tripoli'
   },
   {
-    label: '(GMT+02:00) South Africa',
+    label: 'timezones.southafrica',
+    gmt: '+02:00',
     value: 'Africa/Johannesburg'
   },
   {
-    label: '(GMT+02:00) Troll',
+    label: 'timezones.troll',
+    gmt: '+02:00',
     value: 'Antarctica/Troll'
   },
   {
-    label: '(GMT+03:00) Baghdad',
+    label: 'timezones.baghdad',
+    gmt: '+03:00',
     value: 'Asia/Baghdad'
   },
   {
-    label: '(GMT+03:00) Qatar',
+    label: 'timezones.qatar',
+    gmt: '+03:00',
     value: 'Asia/Qatar'
   },
   {
-    label: '(GMT+03:00) Riyadh',
+    label: 'timezones.riyadh',
+    gmt: '+03:00',
     value: 'Asia/Riyadh'
   },
   {
-    label: '(GMT+03:00) East Africa',
+    label: 'timezones.eastAfrica',
+    gmt: '+03:00',
     value: 'Africa/Nairobi'
   },
   {
-    label: '(GMT+03:00) Amman',
+    label: 'timezones.amman',
+    gmt: '+03:00',
     value: 'Asia/Amman'
   },
   {
-    label: '(GMT+03:00) Athens',
+    label: 'timezones.athens',
+    gmt: '+03:00',
     value: 'Europe/Athens'
   },
   {
-    label: '(GMT+03:00) Beirut',
+    label: 'timezones.beirut',
+    gmt: '+03:00',
     value: 'Asia/Beirut'
   },
   {
-    label: '(GMT+03:00) Bucharest',
+    label: 'timezones.bucharest',
+    gmt: '+03:00',
     value: 'Europe/Bucharest'
   },
   {
-    label: '(GMT+03:00) Chisinau',
+    label: 'timezones.chisinau',
+    gmt: '+03:00',
     value: 'Europe/Chisinau'
   },
   {
-    label: '(GMT+03:00) Damascus',
+    label: 'timezones.damascus',
+    gmt: '+03:00',
     value: 'Asia/Damascus'
   },
   {
-    label: '(GMT+03:00) Gaza',
+    label: 'timezones.gaza',
+    gmt: '+03:00',
     value: 'Asia/Gaza'
   },
   {
-    label: '(GMT+03:00) Hebron',
+    label: 'timezones.hebron',
+    gmt: '+03:00',
     value: 'Asia/Hebron'
   },
   {
-    label: '(GMT+03:00) Helsinki',
+    label: 'timezones.helsinki',
+    gmt: '+03:00',
     value: 'Europe/Helsinki'
   },
   {
-    label: '(GMT+03:00) Kiev',
+    label: 'timezones.kiev',
+    gmt: '+03:00',
     value: 'Europe/Kiev'
   },
   {
-    label: '(GMT+03:00) Nicosia',
+    label: 'timezones.nicosia',
+    gmt: '+03:00',
     value: 'Asia/Nicosia'
   },
   {
-    label: '(GMT+03:00) Riga',
+    label: 'timezones.riga',
+    gmt: '+03:00',
     value: 'Europe/Riga'
   },
   {
-    label: '(GMT+03:00) Sofia',
+    label: 'timezones.sofia',
+    gmt: '+03:00',
     value: 'Europe/Sofia'
   },
   {
-    label: '(GMT+03:00) Tallinn',
+    label: 'timezones.tallinn',
+    gmt: '+03:00',
     value: 'Europe/Tallinn'
   },
   {
-    label: '(GMT+03:00) Uzhhorod',
+    label: 'timezones.uzhhorod',
+    gmt: '+03:00',
     value: 'Europe/Uzhgorod'
   },
   {
-    label: '(GMT+03:00) Vilnius',
+    label: 'timezones.vilnius',
+    gmt: '+03:00',
     value: 'Europe/Vilnius'
   },
   {
-    label: '(GMT+03:00) Zaporozhye',
+    label: 'timezones.zaporozhye',
+    gmt: '+03:00',
     value: 'Europe/Zaporozhye'
   },
-  { label: '(GMT+03:00) Famagusta', value: 'Asia/Famagusta' },
   {
-    label: '(GMT+03:00) Israel',
+    label: 'timezones.famagusta',
+    gmt: '+03:00',
+    value: 'Asia/Famagusta'
+  },
+  {
+    label: 'timezones.israel',
+    gmt: '+03:00',
     value: 'Asia/Jerusalem'
   },
   {
-    label: '(GMT+03:00) Kirov',
+    label: 'timezones.kirov',
+    gmt: '+03:00',
     value: 'Europe/Kirov'
   },
   {
-    label: '(GMT+03:00) Minsk',
+    label: 'timezones.minsk',
+    gmt: '+03:00',
     value: 'Europe/Minsk'
   },
   {
-    label: '(GMT+03:00) Moscow',
+    label: 'timezones.moscow',
+    gmt: '+03:00',
     value: 'Europe/Moscow'
   },
   {
-    label: '(GMT+03:00) Simferopol',
+    label: 'timezones.simferopol',
+    gmt: '+03:00',
     value: 'Europe/Simferopol'
   },
   {
-    label: '(GMT+03:00) Turkey',
+    label: 'timezones.turkey',
+    gmt: '+03:00',
     value: 'Europe/Istanbul'
   },
   {
-    label: '(GMT+03:00) Volgograd',
+    label: 'timezones.volgograd',
+    gmt: '+03:00',
     value: 'Europe/Volgograd'
   },
-  { label: '(GMT+04:00) Armenia', value: 'Asia/Yerevan' },
   {
-    label: '(GMT+04:00) Astrakhan',
+    label: 'timezones.armenia',
+    gmt: '+04:00',
+    value: 'Asia/Yerevan'
+  },
+  {
+    label: 'timezones.astrakhan',
+    gmt: '+04:00',
     value: 'Europe/Astrakhan'
   },
   {
-    label: '(GMT+04:00) Azerbaijan',
+    label: 'timezones.azerbaijan',
+    gmt: '+04:00',
     value: 'Asia/Baku'
   },
   {
-    label: '(GMT+04:00) Georgia',
+    label: 'timezones.georgia',
+    gmt: '+04:00',
     value: 'Asia/Tbilisi'
   },
   {
-    label: '(GMT+04:00) Gulf',
+    label: 'timezones.gulf',
+    gmt: '+04:00',
     value: 'Asia/Dubai'
   },
   {
-    label: '(GMT+04:00) Mauritius',
+    label: 'timezones.mauritius',
+    gmt: '+04:00',
     value: 'Indian/Mauritius'
   },
-  { label: '(GMT+04:00) Réunion', value: 'Indian/Reunion' },
   {
-    label: '(GMT+04:00) Samara',
+    label: 'timezones.réunion',
+    gmt: '+04:00',
+    value: 'Indian/Reunion'
+  },
+  {
+    label: 'timezones.samara',
+    gmt: '+04:00',
     value: 'Europe/Samara'
   },
-  { label: '(GMT+04:00) Saratov', value: 'Europe/Saratov' },
   {
-    label: '(GMT+04:00) Seychelles',
+    label: 'timezones.saratov',
+    gmt: '+04:00',
+    value: 'Europe/Saratov'
+  },
+  {
+    label: 'timezones.seychelles',
+    gmt: '+04:00',
     value: 'Indian/Mahe'
   },
-  { label: '(GMT+04:00) Ulyanovsk', value: 'Europe/Ulyanovsk' },
   {
-    label: '(GMT+04:30) Afghanistan',
+    label: 'timezones.ulyanovsk',
+    gmt: '+04:00',
+    value: 'Europe/Ulyanovsk'
+  },
+  {
+    label: 'timezones.afghanistan',
+    gmt: '+04:30',
     value: 'Asia/Kabul'
   },
   {
-    label: '(GMT+04:30) Iran',
+    label: 'timezones.iran',
+    gmt: '+04:30',
     value: 'Asia/Tehran'
   },
   {
-    label: '(GMT+05:00) French Southern & Antarctic',
+    label: 'timezones.frenchSouthernAntarctic',
+    gmt: '+05:00',
     value: 'Indian/Kerguelen'
   },
-  { label: '(GMT+05:00) Maldives', value: 'Indian/Maldives' },
   {
-    label: '(GMT+05:00) Mawson',
+    label: 'timezones.maldives',
+    gmt: '+05:00',
+    value: 'Indian/Maldives'
+  },
+  {
+    label: 'timezones.mawson',
+    gmt: '+05:00',
     value: 'Antarctica/Mawson'
   },
   {
-    label: '(GMT+05:00) Pakistan',
+    label: 'timezones.pakistan',
+    gmt: '+05:00',
     value: 'Asia/Karachi'
   },
   {
-    label: '(GMT+05:00) Tajikistan',
+    label: 'timezones.tajikistan',
+    gmt: '+05:00',
     value: 'Asia/Dushanbe'
   },
   {
-    label: '(GMT+05:00) Turkmenistan',
+    label: 'timezones.turkmenistan',
+    gmt: '+05:00',
     value: 'Asia/Ashgabat'
   },
   {
-    label: '(GMT+05:00) Samarkand',
+    label: 'timezones.samarkand',
+    gmt: '+05:00',
     value: 'Asia/Samarkand'
   },
   {
-    label: '(GMT+05:00) Tashkent',
+    label: 'timezones.tashkent',
+    gmt: '+05:00',
     value: 'Asia/Tashkent'
   },
   {
-    label: '(GMT+05:00) Aktau',
+    label: 'timezones.aktau',
+    gmt: '+05:00',
     value: 'Asia/Aqtau'
   },
   {
-    label: '(GMT+05:00) Aqtobe',
+    label: 'timezones.aqtobe',
+    gmt: '+05:00',
     value: 'Asia/Aqtobe'
   },
   {
-    label: '(GMT+05:00) Atyrau',
+    label: 'timezones.atyrau',
+    gmt: '+05:00',
     value: 'Asia/Atyrau'
   },
   {
-    label: '(GMT+05:00) Oral',
+    label: 'timezones.oral',
+    gmt: '+05:00',
     value: 'Asia/Oral'
   },
   {
-    label: '(GMT+05:00) Qyzylorda',
+    label: 'timezones.qyzylorda',
+    gmt: '+05:00',
     value: 'Asia/Qyzylorda'
   },
   {
-    label: '(GMT+05:00) Yekaterinburg',
+    label: 'timezones.yekaterinburg',
+    gmt: '+05:00',
     value: 'Asia/Yekaterinburg'
   },
   {
-    label: '(GMT+05:30) Colombo',
+    label: 'timezones.colombo',
+    gmt: '+05:30',
     value: 'Asia/Colombo'
   },
   {
-    label: '(GMT+05:30) Kolkata',
+    label: 'timezones.kolkata',
+    gmt: '+05:30',
     value: 'Asia/Kolkata'
   },
   {
-    label: '(GMT+05:45) Nepal',
+    label: 'timezones.nepal',
+    gmt: '+05:45',
     value: 'Asia/Kathmandu'
   },
-  { label: '(GMT+06:00) Bangladesh', value: 'Asia/Dhaka' },
   {
-    label: '(GMT+06:00) Bhutan',
+    label: 'timezones.bangladesh',
+    gmt: '+06:00',
+    value: 'Asia/Dhaka'
+  },
+  {
+    label: 'timezones.bhutan',
+    gmt: '+06:00',
     value: 'Asia/Thimphu'
   },
   {
-    label: '(GMT+06:00) Almaty',
+    label: 'timezones.almaty',
+    gmt: '+06:00',
     value: 'Asia/Almaty'
   },
   {
-    label: '(GMT+06:00) Kostanay',
+    label: 'timezones.kostanay',
+    gmt: '+06:00',
     value: 'Asia/Qostanay'
   },
-  { label: '(GMT+06:00) Indian Ocean', value: 'Indian/Chagos' },
   {
-    label: '(GMT+06:00) Kyrgyzstan',
+    label: 'timezones.indianOcean',
+    gmt: '+06:00',
+    value: 'Indian/Chagos'
+  },
+  {
+    label: 'timezones.kyrgyzstan',
+    gmt: '+06:00',
     value: 'Asia/Bishkek'
   },
-  { label: '(GMT+06:00) Omsk', value: 'Asia/Omsk' },
   {
-    label: '(GMT+06:00) Urumqi',
+    label: 'timezones.omsk',
+    gmt: '+06:00',
+    value: 'Asia/Omsk'
+  },
+  {
+    label: 'timezones.urumqi',
+    gmt: '+06:00',
     value: 'Asia/Urumqi'
   },
-  { label: '(GMT+06:00) Vostok', value: 'Antarctica/Vostok' },
   {
-    label: '(GMT+06:30) Cocos Islands',
+    label: 'timezones.vostok',
+    gmt: '+06:00',
+    value: 'Antarctica/Vostok'
+  },
+  {
+    label: 'timezones.cocosIslands',
+    gmt: '+06:30',
     value: 'Indian/Cocos'
   },
-  { label: '(GMT+06:30) Myanmar', value: 'Asia/Yangon' },
   {
-    label: '(GMT+07:00) Barnaul',
+    label: 'timezones.myanmar',
+    gmt: '+06:30',
+    value: 'Asia/Yangon'
+  },
+  {
+    label: 'timezones.barnaul',
+    gmt: '+07:00',
     value: 'Asia/Barnaul'
   },
-  { label: '(GMT+07:00) Christmas Island', value: 'Indian/Christmas' },
   {
-    label: '(GMT+07:00) Davis',
+    label: 'timezones.christmasIsland',
+    gmt: '+07:00',
+    value: 'Indian/Christmas'
+  },
+  {
+    label: 'timezones.davis',
+    gmt: '+07:00',
     value: 'Antarctica/Davis'
   },
   {
-    label: '(GMT+07:00) Hovd',
+    label: 'timezones.hovd',
+    gmt: '+07:00',
     value: 'Asia/Hovd'
   },
   {
-    label: '(GMT+07:00) Bangkok',
+    label: 'timezones.bangkok',
+    gmt: '+07:00',
     value: 'Asia/Bangkok'
   },
   {
-    label: '(GMT+07:00) Ho Chi Minh City',
+    label: 'timezones.hoChiMinhCity',
+    gmt: '+07:00',
     value: 'Asia/Ho_Chi_Minh'
   },
   {
-    label: '(GMT+07:00) Krasnoyarsk',
+    label: 'timezones.krasnoyarsk',
+    gmt: '+07:00',
     value: 'Asia/Krasnoyarsk'
   },
   {
-    label: '(GMT+07:00) Novokuznetsk',
+    label: 'timezones.novokuznetsk',
+    gmt: '+07:00',
     value: 'Asia/Novokuznetsk'
   },
   {
-    label: '(GMT+07:00) Novosibirsk',
+    label: 'timezones.novosibirsk',
+    gmt: '+07:00',
     value: 'Asia/Novosibirsk'
   },
   {
-    label: '(GMT+07:00) Tomsk',
+    label: 'timezones.tomsk',
+    gmt: '+07:00',
     value: 'Asia/Tomsk'
   },
   {
-    label: '(GMT+07:00) Jakarta',
+    label: 'timezones.jakarta',
+    gmt: '+07:00',
     value: 'Asia/Jakarta'
   },
   {
-    label: '(GMT+07:00) Pontianak',
+    label: 'timezones.pontianak',
+    gmt: '+07:00',
     value: 'Asia/Pontianak'
   },
   {
-    label: '(GMT+08:00) Australian Western',
+    label: 'timezones.australianWestern',
+    gmt: '+08:00',
     value: 'Australia/Perth'
   },
   {
-    label: '(GMT+08:00) Brunei Darussalam',
+    label: 'timezones.bruneiDarussalam',
+    gmt: '+08:00',
     value: 'Asia/Brunei'
   },
   {
-    label: '(GMT+08:00) Central Indonesia',
+    label: 'timezones.centralIndonesia',
+    gmt: '+08:00',
     value: 'Asia/Makassar'
   },
   {
-    label: '(GMT+08:00) Macao',
+    label: 'timezones.macao',
+    gmt: '+08:00',
     value: 'Asia/Macau'
   },
   {
-    label: '(GMT+08:00) Shanghai',
+    label: 'timezones.shanghai',
+    gmt: '+08:00',
     value: 'Asia/Shanghai'
   },
   {
-    label: '(GMT+08:00) Hong Kong',
+    label: 'timezones.hongKong',
+    gmt: '+08:00',
     value: 'Asia/Hong_Kong'
   },
   {
-    label: '(GMT+08:00) Irkutsk',
+    label: 'timezones.irkutsk',
+    gmt: '+08:00',
     value: 'Asia/Irkutsk'
   },
   {
-    label: '(GMT+08:00) Kuala Lumpur',
+    label: 'timezones.kualaLumpur',
+    gmt: '+08:00',
     value: 'Asia/Kuala_Lumpur'
   },
   {
-    label: '(GMT+08:00) Kuching',
+    label: 'timezones.kuching',
+    gmt: '+08:00',
     value: 'Asia/Kuching'
   },
   {
-    label: '(GMT+08:00) Philippine',
+    label: 'timezones.philippine',
+    gmt: '+08:00',
     value: 'Asia/Manila'
   },
   {
-    label: '(GMT+08:00) Singapore',
+    label: 'timezones.singapore',
+    gmt: '+08:00',
     value: 'Asia/Singapore'
   },
   {
-    label: '(GMT+08:00) Taipei',
+    label: 'timezones.taipei',
+    gmt: '+08:00',
     value: 'Asia/Taipei'
   },
   {
-    label: '(GMT+08:00) Choibalsan',
+    label: 'timezones.choibalsan',
+    gmt: '+08:00',
     value: 'Asia/Choibalsan'
   },
   {
-    label: '(GMT+08:00) Ulaanbaatar',
+    label: 'timezones.ulaanbaatar',
+    gmt: '+08:00',
     value: 'Asia/Ulaanbaatar'
   },
   {
-    label: '(GMT+08:45) Australian Central Western',
+    label: 'timezones.australianCentralWestern',
+    gmt: '+08:45',
     value: 'Australia/Eucla'
   },
-  { label: '(GMT+09:00) East Timor', value: 'Asia/Dili' },
   {
-    label: '(GMT+09:00) Eastern Indonesia',
+    label: 'timezones.eastTimor',
+    gmt: '+09:00',
+    value: 'Asia/Dili'
+  },
+  {
+    label: 'timezones.easternIndonesia',
+    gmt: '+09:00',
     value: 'Asia/Jayapura'
   },
   {
-    label: '(GMT+09:00) Japan',
+    label: 'timezones.japan',
+    gmt: '+09:00',
     value: 'Asia/Tokyo'
   },
   {
-    label: '(GMT+09:00) Pyongyang',
+    label: 'timezones.pyongyang',
+    gmt: '+09:00',
     value: 'Asia/Pyongyang'
   },
   {
-    label: '(GMT+09:00) Seoul',
+    label: 'timezones.seoul',
+    gmt: '+09:00',
     value: 'Asia/Seoul'
   },
   {
-    label: '(GMT+09:00) Palau',
+    label: 'timezones.palau',
+    gmt: '+09:00',
     value: 'Pacific/Palau'
   },
   {
-    label: '(GMT+09:00) Chita',
+    label: 'timezones.chita',
+    gmt: '+09:00',
     value: 'Asia/Chita'
   },
   {
-    label: '(GMT+09:00) Khandyga',
+    label: 'timezones.khandyga',
+    gmt: '+09:00',
     value: 'Asia/Khandyga'
   },
   {
-    label: '(GMT+09:00) Yakutsk',
+    label: 'timezones.yakutsk',
+    gmt: '+09:00',
     value: 'Asia/Yakutsk'
   },
   {
-    label: '(GMT+09:30) Australian Central',
+    label: 'timezones.australianCentral',
+    gmt: '+09:30',
     value: 'Australia/Darwin'
   },
   {
-    label: '(GMT+09:30) Adelaide',
+    label: 'timezones.adelaide',
+    gmt: '+09:30',
     value: 'Australia/Adelaide'
   },
   {
-    label: '(GMT+09:30) Broken Hill',
+    label: 'timezones.brokenHill',
+    gmt: '+09:30',
     value: 'Australia/Broken_Hill'
   },
   {
-    label: '(GMT+10:00) Brisbane',
+    label: 'timezones.brisbane',
+    gmt: '+10:00',
     value: 'Australia/Brisbane'
   },
   {
-    label: '(GMT+10:00) Lindeman',
+    label: 'timezones.lindeman',
+    gmt: '+10:00',
     value: 'Australia/Lindeman'
   },
-  { label: '(GMT+10:00) Chamorro', value: 'Pacific/Guam' },
   {
-    label: '(GMT+10:00) Chuuk',
+    label: 'timezones.chamorro',
+    gmt: '+10:00',
+    value: 'Pacific/Guam'
+  },
+  {
+    label: 'timezones.chuuk',
+    gmt: '+10:00',
     value: 'Pacific/Chuuk'
   },
   {
-    label: '(GMT+10:00) Hobart',
+    label: 'timezones.hobart',
+    gmt: '+10:00',
     value: 'Australia/Hobart'
   },
   {
-    label: '(GMT+10:00) Macquarie',
+    label: 'timezones.macquarie',
+    gmt: '+10:00',
     value: 'Antarctica/Macquarie'
   },
   {
-    label: '(GMT+10:00) Melbourne',
+    label: 'timezones.melbourne',
+    gmt: '+10:00',
     value: 'Australia/Melbourne'
   },
   {
-    label: '(GMT+10:00) Sydney',
+    label: 'timezones.sydney',
+    gmt: '+10:00',
     value: 'Australia/Sydney'
   },
   {
-    label: '(GMT+10:00) Papua New Guinea',
+    label: 'timezones.papuaNewGuinea',
+    gmt: '+10:00',
     value: 'Pacific/Port_Moresby'
   },
   {
-    label: '(GMT+10:00) Ust-Nera',
+    label: 'timezones.ustNera',
+    gmt: '+10:00',
     value: 'Asia/Ust-Nera'
   },
   {
-    label: '(GMT+10:00) Vladivostok',
+    label: 'timezones.vladivostok',
+    gmt: '+10:00',
     value: 'Asia/Vladivostok'
   },
   {
-    label: '(GMT+10:30) Lord Howe',
+    label: 'timezones.lordHowe',
+    gmt: '+10:30',
     value: 'Australia/Lord_Howe'
   },
-  { label: '(GMT+11:00) Bougainville', value: 'Pacific/Bougainville' },
   {
-    label: '(GMT+11:00) Casey',
+    label: 'timezones.bougainville',
+    gmt: '+11:00',
+    value: 'Pacific/Bougainville'
+  },
+  {
+    label: 'timezones.casey',
+    gmt: '+11:00',
     value: 'Antarctica/Casey'
   },
-  { label: '(GMT+11:00) Kosrae', value: 'Pacific/Kosrae' },
   {
-    label: '(GMT+11:00) Magadan',
+    label: 'timezones.kosrae',
+    gmt: '+11:00',
+    value: 'Pacific/Kosrae'
+  },
+  {
+    label: 'timezones.magadan',
+    gmt: '+11:00',
     value: 'Asia/Magadan'
   },
   {
-    label: '(GMT+11:00) New Caledonia',
+    label: 'timezones.newCaledonia',
+    gmt: '+11:00',
     value: 'Pacific/Noumea'
   },
-  { label: '(GMT+11:00) Norfolk Island', value: 'Pacific/Norfolk' },
   {
-    label: '(GMT+11:00) Ponape',
+    label: 'timezones.norfolkIsland',
+    gmt: '+11:00',
+    value: 'Pacific/Norfolk'
+  },
+  {
+    label: 'timezones.ponape',
+    gmt: '+11:00',
     value: 'Pacific/Pohnpei'
   },
   {
-    label: '(GMT+11:00) Sakhalin',
+    label: 'timezones.sakhalin',
+    gmt: '+11:00',
     value: 'Asia/Sakhalin'
   },
   {
-    label: '(GMT+11:00) Solomon Islands',
+    label: 'timezones.solomonIslands',
+    gmt: '+11:00',
     value: 'Pacific/Guadalcanal'
   },
   {
-    label: '(GMT+11:00) Srednekolymsk',
+    label: 'timezones.srednekolymsk',
+    gmt: '+11:00',
     value: 'Asia/Srednekolymsk'
   },
   {
-    label: '(GMT+11:00) Vanuatu',
+    label: 'timezones.vanuatu',
+    gmt: '+11:00',
     value: 'Pacific/Efate'
   },
   {
-    label: '(GMT+12:00) Anadyr',
+    label: 'timezones.anadyr',
+    gmt: '+12:00',
     value: 'Asia/Anadyr'
   },
   {
-    label: '(GMT+12:00) Fiji',
+    label: 'timezones.fiji',
+    gmt: '+12:00',
     value: 'Pacific/Fiji'
   },
   {
-    label: '(GMT+12:00) Gilbert Islands',
+    label: 'timezones.gilbertIslands',
+    gmt: '+12:00',
     value: 'Pacific/Tarawa'
   },
   {
-    label: '(GMT+12:00) Kwajalein',
+    label: 'timezones.kwajalein',
+    gmt: '+12:00',
     value: 'Pacific/Kwajalein'
   },
   {
-    label: '(GMT+12:00) Majuro',
+    label: 'timezones.majuro',
+    gmt: '+12:00',
     value: 'Pacific/Majuro'
   },
-  { label: '(GMT+12:00) Nauru', value: 'Pacific/Nauru' },
   {
-    label: '(GMT+12:00) New Zealand',
+    label: 'timezones.nauru',
+    gmt: '+12:00',
+    value: 'Pacific/Nauru'
+  },
+  {
+    label: 'timezones.newZealand',
+    gmt: '+12:00',
     value: 'Pacific/Auckland'
   },
   {
-    label: '(GMT+12:00) Petropavlovsk-Kamchatski',
+    label: 'timezones.petropavlovskKamchatski',
+    gmt: '+12:00',
     value: 'Asia/Kamchatka'
   },
-  { label: '(GMT+12:00) Tuvalu', value: 'Pacific/Funafuti' },
   {
-    label: '(GMT+12:00) Wake Island',
+    label: 'timezones.tuvalu',
+    gmt: '+12:00',
+    value: 'Pacific/Funafuti'
+  },
+  {
+    label: 'timezones.wakeIsland',
+    gmt: '+12:00',
     value: 'Pacific/Wake'
   },
-  { label: '(GMT+12:00) Wallis & Futuna', value: 'Pacific/Wallis' },
   {
-    label: '(GMT+12:45) Chatham',
+    label: 'timezones.wallisFutuna',
+    gmt: '+12:00',
+    value: 'Pacific/Wallis'
+  },
+  {
+    label: 'timezones.chatham',
+    gmt: '+12:45',
     value: 'Pacific/Chatham'
   },
   {
-    label: '(GMT+13:00) Apia',
+    label: 'timezones.apia',
+    gmt: '+13:00',
     value: 'Pacific/Apia'
   },
-  { label: '(GMT+13:00) Phoenix Islands', value: 'Pacific/Kanton' },
   {
-    label: '(GMT+13:00) Tokelau',
+    label: 'timezones.phoenixIslands',
+    gmt: '+13:00',
+    value: 'Pacific/Kanton'
+  },
+  {
+    label: 'timezones.tokelau',
+    gmt: '+13:00',
     value: 'Pacific/Fakaofo'
   },
   {
-    label: '(GMT+13:00) Tonga',
+    label: 'timezones.tonga',
+    gmt: '+13:00',
     value: 'Pacific/Tongatapu'
   },
-  { label: '(GMT+14:00) Line Islands', value: 'Pacific/Kiritimati' }
+  {
+    label: 'timezones.lineIsLands',
+    gmt: '+14:00',
+    value: 'Pacific/Kiritimati'
+  }
 ]
 
-export const START_YEAR = dayjs().subtract(20, 'year').year()
-export const YEAR_OPTIONS: IOptionType[] = Array.from({ length: 40 }, (_, i) => {
-  const year = START_YEAR + i
-
-  return {
-    value: year,
-    label: year
+export const DATE_FORMATS = {
+  de: {
+    year: 'YYYY',
+    month: 'MMMM',
+    day: 'DD.MM.YYYY',
+    time: 'HH:mm',
+    date: 'DD.MM.YYYY HH:mm'
+  },
+  en: {
+    year: 'YYYY',
+    month: 'MMMM',
+    day: 'MMM DD, YYYY',
+    time: 'hh:mm A',
+    date: 'MMM DD, YYYY hh:mm A'
+  },
+  fr: {
+    year: 'YYYY',
+    month: 'MMMM',
+    day: 'DD/MM/YYYY',
+    time: 'hh:mm A',
+    date: 'DD/MM/YYYY hh:mm A'
+  },
+  ja: {
+    year: 'YYYY年',
+    month: 'MMMM',
+    day: 'YYYY年MM月DD日',
+    time: 'A hh:mm',
+    date: 'YYYY年MM月DD日 A hh:mm'
+  },
+  pl: {
+    year: 'YYYY年',
+    month: 'MMMM',
+    day: 'DD.MM.YYYY',
+    time: 'hh:mm A',
+    date: 'DD.MM.YYYY hh:mm A'
+  },
+  'zh-cn': {
+    year: 'YYYY年',
+    month: 'MMMM',
+    day: 'YYYY年MM月DD日',
+    time: 'A hh:mm',
+    date: 'YYYY年MM月DD日 A hh:mm'
+  },
+  'zh-tw': {
+    year: 'YYYY年',
+    month: 'MMMM',
+    day: 'YYYY年MM月DD日',
+    time: 'A hh:mm',
+    date: 'YYYY年MM月DD日 A hh:mm'
   }
-})
-
-export const MONTH_OPTIONS: IOptionType[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-].map((month, index) => ({
-  value: index,
-  label: month
-}))
+}

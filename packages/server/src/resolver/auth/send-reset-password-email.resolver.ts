@@ -1,14 +1,13 @@
+import { SendResetPasswordEmailInput } from '@graphql'
+import { DeviceIdGuard, GqlThrottlerGuard } from '@guard'
+import { helper, hs } from '@heyform-inc/utils'
 import { BadRequestException, UseGuards } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
-import { SendResetPasswordEmailInput } from '@graphql'
-import { BrowserIdGuard } from '@guard'
 import { AuthService, MailService, UserService } from '@service'
+import { Throttle } from '@nestjs/throttler'
 
 @Resolver()
-@UseGuards(BrowserIdGuard)
+@UseGuards(DeviceIdGuard)
 export class SendResetPasswordEmailResolver {
   constructor(
     private readonly mailService: MailService,
@@ -17,6 +16,8 @@ export class SendResetPasswordEmailResolver {
   ) {}
 
   @Mutation(returns => Boolean)
+  @UseGuards(GqlThrottlerGuard)
+  @Throttle(5, hs('1h'))
   async sendResetPasswordEmail(
     @Args('input') input: SendResetPasswordEmailInput
   ): Promise<boolean> {

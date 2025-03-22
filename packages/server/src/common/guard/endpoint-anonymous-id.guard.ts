@@ -1,7 +1,11 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common'
-import { GqlExecutionContext } from '@nestjs/graphql'
-
 import { helper } from '@heyform-inc/utils'
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable
+} from '@nestjs/common'
+import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()
 export class EndpointAnonymousIdGuard implements CanActivate {

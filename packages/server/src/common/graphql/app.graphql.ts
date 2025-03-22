@@ -31,6 +31,9 @@ export class AppType {
   id: string
 
   @Field({ nullable: true })
+  internalType: number
+
+  @Field({ nullable: true })
   uniqueId: string
 
   @Field()
@@ -50,6 +53,9 @@ export class AppType {
 
   @Field({ nullable: true })
   helpLinkUrl?: string
+
+  @Field({ nullable: true })
+  planGrade?: number
 
   @Field({ nullable: true })
   status?: number

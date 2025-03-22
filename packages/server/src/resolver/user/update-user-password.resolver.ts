@@ -1,12 +1,11 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, User } from '@decorator'
 import { BCRYPT_SALT } from '@environments'
 import { UpdateUserPasswordInput } from '@graphql'
+import { comparePassword, passwordHash } from '@heyforms/nestjs'
 import { UserModel } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService, UserService } from '@service'
-import { comparePassword, passwordHash } from '@utils'
 
 @Resolver()
 @Auth()
@@ -26,7 +25,10 @@ export class UpdateUserPasswordResolver {
     const attemptsKey = `limit:update_password:${user.id}`
 
     await this.authService.attemptsCheck(attemptsKey, async () => {
-      const verified = await comparePassword(input.currentPassword, user.password)
+      const verified = await comparePassword(
+        input.currentPassword,
+        user.password
+      )
 
       if (!verified) {
         throw new BadRequestException('The password does not match')

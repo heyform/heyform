@@ -1,21 +1,16 @@
+import { TemplateDetailInput, TemplateType } from '@graphql'
 import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
-import { TemplateDetailInput, TemplateDetailType } from '@graphql'
-import { TemplateModel } from '@model'
-import { TemplateService } from '@service'
+import { FormService } from '@service'
+import { TEMPLATES_TEAM_ID } from '@environments'
+import { Auth } from '@decorator'
 
 @Resolver()
+@Auth()
 export class TemplateDetailResolver {
-  constructor(private readonly templateService: TemplateService) {}
+  constructor(private readonly formService: FormService) {}
 
-  @Query(returns => TemplateDetailType)
-  async templateDetail(@Args('input') input: TemplateDetailInput): Promise<TemplateModel> {
-    if (helper.isValid(input.templateSlug)) {
-      return this.templateService.findBySlug(input.templateSlug)
-    } else {
-      return this.templateService.findById(input.templateId)
-    }
+  @Query(returns => TemplateType)
+  async templateDetail(@Args('input') input: TemplateDetailInput) {
+    return this.formService.findByIdInTeam(input.templateId, TEMPLATES_TEAM_ID)
   }
 }

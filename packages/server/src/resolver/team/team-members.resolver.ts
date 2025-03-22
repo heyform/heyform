@@ -1,10 +1,8 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
 import { Auth, Team, TeamGuard, User } from '@decorator'
 import { TeamDetailInput, TeamMemberType } from '@graphql'
+import { helper } from '@heyform-inc/utils'
 import { TeamModel, UserModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { TeamService, UserService } from '@service'
 
 @Resolver()
@@ -28,7 +26,9 @@ export class TeamMembersResolver {
       return []
     }
 
-    const users = await this.userService.findAll(members.map(member => member.memberId))
+    const users = await this.userService.findAll(
+      members.map(member => member.memberId)
+    )
 
     return users.map(user => {
       const member = members.find(member => member.memberId === user.id)

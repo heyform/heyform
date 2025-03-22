@@ -1,18 +1,16 @@
-import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-
 import {
   Answer,
   SubmissionCategoryEnum,
   SubmissionStatusEnum
 } from '@heyform-inc/shared-types-enums'
 import { date, helper } from '@heyform-inc/utils'
-
 import { FormModel, SubmissionModel } from '@model'
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
 import { getUpdateQuery } from '@utils'
-
+import { Model } from 'mongoose'
 import { FormService } from './form.service'
+const { isValid } = helper
 
 interface FindSubmissionOptions {
   formId: string
@@ -40,7 +38,10 @@ export class SubmissionService {
     return this.submissionModel.findById(id)
   }
 
-  async findByFormId(formId: string, submissionId: string): Promise<SubmissionModel | null> {
+  async findByFormId(
+    formId: string,
+    submissionId: string
+  ): Promise<SubmissionModel | null> {
     return this.submissionModel.findOne({
       _id: submissionId,
       formId
@@ -97,6 +98,7 @@ export class SubmissionService {
     }
     const projections = {
       id: 1,
+      contactId: 1,
       answers,
       endAt: 1
     }
@@ -119,7 +121,7 @@ export class SubmissionService {
   async findAllGroupInFieldIds(
     formId: string,
     fieldIds: string[],
-    limit = 5
+    limit = 10
   ): Promise<SubmissionModel[]> {
     if (helper.isEmpty(fieldIds)) {
       return []
@@ -160,7 +162,11 @@ export class SubmissionService {
     ])
   }
 
-  public async count({ formId, category, labelId }: FindSubmissionOptions): Promise<number> {
+  public async count({
+    formId,
+    category,
+    labelId
+  }: FindSubmissionOptions): Promise<number> {
     const conditions: Record<string, any> = {
       formId,
       status: SubmissionStatusEnum.PUBLIC
@@ -185,7 +191,7 @@ export class SubmissionService {
   public async countAllInTeam(teamId: string): Promise<number> {
     const forms = await this.formService.findAllInTeam(teamId)
 
-    if (helper.isValid(forms)) {
+    if (isValid(forms)) {
       return this.countAll(
         forms.map(f => f._id),
         {
@@ -199,7 +205,10 @@ export class SubmissionService {
     return 0
   }
 
-  public countAll(formIds: string[], filters: Record<string, any> = {}): Promise<number> {
+  public countAll(
+    formIds: string[],
+    filters: Record<string, any> = {}
+  ): Promise<number> {
     return new Promise((resolve, reject) => {
       this.submissionModel.countDocuments(
         {
@@ -268,7 +277,10 @@ export class SubmissionService {
     return result.id
   }
 
-  public async maskAsPrivate(formId: string, submissionIds?: string[]): Promise<boolean> {
+  public async maskAsPrivate(
+    formId: string,
+    submissionIds?: string[]
+  ): Promise<boolean> {
     const conditions: any = {
       formId
     }
@@ -285,7 +297,10 @@ export class SubmissionService {
     return result?.n > 0
   }
 
-  public async deleteByIds(formId: string, submissionIds?: string[]): Promise<boolean> {
+  public async deleteByIds(
+    formId: string,
+    submissionIds?: string[]
+  ): Promise<boolean> {
     const conditions: any = {
       formId
     }
@@ -334,7 +349,10 @@ export class SubmissionService {
     return result?.n > 0
   }
 
-  async findByIds(formId: string, submissionIds: string[]): Promise<SubmissionModel[]> {
+  async findByIds(
+    formId: string,
+    submissionIds: string[]
+  ): Promise<SubmissionModel[]> {
     const conditions: Record<string, any> = {
       formId,
       _id: {
@@ -346,6 +364,7 @@ export class SubmissionService {
   }
 
   async findAllByForm(formId: string): Promise<SubmissionModel[]> {
+    // 查询 submission list
     let submissions = []
     const limit = 1000
     const submissionCount = await this.count({
@@ -425,6 +444,13 @@ export class SubmissionService {
           }
         },
         {
+          $group: {
+            _id: '$geoLocation.country',
+            // region: { $first: '$geoLocation.city' },
+            total: { $sum: 1 }
+          }
+        },
+        {
           $sort: {
             total: -1
           }
@@ -434,6 +460,7 @@ export class SubmissionService {
           $project: {
             _id: 0,
             code: '$_id',
+            // region: 1,
             total: 1
           }
         }
@@ -453,10 +480,10 @@ export class SubmissionService {
       {
         $group: {
           _id: null,
-          averageTime: {
+          avgAverageTime: {
             $avg: { $subtract: ['$endAt', '$startAt'] }
           },
-          submissionCount: { $sum: 1 }
+          avgSubmissionCount: { $sum: 1 }
         }
       }
     ])

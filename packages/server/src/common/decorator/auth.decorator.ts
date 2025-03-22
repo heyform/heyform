@@ -1,7 +1,6 @@
-import { UseGuards, applyDecorators } from '@nestjs/common'
-
-import { AuthGuard, BrowserIdGuard } from '@guard'
+import { AuthGuard, DeviceIdGuard } from '@guard'
+import { applyDecorators, UseGuards } from '@nestjs/common'
 
 export function Auth(): any {
-  return applyDecorators(UseGuards(BrowserIdGuard, AuthGuard))
+  return applyDecorators(UseGuards(DeviceIdGuard, AuthGuard))
 }

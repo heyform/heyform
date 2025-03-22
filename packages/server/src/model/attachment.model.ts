@@ -8,7 +8,8 @@ export enum AttachmentStatusEnum {
 
 export interface AttachmentFile {
   filename: string
-  url: string
+  cdnKey: string
+  cdnUrlPrefix: string
   size: number
 }
 
@@ -21,7 +22,10 @@ export class AttachmentModel extends Document {
   filename: string
 
   @Prop({ required: true })
-  url: string
+  cdnKey: string
+
+  @Prop({ required: true })
+  cdnUrlPrefix: string
 
   @Prop({ required: true })
   size: number

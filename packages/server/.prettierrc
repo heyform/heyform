@@ -1,5 +1,5 @@
 {
-  "printWidth": 100,
+  "printWidth": 80,
   "singleQuote": true,
   "useTabs": false,
   "semi": false,
@@ -7,13 +7,5 @@
   "trailingComma": "none",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "arrowParens": "avoid",
-  "importOrder": ["^@heyform-inc/", "^@(decorator|graphql|guard|dto|interceptor|middleware|config|environments|controller|model|resolver|service|schedule|utils)", "^[.+/]"],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "importOrderGroupNamespaceSpecifiers": false,
-  "importOrderParserPlugins": [
-    "typescript",
-    "decorators-legacy"
-  ]
+  "arrowParens": "avoid"
 }

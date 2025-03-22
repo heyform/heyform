@@ -1,8 +1,7 @@
-import { BadRequestException } from '@nestjs/common'
-import { Query, Resolver } from '@nestjs/graphql'
-
 import { Auth, User } from '@decorator'
 import { UserModel } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Query, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService } from '@service'
 
 @Resolver()

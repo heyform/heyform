@@ -1,10 +1,15 @@
+/**
+ * @program: heyform-serves
+ * @description:
+ * @author: mufeng
+ * @date: 11/9/21 10:23 AM
+ **/
+
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-
-import { helper, timestamp } from '@heyform-inc/utils'
-
 import { FormModel, SubmissionIpLimitModel } from '@model'
+import { Model } from 'mongoose'
+import { helper, timestamp } from '@heyform-inc/utils'
 
 @Injectable()
 export class SubmissionIpLimitService {
@@ -45,7 +50,8 @@ export class SubmissionIpLimitService {
         )
       }
 
-      const isTmpRecord = limit.count >= form.settings.ipLimitCount && limit.expiredAt < now
+      const isTmpRecord =
+        limit.count >= form.settings.ipLimitCount && limit.expiredAt < now
       const updates: Record<string, any> = {
         count: isTmpRecord ? 1 : limit.count + 1,
         expiredAt: expiredAt === 0 || isTmpRecord ? expiredAt : undefined

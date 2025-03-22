@@ -1,10 +1,8 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper, pickValidValues } from '@heyform-inc/utils'
-
-import { Auth, Form, FormGuard } from '@decorator'
+import { Auth, Form, FormGuard, Team } from '@decorator'
 import { UpdateFormInput } from '@graphql'
-import { FormModel } from '@model'
+import { helper, pickValidValues } from '@heyform-inc/utils'
+import { FormModel, TeamModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService, SubmissionService } from '@service'
 
 @Resolver()
@@ -24,6 +22,7 @@ export class UpdateFormResolver {
   @Mutation(returns => Boolean)
   @FormGuard()
   async updateForm(
+    @Team() team: TeamModel,
     @Form() form: FormModel,
     @Args('input') input: UpdateFormInput
   ): Promise<boolean> {
@@ -38,7 +37,6 @@ export class UpdateFormResolver {
       ['timeLimit', 'settings.timeLimit'],
       ['captchaKind', 'settings.captchaKind'],
       ['filterSpam', 'settings.filterSpam'],
-      ['published', 'settings.published'],
       ['enableQuotaLimit', 'settings.enableQuotaLimit'],
       ['quotaLimit', 'settings.quotaLimit'],
       ['enableIpLimit', 'settings.enableIpLimit'],
@@ -46,29 +44,37 @@ export class UpdateFormResolver {
       ['ipLimitTime', 'settings.ipLimitTime'],
       ['enableProgress', 'settings.enableProgress'],
       ['enableQuestionList', 'settings.enableQuestionList'],
+      ['enableNavigationArrows', 'settings.enableNavigationArrows'],
       ['locale', 'settings.locale'],
       ['languages', 'settings.languages'],
       ['enableClosedMessage', 'settings.enableClosedMessage'],
       ['closedFormTitle', 'settings.closedFormTitle'],
       ['closedFormDescription', 'settings.closedFormDescription'],
-      ['allowArchive', 'settings.allowArchive']
+      ['allowArchive', 'settings.allowArchive'],
+      ['password', 'settings.password'],
+      ['requirePassword', 'settings.requirePassword'],
+      ['enableEmailNotification', 'settings.enableEmailNotification']
     ])
 
-    if (helper.isTrue(input.active)) {
-      updates.draft = false
-    }
-
-    if (!helper.isNil(input.password) || !helper.isNil(input.requirePassword)) {
-      updates = {
-        ...updates,
-        ...pickValidValues(input as any, [
-          ['password', 'settings.password'],
-          ['requirePassword', 'settings.requirePassword']
-        ])
+    // Discard at Dec 20, 2021 (v2021.12.3)
+    // Refactor at Jun 12, 2024 (v3.0.0)
+    if (helper.isTrue(input.redirectOnCompletion)) {
+      if (team.plan.customUrlRedirects) {
+        updates = {
+          ...updates,
+          ...pickValidValues(input as any, [
+            ['redirectOnCompletion', 'settings.redirectOnCompletion'],
+            ['redirectUrl', 'settings.redirectUrl'],
+            ['redirectDelay', 'settings.redirectDelay']
+          ])
+        }
+      } else {
+        updates['settings.redirectOnCompletion'] = false
       }
     }
 
-    if (!input.allowArchive) {
+    // Add at Sep 23, 2022
+    if (input.allowArchive === false) {
       await this.submissionService.deleteByIds(input.formId)
     }
 
@@ -76,7 +82,27 @@ export class UpdateFormResolver {
       helper.isValidArray(input.languages) &&
       !input.languages.every(t => form.settings?.languages?.includes(t))
     ) {
-      this.formService.addTranslateQueue(input.formId, input.languages!)
+      if (team.plan.multiLanguage) {
+        this.formService.addTranslateQueue(input.formId, input.languages!)
+      } else {
+        input.languages = []
+      }
+    }
+
+    // Add at Jul 12, 2024
+    if (input.metaTitle || input.metaDescription || input.metaOGImageUrl) {
+      if (team.plan.customMetaData) {
+        updates = {
+          ...updates,
+          ...pickValidValues(input as any, [
+            ['metaTitle', 'settings.metaTitle'],
+            ['metaDescription', 'settings.metaDescription'],
+            ['metaOGImageUrl', 'settings.metaOGImageUrl']
+          ])
+        }
+      }
+    } else if (helper.isNull(input.metaOGImageUrl)) {
+      updates['settings.metaOGImageUrl'] = null
     }
 
     return this.formService.update(input.formId, updates)

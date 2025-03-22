@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --hf-background: 244, 244, 245;
+    --hf-foreground: 255, 255, 255;
+    --hf-input: 9, 9, 11, 15%;
+    --hf-primary: 9, 9, 11;
+    --hf-primary-light: 255, 255, 255;
+    --hf-secondary: 113, 113, 122;
+    --hf-secondary-light: 9, 9, 11, 2.5%;
+    --hf-accent: 230, 230, 230;
+    --hf-accent-light: 9, 9, 11, 5%;
+    --hf-error: 220, 38, 38;
+  }
+
+  .dark {
+    --hf-background: 9, 9, 11;
+    --hf-foreground: 24, 24, 27;
+    --hf-input: 255, 255, 255, 10%;
+    --hf-primary: 255, 255, 255;
+    --hf-primary-light: 24, 24, 27;
+    --hf-secondary: 161, 161, 170;
+    --hf-secondary-light: 255, 255, 255, 2.5%;
+    --hf-accent: 230, 230, 230;
+    --hf-accent-light: 255, 255, 255, 5%;
+    --hf-error: 220, 38, 38;
+  }
+}
+
+body {
+  @apply text-primary antialiased lg:bg-background;
+}
+
+@layer components {
+  .scrollbar {
+    overflow-y: auto;
+
+    @media (min-width: 768px) {
+      &::-webkit-scrollbar {
+        height: 12px;
+        width: 12px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 6px;
+      }
+
+      &:hover::-webkit-scrollbar-thumb {
+        border: 3px solid transparent;
+        background-clip: content-box;
+        @apply bg-black/20 hover:bg-black/[0.25] dark:bg-white/20 dark:hover:bg-white/[0.25];
+      }
+
+      &::-webkit-scrollbar-track-piece,
+      &::-webkit-scrollbar-corner,
+      &::-webkit-scrollbar-resizer {
+        background-color: transparent;
+      }
+
+      &::-webkit-scrollbar-button:start:increment,
+      &::-webkit-scrollbar-button:end:decrement,
+      &::-webkit-scrollbar-button:increment,
+      &::-webkit-scrollbar-button:decrement,
+      &::-webkit-scrollbar-track {
+        display: none;
+      }
+    }
+  }
+
+  @keyframes skeleton {
+    from {
+      background-position: 100% 50%;
+    }
+
+    to {
+      background-position: 0 50%;
+    }
+  }
+
+  .skeleton {
+    @apply bg-gradient-to-r from-background from-40% via-input via-50% to-background to-60% dark:from-input dark:from-40% dark:via-background/20 dark:via-50% dark:to-input dark:to-60%;
+    background-size: 400% 100%;
+    animation: skeleton 1.4s ease infinite;
+  }
+
+  .non-scaling-stroke {
+    path {
+      vector-effect: non-scaling-stroke;
+    }
+  }
+}
+
+// Color picker
+.color-picker {
+  @apply space-y-2;
+
+  .react-colorful {
+    @apply h-40 w-full;
+  }
+
+  .react-colorful__pointer {
+    @apply h-[0.875rem] w-[0.875rem] border-none bg-transparent;
+    box-shadow:
+      white 0 0 0 3px inset,
+      rgb(0 0 0 / 10%) 0 0 0 4px inset,
+      rgb(0 0 0 / 10%) 0 0 0 1px;
+  }
+
+  .react-colorful__pointer-fill {
+    @apply opacity-0;
+  }
+
+  .react-colorful__saturation {
+    @apply overflow-hidden rounded-lg border-none shadow-none;
+
+    .react-colorful__interactive {
+      @apply inset-0.5;
+    }
+  }
+
+  .react-colorful__hue,
+  .react-colorful__alpha {
+    @apply mt-2.5 h-2 cursor-pointer rounded-lg;
+
+    .react-colorful__interactive {
+      @apply left-1 right-1;
+    }
+  }
+}
+
+// Changelog
+.changelog {
+  @apply mt-4 font-medium text-secondary;
+
+  h2 {
+    @apply mb-1.5 mt-4 text-base/6 font-bold text-primary;
+  }
+
+  h3 {
+    @apply mb-1 mt-2 text-sm/6 font-bold text-primary;
+  }
+
+  hr {
+    @apply my-4;
+  }
+
+  p,
+  img {
+    @apply mb-4;
+  }
+
+  a {
+    @apply underline;
+
+    &:hover {
+      @apply text-primary;
+    }
+  }
+
+  img {
+    @apply mt-4 h-auto w-full rounded-lg shadow-lg;
+  }
+
+  figcaption {
+    @apply hidden;
+  }
+
+  ul {
+    @apply ml-4 list-disc;
+  }
+}
+
+@keyframes loader-blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+.loader-span {
+  animation-name: loader-blink;
+  animation-duration: 1.4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+}

@@ -1,19 +1,13 @@
-import { FC } from 'react'
+import CustomReportModal from './CustomReportModal'
+import FormAnalyticsOverview from './Overview'
+import FormAnalyticsReport from './Report'
 
-import Report from './views/Report'
-import Summary from './views/Summary'
-
-const Analytics: FC = () => {
+export default function FormAnalytics() {
   return (
-    <div className="form-content-container">
-      <div className="container mx-auto max-w-5xl pt-14">
-        <div className="mx-4 md:mx-0">
-          <Summary />
-          <Report />
-        </div>
-      </div>
-    </div>
+    <>
+      <FormAnalyticsOverview />
+      <FormAnalyticsReport />
+      <CustomReportModal />
+    </>
   )
 }
-
-export default Analytics

@@ -1,9 +1,13 @@
-import { BadRequestException, CanActivate, ExecutionContext, Inject } from '@nestjs/common'
+import { helper, timestamp } from '@heyform-inc/utils'
+import { PlanGradeEnum } from '@model'
+import {
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  Inject
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { GqlExecutionContext } from '@nestjs/graphql'
-
-import { helper, timestamp } from '@heyform-inc/utils'
-
 import { FormService, ProjectService, TeamService } from '@service'
 import { requestParser } from '@utils'
 
@@ -41,7 +45,10 @@ export class PermissionGuard implements CanActivate {
     }
 
     const user = req.user
-    const scope = this.reflector.get<PermissionScopeEnum>('scope', context.getHandler())
+    const scope = this.reflector.get<PermissionScopeEnum>(
+      'scope',
+      context.getHandler()
+    )
 
     let { teamId, projectId } = args.input
 
@@ -50,7 +57,9 @@ export class PermissionGuard implements CanActivate {
       const form = await this.formService.findById(formId)
 
       if (!form) {
-        throw new BadRequestException('Please make sure you have permission to access this form')
+        throw new BadRequestException(
+          'Please make sure you have permission to access this form'
+        )
       }
 
       req.form = {
@@ -66,12 +75,19 @@ export class PermissionGuard implements CanActivate {
       const project = await this.projectService.findById(projectId)
 
       if (!project) {
-        throw new BadRequestException('Please make sure you have permission to access this project')
+        throw new BadRequestException(
+          'Please make sure you have permission to access this project'
+        )
       }
 
-      const member = await this.projectService.findMemberById(projectId, user.id)
+      const member = await this.projectService.findMemberById(
+        projectId,
+        user.id
+      )
       if (!member) {
-        throw new BadRequestException("You don't have permission to access the workspace")
+        throw new BadRequestException(
+          "You don't have permission to access the workspace"
+        )
       }
 
       req.project = {
@@ -83,25 +99,43 @@ export class PermissionGuard implements CanActivate {
       teamId = project.teamId
     }
 
-    const team = await this.teamService.findById(teamId)
+    const team = await this.teamService.findWithPlanById(teamId)
 
     if (!team) {
-      throw new BadRequestException("You don't have permission to access the workspace")
+      throw new BadRequestException(
+        "You don't have permission to access the workspace"
+      )
     }
 
     const member = await this.teamService.findMemberById(teamId, user.id)
     if (!member) {
-      throw new BadRequestException("You don't have permission to access the workspace")
+      throw new BadRequestException(
+        "You don't have permission to access the workspace"
+      )
+    }
+
+    // Only team owner can access the team with Free Plan
+    const isOwner = team.ownerId === user.id
+    if (team.plan.grade === PlanGradeEnum.FREE && !isOwner) {
+      throw new BadRequestException(
+        "You don't have permission to access the workspace"
+      )
     }
 
     req.team = {
       id: teamId,
       ownerId: team.ownerId,
-      isOwner: team.ownerId === user.id,
+      isOwner,
       name: team.name,
       role: member.role,
       storageQuota: team.storageQuota,
-      inviteCode: team.inviteCode
+      // Discard at Dec 20, 2021 (v2021.12.3)
+      // submissionQuota: team.submissionQuota,
+      plan: team.plan,
+      subscription: team.subscription,
+      inviteCode: team.inviteCode,
+      // Add at Dec 29, 2021 (v2021.12.4)
+      additionalSeats: team.additionalSeats
     }
 
     // Update team member last activity date

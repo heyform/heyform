@@ -1,18 +1,18 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
 import { Auth } from '@decorator'
 import { UNSPLASH_CLIENT_ID } from '@environments'
 import { UnsplashImageType, UnsplashSearchInput } from '@graphql'
-import { Unsplash } from '@utils'
+import { Unsplash } from '@heyforms/integrations'
+import { helper } from '@heyform-inc/utils'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { randomNumber } from '@utils'
 
 @Resolver()
 @Auth()
 export class UnsplashSearchResolver {
   @Query(returns => [UnsplashImageType])
-  async unsplashSearch(@Args('input') input: UnsplashSearchInput): Promise<UnsplashImageType[]> {
+  async unsplashSearch(
+    @Args('input') input: UnsplashSearchInput
+  ): Promise<UnsplashImageType[]> {
     let page = input.page || 1
     let query = input.keyword
 

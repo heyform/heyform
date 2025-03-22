@@ -1,8 +1,6 @@
+import { FormField } from '@heyform-inc/shared-types-enums'
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsOptional, Max } from 'class-validator'
-
-import { FormField, FormKindEnum, InteractiveModeEnum } from '@heyform-inc/shared-types-enums'
-
 import { FormFieldType, ThemeSettingsType } from './form.graphql'
 import { ProjectDetailInput } from './project.graphql'
 
@@ -21,16 +19,16 @@ export class TemplatesInput {
 @InputType()
 export class TemplateDetailInput {
   @Field({ nullable: true })
-  templateId?: string
-
-  @Field({ nullable: true })
-  templateSlug?: string
+  templateId: string
 }
 
 @ObjectType()
 export class TemplateType {
   @Field()
   id: string
+
+  @Field({ nullable: true })
+  recordId?: string
 
   @Field()
   name: string
@@ -41,45 +39,24 @@ export class TemplateType {
   @Field({ nullable: true })
   thumbnail?: string
 
-  @Field()
-  category: string
-
   @Field({ nullable: true })
-  description?: string
+  category?: string
 
-  @Field(type => Number)
-  interactiveMode: InteractiveModeEnum
-
-  @Field(type => Number)
-  kind: FormKindEnum
+  @Field(type => [FormFieldType], { nullable: true })
+  fields?: FormField[]
 
   @Field(type => ThemeSettingsType, { nullable: true })
   themeSettings?: ThemeSettingsType
 
-  @Field()
-  usedCount: number
-
   @Field({ nullable: true })
-  timeSaving?: string
-
-  @Field({ nullable: true })
-  timeToComplete?: string
-
-  @Field()
-  published?: boolean
-}
-
-@ObjectType()
-export class TemplateDetailType extends TemplateType {
-  @Field(type => [FormFieldType], { nullable: true })
-  fields?: FormField[]
-
-  @Field({ nullable: true })
-  fieldUpdateAt?: number
+  used?: number
 }
 
 @InputType()
 export class UseTemplateInput extends ProjectDetailInput {
   @Field()
   templateId: string
+
+  @Field()
+  recordId: string
 }

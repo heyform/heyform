@@ -1,6 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsArray, IsOptional } from 'class-validator'
-
 import { TeamDetailInput } from './team.graphql'
 
 @InputType()

@@ -1,18 +1,23 @@
+/**
+ * Created by mufeng on 2021/05/20.
+ * Copyright (c) 2021 Heyooo, Inc. all rights reserved
+ */
 import { Process, Processor } from '@nestjs/bull'
+import { FailedTaskService, FormReportService } from '@service'
 import { Job } from 'bull'
+import { BaseQueue, BaseQueueJob } from './base.queue'
 
-import { FormReportService } from '@service'
-
-import { BaseQueue } from './base.queue'
-
-interface FormReportQueueJob {
+interface FormReportQueueJob extends BaseQueueJob {
   formId: string
 }
 
 @Processor('FormReportQueue')
 export class FormReportQueue extends BaseQueue {
-  constructor(private readonly formReportService: FormReportService) {
-    super()
+  constructor(
+    failedTaskService: FailedTaskService,
+    private readonly formReportService: FormReportService
+  ) {
+    super(failedTaskService)
   }
 
   @Process()

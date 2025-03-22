@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-
 import { IntegrationModel } from './integration.model'
 
 @Schema({
@@ -13,4 +12,6 @@ export class IntegrationRecordModel extends IntegrationModel {
   response?: Record<string, any>
 }
 
-export const IntegrationRecordSchema = SchemaFactory.createForClass(IntegrationRecordModel)
+export const IntegrationRecordSchema = SchemaFactory.createForClass(
+  IntegrationRecordModel
+)

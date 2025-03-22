@@ -1,8 +1,7 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
 import { Auth, Project, ProjectGuard } from '@decorator'
 import { ProjectDetailInput, UserDetailType } from '@graphql'
 import { ProjectModel, UserModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { ProjectService, UserService } from '@service'
 
 @Resolver()

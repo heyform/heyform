@@ -1,8 +1,26 @@
+import { FormType, PlanType, ProjectType } from '@graphql'
+import {
+  BillingCycleEnum,
+  FormModel,
+  PlanModel,
+  ProjectModel,
+  SubscriptionModel,
+  SubscriptionStatusEnum,
+  TeamRoleEnum
+} from '@model'
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { ArrayMinSize, IsArray, IsEmail, IsEnum, IsOptional, IsUrl, Length } from 'class-validator'
-
-import { ProjectType } from '@graphql'
-import { ProjectModel, TeamRoleEnum } from '@model'
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEmail,
+  IsEnum,
+  IsFQDN,
+  IsObject,
+  IsOptional,
+  IsUrl,
+  Length
+} from 'class-validator'
+import { GraphQLJSONObject } from 'graphql-type-json'
 
 @InputType()
 export class CreateTeamInput {
@@ -20,12 +38,27 @@ export class CreateTeamInput {
   @IsOptional()
   @IsArray()
   members?: string[]
+
+  @Field()
+  projectName: string
 }
 
 @InputType()
 export class TeamDetailInput {
   @Field()
   teamId: string
+}
+
+@InputType()
+export class SearchTeamInput extends TeamDetailInput {
+  @Field()
+  query: string
+}
+
+@InputType()
+export class FreeTrialInput extends TeamDetailInput {
+  @Field()
+  planId: string
 }
 
 @InputType()
@@ -49,6 +82,64 @@ export class InviteMemberInput extends TeamDetailInput {
 }
 
 @InputType()
+export class TeamCdnTokenInput {
+  @Field()
+  teamId: string
+
+  @Field()
+  mime: string
+
+  @Field()
+  filename: string
+}
+
+@InputType()
+export class AddCustomDomainInput extends TeamDetailInput {
+  @Field()
+  @IsFQDN()
+  domain: string
+}
+
+@InputType()
+export class CreateBrandKitInput extends TeamDetailInput {
+  @Field()
+  @IsUrl()
+  logo: string
+
+  @Field(type => GraphQLJSONObject)
+  @IsObject()
+  theme: Record<string, any>
+}
+
+@InputType()
+export class UpdateBrandKitInput extends TeamDetailInput {
+  @Field({ nullable: true })
+  @IsUrl()
+  @IsOptional()
+  logo: string
+
+  @Field(type => GraphQLJSONObject, { nullable: true })
+  @IsObject()
+  @IsOptional()
+  theme: Record<string, any>
+}
+
+@ObjectType()
+export class CustomHostnameType {
+  @Field()
+  active: boolean
+
+  @Field()
+  ssl: boolean
+
+  @Field()
+  ownership: boolean
+
+  @Field(type => [String], { nullable: true })
+  errors?: string[]
+}
+
+@InputType()
 export class UpdateTeamInput extends TeamDetailInput {
   @Field({ nullable: true })
   @Length(1, 30, {
@@ -61,6 +152,18 @@ export class UpdateTeamInput extends TeamDetailInput {
   @IsUrl()
   @IsOptional()
   avatar?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  customDomain?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  enableCustomDomain?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  removeBranding?: boolean
 }
 
 @InputType()
@@ -95,6 +198,39 @@ export class UpdateTeamMemberInput extends TransferTeamInput {
   @Field(type => Number)
   @IsEnum([TeamRoleEnum.ADMIN, TeamRoleEnum.COLLABORATOR, TeamRoleEnum.MEMBER])
   role: TeamRoleEnum
+}
+
+@ObjectType()
+export class SubscriptionType {
+  @Field({ nullable: true })
+  id: string
+
+  @Field()
+  teamId: string
+
+  @Field()
+  planId: string
+
+  @Field()
+  billingCycle: BillingCycleEnum
+
+  @Field({ nullable: true })
+  startAt: number
+
+  @Field({ nullable: true })
+  endAt: number
+
+  @Field({ nullable: true })
+  isCanceled: boolean
+
+  @Field({ nullable: true })
+  canceledAt: number
+
+  @Field({ nullable: true })
+  trialing?: boolean
+
+  @Field()
+  status: SubscriptionStatusEnum
 }
 
 @ObjectType()
@@ -143,9 +279,30 @@ export class PublicTeamType {
 }
 
 @ObjectType()
+class BrandKitType {
+  @Field()
+  id: string
+
+  @Field()
+  logo: string
+
+  @Field(type => GraphQLJSONObject)
+  theme: Record<string, any>
+}
+
+@ObjectType()
 export class TeamType extends PublicTeamType {
   @Field()
   ownerId: string
+
+  @Field({ nullable: true })
+  enableCustomDomain?: boolean
+
+  @Field({ nullable: true })
+  customDomain?: string
+
+  @Field({ nullable: true })
+  removeBranding?: boolean
 
   @Field()
   inviteCode: string
@@ -156,8 +313,13 @@ export class TeamType extends PublicTeamType {
   @Field({ nullable: true })
   storageQuota?: number
 
+  // Discard at Dec 20, 2021 (v2021.12.3)
+  // Reverted at Nov 28, 2023
   @Field({ nullable: true })
   submissionQuota?: number
+
+  @Field({ nullable: true })
+  contactCount?: number
 
   @Field({ nullable: true })
   isOwner?: boolean
@@ -165,6 +327,16 @@ export class TeamType extends PublicTeamType {
   @Field(type => [ProjectType], { nullable: true })
   projects?: ProjectModel[]
 
+  @Field(type => [BrandKitType], { nullable: true })
+  brandKits: BrandKitType[]
+
+  @Field(type => PlanType, { nullable: true })
+  plan: PlanModel
+
+  @Field(type => SubscriptionType, { nullable: true })
+  subscription: SubscriptionModel
+
+  // @Discard
   @Field(type => Number, { nullable: true })
   role?: TeamRoleEnum
 
@@ -181,8 +353,13 @@ export class TeamSubscriptionType {
   memberCount?: number
 
   @Field({ nullable: true })
+  contactCount?: number
+
+  @Field({ nullable: true })
   formCount?: number
 
+  // Discard at Dec 20, 2021 (v2021.12.3)
+  // Reverted at Nov 28, 2023
   @Field({ nullable: true })
   submissionQuota?: number
 
@@ -212,4 +389,25 @@ export class TeamMemberType {
 
   @Field()
   isOwner?: boolean
+}
+
+@ObjectType()
+class DocType {
+  @Field()
+  id: string
+
+  @Field()
+  title: string
+
+  @Field()
+  description: string
+}
+
+@ObjectType()
+export class SearchTeamType {
+  @Field(type => [FormType], { nullable: true })
+  forms: FormModel[]
+
+  @Field(type => [DocType], { nullable: true })
+  docs: DocType[]
 }

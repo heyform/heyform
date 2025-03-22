@@ -2,8 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
 export enum IntegrationStatusEnum {
+  PENDING = 0,
   ACTIVE = 1,
-  DISABLED
+  DISABLED = 2
 }
 
 interface EmailAttribute {
@@ -28,6 +29,7 @@ interface AirtableAttribute {
   apiKey: string
   base: string
   table: string
+  // 数据对应关系
   fields: Array<Array<string | number | undefined>>
 }
 
@@ -38,6 +40,7 @@ interface MailchimpAttribute {
   }
   group?: string
   tags?: string[]
+  // 数据对应关系
   email: string
   fullName?: string
   address?: string
@@ -65,6 +68,7 @@ interface GoogleSheetsAttribute {
     name: string
   }
   worksheet: string
+  // 数据对应关系
   fields: Array<string | number | undefined>
 }
 
@@ -86,6 +90,7 @@ interface MondayAttribute {
     title: string
   }
   itemName: string
+  // 数据对应关系
   fields?: Array<Array<string | number | undefined>>
 }
 

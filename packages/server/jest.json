@@ -1,0 +1,27 @@
+{
+  "testTimeout": 60000,
+  "moduleDirectories": ["node_modules", "src"],
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "globalSetup": "<rootDir>/test/global.setup.ts",
+  "testEnvironment": "node",
+  "testRegex": ".spec.ts$",
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@decorator$": "<rootDir>/src/common/decorator",
+    "^@graphql$": "<rootDir>/src/common/graphql",
+    "^@dto$": "<rootDir>/src/common/dto",
+    "^@interceptor$": "<rootDir>/src/common/interceptor",
+    "^@middleware$": "<rootDir>/src/common/middleware",
+    "^@guard$": "<rootDir>/src/common/guard",
+    "^@config$": "<rootDir>/src/config",
+    "^@environments$": "<rootDir>/src/environments",
+    "^@controller$": "<rootDir>/src/controller",
+    "^@model$": "<rootDir>/src/model",
+    "^@resolver$": "<rootDir>/src/resolver",
+    "^@service$": "<rootDir>/src/service",
+    "^@utils$": "<rootDir>/src/utils"
+  },
+  "coverageDirectory": "./coverage"
+}

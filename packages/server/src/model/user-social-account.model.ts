@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-
 import { SocialLoginTypeEnum } from '@heyform-inc/shared-types-enums'
 
 @Schema({
@@ -20,7 +19,9 @@ export class UserSocialAccountModel extends Document {
   openId: string
 }
 
-export const UserSocialAccountSchema = SchemaFactory.createForClass(UserSocialAccountModel)
+export const UserSocialAccountSchema = SchemaFactory.createForClass(
+  UserSocialAccountModel
+)
 
 // Unique constraint
 UserSocialAccountSchema.index({ kind: 1, openId: 1 }, { unique: true })

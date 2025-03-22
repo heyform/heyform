@@ -1,19 +1,23 @@
+import {
+  ClientInfo,
+  GqlClient,
+  GraphqlRequest,
+  GraphqlResponse
+} from '@decorator'
+import { BCRYPT_SALT } from '@environments'
+import { SignUpInput } from '@graphql'
+import { DeviceIdGuard } from '@guard'
+import { gravatar, passwordHash } from '@heyforms/nestjs'
+import { helper } from '@heyform-inc/utils'
+import { UserActivityKindEnum } from '@model'
 import { BadRequestException, UseGuards } from '@nestjs/common'
 import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
-import { GraphqlRequest, GraphqlResponse } from '@decorator'
-import { APP_DISABLE_REGISTRATION, BCRYPT_SALT, VERIFY_USER_EMAIL } from '@environments'
-import { SignUpInput } from '@graphql'
-import { BrowserIdGuard } from '@guard'
 import { AuthService, UserService } from '@service'
-import { GqlClient, gravatar, passwordHash } from '@utils'
-import { ClientInfo } from '@utils'
 import { isDisposableEmail } from '@utils'
+import { COOKIE_UTM_SOURCE_NAME } from '@config'
 
 @Resolver()
-@UseGuards(BrowserIdGuard)
+@UseGuards(DeviceIdGuard)
 export class SignUpResolver {
   constructor(
     private readonly authService: AuthService,
@@ -27,10 +31,6 @@ export class SignUpResolver {
     @GraphqlResponse() res: any,
     @Args('input') input: SignUpInput
   ): Promise<boolean> {
-    if (APP_DISABLE_REGISTRATION) {
-      throw new BadRequestException('Error: Registration is disabled')
-    }
-
     if (isDisposableEmail(input.email)) {
       throw new BadRequestException(
         'Error: Disposable email address detected, please use a work email to create the account'
@@ -49,14 +49,40 @@ export class SignUpResolver {
       password: await passwordHash(input.password, BCRYPT_SALT),
       avatar: gravatar(input.email),
       lang: client.lang,
-      // Setup SMTP if you want to verify user's email address
-      isEmailVerified: !VERIFY_USER_EMAIL
+      // Add at 31 Aug 2024
+      isOnboardRequired: true,
+      onboardedAt: 0,
+      source: req.cookies[COOKIE_UTM_SOURCE_NAME]
     })
+
+    // Create sign up activity
+    this.authService.createUserActivity({
+      kind: UserActivityKindEnum.SIGN_UP,
+      userId,
+      ...client
+    })
+
+    // @discard
+    // @Refactor at 17 Jan 2022
+    // Create a team for every new user
+    //
+    // @Refactor at 5 May 2022
+    // Attach a 14 days free trial Business Plan to newly created team
+    //
+    // @Discard at 8 Sep 2022
+    // User have to manually create workspace and choose whether to trial for Premium plan
+    //
+    // const teamId = await this.authService.createTeam(
+    //   userId,
+    //   input.email,
+    //   input.name
+    // )
+    // await this.projectService.createByNewTeam(teamId, userId, input.name)
 
     await this.authService.login({
       res,
       userId,
-      browserId: client.browserId
+      deviceId: client.deviceId
     })
 
     return true

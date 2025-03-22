@@ -1,7 +1,0 @@
-export * from './CollapseIcon'
-export * from './CrownIcon'
-export * from './EmotionIcon'
-export * from './LikeIcon'
-export * from './LogoIcon'
-export * from './StarIcon'
-export * from './ThumbsUpIcon'

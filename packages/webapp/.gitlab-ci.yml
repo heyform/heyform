@@ -1,0 +1,71 @@
+image: node:12.17.0
+
+stages:
+  - development
+  - release
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - pnpm install
+
+development:
+  stage: development
+  only:
+    - master
+  cache:
+    paths:
+      - node_modules/
+  script: |
+    echo "=> Building"
+    cp .env.development .env.production
+    pnpm install
+    pnpm build
+
+    echo "=> Packing"
+    mkdir -p tmp/view/
+    mkdir -p tmp/static/
+    cp dist/*.html tmp/view/
+    cp -r dist/static/* tmp/static/
+
+    if [ -f d.tar.gz ]; then
+      rm d.tar.gz
+    fi
+    tar -czvf d.tar.gz tmp/*
+
+    echo "=> Deploying"
+    scp -P "$DEVELOP_PORT" -o stricthostkeychecking=no -C d.tar.gz "$DEVELOP_DEPLOY_USER"@"$DEVELOP_DEPLOY_HOST":"$DEVELOP_TEMP"
+    DEPLOY_SHELL="tar -xzf ${DEVELOP_TEMP}/d.tar.gz -C ${DEVELOP_APP_DIR} && rm -rf ${DEVELOP_TEMP}/d.tar.gz && cd ${DEVELOP_APP_DIR} && cp -r tmp/* ./ && npm start"
+    ssh -p "$DEVELOP_PORT" "$DEVELOP_DEPLOY_USER"@"$DEVELOP_DEPLOY_HOST" -t "$DEPLOY_SHELL"
+    exit
+
+release:
+  stage: release
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v.*$/'
+  cache:
+    paths:
+      - node_modules/
+  script: |
+    echo "=> Building"
+    pnpm install
+    pnpm build
+
+    echo "=> Packing"
+    mkdir -p tmp/view/
+    mkdir -p tmp/static/
+    cp dist/*.html tmp/view/
+    cp -r dist/static/* tmp/static/
+
+    if [ -f fe.tar.gz ]; then
+      rm fe.tar.gz
+    fi
+    tar -czvf fe.tar.gz tmp/*
+
+    echo "=> Deploying"
+    scp -P "$PRO_DEPLOY_PORT" -o stricthostkeychecking=no -C fe.tar.gz "$PRO_DEPLOY_USER"@"$PRO_DEPLOY_HOST":"$PRO_TEMP"
+    DEPLOY_SHELL="tar -xzf ${PRO_TEMP}/fe.tar.gz -C ${PRO_APP_DIR} && cd ${PRO_APP_DIR} && cp -r tmp/* ./ && npm start"
+    ssh -p "$PRO_DEPLOY_PORT" "$PRO_DEPLOY_USER"@"$PRO_DEPLOY_HOST" -t "$DEPLOY_SHELL"
+    exit

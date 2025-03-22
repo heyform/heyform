@@ -1,7 +1,6 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard } from '@decorator'
 import { UpdateFormArchiveInput } from '@graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
 
 @Resolver()
@@ -17,7 +16,9 @@ export class FormArchiveResolver {
    */
   @Mutation(returns => Boolean)
   @FormGuard()
-  async formArchive(@Args('input') input: UpdateFormArchiveInput): Promise<boolean> {
+  async formArchive(
+    @Args('input') input: UpdateFormArchiveInput
+  ): Promise<boolean> {
     // Delete all submission once user disable archive
     if (!input.allowArchive) {
     }

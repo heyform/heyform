@@ -1,127 +1,165 @@
+import {
+  bytes,
+  commonFileMimeTypes,
+  commonImageMimeTypes,
+  mime
+} from '@heyform-inc/utils'
+import * as dotenv from 'dotenv'
 import * as fs from 'fs'
-import { resolve } from 'path'
+import * as process from 'process'
 
-import { loadEnv } from '@heyooo-inc/env'
-import { bytes, commonFileMimeTypes, helper, mime, toBool } from '@heyform-inc/utils'
+dotenv.config()
 
 // environment
 export const NODE_ENV: string = process.env.NODE_ENV || 'development'
-export const ROOT_PATH = process.cwd()
 
-// Load environment
-loadEnv(NODE_ENV, ROOT_PATH)
+// application
+export const APP_LISTEN_PORT: number = +process.env.APP_LISTEN_PORT || 8080
+export const APP_LISTEN_HOSTNAME: string =
+  process.env.APP_LISTEN_HOSTNAME || '127.0.0.1'
+export const APP_HOMEPAGE: string = process.env.APP_HOMEPAGE
 
-// App serve
-export const APP_LISTEN_PORT: number = +process.env.APP_LISTEN_PORT || 8000
-export const APP_LISTEN_HOSTNAME: string = process.env.APP_LISTEN_HOSTNAME || '0.0.0.0'
-export const APP_HOMEPAGE_URL: string =
-  process.env.APP_HOMEPAGE_URL || `http://${APP_LISTEN_HOSTNAME}:${APP_LISTEN_PORT}`
-export const APP_DISABLE_REGISTRATION: boolean = helper.isTrue(process.env.APP_DISABLE_REGISTRATION)
+// public api
+export const PUBLIC_API_VERIFICATION_KEY =
+  process.env.PUBLIC_API_VERIFICATION_KEY
 
-// Cookie
+// cookie
 export const COOKIE_MAX_AGE: string = process.env.COOKIE_MAX_AGE || '1y'
-export const COOKIE_DOMAIN: string = process.env.COOKIE_DOMAIN || new URL(APP_HOMEPAGE_URL).hostname
-export const SESSION_KEY: string = process.env.SESSION_KEY
+export const COOKIE_DOMAIN: string = process.env.COOKIE_DOMAIN
+export const SESSION_KEYS: string[] = [process.env.KEY1]
 export const SESSION_MAX_AGE: string = process.env.SESSION_MAX_AGE || '15d'
 
-// Email templates
-export const EMAIL_TEMPLATES_DIR: string = resolve(ROOT_PATH, 'resources/email-templates')
-
-// Static
-
-export const STATIC_DIR: string = resolve(ROOT_PATH, 'static')
-export const VIEW_DIR: string = resolve(ROOT_PATH, 'view')
-
-// Upload
-export const UPLOAD_FILE_TYPES: string[] = (process.env.UPLOAD_FILE_TYPES
-  ? process.env.UPLOAD_FILE_TYPES.split(',').map(mime)
+// upload
+export const UPLOAD_IMAGE_TYPE: string[] = (process.env.UPLOAD_IMAGE_TYPE
+  ? process.env.UPLOAD_IMAGE_TYPE.split(',').map(mime)
+  : commonImageMimeTypes) as any
+export const UPLOAD_IMAGE_SIZE: number =
+  +process.env.UPLOAD_IMAGE_SIZE || bytes('2mb')
+export const UPLOAD_FILE_TYPE: string[] = (process.env.UPLOAD_FILE_TYPE
+  ? process.env.UPLOAD_FILE_TYPE.split(',').map(mime)
   : commonFileMimeTypes) as any
-export const UPLOAD_FILE_SIZE: number = +process.env.UPLOAD_FILE_SIZE || bytes('10mb')
-export const UPLOAD_DIR: string = resolve(STATIC_DIR, 'upload')
+export const UPLOAD_FILE_SIZE: number =
+  +process.env.UPLOAD_FILE_SIZE || bytes('10mb')
 
-// Encryption
-export const FORM_ENCRYPTION_KEY: string = process.env.FORM_ENCRYPTION_KEY
+// static
+export const STATIC: string = process.env.STATIC || 'static'
 
-// Bcrypt
+// encryption
+export const ENCRYPTION_KEY: string = process.env.KEY2
+
+// bcrypt
 export const BCRYPT_SALT: number = +process.env.BCRYPT_SALT || 10
 
-// Mongo
+// mongo
 export const MONGO_URI: string = process.env.MONGO_URI
 export const MONGO_USER: string = process.env.MONGO_USER
 export const MONGO_PASSWORD: string = process.env.MONGO_PASSWORD
-export const MONGO_SSL_CA_PATH: Buffer[] | undefined = process.env.MONGO_SSL_CA_PATH
-  ? [fs.readFileSync(process.env.MONGO_SSL_CA_PATH)]
+export const MONGO_SSL_CA: Buffer[] | undefined = process.env.MONGO_SSL_CA
+  ? [fs.readFileSync(process.env.MONGO_SSL_CA)]
   : undefined
 
-// Redis
+// redis
 export const REDIS_HOST: string = process.env.REDIS_HOST || '127.0.0.1'
 export const REDIS_PORT: number = +process.env.REDIS_PORT || 6379
 export const REDIS_PASSWORD: string = process.env.REDIS_PASSWORD
 export const REDIS_DB: number = +process.env.REDIS_DB || 0
 
-// SMTP
-export const VERIFY_USER_EMAIL: boolean = toBool(process.env.VERIFY_USER_EMAIL, false)
+// smtp
 export const SMTP_FROM: string = process.env.SMTP_FROM
 export const SMTP_HOST: string = process.env.SMTP_HOST
 export const SMTP_PORT: number = +process.env.SMTP_PORT
 export const SMTP_USER: string = process.env.SMTP_USER
 export const SMTP_PASSWORD: string = process.env.SMTP_PASSWORD
-export const SMTP_SERVERNAME: string = process.env.SMTP_SERVERNAME || null
-export const SMTP_SECURE: boolean = helper.isTrue(process.env.SMTP_SECURE)
-export const SMTP_IGNORE_CERT: boolean = helper.isTrue(process.env.SMTP_IGNORE_CERT)
 
-// Google recaptcha
+// qiniu
+export const QINIU_ACCESS_KEY: string = process.env.QINIU_ACCESS_KEY
+export const QINIU_SECRET_KEY: string = process.env.QINIU_SECRET_KEY
+export const QINIU_BUCKET: string = process.env.QINIU_BUCKET
+export const QINIU_URL_PREFIX: string = process.env.QINIU_URL_PREFIX
+export const QINIU_CALLBACK_URL: string = process.env.QINIU_CALLBACK_URL
+export const QINIU_TEMPORARY_BUCKET: string = process.env.QINIU_TEMPORARY_BUCKET
+export const QINIU_TEMPORARY_URL_PREFIX: string =
+  process.env.QINIU_TEMPORARY_URL_PREFIX
+
+// google recaptcha
 export const GOOGLE_RECAPTCHA_KEY: string = process.env.GOOGLE_RECAPTCHA_KEY
-export const GOOGLE_RECAPTCHA_SECRET: string = process.env.GOOGLE_RECAPTCHA_SECRET
+export const GOOGLE_RECAPTCHA_SECRET: string =
+  process.env.GOOGLE_RECAPTCHA_SECRET
 
-// Geetest captcha
-export const GEETEST_CAPTCHA_ID: string = process.env.GEETEST_CAPTCHA_ID
+// geetest captcha
 export const GEETEST_CAPTCHA_KEY: string = process.env.GEETEST_CAPTCHA_KEY
+export const GEETEST_CAPTCHA_SECRET: string = process.env.GEETEST_CAPTCHA_SECRET
 
-// Akismet
+// geetest captcha 4
+export const GEETEST4_CAPTCHA_ID: string = process.env.GEETEST4_CAPTCHA_ID
+export const GEETEST4_CAPTCHA_KEY: string = process.env.GEETEST4_CAPTCHA_KEY
+
+// akismet
 export const AKISMET_KEY: string = process.env.AKISMET_KEY
 
-// Social login
+// social login
 export const APPLE_LOGIN_TEAM_ID: string = process.env.APPLE_LOGIN_TEAM_ID
-export const APPLE_LOGIN_WEB_CLIENT_ID: string = process.env.APPLE_LOGIN_WEB_CLIENT_ID
+export const APPLE_LOGIN_WEB_CLIENT_ID: string =
+  process.env.APPLE_LOGIN_WEB_CLIENT_ID
 export const APPLE_LOGIN_KEY_ID: string = process.env.APPLE_LOGIN_KEY_ID
-export const APPLE_LOGIN_PRIVATE_KEY_PATH: Buffer | undefined = process.env
-  .APPLE_LOGIN_PRIVATE_KEY_PATH
-  ? fs.readFileSync(process.env.APPLE_LOGIN_PRIVATE_KEY_PATH as any)
+export const APPLE_LOGIN_PRIVATE_KEY: Buffer | undefined = process.env.APPLE_LOGIN_PRIVATE_KEY
+  ? fs.readFileSync(process.env.APPLE_LOGIN_PRIVATE_KEY)
   : undefined
-export const DISABLE_LOGIN_WITH_APPLE =
-  helper.isEmpty(APPLE_LOGIN_TEAM_ID) ||
-  helper.isEmpty(APPLE_LOGIN_WEB_CLIENT_ID) ||
-  helper.isEmpty(APPLE_LOGIN_KEY_ID) ||
-  helper.isEmpty(APPLE_LOGIN_PRIVATE_KEY_PATH)
-
 export const GOOGLE_LOGIN_CLIENT_ID: string = process.env.GOOGLE_LOGIN_CLIENT_ID
-export const GOOGLE_LOGIN_CLIENT_SECRET: string = process.env.GOOGLE_LOGIN_CLIENT_SECRET
-export const DISABLE_LOGIN_WITH_GOOGLE =
-  helper.isEmpty(GOOGLE_LOGIN_CLIENT_ID) || helper.isEmpty(GOOGLE_LOGIN_CLIENT_SECRET)
+export const GOOGLE_LOGIN_CLIENT_SECRET: string =
+  process.env.GOOGLE_LOGIN_CLIENT_SECRET
 
-// Stripe
+// stripe
 export const STRIPE_VERSION: string = process.env.STRIPE_VERSION
 export const STRIPE_PUBLISHABLE_KEY: string = process.env.STRIPE_PUBLISHABLE_KEY
 export const STRIPE_SECRET_KEY: string = process.env.STRIPE_SECRET_KEY
-export const STRIPE_CONNECT_CLIENT_ID: string = process.env.STRIPE_CONNECT_CLIENT_ID
-export const STRIPE_WEBHOOK_SECRET_KEY: string = process.env.STRIPE_WEBHOOK_SECRET_KEY
+export const STRIPE_SUBSCRIPTION_SECRET_KEY: string =
+  process.env.STRIPE_SUBSCRIPTION_SECRET_KEY
+export const STRIPE_CONNECT_CLIENT_ID: string =
+  process.env.STRIPE_CONNECT_CLIENT_ID
+export const STRIPE_CONNECT_SECRET_KEY: string =
+  process.env.STRIPE_CONNECT_SECRET_KEY
 
-// Bull
+// bull
 export const BULL_JOB_ATTEMPTS: number = +process.env.BULL_JOB_ATTEMPTS || 3
 export const BULL_JOB_TIMEOUT: string = process.env.BULL_JOB_TIMEOUT || '1m'
-export const BULL_JOB_BACKOFF_DELAY: number = +process.env.BULL_JOB_BACKOFF_DELAY || 3000
-export const BULL_JOB_BACKOFF_TYPE: string = process.env.BULL_JOB_BACKOFF_TYPE || 'fixed'
+export const BULL_JOB_BACKOFF_DELAY: number =
+  +process.env.BULL_JOB_BACKOFF_DELAY || 3000
+export const BULL_JOB_BACKOFF_TYPE: string =
+  process.env.BULL_JOB_BACKOFF_TYPE || 'fixed'
 
 // Time limit on team invite links
-export const INVITE_CODE_EXPIRE_DAYS: number = +process.env.INVITE_CODE_EXPIRE_DAYS || 7
+export const INVITE_CODE_EXPIRE_DAYS: number =
+  +process.env.INVITE_CODE_EXPIRE_DAYS || 7
+
+// Time limit on team submission quote
+export const SUBMISSION_QUOTE_RESET_DAYS: number =
+  +process.env.SUBMISSION_QUOTE_RESET_DAYS || 30
+
+// Sentry
+export const SENTRY_IO_DSN: string = process.env.SENTRY_IO_DSN
+
+// Open App
+export const OPEN_APP_ACCESS_EXPIRES: string =
+  process.env.OPEN_APP_ACCESS_EXPIRES || '15d'
+export const OPEN_APP_REFRESH_EXPIRES: string =
+  process.env.OPEN_APP_REFRESH_EXPIRES || '60d'
 
 // Form report rate
 export const FORM_REPORT_RATE: string = process.env.FORM_REPORT_RATE || '5s'
 
+// CloudflareService API token
+export const CLOUDFLARE_API_PREFIX: string = process.env.CLOUDFLARE_API_PREFIX
+export const CLOUDFLARE_API_TOKEN: string = process.env.CLOUDFLARE_API_TOKEN
+export const CLOUDFLARE_ZONE_ID: string = process.env.CLOUDFLARE_ZONE_ID
+export const CLOUDFLARE_FALLBACK_ORIGIN: string =
+  process.env.CLOUDFLARE_FALLBACK_ORIGIN
+
 // Verification code
-export const VERIFICATION_CODE_EXPIRE: string = process.env.VERIFICATION_CODE_EXPIRE || '10m'
-export const VERIFICATION_CODE_LIMIT: number = +process.env.VERIFICATION_CODE_LIMIT || 5
+export const VERIFICATION_CODE_EXPIRE: string =
+  process.env.VERIFICATION_CODE_EXPIRE || '10m'
+export const VERIFICATION_CODE_LIMIT: number =
+  +process.env.VERIFICATION_CODE_LIMIT || 3
 
 // Account Deletion
 export const ACCOUNT_DELETION_SCHEDULE_INTERVAL: string =
@@ -130,15 +168,59 @@ export const ACCOUNT_DELETION_SCHEDULE_INTERVAL: string =
 // Unsplash
 export const UNSPLASH_CLIENT_ID: string = process.env.UNSPLASH_CLIENT_ID
 
+// Caddy api key
+export const CADDY_API_KEY: string = process.env.KEY3
+export const CADDY_CNAME_PROXY: string = process.env.CADDY_CNAME_PROXY
+export const CADDY_ANAME_PROXY: string = process.env.CADDY_ANAME_PROXY
+
+export const CADDY_API_URL = process.env.CADDY_API_URL
+export const CADDY_UPSTREAM = process.env.CADDY_UPSTREAM
+export const CADDY_SERVER_ID = process.env.CADDY_SERVER_ID
+export const CADDY_TLS_AUTOMATION_POLICY_ID =
+  process.env.CADDY_TLS_AUTOMATION_POLICY_ID
+
+// Sendy
+export const SENDY_API_URL: string = process.env.SENDY_API_URL
+export const SENDY_API_KEY: string = process.env.SENDY_API_KEY
+export const SENDY_SUBSCRIBE_LIST: string = process.env.SENDY_SUBSCRIBE_LIST
+
+// EspoCRM
+export const ESPOCRM_API_URL: string = process.env.ESPOCRM_API_URL
+export const ESPOCRM_API_KEY: string = process.env.ESPOCRM_API_KEY
+
+// Free trial
+export const FREE_TRIAL_DAYS: number = +process.env.FREE_TRIAL_DAYS || 7
+
+// Bunny
+export const BUNNY_API_URL = process.env.BUNNY_API_URL
+export const BUNNY_API_ACCESS_KEY = process.env.BUNNY_API_ACCESS_KEY
+export const BUNNY_CACHE_DIR = process.env.BUNNY_CACHE_DIR
+export const BUNNY_URL_PREFIX = process.env.BUNNY_URL_PREFIX
+export const BUNNY_TOKEN_KEY = process.env.BUNNY_TOKEN_KEY
+
 // OpenAI
 export const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-3.5-turbo-0125'
+export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-4o'
 
-// S3
-export const S3_ENDPOINT = process.env.S3_ENDPOINT
-export const S3_REGION = process.env.S3_REGION
-export const S3_BUCKET = process.env.S3_BUCKET
-export const S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID
-export const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY
-export const S3_PUBLIC_URL = process.env.S3_PUBLIC_URL
+// Loops
+export const LOOPS_API_KEY = process.env.LOOPS_API_KEY
+
+// Plunk
+export const PLUNK_API_URL = process.env.PLUNK_API_URL
+export const PLUNK_API_KEY = process.env.PLUNK_API_KEY
+
+// Changelog
+export const CHANGELOG_API_URL = process.env.CHANGELOG_API_URL
+export const CHANGELOG_API_KEY = process.env.CHANGELOG_API_KEY
+
+// Help center
+export const HELP_CENTER_API_URL = process.env.HELP_CENTER_API_URL
+
+// Templates
+export const TEMPLATES_TEAM_ID = process.env.TEMPLATES_TEAM_ID
+
+// Teable
+export const TEABLE_API_URL = process.env.TEABLE_API_URL
+export const TEABLE_API_KEY = process.env.TEABLE_API_KEY
+export const TEABLE_TEMPLATE_TABLE_ID = process.env.TEABLE_TEMPLATE_TABLE_ID

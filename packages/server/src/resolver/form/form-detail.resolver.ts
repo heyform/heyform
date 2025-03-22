@@ -1,46 +1,51 @@
+import { Auth, FormGuard, Team } from '@decorator'
+import { FormDetailInput, FormType } from '@graphql'
+import { FormModel, TeamModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { Auth, FormGuard } from '@decorator'
-import { FormDetailInput, FormType, PublicFormType } from '@graphql'
-import { FormModel } from '@model'
-import { AppService, FormService, IntegrationService } from '@service'
+import {
+  FormCustomReportService,
+  FormService,
+  SubmissionService
+} from '@service'
+import { date } from '@heyform-inc/utils'
 
 @Resolver()
+@Auth()
 export class FormDetailResolver {
   constructor(
-    private readonly appService: AppService,
     private readonly formService: FormService,
-    private readonly integrationService: IntegrationService
+    private readonly submissionService: SubmissionService,
+    private readonly formCustomReportService: FormCustomReportService
   ) {}
 
+  /**
+   * Detail of the form
+   *
+   * @param input
+   */
   @Query(returns => FormType)
   @FormGuard()
-  @Auth()
-  async formDetail(@Args('input') input: FormDetailInput): Promise<FormModel> {
-    return this.formService.findById(input.formId)
-  }
+  async formDetail(
+    @Team() team: TeamModel,
+    @Args('input') input: FormDetailInput
+  ): Promise<FormModel> {
+    const [form, submissionCount, customReport] = await Promise.all([
+      this.formService.findById(input.formId),
+      this.submissionService.count({ formId: input.formId }),
+      team.plan.formReport
+        ? this.formCustomReportService.findByFormId(input.formId)
+        : null
+    ])
 
-  @Query(returns => PublicFormType)
-  async publicForm(@Args('input') input: FormDetailInput): Promise<PublicFormType> {
-    const form = await this.formService.findPublicForm(input.formId)
-    const integrations: Record<string, any> = {}
+    //@ts-ignore
+    form.updatedAt = date(form.get('updatedAt')).unix()
 
-    if (form.settings.active) {
-      const apps = await this.appService.findAllByUniqueIds(['googleanalytics', 'facebookpixel'])
-      const result = await this.integrationService.findAllInFormByApps(
-        input.formId,
-        apps.map(app => app.id)
-      )
+    // @ts-ignore
+    form.submissionCount = submissionCount
 
-      for (const row of result) {
-        const app = apps.find(app => app.id === row.appId)
-        integrations[app.uniqueId] = (row.attributes as any).get('trackingCode')
-      }
-    }
+    // @ts-ignore
+    form.customReport = customReport
 
-    return {
-      ...form,
-      integrations
-    }
+    return form
   }
 }

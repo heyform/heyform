@@ -41,6 +41,18 @@ export class AllExceptionsFilter implements ExceptionFilter {
         this.logger.error(exception, exception.stack)
       }
 
+      if (res.get('content-type') === 'text/event-stream') {
+        const response = httpException.getResponse()
+        let message = response as string
+
+        if (helper.isObject(response)) {
+          message = (response as any).message[0]
+        }
+
+        res.sse(`data: [ERROR] ${message}\n\n`)
+        return res.end()
+      }
+
       res.status(httpException.getStatus()).json(httpException.getResponse())
     }
   }

@@ -1,8 +1,7 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard, Team } from '@decorator'
 import { UpdateFormArchiveInput } from '@graphql'
 import { TeamModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService, SubmissionService } from '@service'
 
 @Resolver()

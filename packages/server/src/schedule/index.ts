@@ -1,20 +1,33 @@
-import { BullModule } from '@nestjs/bull'
-
 import { BullOptionsFactory } from '@config'
-
+import { BullModule } from '@nestjs/bull'
 import { DeleteFormInTrashSchedule } from './delete-form-in-trash.schedule'
+import { ExpiredAppCodeTokenSchedule } from './expired-app-code-token.schedule'
+import { ExpiredSubscriptionSchedule } from './expired-subscription.schedule'
+import { RefreshThirdPartyOauthSchedule } from './refresh-third-party-oauth.schedule'
+import { ResumeFailedTaskSchedule } from './resume-failed-task.schedule'
 import { DeleteUserAccountSchedule } from './delete-user-account.schedule'
-import { ResetInviteCodeSchedule } from './reset-invite-code.schedule'
+import { BlockUserSchedule } from './block-user.schedule'
 
 export const ScheduleProviders = {
   DeleteFormInTrashSchedule,
-  ResetInviteCodeSchedule,
-  DeleteUserAccountSchedule
+  ExpiredAppCodeTokenSchedule,
+  ExpiredSubscriptionSchedule,
+  RefreshThirdPartyOauthSchedule,
+  // Discard at Jun 26, 2024
+  // ResetInviteCodeSchedule,
+  // Discard at Dec 20, 2021 (v2021.12.3)
+  // ResetSubmissionQuotaSchedule,
+  ResumeFailedTaskSchedule,
+  // Add at Dec 27, 2021 (v2021.12.4)
+  DeleteUserAccountSchedule,
+  BlockUserSchedule
 }
 
-export const ScheduleModules = Object.keys(ScheduleProviders).map(scheduleName => {
-  return BullModule.registerQueueAsync({
-    name: scheduleName,
-    useFactory: BullOptionsFactory
-  })
-})
+export const ScheduleModules = Object.keys(ScheduleProviders).map(
+  scheduleName => {
+    return BullModule.registerQueueAsync({
+      name: scheduleName,
+      useFactory: BullOptionsFactory
+    })
+  }
+)

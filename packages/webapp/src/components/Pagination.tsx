@@ -1,13 +1,17 @@
 import type { FC } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/ui'
+import { cn } from '@/utils'
 
-interface PaginationProps {
-  className?: string
+import { Button, ButtonProps } from './Button'
+
+interface PaginationProps extends Omit<ComponentProps, 'onChange'> {
   total: number
   page: number
   pageSize: number
+  loading?: boolean
+  buttonProps?: ButtonProps
   onChange?: (page: number) => void
 }
 
@@ -15,12 +19,14 @@ export const Pagination: FC<PaginationProps> = ({
   className,
   total,
   page = 1,
-  pageSize = 20,
+  pageSize = 10,
+  loading,
+  buttonProps,
   onChange
 }) => {
+  const { t } = useTranslation()
+
   const maxPage = useMemo(() => Math.ceil(total / pageSize), [total, pageSize])
-  const [start, setStart] = useState(0)
-  const [end, setEnd] = useState(0)
 
   function handlePrevious() {
     onChange?.(page - 1)
@@ -30,35 +36,39 @@ export const Pagination: FC<PaginationProps> = ({
     onChange?.(page + 1)
   }
 
-  useEffect(() => {
-    setStart((page - 1) * pageSize + 1)
-    setEnd(Math.min(total, page * pageSize))
-  }, [page, pageSize, total])
-
   if (maxPage <= 1) {
     return null
   }
 
   return (
     <nav
-      className={`flex items-center justify-between px-4 py-3 sm:px-6 ${className}`}
-      aria-label="Pagination"
+      className={cn('flex items-center justify-between gap-x-4', className)}
+      role="navigation"
+      aria-label="pagination"
     >
-      <div className="hidden sm:block">
-        <p className="text-sm text-slate-900">
-          Showing <span className="font-medium">{start}</span> to{' '}
-          <span className="font-medium">{end}</span> of <span className="font-medium">{total}</span>{' '}
-          results
-        </p>
+      <div className="hidden text-sm/6 text-primary sm:block" data-slot="info">
+        {t('components.pagination.title', { page, maxPage })}
       </div>
 
-      <div className="ml-5 flex flex-1 justify-between sm:justify-end">
-        <Button disabled={page <= 1} onClick={handlePrevious}>
-          Previous
-        </Button>
-        <Button className="ml-3" disabled={page >= maxPage} onClick={handleNext}>
-          Next
-        </Button>
+      <div className="flex flex-1 justify-between gap-x-3 sm:justify-end" data-slot="buttons">
+        <Button.Ghost
+          size="md"
+          {...buttonProps}
+          data-slot="previous"
+          disabled={page <= 1 || loading}
+          onClick={handlePrevious}
+        >
+          {t('components.pagination.previous')}
+        </Button.Ghost>
+        <Button.Ghost
+          size="md"
+          {...buttonProps}
+          data-slot="next"
+          disabled={page >= maxPage || loading}
+          onClick={handleNext}
+        >
+          {t('components.pagination.next')}
+        </Button.Ghost>
       </div>
     </nav>
   )

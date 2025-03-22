@@ -1,12 +1,13 @@
+/**
+ * Created by jiangwei on 2020/09/24.
+ * Copyright (c) 2020 Heyooo, Inc. all rights reserved
+ */
+import { IntegrationModel, IntegrationStatusEnum } from '@model'
 import { Injectable } from '@nestjs/common'
-import { InjectQueue } from '@nestjs/bull'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Queue } from 'bull'
-
-import { IntegrationModel, IntegrationStatusEnum } from '@model'
-
 import { AppService } from './app.service'
+import { QueueService } from './queue.service'
 
 @Injectable()
 export class IntegrationService {
@@ -14,8 +15,7 @@ export class IntegrationService {
     @InjectModel(IntegrationModel.name)
     private readonly integrationModel: Model<IntegrationModel>,
     private readonly appService: AppService,
-    @InjectQueue('IntegrationEmailQueue') private readonly emailQueue: Queue,
-    @InjectQueue('IntegrationWebhookQueue') private readonly webhookQueue: Queue
+    private readonly queueService: QueueService
   ) {}
 
   async findById(id: string): Promise<IntegrationModel | null> {
@@ -26,7 +26,10 @@ export class IntegrationService {
     return this.integrationModel.find({ formId })
   }
 
-  async findAllInFormByApps(formId: string, appIds: string[]): Promise<IntegrationModel[]> {
+  async findAllInFormByApps(
+    formId: string,
+    appIds: string[]
+  ): Promise<IntegrationModel[]> {
     return this.integrationModel.find({
       formId,
       appId: {
@@ -35,14 +38,19 @@ export class IntegrationService {
     })
   }
 
-  async findOne(formId: string, appId: string): Promise<IntegrationModel | null> {
+  async findOne(
+    formId: string,
+    appId: string
+  ): Promise<IntegrationModel | null> {
     return this.integrationModel.findOne({
       formId,
       appId
     })
   }
 
-  async create(integration: IntegrationModel | any): Promise<string | undefined> {
+  async create(
+    integration: IntegrationModel | any
+  ): Promise<string | undefined> {
     const result = await this.integrationModel.create(integration as any)
     return result.id
   }
@@ -57,7 +65,10 @@ export class IntegrationService {
     return !!result?.ok
   }
 
-  async updateAllBy(conditions: Record<string, any>, updates: Record<string, any>): Promise<any> {
+  async updateAllBy(
+    conditions: Record<string, any>,
+    updates: Record<string, any>
+  ): Promise<any> {
     const result = await this.integrationModel.updateMany(conditions, updates)
     return result?.n > 0
   }
@@ -102,18 +113,73 @@ export class IntegrationService {
         continue
       }
 
-      const data = {
-        integrationId: integration.id,
-        submissionId
-      }
-
       switch (app.uniqueId) {
-        case 'email':
-          this.emailQueue.add(data)
+        case 'airtable':
+          this.queueService.addAirtableQueue(integration.id, submissionId)
+          break
+
+        case 'github':
+          this.queueService.addGithubQueue(integration.id, submissionId)
+          break
+
+        case 'gitlab':
+          this.queueService.addGitlabQueue(integration.id, submissionId)
+          break
+
+        case 'googledrive':
+          this.queueService.addGoogleDriveQueue(integration.id, submissionId)
+          break
+
+        case 'googlesheets':
+          this.queueService.addGoogleSheetsQueue(integration.id, submissionId)
+          break
+
+        case 'hubspot':
+          this.queueService.addHubspotQueue(integration.id, submissionId)
+          break
+
+        case 'lark':
+          this.queueService.addLarkQueue(integration.id, submissionId)
+          break
+
+        case 'legacyslack':
+          this.queueService.addLegacySlackQueue(integration.id, submissionId)
+          break
+
+        case 'slack':
+          this.queueService.addSlackQueue(integration.id, submissionId)
+          break
+
+        case 'mailchimp':
+          this.queueService.addMailchimpQueue(integration.id, submissionId)
+          break
+
+        case 'monday':
+          this.queueService.addMondayQueue(integration.id, submissionId)
+          break
+
+        case 'supportpal':
+          this.queueService.addSupportpalQueue(integration.id, submissionId)
+          break
+
+        case 'osticket':
+          this.queueService.addOsticketQueue(integration.id, submissionId)
+          break
+
+        case 'telegram':
+          this.queueService.addTelegramQueue(integration.id, submissionId)
           break
 
         case 'webhook':
-          this.webhookQueue.add(data)
+          this.queueService.addWebhookQueue(integration.id, submissionId)
+          break
+
+        case 'dropbox':
+          this.queueService.addDropboxQueue(integration.id, submissionId)
+          break
+
+        case 'notion':
+          this.queueService.addNotionQueue(integration.id, submissionId)
           break
       }
     }

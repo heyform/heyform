@@ -1,10 +1,8 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { pickValidValues } from '@heyform-inc/utils'
-
 import { Auth, Form, FormGuard, User } from '@decorator'
-import { FormDetailInput } from '@graphql'
+import { DuplicateFormInput } from '@graphql'
+import { helper, pickValidValues } from '@heyform-inc/utils'
 import { FormModel, UserModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
 
 @Resolver()
@@ -20,26 +18,38 @@ export class DuplicateFormResolver {
   async duplicateForm(
     @User() user: UserModel,
     @Form() form: FormModel,
-    @Args('input') input: FormDetailInput
+    @Args('input') input: DuplicateFormInput
   ): Promise<string> {
+    // Discard at Dec 20, 2021 (v2021.12.3)
+    // await this.formService.checkQuota(team.id, team.plan.formLimit)
+
     const fields = [
       'variables',
       'logics',
       'translations',
       'hiddenFields',
-      'fields',
+      '_drafts',
       'kind',
       'interactiveMode',
       'settings',
       'teamId',
       'projectId',
-      'themeSettings',
-      'fieldUpdateAt'
+      'themeSettings'
     ]
-    const newForm = pickValidValues(form as any, fields)
+    const newForm: any = pickValidValues(form as any, fields)
 
     newForm.memberId = user.id
-    newForm.name = `${form.name} (copy)`
+    newForm.name = input.name
+    newForm.fields = []
+    newForm.fieldsUpdatedAt = 0
+    newForm.settings = {
+      ...newForm.settings,
+      active: false
+    }
+
+    if (helper.isEmpty(form._drafts)) {
+      newForm._drafts = JSON.stringify(form.fields || [])
+    }
 
     return await this.formService.create(newForm)
   }

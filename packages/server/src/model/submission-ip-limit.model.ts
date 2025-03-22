@@ -1,3 +1,10 @@
+/**
+ * @program: heyform-serves
+ * @description: Submission IP address limit
+ * @author: mufeng
+ * @date: 11/9/21 10:05 AM
+ **/
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
@@ -18,6 +25,8 @@ export class SubmissionIpLimitModel extends Document {
   expiredAt: number
 }
 
-export const SubmissionIpLimitSchema = SchemaFactory.createForClass(SubmissionIpLimitModel)
+export const SubmissionIpLimitSchema = SchemaFactory.createForClass(
+  SubmissionIpLimitModel
+)
 
 SubmissionIpLimitSchema.index({ formId: 1, ip: 1 }, { unique: true })

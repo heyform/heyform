@@ -1,11 +1,16 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
+/**
+ * @program: servers
+ * @description: Update Integration Settings
+ * @author:
+ * @date: 2021-06-15 10:50
+ **/
 
 import { Auth, FormGuard } from '@decorator'
 import { UpdateIntegrationInput } from '@graphql'
+import { helper } from '@heyform-inc/utils'
 import { IntegrationStatusEnum } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AppService, IntegrationService } from '@service'
 
 @Resolver()

@@ -1,8 +1,11 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
+/**
+ * Created by jiangwei on 2020/11/18.
+ * Copyright (c) 2020 Heyooo, Inc. all rights reserved
+ */
 import { AppDetailInput, AppType } from '@graphql'
 import { AppModel, AppStatusEnum } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { AppService } from '@service'
 
 @Resolver()

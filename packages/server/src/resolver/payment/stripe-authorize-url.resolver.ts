@@ -1,10 +1,8 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { nanoid } from '@heyform-inc/utils'
-
 import { Auth, FormGuard, User } from '@decorator'
 import { FormDetailInput } from '@graphql'
+import { nanoid } from '@heyform-inc/utils'
 import { UserModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { PaymentService, RedisService } from '@service'
 
 @Resolver()
@@ -24,6 +22,7 @@ export class StripeAuthorizeUrlResolver {
     const state = nanoid()
     const key = `connect:stripe:${state}`
 
+    // 保存 state 1小时
     await this.redisService.set({
       key,
       value: input.formId,

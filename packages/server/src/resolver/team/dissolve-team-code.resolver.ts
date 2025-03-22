@@ -1,10 +1,9 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
 import { Auth, Team, TeamGuard, User } from '@decorator'
 import { TeamDetailInput } from '@graphql'
 import { TeamModel, UserModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService } from '@service'
+import { BadRequestException } from '@nestjs/common'
 
 @Resolver()
 @Auth()
@@ -22,7 +21,9 @@ export class DissolveTeamCodeResolver {
     @Args('input') input: TeamDetailInput
   ): Promise<boolean> {
     if (!team.isOwner) {
-      throw new BadRequestException("You don't have permission to dissolve workspace")
+      throw new BadRequestException(
+        "You don't have permission to dissolve workspace"
+      )
     }
 
     // Add a code of dissolve team to cache

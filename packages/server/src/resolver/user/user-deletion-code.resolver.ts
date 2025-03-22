@@ -1,7 +1,13 @@
-import { Query, Resolver } from '@nestjs/graphql'
+/**
+ * @program: serves
+ * @description:
+ * @author: mufeng
+ * @date: 12/27/21 1:09 PM
+ **/
 
 import { Auth, User } from '@decorator'
 import { UserModel } from '@model'
+import { Query, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService } from '@service'
 
 @Resolver()

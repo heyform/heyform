@@ -19,7 +19,7 @@ export class TeamMemberModel extends Document {
   @Prop({ type: Number, required: true, enum: Object.values(TeamRoleEnum) })
   role: TeamRoleEnum
 
-  @Prop()
+  @Prop({ default: 0 })
   lastSeenAt?: number
 }
 

@@ -1,9 +1,8 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, ProjectGuard, Team } from '@decorator'
 import { ProjectMemberInput } from '@graphql'
 import { TeamModel } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService } from '@service'
 
 @Resolver()
@@ -18,7 +17,9 @@ export class DeleteProjectMemberResolver {
     @Args('input') input: ProjectMemberInput
   ): Promise<boolean> {
     if (input.memberId === team.ownerId) {
-      throw new BadRequestException("You don't have permission to remove member from the project")
+      throw new BadRequestException(
+        "You don't have permission to remove member from the project"
+      )
     }
 
     return this.projectService.deleteMember(input.projectId, input.memberId)

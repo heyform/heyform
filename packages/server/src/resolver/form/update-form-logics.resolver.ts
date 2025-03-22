@@ -1,7 +1,6 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard } from '@decorator'
 import { UpdateFormLogicsInput } from '@graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
 
 @Resolver()
@@ -14,7 +13,9 @@ export class UpdateFormLogicsResolver {
    */
   @Mutation(returns => Boolean)
   @FormGuard()
-  async updateFormLogics(@Args('input') input: UpdateFormLogicsInput): Promise<boolean> {
+  async updateFormLogics(
+    @Args('input') input: UpdateFormLogicsInput
+  ): Promise<boolean> {
     return this.formService.update(input.formId, {
       logics: input.logics
     })

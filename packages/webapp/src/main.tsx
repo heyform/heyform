@@ -1,44 +1,92 @@
-import { IconMoodSad } from '@tabler/icons-react'
-import { StrictMode, Suspense } from 'react'
+import { ApolloError } from '@apollo/client'
+import Router, { Route } from '@heyooo-inc/react-router'
+import * as Tooltip from '@radix-ui/react-tooltip'
+import * as Sentry from '@sentry/react'
+import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ErrorBoundary } from 'react-error-boundary'
-import 'unfetch/polyfill/polyfill.mjs'
+import { useTranslation } from 'react-i18next'
+import {
+  Navigate,
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType
+} from 'react-router-dom'
 
-import { EmptyStates } from '@/components/ui'
-import '@/locales'
-import Router from '@/router'
-import { StoreProvider, store } from '@/store'
-import { getBrowserId, setBrowserId } from '@/utils'
+import { Toaster } from '@/components'
+import { IS_PROD, PACKAGE_VERSION, REDIRECT_COOKIE_NAME, SENTRY_DSN } from '@/consts'
+import '@/i18n'
+import { AuthLayout } from '@/layouts'
+import routes from '@/routes'
+import '@/styles/globals.scss'
+import { getAuthState, getDeviceId, setCookie, setDeviceId } from '@/utils'
 
-import './styles/index.scss'
+if (IS_PROD) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    release: PACKAGE_VERSION,
+    integrations: [
+      Sentry.browserTracingIntegration(),
+      Sentry.reactRouterV6BrowserTracingIntegration({
+        useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      })
+    ],
+    tracesSampleRate: 1.0,
+    beforeSend: (event, hit) => {
+      if (hit?.originalException instanceof ApolloError) {
+        return null
+      }
+      return event
+    }
+  })
+}
 
-if (!getBrowserId()) {
-  setBrowserId()
+// Setup device ID
+if (!getDeviceId()) {
+  setDeviceId()
+}
+
+const Fallback = () => {
+  const { t } = useTranslation()
+
+  return (
+    <AuthLayout>
+      <h1 className="text-center text-2xl font-semibold">{t('components.error.title')}</h1>
+      <p className="text-center text-sm/6 text-secondary">{t('components.error.message')}</p>
+    </AuthLayout>
+  )
 }
 
 const App = () => {
-  const Fallback = (
-    <EmptyStates
-      className="flex h-screen flex-col justify-center"
-      icon={<IconMoodSad />}
-      title="Oops, Something went wrong"
-      description="Brace yourself till we get the error fixed. You may also refresh the page or try again later."
-    />
-  )
+  function render(options?: any) {
+    const isLoggedIn = getAuthState()
+
+    if (options?.loginRequired) {
+      if (!isLoggedIn) {
+        const redirectUri = window.location.pathname + window.location.search
+
+        setCookie(REDIRECT_COOKIE_NAME, redirectUri, {})
+        return <Navigate to="/login" replace />
+      }
+    } else {
+      if (isLoggedIn) {
+        return <Navigate to="/" replace />
+      }
+    }
+  }
 
   return (
-    <ErrorBoundary fallback={Fallback}>
-      <Suspense fallback={<></>}>
-        <StoreProvider value={store}>
-          <Router />
-        </StoreProvider>
-      </Suspense>
-    </ErrorBoundary>
+    <Sentry.ErrorBoundary fallback={<Fallback />}>
+      <Tooltip.Provider>
+        <Router routes={routes as Route[]} render={render} />
+      </Tooltip.Provider>
+      <Toaster />
+    </Sentry.ErrorBoundary>
   )
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-)
+createRoot(document.getElementById('root')!).render(<App />)

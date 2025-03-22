@@ -1,0 +1,1675 @@
+{
+  "languages": {
+    "de": {
+      "original": "Deutsch",
+      "translated": "Deutsch"
+    },
+    "en": {
+      "original": "English",
+      "translated": "Englisch"
+    },
+    "fr": {
+      "original": "Français",
+      "translated": "Französisch"
+    },
+    "ja": {
+      "original": "日本語",
+      "translated": "Japanisch"
+    },
+    "pl": {
+      "original": "Polski",
+      "translated": "Polnisch"
+    },
+    "zh-cn": {
+      "original": "简体中文",
+      "translated": "Chinesisch (vereinfacht)"
+    },
+    "zh-tw": {
+      "original": "繁體中文（台灣）",
+      "translated": "Chinesisch (Taiwan)"
+    }
+  },
+  "timezones": {
+    "niue": "Niue",
+    "samoa": "Samoa",
+    "cookislands": "Cookinseln",
+    "hawaiialeutian": "Hawaii-Aleuten-Zeitzone",
+    "tahiti": "Tahiti",
+    "marquesas": "Marquesas",
+    "gambier": "Gambier",
+    "hawaiialeutianadak": "Hawaii-Aleuten (Adak)",
+    "anchorage": "Anchorage",
+    "juneau": "Juneau",
+    "metlakatla": "Metlakatla",
+    "nome": "Nome",
+    "sitka": "Sitka",
+    "yakutat": "Yakutat",
+    "pitcairn": "Pitcairninseln",
+    "mexicanpacific": "Mexikanischer Pazifik",
+    "dawsoncreek": "Dawson Creek",
+    "fortnelson": "Fort Nelson",
+    "phoenix": "Phoenix",
+    "losangeles": "Los Angeles",
+    "tijuana": "Tijuana",
+    "vancouver": "Vancouver",
+    "dawson": "Dawson",
+    "whitehorse": "Whitehorse",
+    "belize": "Belize",
+    "costarica": "Costa Rica",
+    "elsalvador": "El Salvador",
+    "guatemala": "Guatemala",
+    "managua": "Managua",
+    "regina": "Regina",
+    "swiftcurrent": "Swift Current",
+    "tegucigalpa": "Tegucigalpa",
+    "easterisland": "Osterinsel",
+    "galapagos": "Galápagos-Inseln",
+    "chihuahua": "Chihuahua",
+    "mazatlan": "Mazatlán",
+    "boise": "Boise",
+    "cambridgebay": "Cambridge Bay",
+    "denver": "Denver",
+    "edmonton": "Edmonton",
+    "inuvik": "Inuvik",
+    "ojinaga": "Ojinaga",
+    "yellowknife": "Yellowknife",
+    "eirunepe": "Eirunepé",
+    "riobranco": "Rio Branco",
+    "bahiabanderas": "Bahía de Banderas",
+    "beulahnorthdakota": "Beulah, North Dakota",
+    "centernorthdakota": "Center, North Dakota",
+    "chicago": "Chicago",
+    "knoxindiana": "Knox, Indiana",
+    "matamoros": "Matamoros",
+    "menominee": "Menominee",
+    "merida": "Merida",
+    "mexicocity": "Mexiko-Stadt",
+    "monterrey": "Monterrey",
+    "newsalemnorthdakota": "New Salem, North Dakota",
+    "rainyriver": "Rainy River",
+    "rankininlet": "Rankin Inlet",
+    "resolute": "Resolute",
+    "tellcityindiana": "Tell City, Indiana",
+    "winnipeg": "Winnipeg",
+    "colombia": "Kolumbien",
+    "cancun": "Cancún",
+    "jamaica": "Jamaika",
+    "panama": "Panama",
+    "ecuador": "Ecuador",
+    "peru": "Peru",
+    "boavista": "Boa Vista",
+    "campogrande": "Campo Grande",
+    "cuiaba": "Cuiabá",
+    "manaus": "Manaus",
+    "portovelho": "Porto Velho",
+    "barbados": "Barbados",
+    "martinique": "Martinique",
+    "puertorico": "Puerto Rico",
+    "santodomingo": "Santo Domingo",
+    "bolivia": "Bolivien",
+    "chile": "Chile",
+    "cuba": "Kuba",
+    "detroit": "Detroit",
+    "grandturk": "Grand Turk",
+    "indianapolis": "Indianapolis",
+    "iqaluit": "Iqaluit",
+    "louisville": "Louisville",
+    "marengoindiana": "Marengo, Indiana",
+    "monticellokentucky": "Monticello, Kentucky",
+    "newyork": "New York",
+    "nipigon": "Nipigon",
+    "pangnirtung": "Pangnirtung",
+    "petersburgindiana": "Petersburg, Indiana",
+    "portauprince": "Port-au-Prince",
+    "thunderbay": "Thunder Bay",
+    "toronto": "Toronto",
+    "vevayindiana": "Vevay, Indiana",
+    "vincennesindiana": "Vincennes, Indiana",
+    "winamacindiana": "Winamac, Indiana",
+    "guyana": "Guyana",
+    "paraguay": "Paraguay",
+    "venezuela": "Venezuela",
+    "buenosaires": "Buenos Aires",
+    "catamarca": "Catamarca",
+    "cordoba": "Córdoba",
+    "jujuy": "Jujuy",
+    "larioja": "La Rioja",
+    "mendoza": "Mendoza",
+    "riogallegos": "Río Gallegos",
+    "salta": "Salta",
+    "sanjuan": "San Juan",
+    "sanluis": "San Luis",
+    "tucuman": "Tucumán",
+    "ushuaia": "Ushuaia",
+    "bermuda": "Bermuda",
+    "glacebay": "Glace Bay",
+    "goosebay": "Goose Bay",
+    "halifax": "Halifax",
+    "moncton": "Moncton",
+    "thule": "Thule",
+    "araguaina": "Araguaina",
+    "bahia": "Bahia",
+    "belem": "Belem",
+    "fortaleza": "Fortaleza",
+    "maceio": "Maceió",
+    "recife": "Recife",
+    "santarem": "Santarém",
+    "saopaulo": "São Paulo",
+    "falklandislands": "Falklandinseln",
+    "frenchguiana": "Französisch-Guayana",
+    "palmer": "Palmer",
+    "puntaarenas": "Punta Arenas",
+    "rothera": "Rothera",
+    "suriname": "Suriname",
+    "uruguay": "Uruguay",
+    "newfoundland": "Neufundland",
+    "fernandodenoronha": "Fernando de Noronha",
+    "southgeorgia": "Südgeorgien",
+    "stpierremiquelon": "St. Pierre und Miquelon",
+    "westgreenland": "Westgrönland",
+    "capeverde": "Kap Verde",
+    "azores": "Azoren",
+    "coordinateduniversal": "Koordinierte Weltzeit",
+    "eastgreenland": "Ostgrönland",
+    "greenwichmean": "Greenwich Mean Time",
+    "abidjan": "Abidjan",
+    "bissau": "Bissau",
+    "danmarkshavn": "Danmarkshavn",
+    "monrovia": "Monrovia",
+    "reykjavik": "Reykjavík",
+    "sãotomé": "São Tomé",
+    "algiers": "Algier",
+    "tunis": "Tunis",
+    "ireland": "Irland",
+    "morocco": "Marokko",
+    "unitedkingdom": "Vereinigtes Königreich",
+    "lagos": "Lagos",
+    "ndjamena": "N'Djamena",
+    "canary": "Kanarische Inseln",
+    "faroe": "Färöer",
+    "lisbon": "Lissabon",
+    "madeira": "Madeira",
+    "westernsahara": "Westsahara",
+    "juba": "Juba",
+    "khartoum": "Khartum",
+    "maputo": "Maputo",
+    "windhoek": "Windhuk",
+    "amsterdam": "Amsterdam",
+    "andorra": "Andorra",
+    "belgrade": "Belgrad",
+    "berlin": "Berlin",
+    "brussels": "Brüssel",
+    "budapest": "Budapest",
+    "ceuta": "Ceuta",
+    "copenhagen": "Kopenhagen",
+    "gibraltar": "Gibraltar",
+    "luxembourg": "Luxemburg",
+    "madrid": "Madrid",
+    "malta": "Malta",
+    "monaco": "Monaco",
+    "oslo": "Oslo",
+    "paris": "Paris",
+    "prague": "Prag",
+    "rome": "Rom",
+    "stockholm": "Stockholm",
+    "tirane": "Tirana",
+    "vienna": "Wien",
+    "warsaw": "Warschau",
+    "zurich": "Zürich",
+    "cairo": "Kairo",
+    "kaliningrad": "Kaliningrad",
+    "tripoli": "Tripolis",
+    "southafrica": "Südafrika",
+    "troll": "Troll",
+    "baghdad": "Bagdad",
+    "qatar": "Katar",
+    "riyadh": "Riad",
+    "eastAfrica": "Ostafrika",
+    "amman": "Amman",
+    "athens": "Athen",
+    "beirut": "Beirut",
+    "bucharest": "Bukarest",
+    "chisinau": "Chisinau",
+    "damascus": "Damaskus",
+    "gaza": "Gaza",
+    "hebron": "Hebron",
+    "helsinki": "Helsinki",
+    "kiev": "Kiew",
+    "nicosia": "Nikosia",
+    "riga": "Riga",
+    "sofia": "Sofia",
+    "tallinn": "Tallinn",
+    "uzhhorod": "Uschhorod",
+    "vilnius": "Wilna",
+    "zaporozhye": "Saporischschja",
+    "famagusta": "Famagusta",
+    "israel": "Israel",
+    "kirov": "Kirow",
+    "minsk": "Minsk",
+    "moscow": "Moskau",
+    "simferopol": "Simferopol",
+    "turkey": "Türkei",
+    "volgograd": "Wolgograd",
+    "armenia": "Armenien",
+    "astrakhan": "Astrachan",
+    "azerbaijan": "Aserbaidschan",
+    "georgia": "Georgien",
+    "gulf": "Golfregion",
+    "mauritius": "Mauritius",
+    "réunion": "Réunion",
+    "samara": "Samara",
+    "saratov": "Saratow",
+    "seychelles": "Seychellen",
+    "ulyanovsk": "Uljanowsk",
+    "afghanistan": "Afghanistan",
+    "iran": "Iran",
+    "frenchSouthernAntarctic": "Französische Süd- und Antarktisgebiete",
+    "maldives": "Malediven",
+    "mawson": "Mawson",
+    "pakistan": "Pakistan",
+    "tajikistan": "Tadschikistan",
+    "turkmenistan": "Turkmenistan",
+    "samarkand": "Samarkand",
+    "tashkent": "Taschkent",
+    "aktau": "Aktau",
+    "aqtobe": "Aqtöbe",
+    "atyrau": "Atyrau",
+    "oral": "Oral",
+    "qyzylorda": "Qysylorda",
+    "yekaterinburg": "Jekaterinburg",
+    "colombo": "Colombo",
+    "kolkata": "Kalkutta",
+    "nepal": "Nepal",
+    "bangladesh": "Bangladesch",
+    "bhutan": "Bhutan",
+    "almaty": "Almaty",
+    "kostanay": "Kostanai",
+    "indianOcean": "Indischer Ozean",
+    "kyrgyzstan": "Kirgisistan",
+    "omsk": "Omsk",
+    "urumqi": "Ürümqi",
+    "vostok": "Wostok",
+    "cocosIslands": "Kokosinseln",
+    "myanmar": "Myanmar",
+    "barnaul": "Barnaul",
+    "christmasIsland": "Weihnachtsinsel",
+    "davis": "Davis-Station",
+    "hovd": "Chowd",
+    "bangkok": "Bangkok",
+    "hoChiMinhCity": "Ho-Chi-Minh-Stadt",
+    "krasnoyarsk": "Krasnojarsk",
+    "novokuznetsk": "Nowokusnezk",
+    "novosibirsk": "Nowosibirsk",
+    "tomsk": "Tomsk",
+    "jakarta": "Jakarta",
+    "pontianak": "Pontianak",
+    "australianWestern": "West-Australien",
+    "bruneiDarussalam": "Brunei Darussalam",
+    "centralIndonesia": "Zentralindonesien",
+    "macao": "Macao",
+    "shanghai": "Shanghai",
+    "hongKong": "Hongkong",
+    "irkutsk": "Irkutsk",
+    "kualaLumpur": "Kuala Lumpur",
+    "kuching": "Kuching",
+    "philippine": "Philippinen",
+    "singapore": "Singapur",
+    "taipei": "Taipeh",
+    "choibalsan": "Tschoibalsan",
+    "ulaanbaatar": "Ulaanbaatar",
+    "australianCentralWestern": "Australische Zentral-Westliche",
+    "eastTimor": "Osttimor",
+    "easternIndonesia": "Östliches Indonesien",
+    "japan": "Japan",
+    "pyongyang": "Pjöngjang",
+    "seoul": "Seoul",
+    "palau": "Palau",
+    "chita": "Tschita",
+    "khandyga": "Chandyga",
+    "yakutsk": "Jakutsk",
+    "australianCentral": "Zentral-Australien",
+    "adelaide": "Adelaide",
+    "brokenHill": "Broken Hill",
+    "brisbane": "Brisbane",
+    "lindeman": "Lindeman",
+    "chamorro": "Chamorro",
+    "chuuk": "Chuuk",
+    "hobart": "Hobart",
+    "macquarie": "Macquarie",
+    "melbourne": "Melbourne",
+    "sydney": "Sydney",
+    "papuaNewGuinea": "Papua-Neuguinea",
+    "ustNera": "Ust-Nera",
+    "vladivostok": "Wladiwostok",
+    "lordHowe": "Lord Howe",
+    "bougainville": "Bougainville",
+    "casey": "Casey-Station",
+    "kosrae": "Kosrae-Inseln",
+    "magadan": "Magadan",
+    "newCaledonia": "Neukaledonien",
+    "norfolkIsland": "Norfolkinsel",
+    "ponape": "Ponape",
+    "sakhalin": "Sachalin",
+    "solomonIslands": "Salomonen",
+    "srednekolymsk": "Srednekolymsk",
+    "vanuatu": "Vanuatu",
+    "anadyr": "Anadyr",
+    "fiji": "Fidschi-Inseln",
+    "gilbertIslands": "Gilbertinseln",
+    "kwajalein": "Kwajalein",
+    "majuro": "Majuro",
+    "nauru": "Nauru",
+    "newZealand": "Neuseeland",
+    "petropavlovskKamchatski": "Petropawlowsk-Kamtschatski",
+    "tuvalu": "Tuvalu",
+    "wakeIsland": "Wake-Inseln",
+    "wallisFutuna": "Wallis & Futuna",
+    "chatham": "Chatham-Inseln",
+    "apia": "Apia",
+    "phoenixIslands": "Phoenixinseln",
+    "tokelau": "Tokelau",
+    "tonga": "Tonga",
+    "lineIsLands": "Linieninseln"
+  },
+  "components": {
+    "add": "Hinzufügen",
+    "apply": "Anwenden",
+    "cancel": "Abbrechen",
+    "change": "Ändern",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "continue": "Fortsetzen",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "delete": "Löschen",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "duplicate": "Duplizieren",
+    "expand": "Erweitern",
+    "edit": "Bearbeiten",
+    "next": "Weiter",
+    "optional": "optional",
+    "permanentlyDelete": "Dauerhaft löschen",
+    "previous": "Zurück",
+    "publish": "Veröffentlichen",
+    "print": "Print",
+    "revert": "Zurücksetzen",
+    "refresh": "Aktualisieren",
+    "rename": "Umbenennen",
+    "restore": "Wiederherstellen",
+    "remove": "Entfernen",
+    "send": "Senden",
+    "save": "Speichern",
+    "share": "Teilen",
+    "saveChanges": "Änderungen speichern",
+    "pagination": {
+      "title": "Seite {{page}} von {{maxPage}}",
+      "previous": "Zurück",
+      "next": "Weiter"
+    },
+    "uploader": {
+      "headline": "Datei hochladen oder hierher ziehen und ablegen",
+      "subHeadline": "{{fileTypes}} bis zu {{maxSize}}",
+      "reselectFile": "Datei zum Hochladen erneut auswählen",
+      "invalidType": "Nicht unterstützter Dateityp",
+      "exceedsMaxSize": "Die ausgewählte Datei überschreitet das Limit von {{maxSize}}",
+      "uploading": "Hochladen..."
+    },
+    "password": {
+      "invalid": "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens 1 Großbuchstaben, 1 Kleinbuchstaben und 1 Zahl enthalten."
+    },
+    "imagePicker": {
+      "image": "Bild",
+      "unsplash": {
+        "title": "Unsplash",
+        "search": "Suche Unsplash-Bilder",
+        "emptyState": "Keine Ergebnisse gefunden"
+      },
+      "gradient": {
+        "title": "Verlauf"
+      }
+    },
+    "datePicker": {
+      "time": "Zeit"
+    },
+    "error": {
+      "title": "Etwas ist schief gelaufen",
+      "message": "Nehmen Sie sich einen Moment Zeit und versuchen Sie es erneut. Wenn der Fehler weiterhin besteht, kontaktieren Sie uns bitte.",
+      "retry": "Erneut versuchen"
+    },
+    "moveto": "Verschieben nach"
+  },
+  "login": {
+    "title": "Anmelden",
+    "headline": "👋 Willkommen zurück!",
+    "subHeadline": "Melden Sie sich bei Ihrem Konto an oder <a>erstellen Sie ein Konto</a>",
+    "continueWith": "Oder weiter mit",
+    "email": {
+      "label": "E-Mail-Adresse",
+      "required": "Die E-Mail-Adresse darf nicht leer sein",
+      "invalid": "Die E-Mail-Adresse ist ungültig"
+    },
+    "password": {
+      "label": "Passwort",
+      "required": "Das Passwort darf nicht leer sein",
+      "maxLength": "Das Passwort muss weniger als 100 Zeichen enthalten."
+    },
+    "forgotPassword": "Passwort vergessen?"
+  },
+  "signUp": {
+    "title": "Ein Konto erstellen",
+    "subHeadline": "Starten Sie eine 7-tägige Testversion mit allen freigeschalteten Funktionen",
+    "name": {
+      "label": "Name",
+      "required": "Der Name darf nicht leer sein"
+    },
+    "agreement": "Durch die Anmeldung stimmen Sie unseren <a1>Nutzungsbedingungen</a1> und unserer <a2>Datenschutzrichtlinie</a2> zu.",
+    "haveAccount": "Haben Sie bereits ein Konto? <a>Anmelden</a>."
+  },
+  "forgotPassword": {
+    "title": "Passwort vergessen?",
+    "subHeadline": "Wir senden Ihnen eine E-Mail mit einem Bestätigungscode",
+    "toLogin": "Zurück zum <a>Anmelden</a>"
+  },
+  "resetPassword": {
+    "title": "Passwort zurücksetzen",
+    "subHeadline": "Wir haben Ihnen eine E-Mail mit einem 6-stelligen Bestätigungscode gesendet, bitte überprüfen Sie Ihr Postfach unter {{email}}.",
+    "verificationCode": {
+      "label": "Verifizierungscode",
+      "required": "Der Verifizierungscode darf nicht leer sein"
+    },
+    "newPassword": {
+      "label": "Neues Passwort"
+    },
+    "repeatPassword": {
+      "label": "Neues Passwort wiederholen",
+      "invalid": "Das neue Passwort und das wiederholte Passwort stimmen nicht überein."
+    }
+  },
+  "verifyEmail": {
+    "title": "E-Mail-Adresse verifizieren",
+    "subHeadline": "Wir haben Ihnen eine E-Mail mit einem 6-stelligen Verifizierungscode gesendet. Bitte überprüfen Sie Ihr Postfach unter {{email}}.",
+    "resend": "Haben Sie den Code nicht erhalten? <button>Erneut senden</button>"
+  },
+  "oauth": {
+    "title": "Autorisieren",
+    "headline": "Verbinden mit {{name}}",
+    "subHeadline": "Verwenden Sie {{name}}, um HeyForm mit Ihren Lieblings-Apps wie Chat, E-Mail oder SMS zu integrieren.",
+    "would": "{{name}} möchte:",
+    "scopes": [
+      "Arbeitsbereich lesen",
+      "Daten über alle Arbeitsbereiche in Ihrem HeyForm-Konto abrufen",
+      "Projekt lesen",
+      "Daten über alle Projekte in Ihrem HeyForm-Arbeitsbereich abrufen",
+      "Formular lesen",
+      "Daten über alle Formulare in Ihrem HeyForm-Projekt abrufen",
+      "Eingaben lesen",
+      "Gesammelte Formulareingaben abrufen",
+      "Konten lesen",
+      "Abrufen Ihrer HeyForm-Kontoinformationen"
+    ]
+  },
+  "onboarding": {
+    "title": "Einführung"
+  },
+  "workspace": {
+    "notExist": "Dieser Arbeitsbereich existiert nicht.",
+    "backHome": "Zurück zu HeyForm",
+    "appearance": {
+      "title": "Erscheinungsbild",
+      "system": "Systemeinstellung",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "sidebar": {
+      "workspaces": "Arbeitsbereiche",
+      "projects": "Projekte",
+      "noProjects": "Sie können den Arbeitsbereichsbesitzer kontaktieren, um Sie zu einem Projekt hinzuzufügen, oder Sie können ein neues erstellen.",
+      "search": "Suche",
+      "viewProfile": "Profil anzeigen",
+      "accountSettings": "Kontoeinstellungen",
+      "language": "Sprache",
+      "version": "Version {{version}}",
+      "logout": "Abmelden",
+      "resources": "Ressourcen",
+      "gettingStarted": "Erste Schritte",
+      "help": "Hilfezentrum",
+      "template": "Vorlage",
+      "whatsNew": "Neuigkeiten"
+    },
+    "creation": {
+      "title": "Arbeitsbereich erstellen",
+      "headline": "Einen neuen Arbeitsbereich erstellen",
+      "subHeadline": "Arbeitsbereiche sind gemeinsame Umgebungen, in denen Mitglieder zusammenarbeiten können. Nach der Erstellung eines Arbeitsbereichs können Sie andere einladen, beizutreten.",
+      "name": {
+        "label": "Arbeitsbereichsname",
+        "required": "Der Name des Arbeitsbereichs darf nicht leer sein"
+      },
+      "logo": "Logo <span>($t(components.optional))</span>"
+    },
+    "invitation": {
+      "title": "Einladung",
+      "headline": "Sie wurden eingeladen, dem Arbeitsbereich von <span1>{{owner}}</span1> beizutreten: <span2>{{name}}</span2>",
+      "subHeadline": "Treten Sie dem Arbeitsbereich bei und beginnen Sie noch heute mit der Zusammenarbeit!",
+      "join": "Beitreten"
+    },
+    "trial": {
+      "title": "Starten Sie Ihre 7-tägige kostenlose Testversion",
+      "subHeadline": "Keine Verträge, herabstufen oder kündigen Sie das Abonnement jederzeit mit einem Klick von Ihrem Dashboard aus.",
+      "startTrial": "Testversion starten",
+      "continueWithFree": "Mit dem kostenlosen Plan fortfahren"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "morning": "Guten Morgen, {{name}}",
+    "afternoon": "Guten Nachmittag, {{name}}",
+    "evening": "Guten Abend, {{name}}",
+    "overview": "Übersicht",
+    "forms": "Formulare",
+    "submission": "Einreichung",
+    "resetsOn": "Setzt sich zurück am {{date}}",
+    "members": "Mitglieder",
+    "storage": "Speicher",
+    "recentForms": "Kürzlich verwendete Formulare",
+    "noForms": "Es gibt keine Formulare im Arbeitsbereich",
+    "pickTemplate": "Wählen Sie einfach eine Vorlage oder beginnen Sie von Grund auf neu.",
+    "search": {
+      "actions": "Aktionen",
+      "navigation": "Navigation",
+      "newWorkspace": "Neuer Arbeitsbereich",
+      "newProject": "Neues Projekt",
+      "newForm": "Neues Formular",
+      "forms": "Formulare",
+      "selectProject": "Erstelle ein Formular im Projekt",
+      "placeholder": "Suche nach Formularen und Hilfedokumenten",
+      "emptyState": "Keine Ergebnisse gefunden."
+    }
+  },
+  "members": {
+    "title": "Mitglieder",
+    "name": "Name",
+    "role": "Rolle",
+    "you": "Sie",
+    "owner": "Besitzer",
+    "member": "Mitglied",
+    "lastSeen": "Zuletzt gesehen",
+    "menuTip": "Übertragen, löschen und mehr...",
+    "remove": {
+      "title": "Entfernen",
+      "headline": "Sind Sie sicher, dass Sie {{name}} aus diesem Arbeitsbereich entfernen möchten?",
+      "subHeadline": "Sobald Sie bestätigen, hat das Mitglied keinen Zugriff mehr auf die Daten dieses Arbeitsbereichs.",
+      "confirm": "Entfernen"
+    },
+    "transfer": {
+      "title": "Eigentum übertragen",
+      "headline": "Sind Sie sicher, dass Sie diesen Arbeitsbereich an {{name}} übertragen möchten?",
+      "subHeadline": "Sobald Sie die Übertragung bestätigen, sind Sie nicht mehr der Eigentümer dieses Arbeitsbereichs.",
+      "confirm": "Übertragen"
+    },
+    "leave": {
+      "title": "Arbeitsbereich verlassen",
+      "headline": "Sind Sie sicher, dass Sie den Arbeitsbereich verlassen möchten?",
+      "subHeadline": "Sobald Sie bestätigen, diesen Arbeitsbereich zu verlassen, haben Sie keinen Zugriff mehr auf dessen Daten.",
+      "confirm": "Verlassen"
+    },
+    "invite": {
+      "title": "Mitglied einladen",
+      "headline": "Mitglieder einladen",
+      "subHeadline": "Laden Sie Ihre Teamkollegen per E-Mail in den Arbeitsbereich ein. Die Einladung ist 7 Tage gültig.",
+      "addMore": "Mehr hinzufügen",
+      "required": "Die E-Mail-Adresse darf nicht leer sein",
+      "sentSuccess_one": "{{count}} Einladung gesendet",
+      "sentSuccess_other": "{{count}} Einladungen gesendet",
+      "sentSuccessMessage": "Eingeladene Mitglieder wurden per E-Mail benachrichtigt, um sich bei HeyForm anzumelden"
+    }
+  },
+  "billing": {
+    "title": "Abrechnung",
+    "planName": "{{name}}-Plan",
+    "year": "Jahr",
+    "month": "Monat",
+    "cycles": ["Für immer", "Monatlich", "Jährlich"],
+    "save16": "Sparen Sie 16%",
+    "keepFreePlan": "Weiterhin den kostenlosen Plan nutzen",
+    "plans": {
+      "headline": "Pläne",
+      "subHeadline": "Workspace <strong>{{workspaceName}}</strong> befindet sich derzeit im {{planName}}-Plan.",
+      "view": "Pläne anzeigen"
+    },
+    "subscription": {
+      "headline": "Aktueller Plan",
+      "subHeadline": "Der Workspace befindet sich derzeit im {{planName}}-Plan.",
+      "manage": "Abonnement verwalten",
+      "renewsOn": "Verlängert am {{date}}.",
+      "neverExpires": "Läuft nie ab.",
+      "canceled": "Gekündigt am {{canceledAt}}, gültig bis {{endAt}}."
+    },
+    "invoices": {
+      "headline": "Rechnungen",
+      "subHeadline": "Besuchen Sie das <button>Stripe-Kundenportal</button>, um Ihre Rechnungen anzusehen."
+    },
+    "upgrade": {
+      "title": "Upgrade",
+      "headline": "Ihren Plan upgraden",
+      "subHeadline": "Sie haben das Limit Ihres aktuellen Plans erreicht oder versuchen, auf eine erweiterte Funktion zuzugreifen. Bitte upgraden Sie, um sie freizuschalten.",
+      "removeBranding": "Upgraden Sie auf Premium, um das HeyForm-Branding zu entfernen",
+      "customDomain": "Upgraden Sie auf Premium, um eine benutzerdefinierte Domain einzurichten",
+      "translations": "Upgraden Sie auf Premium, um Formularfragen zu übersetzen",
+      "customCSS": "Upgraden Sie auf Premium, um benutzerdefiniertes CSS einzurichten",
+      "report": "Upgraden Sie auf Basic, um den Formularbericht anzusehen",
+      "customize": "Upgraden Sie auf Basic, um das Formular anzupassen",
+      "exportData": "Upgraden Sie auf Basic, um CSV-Daten zu exportieren",
+      "theme": "Upgraden Sie auf Basic, um ein Thema für das Formular festzulegen",
+      "metadata": "Upgraden Sie auf Basic, um Linkeinstellungen vorzunehmen",
+      "confirm": "Upgrade",
+      "remaining_one": "{{count}} Tag verbleibend",
+      "remaining_other": "{{count}} Tage verbleibend",
+      "trialing": "Testversion läuft",
+      "trialTip_zero": "{{name}}-Testversion endet heute",
+      "trialTip_one": "{{name}}-Testversion endet in {{count}} Tag",
+      "trialTip_other": "{{name}}-Testversion endet in {{count}} Tagen",
+      "upgradeTip": "Der kostenlose Plan wird am 1. Mai 2025 eingestellt. Erwägen Sie einen Wechsel zum Premium-Plan oder zur selbst gehosteten Lösung.",
+      "hiddenFields": "Upgrade auf Basic, um ein verstecktes Feld hinzuzufügen",
+      "brandKit": "Upgrade auf Premium, um das Marken-Kit einzurichten",
+      "redirect": "Upgrade auf Basic, um die Umleitung einzurichten"
+    },
+    "payment": {
+      "headline": "Plan upgraden",
+      "couponCode": {
+        "label": "Gutscheincode",
+        "require": "Der Gutscheincode darf nicht leer sein"
+      },
+      "apply": "Anwenden",
+      "subtotal": "Zwischensumme",
+      "discount": "Rabatt",
+      "total": "Gesamtsumme",
+      "confirm": "Jetzt upgraden"
+    },
+    "downgrade": {
+      "headline": "Plan downgraden",
+      "subHeadline": "Sobald Sie das Downgrade bestätigen, hat Ihr Arbeitsbereich: <strong>{{workspaceName}}</strong> keinen Zugriff mehr auf die Funktionen des <strong>{{planName}}</strong>-Plans.",
+      "confirm": "Herabstufen"
+    },
+    "features": {
+      "basic": [
+        "Unbegrenzte Formulare",
+        "5.000 Antworten pro Monat",
+        "10GB Speicherplatz im Arbeitsbereich",
+        "Formularbericht",
+        "Benutzerdefinierte Metadaten",
+        "Versteckte Felder",
+        "Themenanpassung",
+        "Weiterleitung nach Abschluss",
+        "Daten herunterladen"
+      ],
+      "premium": [
+        "Alles in BASIC",
+        "20.000 Antworten pro Monat",
+        "20GB Speicherplatz im Arbeitsbereich",
+        "Bis zu 3 Mitglieder einladen",
+        "Eigene Domain",
+        "Eigenes CSS",
+        "HeyForm-Branding entfernen",
+        "Priorisierter Support"
+      ],
+      "business": [
+        "Alles in PREMIUM",
+        "150,000 Antworten pro Monat",
+        "50GB Speicherplatz im Arbeitsbereich",
+        "Laden Sie bis zu 10 Mitglieder ein",
+        "Keine Provision auf Zahlungen",
+        "Keine Größenbeschränkung für Datei-Uploads"
+      ]
+    },
+    "success": {
+      "title": "Zahlung erfolgreich",
+      "description": "Vielen Dank für Ihre Zahlung. Ihre Bestellung wird bearbeitet.",
+      "button": "Zurück zum Dashboard"
+    }
+  },
+  "settings": {
+    "title": "Arbeitsbereich-Einstellungen",
+    "branding": {
+      "title": "Branding",
+      "removeBrandingHeadline": "HeyForm-Branding entfernen",
+      "removeBrandingSubHeadline": "Um HeyForm vollständig an Ihre Marke anzupassen, entfernen Sie das HeyForm-Logo im Formularfuß.",
+      "viewBrandKit": "Ansehen",
+      "logo": {
+        "title": "Logo",
+        "required": "Das Logo darf nicht leer sein.",
+        "invalid": "Die URL des Logos ist ungültig."
+      },
+      "theme": "Thema",
+      "presetThemes": "Voreingestellte Themen",
+      "brandKitHeadline": "Marken-Kit",
+      "brandKitSubHeadline": "Wenden Sie visuelle Elemente Ihres Arbeitsbereichs nahtlos auf Ihre Formulare mit dem Marken-Kit an. Laden Sie Ihr Logo hoch und erstellen Sie ein Thema, das jedes Mitglied in Ihrem Arbeitsbereich nutzen kann.",
+      "brandKitPreview": {
+        "number": "Frage 1",
+        "title": "Wie lautet Ihr Name?",
+        "description": "Geben Sie hier Ihren Namen ein",
+        "input": "Ihre Antwort kommt hier hin",
+        "next": "Weiter"
+      }
+    },
+    "customDomain": {
+      "headline": "Eigene Domain",
+      "subHeadline": "Eigene Domains ermöglichen es Ihnen, Formulare unter Ihren eigenen, nicht-HeyForm-Domainnamen zugänglich zu machen. <a>Mehr erfahren <icon /></a>",
+      "placeholder": "z.B.: yourcustomdomain.com",
+      "invalid": "Die Domain ist ungültig",
+      "tip1": "Eigene Domains ermöglichen es Ihnen, Formulare unter Ihren eigenen, nicht-HeyForm-Domainnamen zugänglich zu machen (zum Beispiel yourcustomdomain.com). HeyForm unterstützt alle Top-Level-Domains für eigene Domains. <a>Mehr erfahren <icon /></a>",
+      "tip2": "Bitte fügen Sie die folgenden DNS-Einträge in die DNS-Einstellungen Ihres Domainanbieters ein. Sie können die DNS-Einträge Ihrer Domain mit diesem Tool überprüfen: <a>DNS Lookup <icon /></a>",
+      "type": "Typ",
+      "name": "Name",
+      "cname": "CNAME",
+      "aname": "A",
+      "content": "Inhalt",
+      "ttl": "TTL",
+      "ttlAuto": "Automatisch / Standard",
+      "dnsOnly": "Nur DNS",
+      "proxyStatus": "Proxy-Status",
+      "proxyTip": "Bei Domain-Anbietern wie Cloudflare bitten wir Sie, die Proxy-Funktion zu deaktivieren.",
+      "dnsError": "Wir konnten Ihre DNS-Einträge nicht verifizieren. Wenn Sie dies bereits eingerichtet haben, versuchen Sie es später erneut."
+    },
+    "exportData": {
+      "title": "Daten exportieren",
+      "description": "Erhalten Sie eine E-Mail mit all Ihren Formularen und Einstellungen in einer Datei.",
+      "button": "Fordern Sie Ihre Daten an",
+      "successTip": "Sobald der Export fertig ist, erhalten Sie eine E-Mail mit dem Download-Link."
+    },
+    "deletion": {
+      "title": "Arbeitsbereich löschen",
+      "description": "Das Löschen des Arbeitsbereichs wird alle Formulare und Daten dauerhaft löschen. Gehen Sie vorsichtig vor!",
+      "button": "Diesen Arbeitsbereich löschen",
+      "headline": "Löschanforderung für den Arbeitsbereich bestätigen",
+      "sentSuccess": "Bestätigungscode für die Löschung gesendet",
+      "sentFailed": "Fehler beim Senden des Bestätigungscodes zur Löschung",
+      "tip1": "Wenn Sie sicher sind, dass Sie den Arbeitsbereich <strong>{{name}}</strong> löschen möchten, fahren Sie bitte unten fort.",
+      "tip2": "Beachten Sie, dass dieser Vorgang irreversibel ist und alle mit diesem Arbeitsbereich verknüpften Daten dauerhaft gelöscht werden.",
+      "tip3": "Sobald Sie die Löschung des Arbeitsbereichs bestätigen, können Sie nicht mehr auf die Daten des Arbeitsbereichs zugreifen.",
+      "code": {
+        "label": "Geben Sie den Löschcode ein, der an <strong>{{email}}</strong> gesendet wurde.",
+        "required": "Der Bestätigungscode darf nicht leer sein"
+      }
+    },
+    "general": {
+      "title": "Allgemein",
+      "name": "Name",
+      "logo": "Logo",
+      "pickLogo": "Wählen Sie ein Logo für Ihren Arbeitsbereich aus."
+    }
+  },
+  "project": {
+    "menuTip": "Umbenennen, löschen und mehr...",
+    "forms": {
+      "title": "Formulare",
+      "headline": "Es gibt keine Formulare im Projekt"
+    },
+    "trash": {
+      "title": "Papierkorb",
+      "headline": "Es gibt keine Formulare im Papierkorb",
+      "subHeadline": "Formulare werden nach 30 Tagen dauerhaft aus dem Papierkorb gelöscht.",
+      "delete": {
+        "headline": "Sind Sie sicher, dass Sie das Formular: {{name}} dauerhaft löschen möchten?",
+        "subHeadline": "Sobald Sie die Löschung des Formulars bestätigen, werden alle damit verbundenen Daten dauerhaft entfernt."
+      },
+      "tip": "Sie können jedes Formular, das in den letzten 30 Tagen gelöscht wurde, wiederherstellen. <a>Mehr erfahren <icon /></a>"
+    },
+    "members": {
+      "title": "Mitglieder",
+      "headline": "Mitglieder in diesem Projekt",
+      "subHeadline": "Nur Benutzer, die zu diesem Projekt <strong>hinzugefügt wurden</strong>, können auf dessen Daten zugreifen, einschließlich Formulare und Einreichungen.",
+      "addMember": "Mitglied zu diesem Projekt hinzufügen",
+      "unjoinedMembers": "Nicht beigetretene Mitglieder",
+      "add": "Hinzufügen",
+      "addSuccess": "Das Mitglied wurde erfolgreich hinzugefügt",
+      "addFailed": "Fehler beim Hinzufügen des Mitglieds",
+      "remove": "Entfernen",
+      "removeSuccess": "Das Mitglied wurde erfolgreich entfernt",
+      "removeFailed": "Entfernen des Mitglieds fehlgeschlagen",
+      "leave": "Verlassen",
+      "leaveSuccess": "Sie haben das Projekt erfolgreich verlassen",
+      "leaveFailed": "Verlassen des Projekts fehlgeschlagen"
+    },
+    "creation": {
+      "title": "Projekt erstellen",
+      "headline": "Ein neues Projekt erstellen",
+      "subHeadline": "Projekte sind Untergruppen innerhalb eines Arbeitsbereichs, die es Ihnen ermöglichen, Mitglieder hinzuzufügen, um an Formularen und Integrationen zusammenzuarbeiten.",
+      "name": {
+        "label": "Projektname",
+        "required": "Der Projektname darf nicht leer sein"
+      },
+      "logo": "Logo <span>($t(components.optional))</span>",
+      "addMembers": "Mitglieder zu diesem Projekt hinzufügen"
+    },
+    "rename": {
+      "headline": "Dieses Projekt umbenennen",
+      "name": {
+        "label": "Name",
+        "required": "Der Name darf nicht leer sein"
+      }
+    },
+    "delete": {
+      "headline": "Löschanforderung des Projekts bestätigen",
+      "sentSuccess": "Löschbestätigungscode gesendet",
+      "sentFailed": "Senden des Löschbestätigungscodes fehlgeschlagen",
+      "tip1": "Wenn Sie sicher sind, dass Sie das Projekt <strong>{{name}}</strong> löschen möchten, fahren Sie bitte unten fort.",
+      "tip2": "Beachten Sie, dass dieser Vorgang unwiderruflich ist und alle mit diesem Projekt verknüpften Daten dauerhaft gelöscht werden.",
+      "tip3": "Sobald Sie die Löschung des Projekts bestätigen, können Sie nicht mehr auf die Projektdaten zugreifen.",
+      "code": {
+        "label": "Geben Sie den Löschcode ein, der an <strong>{{email}}</strong> gesendet wurde.",
+        "required": "Der Bestätigungscode darf nicht leer sein"
+      },
+      "confirm": "Projekt löschen"
+    },
+    "moveto": {
+      "headline": "Verschiebe '{{name}}' nach",
+      "project": {
+        "required": "Das Projekt darf nicht leer sein"
+      }
+    }
+  },
+  "form": {
+    "menuTip": "Umbenennen, duplizieren und mehr...",
+    "metadata2_zero": "Noch keine Einreichungen · Noch {{date}} übrig",
+    "metadata2_one": "{{count}} Einreichung · Noch {{date}} übrig",
+    "metadata2_other": "{{count}} Einreichungen · Noch {{date}} übrig",
+    "editForm": "Formular bearbeiten",
+    "active": "Aktiv",
+    "draft": "Entwurf",
+    "suspended": "Ausgesetzt",
+    "closed": "Geschlossen",
+    "duplicate": "{{name}} (Kopie)",
+    "moveToTrash": "In den Papierkorb verschieben",
+    "copyLinkToShare": "Link zum Teilen kopieren",
+    "creation": {
+      "title": "Formular erstellen",
+      "headline": "Ein neues Formular erstellen",
+      "project": {
+        "label": "Projekt",
+        "required": "Das Projekt darf nicht leer sein"
+      },
+      "name": {
+        "label": "Formularname",
+        "required": "Der Formularname darf nicht leer sein"
+      },
+      "scratch": {
+        "headline": "Von Grund auf neu beginnen",
+        "subHeadline": "Erhalten Sie eine leere Leinwand, um aus verfügbaren Fragetypen zu erstellen"
+      },
+      "template": {
+        "headline": "Wählen Sie eine Vorlage aus",
+        "subHeadline": "Wählen Sie aus handgefertigten Vorlagen, um sofort loszulegen"
+      },
+      "ai": {
+        "headline": "Mit KI erstellen",
+        "subHeadline": "Generieren Sie benutzerdefinierte Fragen mit KI in Sekunden"
+      },
+      "defaultName": "Unbenannt"
+    },
+    "chat": {
+      "title": "HeyForm KI-Assistent",
+      "welcome": "Willkommen beim HeyForm KI-Assistenten! Dies ist eine innovative Funktion, die von modernster KI-Technologie unterstützt wird und Ihnen hilft, Formularfragen und -logiken zu erstellen.",
+      "compose": "Fragen Sie mich alles...",
+      "fieldsUpdated": "Die Fragen Ihres Formulars wurden aktualisiert.",
+      "logicUpdated": "Die Logik Ihres Formulars wurde aktualisiert.",
+      "themeUpdated": "Das Thema Ihres Formulars wurde aktualisiert."
+    },
+    "rename": {
+      "headline": "Dieses Formular umbenennen",
+      "name": {
+        "label": "Name",
+        "required": "Der Name darf nicht leer sein"
+      }
+    },
+    "analytics": {
+      "title": "Analytik",
+      "views": "Ansichten",
+      "submissions": "Einsendungen",
+      "completeRate": "Abschlussrate",
+      "averageDuration": "Durchschnittliche Dauer",
+      "7d": "Letzte Woche",
+      "1m": "Letzter Monat",
+      "3m": "Letzte 3 Monate",
+      "6m": "Letzte 6 Monate",
+      "1y": "Letztes Jahr",
+      "7dTrend": "{{change}}% seit letzter Woche",
+      "1mTrend": "{{change}}% seit letztem Monat",
+      "3mTrend": "{{change}}% seit den letzten 3 Monaten",
+      "6mTrend": "{{change}}% seit den letzten 6 Monaten",
+      "1yTrend": "{{change}}% seit letztem Jahr",
+      "report": {
+        "headline": "Bericht",
+        "submission_zero": "Noch keine Einsendungen",
+        "submission_one": "{{count}} Einsendung",
+        "submission_other": "{{count}} Einsendungen",
+        "submission2_zero": "Noch keine Einsendungen · {{average}} Durchschnitt",
+        "submission2_one": "{{count}} Einsendung · {{average}} Durchschnitt",
+        "submission2_other": "{{count}} Einsendungen · {{average}} Durchschnitt"
+      }
+    },
+    "submissions": {
+      "title": "Einsendungen",
+      "headline": "Noch keine Einsendungen",
+      "subHeadline": "Teilen Sie das Formular online, um ein breiteres Publikum zu erreichen.",
+      "inbox": "Posteingang",
+      "spam": "Spam",
+      "view": "Ansehen",
+      "downloadCSV": "CSV herunterladen",
+      "maximize": "Tabelle maximieren",
+      "minimize": "Tabelle minimieren",
+      "moveTo": "Verschieben nach {{name}}",
+      "detail": {
+        "headline": "Einsendungsdetails",
+        "menuTip": "Drucken und mehr..."
+      }
+    },
+    "integrations": {
+      "title": "Integrationen",
+      "connect": "Verbinden",
+      "connectWith": "Mit {{name}} verbinden",
+      "readMore": "Mehr über die Integration von {{name}} erfahren <icon />",
+      "reporting": "Berichterstattung",
+      "analytics": "Analytik",
+      "marketing": "Marketing",
+      "automation": "Automatisierung",
+      "customerSupport": "Kundensupport",
+      "developerTools": "Entwicklerwerkzeuge",
+      "productivity": "Produktivität",
+      "itEngineering": "IT & Ingenieurwesen",
+      "fileManagement": "Dateiverwaltung",
+      "mapFields": {
+        "headline": "Felder zuordnen",
+        "subHeadline": "Ordne HeyForm den {{name}}-Spalten zu. Wenn du eine Spalte in {{name}} änderst, aktualisiere sie bitte auch hier, sonst funktioniert die Integration nicht wie erwartet.",
+        "requried": "Die Zuordnungsfelder dürfen nicht leer sein",
+        "leftPlaceholder": "Wählen Sie eine HeyForm-Frage aus",
+        "rightPlaceholder": "{{name}} Spalte",
+        "requireLeft": "Die linke Seite des Feldes {{index}} darf nicht leer sein",
+        "requireRight": "Die rechte Seite des Feldes {{index}} darf nicht leer sein",
+        "addMore": "Feld hinzufügen"
+      },
+      "authorization": {
+        "headline": "Autorisierung",
+        "subHeadline": "Bitte autorisieren Sie zunächst HeyForm, auf Ihre Daten zuzugreifen.",
+        "loginWith": "Anmelden mit {{name}}"
+      },
+      "webhook": {
+        "label": "Endpunkt-URL",
+        "invalid": "Die Endpunkt-URL ist nicht gültig"
+      },
+      "telegram": {
+        "label": "Chat-ID",
+        "required": "Die Chat-ID darf nicht leer sein",
+        "footer": "Fügen Sie <a>@HeyForm_bot</a> zu Ihrer Telegram-Gruppe hinzu und geben Sie <code>/start@HeyForm_bot</code> in der Gruppe ein. Sie erhalten dann eine Nachricht mit einer Chat-ID."
+      },
+      "legacyslack": {
+        "label": "Webhook-URL",
+        "invalid": "Die Webhook-URL ist nicht gültig",
+        "footer": "Erstellen Sie Ihre <a1>Slack-App</a1>, aktivieren Sie <a2>Eingehende Webhooks</a2> und fügen Sie die Webhook-URL hier ein."
+      },
+      "slack": {
+        "channel": {
+          "headline": "Kanal"
+        }
+      },
+      "lark": {
+        "label": "Webhook-URL",
+        "invalid": "Die Webhook-URL ist nicht gültig",
+        "footer": "Fügen Sie einen <a>Kundenspezifischen Bot</a> zu Ihrer Gruppe hinzu und fügen Sie dann die Webhook-URL hier ein."
+      },
+      "email": {
+        "label": "E-Mail-Adresse",
+        "invalid": "Die E-Mail-Adresse ist nicht gültig",
+        "deprecation": "Diese Integration ist veraltet. Bitte richten Sie sie stattdessen in den <a>Formulareinstellungen</a> ein."
+      },
+      "facebookpixel": {
+        "label": "Pixel-ID",
+        "required": "Die Pixel-ID darf nicht leer sein",
+        "placeholder": "z.B. 100xxxxxxxxxxxxx",
+        "footer": "Kopieren und fügen Sie Ihre Facebook-Pixel-ID hier ein. <a>Wie finde ich meine Pixel-ID</a>?"
+      },
+      "googleanalytics": {
+        "label": "Tracking-Code",
+        "required": "Der Tracking-Code darf nicht leer sein",
+        "placeholder": "z.B. UA-XXXXX-Y",
+        "footer": "Kopieren und fügen Sie Ihren Google Analytics-Tracking-Code unten ein. <a>Wie finde ich meinen Tracking-Code</a>?"
+      },
+      "googledrive": {
+        "drive": {
+          "headline": "Wählen Sie ein Laufwerk aus",
+          "footer": "Sie können Ihr eigenes Google Drive oder <a>Google Shared Drives</a> auswählen, mit denen Sie verbunden sind."
+        },
+        "folder": {
+          "headline": "Wählen Sie einen Ordner aus",
+          "footer": "Sie können einen Ordner auswählen, um die von Ihrem HeyForm hochgeladenen Dateien abzulegen."
+        }
+      },
+      "googlesheets": {
+        "spreadsheet": "Wählen Sie eine Tabelle aus",
+        "worksheet": "Wählen Sie ein Arbeitsblatt aus"
+      },
+      "osticket": {
+        "serverURL": {
+          "headline": "Server-URL",
+          "footer": "Die Server-URL ist die URL, über die Sie auf das Frontend des Systems zugreifen. z.B. <span>https://support.domain.com</span>."
+        },
+        "apiKey": {
+          "headline": "API-Schlüssel",
+          "footer": "Erstellen Sie ein API-Token, indem Sie im Admin-Bereich zu <a>Verwalten -> API-Schlüssel</a> gehen und sicherstellen, dass es Berechtigungen zum Erstellen von Tickets hat."
+        },
+        "userName": {
+          "headline": "Benutzername"
+        },
+        "emailAddress": {
+          "headline": "E-Mail-Adresse"
+        },
+        "phoneNumber": {
+          "headline": "Telefonnummer (optional)"
+        },
+        "subject": {
+          "headline": "Betreff"
+        },
+        "message": {
+          "headline": "Nachricht"
+        }
+      },
+      "hubspot": {
+        "fullName": {
+          "headline": "Vollständiger Name"
+        },
+        "jobTitle": {
+          "headline": "Berufsbezeichnung (optional)"
+        }
+      },
+      "mailChimp": {
+        "audience": {
+          "headline": "Zielgruppe",
+          "placeholder": "Wählen Sie ein Publikum aus"
+        },
+        "subscriberEmail": {
+          "headline": "Abonnenten-E-Mail"
+        },
+        "address": {
+          "headline": "Adresse"
+        }
+      },
+      "airtable": {
+        "base": {
+          "headline": "Base"
+        },
+        "table": {
+          "headline": "Tabelle"
+        }
+      },
+      "monday": {
+        "board": {
+          "headline": "Tafel"
+        },
+        "group": {
+          "headline": "Gruppe (optional)"
+        },
+        "itemName": {
+          "headline": "Elementname"
+        },
+        "columnValues": {
+          "headline": "Spaltenwerte (optional)"
+        }
+      },
+      "supportPal": {
+        "systemURL": {
+          "headline": "System-URL",
+          "subHeadline": "Die Server-URL ist die URL, mit der Sie auf das Frontend des Systems zugreifen. z.B. <span>https://support.domain.com</span>."
+        },
+        "token": {
+          "headline": "API-Token",
+          "subHeadline": "Generieren Sie ein API-Token, indem Sie im Operator-Panel zu Einstellungen -> Allgemein -> API-Tokens gehen und sicherstellen, dass es Lese- und Schreibzugriff hat."
+        },
+        "userName": {
+          "headline": "Benutzername (optional)"
+        },
+        "email": {
+          "headline": "E-Mail-Adresse (optional)"
+        },
+        "subject": {
+          "headline": "Betreff"
+        },
+        "text": {
+          "headline": "Text"
+        },
+        "department": {
+          "headline": "Abteilung"
+        },
+        "priority": {
+          "headline": "Priorität"
+        },
+        "status": {
+          "headline": "Status"
+        }
+      },
+      "notion": {
+        "database": {
+          "headline": "Datenbank"
+        }
+      }
+    },
+    "share": {
+      "title": "Teilen",
+      "unpublishedTip": "Dieses Formular enthält unveröffentlichte Änderungen. Bitte veröffentlichen Sie die neueste Version, bevor Sie das Formular teilen.",
+      "link": {
+        "headline": "Link teilen",
+        "viaX": "Auf X teilen",
+        "viaFacebook": "Auf Facebook teilen",
+        "viaLinkedIn": "Auf LinkedIn teilen",
+        "qrcode": {
+          "title": "Über QR-Code teilen",
+          "headline": "Formular einbetten",
+          "subHeadline": "Hier sind einige Optionen, um Ihr Formular in Ihre Website zu integrieren.",
+          "download": "Herunterladen"
+        },
+        "email": {
+          "title": "Per E-Mail teilen",
+          "subject": "Könnten Sie sich einen Moment Zeit nehmen, um dieses Hey-Formular auszufüllen?",
+          "body": "Wir würden es sehr schätzen, wenn Sie dieses Formular ausfüllen: {{url}}. Vielen Dank."
+        },
+        "useCustomDomain": "Benutzerdefinierte Domain verwenden"
+      },
+      "settings": {
+        "headline": "Linkeinstellungen",
+        "subHeadline": "Legen Sie fest, wie Ihr Formular erscheint, wenn Sie den Link in sozialen Medien teilen.",
+        "title": "Titel",
+        "description": "Beschreibung",
+        "preview": {
+          "headline": "Vorschau",
+          "subHeadline": "HeyForm generiert automatisch ein <a>Open Graph</a>-Bild für Sie. Sie können auch <button>Ihr eigenes Bild hochladen</button>.",
+          "uploadTitle": "Laden Sie Ihr eigenes Open Graph-Bild hoch",
+          "uploadDescription": "Empfohlene Größe: 1200x630 | JPG, PNG."
+        }
+      },
+      "embed": {
+        "title": "Einbetten",
+        "headline": "Formular einbetten",
+        "subHeadline": "Hier sind einige Optionen, um Ihr Formular in Ihre Website zu integrieren.",
+        "standard": "Standard",
+        "modal": "Modal",
+        "popup": "Popup",
+        "fullpage": "Vollbild",
+        "getCode": "Code abrufen",
+        "settings": "Einstellungen",
+        "width": "Breite",
+        "height": "Höhe",
+        "auto": "Automatisch",
+        "fixed": "Fest",
+        "size": "Modale Größe",
+        "small": "Klein",
+        "medium": "Mittel",
+        "large": "Groß",
+        "launch": "Starten",
+        "click": "Beim Klick auf den Button",
+        "load": "Beim Laden der Seite",
+        "delay": "Nach abgelaufener Zeit",
+        "exit": "Bei Verlassen der Seite",
+        "scroll": "Nach dem Scrollen",
+        "triggerBackground": "Hintergrund auslösen",
+        "triggerText": "Text auslösen",
+        "hideAfterSubmit": "Beim Absenden schließen",
+        "secondsDelay": "Sekunden Verzögerung",
+        "pageScrolled": "% der Seite gescrollt",
+        "position": "Position",
+        "bottomLeft": "Untere linke Ecke",
+        "bottomRight": "Untere rechte Ecke",
+        "transparentBackground": "Transparenter Hintergrund",
+        "code": {
+          "headline": "Fügen Sie HeyForm zu Ihrer Website hinzu",
+          "subHeadline": "Fügen Sie den folgenden Code-Schnipsel in den Body-Bereich Ihrer Website ein."
+        }
+      }
+    },
+    "settings": {
+      "title": "Formular einrichten",
+      "general": {
+        "title": "Allgemein",
+        "archive": {
+          "headline": "Einreichungsarchiv",
+          "subHeadline": "Deaktivieren Sie das Einreichungsarchiv, wenn HeyForm Ihre Einreichungen nicht speichern soll."
+        },
+        "redirect": {
+          "headline": "Weiterleitung nach Abschluss",
+          "subHeadline": "Leiten Sie zu einer benutzerdefinierten URL weiter, wenn das Formular eingereicht wird.",
+          "placeholder": "Geben Sie hier die Weiterleitungs-URL ein, z.B. https://example.com",
+          "invalidUrl": "Die Weiterleitungs-URL ist ungültig"
+        },
+        "progressBar": {
+          "headline": "Fortschrittsbalken",
+          "subHeadline": "Sie können den Befragten leicht mitteilen, wie nah sie daran sind, Ihr Formular abzuschließen."
+        },
+        "viewQuestions": {
+          "headline": "Alle Fragen anzeigen",
+          "subHeadline": "Sie können es aktivieren, um den Befragten zu ermöglichen, alle Fragen durchzugehen."
+        },
+        "navigationArrows": {
+          "headline": "Navigationspfeile",
+          "subHeadline": "Sie können es aktivieren, um den Befragten die Navigation zwischen den Fragen zu ermöglichen."
+        }
+      },
+      "access": {
+        "title": "Zugriff",
+        "closeForm": {
+          "headline": "Formular schließen",
+          "subHeadline": "Sie können dieses Formular schließen, um keine neuen Einsendungen mehr zu erhalten und öffentlichen Zugriff auf das Formular zu verhindern."
+        },
+        "scheduledDate": {
+          "headline": "Formular an einem geplanten Datum schließen",
+          "subHeadline": "Wenn Sie Einreichungen innerhalb eines bestimmten Datumsbereichs erhalten möchten, können Sie hier die Start- und Enddaten festlegen.",
+          "startDate": "Startdatum",
+          "endDate": "Enddatum"
+        },
+        "countdown": {
+          "headline": "Countdown",
+          "subHeadline": "Sie können hier eine zulässige Zeit einstellen, wenn Sie die Einreichung nach Ablauf des Countdowns blockieren möchten.",
+          "days": "Tage",
+          "seconds": "Sekunden",
+          "minutes": "Minuten",
+          "hours": "Stunden"
+        },
+        "limitIP": {
+          "headline": "Häufigkeit der Einreichungen für dieselbe IP-Adresse begrenzen",
+          "subHeadline": "Sie können es hier einstellen, wenn Sie die Anzahl der Einreichungen von derselben IP-Adresse in einem Zeitraum begrenzen möchten.",
+          "times": "Zeiten",
+          "inEvery": "in jeder"
+        },
+        "quotaLimit": {
+          "headline": "Begrenzen Sie die Anzahl der Einsendungen",
+          "subHeadline": "Damit können Sie eine spezifische Gesamtanzahl von erlaubten Einsendungen für Ihr Formular festlegen.",
+          "invalid": "Die Anzahl der Einsendungen ist nicht gültig"
+        },
+        "closedMessage": {
+          "headline": "Nachricht bei geschlossenem Formular",
+          "subHeadline": "Dies sehen die Empfänger, wenn Sie das Formular mit einer der obigen Optionen geschlossen haben.",
+          "title": "Titel der Nachricht bei geschlossenem Formular",
+          "description": "Beschreibung der Nachricht bei geschlossenem Formular"
+        }
+      },
+      "translations": {
+        "title": "Übersetzungen",
+        "primaryLanguage": {
+          "headline": "Primäre Sprache",
+          "subHeadline": "Wählen Sie die primäre Sprache aus, in der die Befragten Ihr Formular sehen. Gilt für nicht angepassten Text wie Standardtasten, Validierungsfehler usw."
+        },
+        "translations": {
+          "headline": "Übersetzungen",
+          "subHeadline": "Übersetzen Sie automatisch die Fragen des Formulars in Ihre gewählten Sprachen mit <a>OpenAI ChatGPT</a>.",
+          "placeholder": "Sprachen auswählen"
+        }
+      },
+      "emailNotification": {
+        "title": "E-Mail-Benachrichtigungen",
+        "self": {
+          "headline": "Eigene E-Mail-Benachrichtigungen",
+          "subHeadline": "Erhalten Sie eine E-Mail, wenn jemand dieses Formular ausfüllt."
+        },
+        "respondent": {
+          "headline": "E-Mail-Benachrichtigungen für Teilnehmer",
+          "subHeadline": "Senden Sie nach dem Ausfüllen des Formulars eine angepasste Text-E-Mail an die Teilnehmer."
+        }
+      },
+      "protection": {
+        "title": "Schutz",
+        "password": {
+          "headline": "Passwortschutz",
+          "subHeadline": "Sichern Sie Ihr Formular mit einem einzigen, leicht zu merkenden Passwort."
+        },
+        "bot": {
+          "headline": "Bot-Schutz",
+          "subHeadline": "Verhindern Sie Bot-Einreichungen, indem Sie das Captcha aktivieren."
+        },
+        "antiSpam": {
+          "headline": "Anti-Spam",
+          "subHeadline": "Sie können es aktivieren, um Spam-Einreichungen zu verhindern."
+        }
+      }
+    },
+    "builder": {
+      "title": "Ersteller",
+      "question": {
+        "menuTip": "Duplizieren, löschen und mehr...",
+        "title": "Frage",
+        "answer": "Antwort",
+        "recommended": "Empfohlen",
+        "multipleChoice": "Mehrfachauswahl",
+        "phoneNumber": "Telefonnummer",
+        "shortText": "Kurztext",
+        "longText": "Langtext",
+        "questionGroup": "Fragegruppe",
+        "statement": "Aussage",
+        "pictureChoice": "Bildauswahl",
+        "yesNo": "Ja/Nein",
+        "email": "E-Mail",
+        "fullName": "Vollständiger Name",
+        "opinionScale": "Meinungsskala",
+        "dateTime": "Datum und Uhrzeit",
+        "dateRange": "Datumsbereich",
+        "fileUpload": "Datei-Upload",
+        "address": "Adresse",
+        "country": "Land",
+        "legalTerms": "Rechtliche Bedingungen",
+        "signature": "Unterschrift",
+        "website": "Webseite",
+        "inputTable": "Eingabetabelle",
+        "submitDate": "Einreichungsdatum",
+        "hiddenFields": "Versteckte Felder",
+        "contactInfo": "Kontaktinformationen",
+        "choices": "Auswahlmöglichkeiten",
+        "text": "Text",
+        "number": "Nummer",
+        "rating": "Bewertung",
+        "data": "Daten",
+        "formStructure": "Formularstruktur",
+        "legalConsent": "Rechtliches & Einwilligung",
+        "date": "Datum",
+        "payment": "Zahlung",
+        "string": "Textfeld",
+        "welcome": "Willkommensbildschirm",
+        "thankYou": "Endbildschirm"
+      },
+      "sidebar": {
+        "questions": "Fragen",
+        "addQuestion": "Frage hinzufügen",
+        "endings": "Endungen",
+        "addEndingTip": "Fügen Sie ein neues Ende hinzu. Sie können mehrere Enden erstellen und eine Logik implementieren, um zu bestimmen, welches die Leute sehen werden."
+      },
+      "compose": {
+        "question": "Geben Sie eine Frage ein",
+        "description": "Beschreibung hinzufügen (optional)",
+        "pasteLink": "Fügen Sie hier den Link ein oder geben Sie ihn ein",
+        "choicePlaceholder": "Auswahl",
+        "otherChoice": "Andere",
+        "addChoice": "Auswahl hinzufügen",
+        "dateRangeTo": "bis",
+        "addColumn": "Spalte hinzufügen",
+        "columnPlaceholder": "Spalte {{index}}"
+      },
+      "settings": {
+        "title": "Einstellungen",
+        "required": "Erforderlich",
+        "dateFormat": "Datumsformat",
+        "timeField": "Zeitfeld",
+        "multipleSelection": "Mehrfachauswahl",
+        "randomize": "Zufällig anordnen",
+        "allowOther": "\"Andere\" Option",
+        "total": "Gesamt",
+        "labels": "Beschriftungen",
+        "leftLabel": "Linke Beschriftung",
+        "centerLabel": "Mittlere Beschriftung",
+        "rightLabel": "Rechte Beschriftung",
+        "defaultCountry": "Standardland",
+        "buttonText": "Schaltflächentext",
+        "redirect": "Weiterleitung nach Abschluss",
+        "shape": "Form",
+        "star": "Stern",
+        "heart": "Herz",
+        "crown": "Krone",
+        "happy": "Glücklich",
+        "thumb_up": "Daumen hoch",
+        "layout": "Layout",
+        "brightness": "Helligkeit",
+        "questionType": {
+          "headline": "Fragetyp ändern?",
+          "subHeadline": "Verschiedene Fragetypen haben unterschiedliche Datenstrukturen für ihre Antworten. Ein Wechsel zwischen ihnen kann dazu führen, dass einige Antworten verloren gehen.\nBitte exportieren Sie Ihre Antworten, bevor Sie fortfahren."
+        },
+        "payment": {
+          "title": "Zahlung",
+          "headline": "Mit Stripe verbinden",
+          "subHeadline": "<div>Zahlungen direkt auf Ihr Bankkonto erhalten, bereitgestellt von Stripe.</div><div>Kostenlose HeyForm-Nutzer sammeln Zahlungen zu einem Satz von <a>5% HeyForm-Provision + Stripe-Transaktionsgebühr.</a></div><div>Um die 5% HeyForm-Provision auf Zahlungen zu entfernen, upgraden Sie zu <button>HeyForm Premium</button>.</div>",
+          "stripeAccount": "Stripe-Konto",
+          "revoke": "Widerrufen",
+          "price": "Preis",
+          "currency": "Währung",
+          "eur": "EUR — Euro",
+          "gbp": "GBP — Pfund Sterling",
+          "usd": "USD — US-Dollar",
+          "aud": "AUD — Australischer Dollar",
+          "cad": "CAD — Kanadischer Dollar",
+          "chf": "CHF — Schweizer Franken",
+          "nok": "NOK — Norwegische Krone",
+          "sek": "SEK — Schwedische Krone",
+          "dkk": "DKK — Dänische Krone",
+          "mxn": "MXN — Mexikanischer Peso",
+          "nzd": "NZD — Neuseeländischer Dollar",
+          "brl": "BRL — Brasilianischer Real"
+        },
+        "multipleChoice": {
+          "unlimited": "Unbegrenzt",
+          "exactNumber": "Genaue Anzahl",
+          "range": "Bereich",
+          "badge": {
+            "title": "Abzeichen",
+            "letter": "Buchstabe",
+            "number": "Nummer"
+          },
+          "verticalAlignment": "Vertikale Ausrichtung"
+        }
+      },
+      "design": {
+        "title": "Design",
+        "theme": {
+          "title": "Thema",
+          "success": "Das Thema wurde erfolgreich aktualisiert.",
+          "failed": "Aktualisierung des Themas fehlgeschlagen"
+        },
+        "customize": {
+          "title": "Anpassen",
+          "systemFonts": "Systemschriftarten",
+          "question": "Fragen",
+          "answer": "Antworten",
+          "buttons": "Schaltflächen",
+          "buttonText": "Schaltflächentext",
+          "background": "Hintergrund",
+          "backgroundImage": "Hintergrundbild",
+          "brightness": "Helligkeit",
+          "customCSS": "Benutzerdefiniertes CSS"
+        }
+      },
+      "logic": {
+        "title": "Logik",
+        "hiddenFields": {
+          "menuTip": "Bearbeiten, löschen und mehr...",
+          "headline": "Versteckte Felder",
+          "subHeadline": "Versteckte Felder ermöglichen es Ihnen, Untersuchungsobjekte zu verfolgen. Sie bleiben für jeden unsichtbar, der das Formular ausfüllt, erlauben jedoch eine effiziente Sammlung und Nutzung von Daten.",
+          "addHiddenField": "Verstecktes Feld hinzufügen",
+          "updateHiddenField": "Verstecktes Feld aktualisieren",
+          "name": "Name",
+          "emptyState": "Versteckte Felder ermöglichen eine unsichtbare und effiziente Datenerfassung. <a>Mehr erfahren <icon /></a>"
+        },
+        "variable": {
+          "headline": "Variablen",
+          "subHeadline": "Eine Formularvariable repräsentiert einen versteckten berechneten Wert, der auf den Antworten Ihrer Befragten in Ihrem Formular basiert. Zum Beispiel kann sie verwendet werden, um die Punktzahl eines Quiz zu berechnen.",
+          "addVariable": "Variable hinzufügen",
+          "updateVariable": "Variable aktualisieren",
+          "type": "Typ",
+          "name": "Name",
+          "defaultValue": "Standardwert",
+          "emptyState": "Variablen berechnen versteckte Werte aus den Antworten. <a>Mehr erfahren <icon /></a>"
+        },
+        "rule": {
+          "headline": "Regeln",
+          "bulkEdit": {
+            "headline": "Massenbearbeitung",
+            "subHeadline": "Bearbeiten Sie die Logik mehrerer Fragen gleichzeitig in der Massenbearbeitung."
+          },
+          "removeAll": "Alle entfernen",
+          "when": "Wenn",
+          "then": "Dann",
+          "deleteRule": "Regel löschen",
+          "singleRule": "1 Regel wurde festgelegt",
+          "multipleRules": "{{count}} Regeln wurden festgelegt",
+          "redirect": "Weiterleitung bei Abschluss",
+          "required": "Die Logikregel darf nicht leer sein",
+          "addRule": "Regel hinzufügen",
+          "ruleCount_one": "1 Regel wurde festgelegt",
+          "ruleCount_other": "{{count}} Regeln wurden festgelegt",
+          "is": "Ist gleich",
+          "isNot": "Ist nicht gleich",
+          "contains": "Enthält",
+          "doesNotContain": "Enthält nicht",
+          "startsWith": "Beginnt mit",
+          "endsWith": "Endet mit",
+          "equal": "=",
+          "notEqual": "!=",
+          "greaterThan": ">",
+          "lessThan": "<",
+          "greaterOrEqualThan": ">=",
+          "lessOrEqualThan": "<=",
+          "isBefore": "Ist vor",
+          "isAfter": "Ist nach",
+          "isEmpty": "Ist leer",
+          "isNotEmpty": "Ist nicht leer",
+          "addition": "Addieren (+)",
+          "subtraction": "Subtrahieren (-)",
+          "multiplication": "Multiplizieren (×)",
+          "division": "Dividieren (÷)",
+          "assignment": "Zuweisen (=)",
+          "navigate": "Springen zu",
+          "calculate": "Berechnen",
+          "emptyState": "Logik ermöglicht es Formularen, auf Antworten zu reagieren. <a>Mehr erfahren <icon /></a>"
+        }
+      },
+      "preview": {
+        "title": "Vorschau",
+        "desktop": "Desktop",
+        "mobile": "Mobilgerät"
+      },
+      "mention": {
+        "mention": "Eine Frage erwähnen",
+        "hiddenfield": "Ein verstecktes Feld erwähnen",
+        "variable": "Eine Variable erwähnen",
+        "emptyState": "Keine Ergebnisse gefunden."
+      },
+      "navbar": {
+        "syncing": "Fragen werden gespeichert..."
+      }
+    },
+    "suspend": {
+      "headline": "Das Formular wurde ausgesetzt",
+      "subHeadline": "Wenn Sie Fragen zur Aussetzung haben, klicken Sie auf die Schaltfläche unten, um uns zu kontaktieren.",
+      "contactUs": "Kontaktieren Sie uns"
+    },
+    "metadata_zero": "Noch keine Einsendungen · Bearbeitet am {{date}}",
+    "metadata_one": "{{count}} Einsendung · Bearbeitet am {{date}}",
+    "metadata_other": "{{count}} Einsendungen · Bearbeitet am {{date}}",
+    "metadata3_zero": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_one": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_other": "<span>{{status}}</span> · $t(form.metadata)",
+    "template": {
+      "headline": "Vorlagen",
+      "categories": [
+        "Umfrage",
+        "Lead-Generierung",
+        "Kundensupport",
+        "Feedback",
+        "Mitarbeiter/Job",
+        "Buchung & Bestellung",
+        "Marketing",
+        "Registrierung",
+        "Bildung",
+        "Veranstaltung",
+        "Gesundheitswesen",
+        "Anwendung",
+        "Fragebogen & Quiz",
+        "Fernarbeit",
+        "Kontakt",
+        "Geschäftlich",
+        "COVID-19",
+        "Umfrage",
+        "Anfrage",
+        "Bankwesen & Finanzen",
+        "Spende & Wohltätigkeit"
+      ],
+      "use": "Diese Vorlage verwenden"
+    },
+    "ai": {
+      "topic": {
+        "label": "Was möchten Sie erstellen?",
+        "description": "Bitte geben Sie so viele Details wie möglich zu dem Formular an, das Sie erstellen möchten.",
+        "ideasForYou": "Ideen für Sie",
+        "examples": [
+          "Erstellen Sie ein Bewerbungsformular, um Kandidatendetails und Lebensläufe zu sammeln.",
+          "Kundenzufriedenheitsumfrage zur Bewertung der Produktqualität und des Kundenservice.",
+          "Geben Sie mir ein Anmeldeformular für Veranstaltungen, um Teilnehmerinformationen zu sammeln."
+        ],
+        "required": "Dieses Feld darf nicht leer sein"
+      },
+      "reference": {
+        "label": "Referenz (optional)",
+        "description": "Nach Angabe der Referenz wird die KI Fragen und Optionen ausschließlich im durch die Referenz festgelegten Rahmen generieren."
+      },
+      "submit": "Fragen generieren"
+    },
+    "customReport": {
+      "chart": "Diagramm",
+      "background": "Hintergrund",
+      "title": "Benutzerdefinierter Bericht",
+      "metadata_zero": "Noch keine Übermittlungen",
+      "metadata_one": "{{count}} Übermittlung",
+      "metadata_other": "{{count}} Übermittlungen",
+      "enablePublicAccess": "Öffentlichen Zugriff aktivieren",
+      "copyLink": "Bericht-Link kopieren",
+      "theme": "Thema",
+      "heading": "Überschrift",
+      "question": "Frage",
+      "showQuestion": "Frage anzeigen",
+      "hideQuestion": "Frage verbergen"
+    }
+  },
+  "user": {
+    "headline": "Kontoeinstellungen",
+    "subHeadline": "Änderungen an den Kontoeinstellungen gelten für alle Ihre Arbeitsbereiche.",
+    "avatar": {
+      "headline": "Avatar",
+      "subHeadline": "Gravatar wird standardmäßig als Ihr HeyForm-Avatar verwendet. Hier können Sie Ihren benutzerdefinierten Avatar hochladen."
+    },
+    "name": "Ihr Name",
+    "email": {
+      "headline": "E-Mail-Adresse",
+      "subHeadline": "Wir senden Ihnen eine E-Mail mit einem 6-stelligen Bestätigungscode.",
+      "label": "E-Mail-Adresse",
+      "invalid": "Die E-Mail-Adresse ist nicht gültig",
+      "code": {
+        "label": "Geben Sie den an <strong>{{email}}</strong> gesendeten Code ein.",
+        "required": "Der Bestätigungscode darf nicht leer sein"
+      },
+      "button": "E-Mail-Adresse ändern"
+    },
+    "password": {
+      "headline": "Passwort",
+      "subHeadline": "Wir senden Ihnen eine E-Mail mit einem 6-stelligen Bestätigungscode.",
+      "button": "Passwort ändern"
+    },
+    "deletion": {
+      "headline": "Konto löschen",
+      "subHeadline": "Dies wird Ihr gesamtes Konto dauerhaft löschen. Alle Ihre Formulare, Einreichungen und Arbeitsbereiche werden gelöscht.",
+      "tip": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird Ihr gesamtes Konto dauerhaft löschen. Alle von Ihnen erstellten Arbeitsbereiche werden gelöscht und Sie werden aus allen geteilten Arbeitsbereichen entfernt.\nWenn Sie sicher sind, dass Sie mit der Löschung Ihres Kontos fortfahren möchten, fahren Sie bitte unten fort.",
+      "code": {
+        "label": "Geben Sie den Löschcode ein, der an <strong>{{email}}</strong> gesendet wurde.",
+        "required": "Der Bestätigungscode darf nicht leer sein"
+      },
+      "sentSuccess": "Löschbestätigungscode gesendet",
+      "sentFailed": "Senden des Löschbestätigungscodes fehlgeschlagen",
+      "button": "Mein Konto löschen",
+      "scheduled": {
+        "title": "Ihr Konto ist zur Löschung vorgesehen",
+        "description": "Alle Ihre Kontodaten, einschließlich aber nicht beschränkt auf Arbeitsbereiche, Projekte, Formulare und Einreichungen, werden innerhalb von {{remainingTime}} Stunden nach dem Löschantrag dauerhaft gelöscht.\nFalls dies irrtümlich geschah, können Sie die Löschung Ihres Kontos unten abbrechen.",
+        "cancel": "Geplante Löschung abbrechen"
+      }
+    }
+  },
+  "template": {
+    "use": {
+      "title": "Vorlage",
+      "workspace": "Arbeitsbereich",
+      "createWorkspace": "Erstelle einen Arbeitsbereich",
+      "project": "Projekt",
+      "createProject": "Erstelle ein Projekt",
+      "submit": "Mit dieser Vorlage starten"
+    }
+  }
+}

@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
-import { Model } from 'mongoose'
-
-import { FormField, FormStatusEnum } from '@heyform-inc/shared-types-enums'
+import { GOOGLE_RECAPTCHA_KEY } from '@environments'
+import {
+  CaptchaKindEnum,
+  FormField,
+  FormStatusEnum
+} from '@heyform-inc/shared-types-enums'
 import { helper, pickObject, timestamp } from '@heyform-inc/utils'
-
-import { STRIPE_PUBLISHABLE_KEY } from '@environments'
+const { isValidArray } = helper
 import { FormModel } from '@model'
-import { getUpdateQuery, mapToObject } from '@utils'
-import { InjectQueue } from '@nestjs/bull'
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { getUpdateQuery } from '@utils'
+import { Model } from 'mongoose'
+import { TeamService } from './team.service'
+import { mapToObject } from '@heyforms/integrations'
 import { Queue } from 'bull'
+import { InjectQueue } from '@nestjs/bull'
 
 interface UpdateFiledOptions {
   formId: string
@@ -22,6 +27,7 @@ export class FormService {
   constructor(
     @InjectModel(FormModel.name)
     private readonly formModel: Model<FormModel>,
+    private readonly teamService: TeamService,
     @InjectQueue('TranslateFormQueue')
     private readonly translateFormQueue: Queue
   ) {}
@@ -30,18 +36,71 @@ export class FormService {
     return this.formModel.findById(id)
   }
 
+  async findByIdInTeam(id: string, teamId: string) {
+    return this.formModel.findOne({
+      _id: id,
+      teamId
+    })
+  }
+
   async findAllInTeam(teamId: string | string[]): Promise<FormModel[]> {
     const conditions: any = {
       teamId
     }
 
-    if (helper.isValidArray(teamId)) {
+    if (isValidArray(teamId)) {
       conditions.teamId = {
         $in: teamId
       }
     }
 
     return this.formModel.find(conditions)
+  }
+
+  async findRecentInTeam(
+    teamId: string,
+    projectIds: string[],
+    limit = 10,
+    status = FormStatusEnum.NORMAL
+  ): Promise<FormModel[]> {
+    const conditions: Record<string, any> = {
+      teamId,
+      status
+    }
+
+    if (helper.isValidArray(projectIds)) {
+      conditions.projectId = {
+        $in: projectIds
+      }
+    }
+
+    return this.formModel
+      .find(conditions)
+      .sort({
+        updatedAt: -1
+      })
+      .limit(limit)
+  }
+
+  async searchInTeam(
+    teamId: string,
+    projectIds: string[],
+    keyword: string
+  ): Promise<FormModel[]> {
+    const conditions: Record<string, any> = {
+      teamId,
+      name: new RegExp(keyword, 'i')
+    }
+
+    if (helper.isValidArray(projectIds)) {
+      conditions.projectId = {
+        $in: projectIds
+      }
+    }
+
+    return this.formModel.find(conditions).sort({
+      updatedAt: -1
+    })
   }
 
   async findAllInTrash(): Promise<FormModel[]> {
@@ -75,7 +134,13 @@ export class FormService {
     }
 
     return this.formModel.find(conditions).sort({
-      createdAt: -1
+      updatedAt: -1
+    })
+  }
+
+  async findAllByFieldLength(maxLength = 2) {
+    return this.formModel.find({
+      $where: `this.fields.length <= ${maxLength}`
     })
   }
 
@@ -100,6 +165,7 @@ export class FormService {
     })
   }
 
+  // Discard
   async countAll(teamId: string): Promise<number> {
     return new Promise((resolve, reject) => {
       this.formModel.countDocuments(
@@ -159,6 +225,50 @@ export class FormService {
     return !!result?.ok
   }
 
+  public async updateMany(
+    formIds: string[],
+    updates: Record<string, any>
+  ): Promise<boolean> {
+    const result = await this.formModel.updateMany(
+      {
+        _id: {
+          $in: formIds
+        }
+      },
+      updates
+    )
+    return !!result?.ok
+  }
+
+  // public async moveToTrash(formId: string | string[]): Promise<boolean> {
+  //   let result: any
+  //   const updates = {
+  //     // 移动到 trash 的时间
+  //     retentionAt: timestamp(),
+  //     status: FormStatusEnum.TRASH
+  //   }
+  //
+  //   if (helper.isValidArray(formId)) {
+  //     result = await this.formModel.update(
+  //       {
+  //         _id: {
+  //           $in: formId as string[]
+  //         }
+  //       },
+  //       updates
+  //     )
+  //   } else {
+  //     result = await this.formModel.updateOne(
+  //       {
+  //         _id: formId as string
+  //       },
+  //       updates
+  //     )
+  //   }
+  //
+  //   return !!result?.ok
+  // }
+
   public async delete(formId: string | string[]): Promise<boolean> {
     let result: any
 
@@ -193,7 +303,11 @@ export class FormService {
     return !!result?.ok
   }
 
-  public async updateField({ formId, fieldId, updates }: UpdateFiledOptions): Promise<boolean> {
+  public async updateField({
+    formId,
+    fieldId,
+    updates
+  }: UpdateFiledOptions): Promise<boolean> {
     const result = await this.formModel.updateOne(
       {
         _id: formId,
@@ -219,39 +333,45 @@ export class FormService {
         }
       },
       {
+        safe: true,
         multi: true
       }
     )
     return !!result?.ok
   }
 
-  public async findPublicForm(formId: string): Promise<any | undefined> {
+  // Check form quota
+  async checkQuota(teamId: string, formLimit: number): Promise<Boolean> {
+    const count = await this.countAll(teamId)
+
+    if (formLimit !== -1 && count >= formLimit) {
+      throw new BadRequestException({
+        code: 'FORM_QUOTA_EXCEED',
+        message: 'The form quota exceeds, new forms are no longer accepted'
+      })
+    }
+
+    return true
+  }
+
+  public async findPublicForm(
+    formId: string
+  ): Promise<Record<string, any> | undefined> {
     const form = await this.findById(formId)
 
-    if (
-      !form ||
-      form.status === FormStatusEnum.TRASH ||
-      form.suspended ||
-      form.draft ||
-      !form.settings.active
-    ) {
+    // 表单不存在或者未公开
+    if (!form || !form.settings.active) {
       return {
         id: formId,
         name: form?.name,
-        fields: [],
-        hiddenFields: [],
         settings: {
-          active: false,
-          ...pickObject(form?.settings || {}, [
-            'enableClosedMessage',
-            'closedFormTitle',
-            'closedFormDescription'
-          ])
+          active: false
         },
         themeSettings: form?.themeSettings
       }
     }
 
+    // 表单不在有效时间限制内
     const now = timestamp()
     if (
       form.settings.enableExpirationDate &&
@@ -261,17 +381,8 @@ export class FormService {
       return {
         id: formId,
         name: form?.name,
-        fields: [],
-        hiddenFields: [],
-        logics: [],
-        variables: [],
         settings: {
-          active: false,
-          ...pickObject(form.settings, [
-            'enableClosedMessage',
-            'closedFormTitle',
-            'closedFormDescription'
-          ])
+          active: false
         },
         themeSettings: form.themeSettings
       }
@@ -280,18 +391,14 @@ export class FormService {
     const masked: Record<string, any> = pickObject(form.toObject(), [
       ['_id', 'id'],
       'name',
-      'nameSchema',
       'interactiveMode',
       'kind',
-      'hiddenFields',
-      'logics',
-      'variables',
       'themeSettings'
     ])
 
+    //!!! Do not disclose form password to the front end
     masked.settings = pickObject(form.settings, [
       'active',
-      'published',
       'enableTimeLimit',
       'timeLimit',
       'captchaKind',
@@ -305,14 +412,33 @@ export class FormService {
       'closedFormDescription'
     ])
 
-    masked.fields = form.fields
+    masked.fields = form.fields.map(field => {
+      //!!! Do not disclose scope and other information to the front end
+      if (field.properties) {
+        field.properties.score = undefined
+
+        if (field.properties.choices) {
+          field.properties.choices = field.properties.choices.map(choice => {
+            choice.score = undefined
+            choice.isExpected = undefined
+            return choice
+          })
+        }
+      }
+
+      return field
+    })
     masked.translations = mapToObject(form.translations)
 
-    if (helper.isValid(form.stripeAccount?.accountId)) {
-      masked.stripe = {
-        accountId: form.stripeAccount!.accountId,
-        publishableKey: STRIPE_PUBLISHABLE_KEY
-      }
+    // 是否支持白标
+    const team = await this.teamService.findWithPlanById(form.teamId)
+    if (team && team.plan.whitelabelBranding) {
+      masked.settings.removeBranding = team.removeBranding
+    }
+
+    // 是否使用 Google reCaptcha
+    if (form.settings?.captchaKind === CaptchaKindEnum.GOOGLE_RECAPTCHA) {
+      masked.settings.googleRecaptchaKey = GOOGLE_RECAPTCHA_KEY
     }
 
     return masked

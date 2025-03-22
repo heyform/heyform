@@ -1,15 +1,28 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { IsEnum, IsNumber, IsOptional, Max, Min } from 'class-validator'
-import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
-
 import {
   FieldKindEnum,
   Property,
   SubmissionCategoryEnum,
   Variable
 } from '@heyform-inc/shared-types-enums'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { IsEnum, IsNumber, IsOptional, Max, Min } from 'class-validator'
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
+import { ContactType } from './audience.graphql'
+import {
+  FormDetailInput,
+  HiddenFieldType,
+  PropertyInput,
+  PropertyType
+} from './form.graphql'
 
-import { FormDetailInput, HiddenFieldType, PropertyInput, PropertyType } from './form.graphql'
+@InputType()
+export class SubmissionLocationsInput extends FormDetailInput {
+  @Field()
+  start: Date
+
+  @Field()
+  end: Date
+}
 
 @InputType()
 export class DeleteSubmissionInput extends FormDetailInput {
@@ -43,7 +56,7 @@ export class SubmissionAnswersInput extends FormDetailInput {
   @Min(1)
   page?: number
 
-  @Field({ nullable: true, defaultValue: 30 })
+  @Field({ nullable: true, defaultValue: 10 })
   @IsOptional()
   @IsNumber()
   @Max(30)
@@ -117,6 +130,7 @@ export class AnswerType {
   value: any
 }
 
+// @discard
 @ObjectType()
 export class SubmissionCategoryType {
   @Field()
@@ -143,12 +157,14 @@ export class SubmissionType {
   @Field({ nullable: true })
   title: string
 
+  // TODO - add AnswerType
   @Field(type => [GraphQLJSONObject])
   answers: Record<string, any>[]
 
   @Field(type => [HiddenFieldAnswerType], { nullable: true })
   hiddenFields: HiddenFieldAnswerType[]
 
+  // Add in Jun 30, 2022
   @Field(type => [GraphQLJSONObject], { nullable: true })
   variables?: Variable[]
 
@@ -173,6 +189,9 @@ class Answer2Type {
   @Field()
   kind: string
 
+  @Field(type => ContactType, { nullable: true })
+  contact?: ContactType
+
   @Field(type => GraphQLJSON, { nullable: true })
   value?: any
 
@@ -187,4 +206,16 @@ export class SubmissionAnswersType {
 
   @Field(type => [Answer2Type])
   answers: Answer2Type[]
+}
+
+@ObjectType()
+export class SubmissionLocationType {
+  @Field()
+  code: string
+
+  // @Field()
+  // region: string
+
+  @Field()
+  total: number
 }

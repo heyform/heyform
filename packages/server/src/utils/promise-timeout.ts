@@ -18,7 +18,10 @@ export class TimeoutError extends Error {}
  *
  * @internal
  */
-export const promiseTimeout = function (ms: number, promise: Promise<unknown>): Promise<unknown> {
+export const promiseTimeout = function (
+  ms: number,
+  promise: Promise<unknown>
+): Promise<unknown> {
   // Create a promise that rejects in <ms> milliseconds
   const timeout = new Promise((_, reject) => {
     const id = setTimeout(() => {

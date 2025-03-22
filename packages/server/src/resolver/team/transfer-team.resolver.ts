@@ -1,9 +1,8 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, Team, TeamGuard } from '@decorator'
 import { TransferTeamInput } from '@graphql'
 import { TeamModel, TeamRoleEnum } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService, TeamService } from '@service'
 
 @Resolver()
@@ -21,10 +20,15 @@ export class TransferTeamResolver {
     @Args('input') input: TransferTeamInput
   ): Promise<boolean> {
     if (!team.isOwner) {
-      throw new BadRequestException("You don't have permission to transfer workspace")
+      throw new BadRequestException(
+        "You don't have permission to transfer workspace"
+      )
     }
 
-    const member = await this.teamService.findMemberById(team.id, input.memberId)
+    const member = await this.teamService.findMemberById(
+      team.id,
+      input.memberId
+    )
 
     if (!member) {
       throw new BadRequestException('The workspace member does not exist')
@@ -41,8 +45,12 @@ export class TransferTeamResolver {
     const allProjects = await this.projectService.findAllInTeam(team.id)
 
     if (allProjects.length > 0) {
-      const projectIds = await this.projectService.findProjectsByMemberId(input.memberId)
-      const notJoined = allProjects.filter(project => !projectIds.includes(project.id))
+      const projectIds = await this.projectService.findProjectsByMemberId(
+        input.memberId
+      )
+      const notJoined = allProjects.filter(
+        project => !projectIds.includes(project.id)
+      )
 
       await this.projectService.addMembers(
         notJoined.map(row => ({

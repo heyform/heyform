@@ -1,13 +1,11 @@
-import { BadRequestException, UseGuards } from '@nestjs/common'
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
-import { timestamp } from '@heyform-inc/utils'
-
-import { FORM_ENCRYPTION_KEY } from '@environments'
+import { ENCRYPTION_KEY } from '@environments'
 import { OpenFormInput } from '@graphql'
 import { EndpointAnonymousIdGuard } from '@guard'
+import { aesEncryptObject } from '@heyforms/nestjs'
+import { timestamp } from '@heyform-inc/utils'
+import { BadRequestException, Headers, UseGuards } from '@nestjs/common'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { FormAnalyticService, FormService } from '@service'
-import { aesEncryptObject } from '@utils'
 
 @Resolver()
 @UseGuards(EndpointAnonymousIdGuard)
@@ -18,7 +16,10 @@ export class OpenFormResolver {
   ) {}
 
   @Query(returns => String)
-  async openForm(@Args('input') input: OpenFormInput): Promise<string> {
+  async openForm(
+    @Headers('x-anonymous-id') anonymousId: string,
+    @Args('input') input: OpenFormInput
+  ): Promise<string> {
     const form = await this.formService.findById(input.formId)
 
     if (!form) {
@@ -40,7 +41,7 @@ export class OpenFormResolver {
       {
         timestamp: timestamp()
       },
-      FORM_ENCRYPTION_KEY
+      ENCRYPTION_KEY
     )
   }
 }

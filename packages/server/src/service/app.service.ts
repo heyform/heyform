@@ -1,25 +1,35 @@
+/**
+ * Created by jiangwei on 2020/11/08.
+ * Copyright (c) 2020 Heyooo, Inc. all rights reserved
+ */
+import { date, nanoid, timestamp } from '@heyform-inc/utils'
+import {
+  AppCodeModel,
+  AppInternalTypeEnum,
+  AppModel,
+  AppStatusEnum
+} from '@model'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { resolve } from 'path'
-import { nanoid } from '@heyform-inc/utils'
 
-import { AppModel, AppStatusEnum } from '@model'
-import { ROOT_PATH } from '@environments'
+interface SharedOptions {
+  appId: string
+  userId: string
+}
+
+interface CreateCodeOptions extends SharedOptions {
+  redirectUri: string
+}
 
 @Injectable()
 export class AppService {
-  constructor(@InjectModel(AppModel.name) private readonly appModel: Model<AppModel>) {}
-
-  async onApplicationBootstrap(): Promise<any> {
-    const apps = await import(resolve(ROOT_PATH, 'resources/apps.json'))
-
-    try {
-      await this.appModel.insertMany(apps, {
-        ordered: false
-      })
-    } catch {}
-  }
+  constructor(
+    @InjectModel(AppModel.name)
+    private readonly appModel: Model<AppModel>,
+    @InjectModel(AppCodeModel.name)
+    private readonly appCodeModel: Model<AppCodeModel>
+  ) {}
 
   async create(app: AppModel | any): Promise<string | null> {
     app.clientId = nanoid()
@@ -45,12 +55,10 @@ export class AppService {
   async findAll(): Promise<AppModel[]> {
     return this.appModel
       .find({
-        status: {
-          $in: [AppStatusEnum.PENDING, AppStatusEnum.ACTIVE]
-        }
+        status: AppStatusEnum.ACTIVE
       })
       .sort({
-        _id: -1
+        uniqueId: 1
       })
   }
 
@@ -60,5 +68,48 @@ export class AppService {
         $in: uniqueIds
       }
     })
+  }
+
+  async findAllByInternalType(
+    internalType: AppInternalTypeEnum
+  ): Promise<AppModel[]> {
+    return this.appModel
+      .find({
+        internalType,
+        status: {
+          $in: [AppStatusEnum.ACTIVE]
+        }
+      })
+      .sort({
+        _id: -1
+      })
+  }
+
+  async findCode(codeId: string): Promise<AppCodeModel | null> {
+    return this.appCodeModel.findById(codeId)
+  }
+
+  async createCode(options: CreateCodeOptions): Promise<string | null> {
+    const result = await this.appCodeModel.create({
+      ...options,
+      expireAt: date().add(2, 'hour').unix()
+    } as any)
+    return result.id
+  }
+
+  async deleteCode(codeId: string): Promise<boolean> {
+    const result = await this.appCodeModel.deleteOne({
+      _id: codeId
+    })
+    return result?.n > 0
+  }
+
+  async deleteExpiredCodes(): Promise<boolean> {
+    const result = await this.appCodeModel.deleteMany({
+      expireAt: {
+        $lt: timestamp()
+      }
+    })
+    return result?.n > 0
   }
 }

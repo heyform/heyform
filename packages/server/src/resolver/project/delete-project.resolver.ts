@@ -1,9 +1,8 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, Project, ProjectGuard, Team, User } from '@decorator'
 import { DeleteProjectInput } from '@graphql'
 import { ProjectModel, TeamModel, UserModel } from '@model'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService, ProjectService } from '@service'
 
 @Resolver()
@@ -24,7 +23,9 @@ export class DeleteProjectResolver {
     @Args('input') input: DeleteProjectInput
   ): Promise<boolean> {
     if (!team.isOwner) {
-      throw new BadRequestException("You don't have permission to delete the project")
+      throw new BadRequestException(
+        "You don't have permission to delete the project"
+      )
     }
 
     // Check if dissolve team is exceeded

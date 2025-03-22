@@ -1,87 +1,90 @@
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { RedirectUriLink } from '@/components'
-import { Form, Input } from '@/components/ui'
-import {
-  APP_DISABLE_REGISTRATION,
-  DISABLE_LOGIN_WITH_APPLE,
-  DISABLE_LOGIN_WITH_GOOGLE
-} from '@/consts'
-import { AuthService } from '@/service'
-import { useQueryURL, useRouter } from '@/utils'
+import { Form, Input } from '@/components'
+import { AuthService } from '@/services'
+import { useRouter } from '@/utils'
 
-import { ThirdPartyLogin } from './views/ThirdPartyLogin'
+import SocialLogin from './SocialLogin'
 
 const Login = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const nextURL = useQueryURL('/')
 
-  async function handleFinish(values: any) {
-    await AuthService.login(values.email, values.password)
-    router.redirect(nextURL)
+  async function fetch(values: any) {
+    await AuthService.login(values)
+    router.replace('/')
+    // router.push('/')
   }
 
   return (
-    <div>
-      <div>
-        <h1 className="mt-6 text-center text-3xl font-bold text-slate-900">{t('login.signIn')}</h1>
-        <p className="mt-2 text-center text-sm text-slate-500">
-          {t('login.logIn')} {''}
-          {!APP_DISABLE_REGISTRATION && (
-            <>
-              {t('login.or')} {''}
-              <RedirectUriLink
-                href="/sign-up"
-                className="font-medium text-blue-700 hover:text-blue-800"
-              >
-                {t('login.startFree')}
-              </RedirectUriLink>
-            </>
-          )}
+    <div className="mx-auto grid w-[21.875rem] gap-6 py-12 lg:py-0">
+      <div className="grid gap-2 text-center">
+        <h1 className="text-3xl font-bold">{t('login.headline')}</h1>
+        <p className="text-sm text-secondary">
+          <Trans
+            t={t}
+            i18nKey="login.subHeadline"
+            components={{
+              a: (
+                <Link
+                  key="sign-up"
+                  className="underline underline-offset-4 hover:text-primary"
+                  to="/sign-up"
+                />
+              )
+            }}
+          />
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-          <ThirdPartyLogin headline={t('login.signWith')} subHeadline={t('login.continueWith')} />
+      <SocialLogin />
 
-          <Form.Custom
-            submitText={t('login.button')}
-            submitOptions={{
-              type: 'primary',
-              block: true
-            }}
-            request={handleFinish}
-          >
-            <Form.Item
-              name="email"
-              label={t('login.Email')}
-              rules={[{ type: 'email', required: true, message: t('login.EmailRequired') }]}
-            >
-              <Input type="email" />
-            </Form.Item>
+      <Form.Simple
+        className="space-y-4"
+        fetch={fetch}
+        submitProps={{
+          label: t('login.title'),
+          className: 'w-full'
+        }}
+      >
+        <Form.Item
+          name="email"
+          label={t('login.email.label')}
+          rules={[
+            {
+              required: true,
+              message: t('login.email.required')
+            },
+            {
+              type: 'email',
+              message: t('login.email.invalid')
+            }
+          ]}
+        >
+          <Input type="email" />
+        </Form.Item>
 
-            <Form.Item
-              name="password"
-              label={
-                <div className="flex items-center justify-between">
-                  <span>{t('login.Password')}</span>
-                  <RedirectUriLink
-                    href="/forgot-password"
-                    className="text-sm font-medium text-blue-700 hover:text-blue-800"
-                  >
-                    {t('login.forgotPassword')}
-                  </RedirectUriLink>
-                </div>
-              }
-              rules={[{ required: true, message: t('login.PasswordRequired') }]}
-            >
-              <Input.Password />
-            </Form.Item>
-          </Form.Custom>
-        </div>
-      </div>
+        <Form.Item
+          name="password"
+          label={
+            <div className="flex items-center justify-between">
+              <span>{t('login.password.label')}</span>
+              <Link to="/forgot-password" className="text-sm underline" tabIndex={-1}>
+                {t('login.forgotPassword')}
+              </Link>
+            </div>
+          }
+          rules={[
+            {
+              required: true,
+              message: t('login.password.required')
+            }
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+      </Form.Simple>
     </div>
   )
 }

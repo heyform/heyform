@@ -1,21 +1,10 @@
 import { helper, nanoid } from '@heyform-inc/utils'
-import type { CookieAttributes } from 'js-cookie'
 import cookies from 'js-cookie'
 import store from 'store2'
 
-import { COOKIE_DOMAIN } from '@/consts'
+import { COOKIE_OPTIONS, DEVICEID_COOKIE_NAME, LOGGED_COOKIE_NAME } from '@/consts'
 
-export const browserIdKey = 'HEYFORM_BROWSER_ID'
-export const loggedInKey = 'HEYFORM_LOGGED_IN'
-
-const cookieOptions: CookieAttributes = {
-  expires: 365,
-  sameSite: 'strict',
-  domain: COOKIE_DOMAIN,
-  secure: import.meta.env.NODE_ENV === 'production'
-}
-
-export function setCookie(key: string, value: string, options = cookieOptions) {
+export function setCookie(key: string, value: string, options = COOKIE_OPTIONS) {
   cookies.set(key, value, options)
 }
 
@@ -23,44 +12,48 @@ export function getCookie(key: string) {
   return cookies.get(key)
 }
 
+export function clearCookie(key: string) {
+  setCookie(key, '', {
+    expires: 0
+  })
+}
+
 export function getAuthState() {
-  const value = getCookie(loggedInKey)
-  return helper.isValid(value)
+  const value = getCookie(LOGGED_COOKIE_NAME)
+  return helper.isTrue(value)
 }
 
 export function clearAuthState() {
   // Clear local storage
   Object.keys(localStorage).forEach(key => {
-    if (key !== browserIdKey) {
+    if (key !== DEVICEID_COOKIE_NAME) {
       store.remove(key)
     }
   })
 
   // Clear logged in cookie
-  cookies.remove(loggedInKey, {
-    path: '/',
-    domain: COOKIE_DOMAIN
-  })
+  clearCookie(LOGGED_COOKIE_NAME)
 }
 
-export function getBrowserId() {
-  const storage = store.get(browserIdKey)
-  const cookie = getCookie(browserIdKey)
+export function getDeviceId() {
+  const storage = store.get(DEVICEID_COOKIE_NAME)
+  const cookie = getCookie(DEVICEID_COOKIE_NAME)
 
   if (helper.isValid(storage)) {
     if (!helper.isEqual(storage, cookie)) {
-      setCookie(browserIdKey, storage)
+      setCookie(DEVICEID_COOKIE_NAME, storage)
     }
+
     return storage
   } else if (helper.isValid(cookie)) {
-    store.set(browserIdKey, cookie)
+    store.set(DEVICEID_COOKIE_NAME, cookie)
     return cookie
   }
 }
 
-export function setBrowserId() {
-  const browserId = nanoid(12)
+export function setDeviceId() {
+  const deviceId = nanoid(12)
 
-  setCookie(browserIdKey, browserId)
-  store.set(browserIdKey, browserId)
+  setCookie(DEVICEID_COOKIE_NAME, deviceId)
+  store.set(DEVICEID_COOKIE_NAME, deviceId)
 }

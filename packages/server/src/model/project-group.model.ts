@@ -12,6 +12,8 @@ export class ProjectGroupModel extends Document {
   groupId: string
 }
 
-export const ProjectGroupSchema = SchemaFactory.createForClass(ProjectGroupModel)
+export const ProjectGroupSchema = SchemaFactory.createForClass(
+  ProjectGroupModel
+)
 
 ProjectGroupSchema.index({ projectId: 1, groupId: 1 }, { unique: true })

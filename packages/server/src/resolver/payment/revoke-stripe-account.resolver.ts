@@ -1,7 +1,6 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard } from '@decorator'
 import { FormDetailInput } from '@graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
 
 @Resolver()
@@ -11,7 +10,9 @@ export class RevokeStripeAccountResolver {
 
   @Mutation(returns => Boolean)
   @FormGuard()
-  async revokeStripeAccount(@Args('input') input: FormDetailInput): Promise<boolean> {
+  async revokeStripeAccount(
+    @Args('input') input: FormDetailInput
+  ): Promise<boolean> {
     return this.formService.update(input.formId, {
       stripeAccount: undefined
     })

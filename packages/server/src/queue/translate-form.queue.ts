@@ -1,43 +1,37 @@
 import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 
-import { FormService } from '@service'
+import { FailedTaskService, FormService, OpenAIService } from '@service'
 
-import { BaseQueue } from './base.queue'
-import { helper } from '@heyform-inc/utils'
 import { htmlUtils } from '@heyform-inc/answer-utils'
-
-import { OpenAI } from 'openai'
-import { OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_GPT_MODEL } from '@environments'
 import { CHOICES_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import { helper } from '@heyform-inc/utils'
+const { isEmpty, isValid, isValidArray } = helper
+import * as template from 'art-template'
+import { BaseQueue } from './base.queue'
+import { LANGUAGES, TRANSLATE_PROMPT } from '@config'
 
 interface TranslateFormQueueJob {
   formId: string
   language: string
 }
 
-const LANGUAGES = {
-  en: 'English',
-  de: 'German',
-  fr: 'French',
-	pl: 'Polish',
-  tr: 'Turkish',
-  'zh-cn': 'Simplified Chinese',
-  'zh-tw': 'Traditional Chinese'
-}
-
 @Processor('TranslateFormQueue')
 export class TranslateFormQueue extends BaseQueue {
-  constructor(private readonly formService: FormService) {
-    super()
+  constructor(
+    failedTaskService: FailedTaskService,
+    private readonly formService: FormService,
+    private readonly openAIService: OpenAIService
+  ) {
+    super(failedTaskService)
   }
 
   @Process()
-  async generateReport(job: Job<TranslateFormQueueJob>): Promise<any> {
+  async translateForm(job: Job<TranslateFormQueueJob>): Promise<any> {
     const { formId, language } = job.data
     const form = await this.formService.findById(formId)
 
-    if (!form || helper.isEmpty(form.settings?.languages) || helper.isEmpty(form.fields)) {
+    if (!form || isEmpty(form.settings?.languages) || isEmpty(form.fields)) {
       return this.logger.info(
         `The form with ID ${formId} does not contain any questions requiring translation`
       )
@@ -46,8 +40,8 @@ export class TranslateFormQueue extends BaseQueue {
     const translations: Record<string, any> = {}
 
     form.fields.forEach(f => {
-      const isTitleValid = helper.isValid(f.title)
-      const isDescriptionValid = helper.isValid(f.description)
+      const isTitleValid = isValid(f.title)
+      const isDescriptionValid = isValid(f.description)
 
       if (isTitleValid || isDescriptionValid) {
         translations[f.id] = {}
@@ -57,11 +51,16 @@ export class TranslateFormQueue extends BaseQueue {
         }
 
         if (isDescriptionValid) {
-          translations[f.id].description = htmlUtils.serialize(f.description as string[])
+          translations[f.id].description = htmlUtils.serialize(
+            f.description as string[]
+          )
         }
       }
 
-      if (CHOICES_FIELD_KINDS.includes(f.kind) && helper.isValidArray(f.properties?.choices)) {
+      if (
+        CHOICES_FIELD_KINDS.includes(f.kind) &&
+        isValidArray(f.properties?.choices)
+      ) {
         translations[f.id].choices = f.properties.choices.reduce(
           (prev, next) => ({ ...prev, [next.id]: next.label }),
           {}
@@ -69,36 +68,22 @@ export class TranslateFormQueue extends BaseQueue {
       }
     })
 
-    if (helper.isValid(translations)) {
-      const openai = new OpenAI({
-        apiKey: OPENAI_API_KEY,
-        baseURL: OPENAI_BASE_URL
+    if (isValid(translations)) {
+      const content = template.render(TRANSLATE_PROMPT, {
+        language: LANGUAGES[language],
+        translations: JSON.stringify(translations)
       })
 
-      const { choices } = await openai.chat.completions.create({
-        model: OPENAI_GPT_MODEL,
-        response_format: {
-          type: 'json_object'
-        },
-        temperature: 0,
-        max_tokens: 1000,
-        top_p: 1,
-        frequency_penalty: 1,
-        presence_penalty: 1,
-        stream: false,
+      const { choices } = await this.openAIService.chatCompletion({
         messages: [
           {
             role: 'user',
-            content: `Translate this JSON to ${LANGUAGES[language]}, and keep all HTML tags and their attributes!`
-          },
-          {
-            role: 'user',
-            content: JSON.stringify(translations)
+            content
           }
         ]
       })
 
-      if (helper.isValidArray(choices) && helper.isValid(choices[0].message.content)) {
+      if (isValidArray(choices) && isValid(choices[0].message.content)) {
         const translation = JSON.parse(choices[0].message.content)
 
         Object.keys(translation).forEach(id => {
@@ -107,7 +92,9 @@ export class TranslateFormQueue extends BaseQueue {
           }
 
           if (translation[id].description) {
-            translation[id].description = htmlUtils.parse(translation[id].description)
+            translation[id].description = htmlUtils.parse(
+              translation[id].description
+            )
           }
         })
 

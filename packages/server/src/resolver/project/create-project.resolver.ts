@@ -1,10 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
 import { Auth, Team, TeamGuard, User } from '@decorator'
 import { CreateProjectInput } from '@graphql'
+import { helper } from '@heyform-inc/utils'
+const { uniqueArray } = helper
 import { TeamModel, UserModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService } from '@service'
 
 @Resolver()
@@ -25,8 +24,10 @@ export class CreateProjectResolver {
       ownerId: user.id
     })
 
-    const memberIds: string[] = helper.uniqueArray([
+    const memberIds: string[] = uniqueArray([
+      // Owner 可以查看所有 project
       team.ownerId,
+      // 创建者可以查看自己创建的 project
       user.id,
       ...(helper.isValidArray(input.memberIds) ? input.memberIds : [])
     ])

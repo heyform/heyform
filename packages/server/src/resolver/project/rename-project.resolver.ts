@@ -1,8 +1,7 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, ProjectGuard, Team } from '@decorator'
 import { RenameProjectInput } from '@graphql'
 import { TeamModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService } from '@service'
 
 @Resolver()

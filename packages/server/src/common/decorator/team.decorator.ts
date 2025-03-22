@@ -1,9 +1,7 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common'
-import { GqlExecutionContext } from '@nestjs/graphql'
-
 import { helper } from '@heyform-inc/utils'
-
 import { UserModel } from '@model'
+import { createParamDecorator, ExecutionContext } from '@nestjs/common'
+import { GqlExecutionContext } from '@nestjs/graphql'
 
 /**
  * Get req.team attached to AuthGuard (guard/permission.guard.ts)

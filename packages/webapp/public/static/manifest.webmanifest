@@ -5,44 +5,44 @@
   "icons": [
     {
       "purpose": "maskable",
-      "src": "/static/icon_maskable_128.png",
+      "src": "/static/icon-maskable-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
       "purpose": "maskable",
-      "src": "/static/icon_maskable_192.png",
+      "src": "/static/icon-maskable-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
       "purpose": "maskable",
-      "src": "/static/icon_maskable_512.png",
+      "src": "/static/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/static/icon_512.png",
+      "src": "/static/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/static/icon_192.png",
+      "src": "/static/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/static/icon_180.png",
+      "src": "/static/icon-180.png",
       "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "/static/icon_128.png",
+      "src": "/static/icon-128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/static/icon_120.png",
+      "src": "/static/icon-120.png",
       "sizes": "120x120",
       "type": "image/png"
     }

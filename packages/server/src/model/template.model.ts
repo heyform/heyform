@@ -1,12 +1,11 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
-
 import {
   FormField,
   FormKindEnum,
   InteractiveModeEnum,
   ThemeSettings
 } from '@heyform-inc/shared-types-enums'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
 
 @Schema({
   timestamps: true
@@ -47,7 +46,7 @@ export class TemplateModel extends Document {
   fields?: FormField[]
 
   @Prop()
-  fieldUpdateAt?: number
+  fieldsUpdatedAt?: number
 
   @Prop()
   themeSettings?: ThemeSettings

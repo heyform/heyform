@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./mongoose",
+    "paths": {
+      "@decorator": ["dist/common/decorator"],
+      "@dto": ["dist/common/dto"],
+      "@interceptor": ["dist/common/interceptor"],
+      "@middleware": ["dist/common/middleware"],
+      "@graphql": ["dist/common/graphql"],
+      "@guard": ["dist/common/guard"],
+      "@config": ["dist/config"],
+      "@environments": ["dist/environments"],
+      "@controller": ["dist/controller"],
+      "@model": ["dist/model"]
+    }
+  },
+  "exclude": ["node_modules", "dashboard", "dist", "src", "test", "**/*spec.ts"]
+}

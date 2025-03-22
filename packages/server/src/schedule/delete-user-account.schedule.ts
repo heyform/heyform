@@ -1,27 +1,38 @@
-import { Process, Processor } from '@nestjs/bull'
+/**
+ * @program: serves
+ * @description:
+ * @author: mufeng
+ * @date: 12/27/21 1:44 PM
+ **/
 
+import { Process, Processor } from '@nestjs/bull'
 import {
+  FailedTaskService,
+  FormAnalyticService,
   FormService,
   MailService,
+  PaymentService,
   SocialLoginService,
   SubmissionService,
   TeamService,
   UserService
 } from '@service'
-
 import { BaseQueue } from '../queue/base.queue'
 
 @Processor('DeleteUserAccountSchedule')
 export class DeleteUserAccountSchedule extends BaseQueue {
   constructor(
+    failedTaskService: FailedTaskService,
     private readonly userService: UserService,
     private readonly socialLoginService: SocialLoginService,
     private readonly teamService: TeamService,
     private readonly formService: FormService,
+    private readonly formAnalyticService: FormAnalyticService,
     private readonly submissionService: SubmissionService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
+    private readonly paymentService: PaymentService
   ) {
-    super()
+    super(failedTaskService)
   }
 
   @Process()
@@ -44,6 +55,11 @@ export class DeleteUserAccountSchedule extends BaseQueue {
           const teamId = team.id
 
           if (team.ownerId === userId) {
+            // Delete own team
+
+            // Cancel own team's subscription
+            await this.paymentService.cancelSubscription(team.subscription.id)
+
             await this.teamService.delete(teamId)
             await this.teamService.deleteAllMemberInTeam(teamId)
 
@@ -52,6 +68,7 @@ export class DeleteUserAccountSchedule extends BaseQueue {
 
             if (formIds.length > 0) {
               await this.formService.delete(formIds)
+              await this.formAnalyticService.delete(formIds)
               await this.submissionService.deleteAll(formIds)
             }
           } else {

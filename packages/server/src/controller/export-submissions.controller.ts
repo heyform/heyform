@@ -1,13 +1,20 @@
-import { BadRequestException, Controller, Get, Query, Res } from '@nestjs/common'
-import { Response } from 'express'
-
-import { flattenFields } from '@heyform-inc/answer-utils'
-import { date } from '@heyform-inc/utils'
-
+/**
+ * Created by jiangwei on 2020/10/22.
+ * Copyright (c) 2020 Heyooo, Inc. all rights reserved
+ */
 import { Auth, FormGuard, Team } from '@decorator'
 import { ExportSubmissionsDto } from '@dto'
+import { date } from '@heyform-inc/utils'
 import { TeamModel } from '@model'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  Res
+} from '@nestjs/common'
 import { ExportFileService, FormService, SubmissionService } from '@service'
+import { Response } from 'express'
 
 @Controller()
 @Auth()
@@ -25,21 +32,25 @@ export class ExportSubmissionsController {
     @Team() team: TeamModel,
     @Res() res: Response
   ): Promise<void> {
+    if (!team.plan.fileExport) {
+      throw new BadRequestException(
+        "Workspace can't export submissions, please upgrade the plan"
+      )
+    }
+
     const form = await this.formService.findById(input.formId)
     if (!form) {
       throw new BadRequestException('The form does not exist')
     }
 
+    // 获取所有的Submission
     const submissions = await this.submissionService.findAllByForm(input.formId)
     if (submissions.length < 1) {
       throw new BadRequestException('The submissions does not exist')
     }
 
-    const data = await this.exportFileService.csv(
-      flattenFields(form.fields),
-      form.hiddenFields,
-      submissions
-    )
+    const data = await this.exportFileService.csv(form, submissions)
+
     const dateStr = date().format('YYYY-MM-DD')
     const filename = `${encodeURIComponent(form.name)}-${dateStr}.csv`
 

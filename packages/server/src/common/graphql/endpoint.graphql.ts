@@ -1,7 +1,14 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsOptional, IsString } from 'class-validator'
 import { GraphQLJSONObject } from 'graphql-type-json'
+import { CdnTokenInput } from './user.graphql'
 import { HiddenFieldAnswer } from '@heyform-inc/shared-types-enums'
+
+@InputType()
+export class UploadFormFileInput extends CdnTokenInput {
+  @Field()
+  formId: string
+}
 
 @InputType()
 export class UploadFormSignatureInput {
@@ -44,6 +51,11 @@ export class CompleteSubmissionInput {
   @Field()
   formId: string
 
+  @Field({ nullable: true })
+  @IsOptional()
+  contactId?: string
+
+  // TODO - add AnswerType
   @Field(type => GraphQLJSONObject)
   answers: Record<string, any>
 
@@ -114,7 +126,10 @@ export class UploadFormFileType {
   filename: string
 
   @Field()
-  url: string
+  cdnKey: string
+
+  @Field()
+  cdnUrlPrefix: string
 
   @Field()
   size: number

@@ -1,14 +1,21 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, User } from '@decorator'
 import { CreateTeamInput } from '@graphql'
-import { TeamRoleEnum, UserModel } from '@model'
-import { ProjectService, TeamService } from '@service'
+import { timestamp } from '@heyform-inc/utils'
+import {
+  BillingCycleEnum,
+  PlanGradeEnum,
+  SubscriptionStatusEnum,
+  TeamRoleEnum,
+  UserModel
+} from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
+import { PlanService, ProjectService, TeamService } from '@service'
 
 @Resolver()
 @Auth()
 export class CreateTeamResolver {
   constructor(
+    private readonly planService: PlanService,
     private readonly teamService: TeamService,
     private readonly projectService: ProjectService
   ) {}
@@ -18,11 +25,21 @@ export class CreateTeamResolver {
     @User() user: UserModel,
     @Args('input') input: CreateTeamInput
   ): Promise<string> {
+    // Attached Free plan to newly created team
+    const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+
     const teamId = await this.teamService.create({
       ownerId: user.id,
       name: input.name,
       avatar: input.avatar,
-      storageQuota: 0
+      storageQuota: 0,
+      subscription: {
+        planId: freePlan.id,
+        billingCycle: BillingCycleEnum.FOREVER,
+        startAt: timestamp(),
+        endAt: -1,
+        status: SubscriptionStatusEnum.ACTIVE
+      }
     })
 
     await this.teamService.createMember({
@@ -31,8 +48,12 @@ export class CreateTeamResolver {
       role: TeamRoleEnum.ADMIN
     })
 
-    // Create project
-    await this.projectService.createByNewTeam(teamId, user.id, user.name)
+    // 新建 project
+    await this.projectService.createByNewTeam(
+      teamId,
+      user.id,
+      input.projectName
+    )
 
     return teamId
   }

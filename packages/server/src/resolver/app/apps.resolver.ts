@@ -1,7 +1,6 @@
-import { Query, Resolver } from '@nestjs/graphql'
-
 import { AppType } from '@graphql'
 import { AppModel } from '@model'
+import { Query, Resolver } from '@nestjs/graphql'
 import { AppService } from '@service'
 
 @Resolver()

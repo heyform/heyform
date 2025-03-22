@@ -1,20 +1,28 @@
+import {
+  APP_LISTEN_HOSTNAME,
+  APP_LISTEN_PORT,
+  SENTRY_IO_DSN
+} from '@environments'
+import { ms } from '@heyform-inc/utils'
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
+import * as Sentry from '@sentry/node'
+import { hbs } from '@utils'
 import * as cookieParser from 'cookie-parser'
 import * as rateLimit from 'express-rate-limit'
 import * as helmet from 'helmet'
+import { join } from 'path'
 import * as serveStatic from 'serve-static'
-
-import { helper, ms } from '@heyform-inc/utils'
-
-import { APP_LISTEN_HOSTNAME, APP_LISTEN_PORT, STATIC_DIR, VIEW_DIR } from '@environments'
-import { Logger, hbs } from '@utils'
-
 import { AppModule } from './app.module'
 import { AllExceptionsFilter } from './common/filter'
 
 async function bootstrap() {
+  // Sentry
+  Sentry.init({
+    dsn: SENTRY_IO_DSN
+  })
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: false
   })
@@ -29,6 +37,15 @@ async function bootstrap() {
   // Catch all exceptions
   app.useGlobalFilters(new AllExceptionsFilter())
 
+  // Enable cors
+  app.enableCors({
+    origin: true,
+    credentials: true
+  })
+
+  // see https://github.com/nestjs/nest/issues/1788#issuecomment-474766198
+  app.disable('x-powered-by')
+
   // Enable cookie
   app.use(cookieParser())
 
@@ -38,27 +55,20 @@ async function bootstrap() {
   // Static assets
   app.use(
     '/static',
-    serveStatic(STATIC_DIR, {
+    serveStatic(join(__dirname, '..', 'static'), {
       maxAge: '30d',
-      extensions: ['jpg', 'jpeg', 'bmp', 'webp', 'gif', 'png', 'svg', 'js', 'css'],
-      setHeaders: (res, path) => {
-        const { attname } = res.req.query
-
-        if (helper.isValid(attname)) {
-          res.setHeader('Content-Disposition', `attachment; filename="${attname}"`)
-        }
-      }
+      extensions: ['png', 'svg', 'js', 'css']
     })
   )
 
   // Template rendering
   app.engine('html', hbs.__express)
-  app.setBaseViewsDir(VIEW_DIR)
+  app.setBaseViewsDir(join(__dirname, '..', 'view'))
   app.setViewEngine('html')
 
   /**
    * Limit the number of user's requests
-   * 1000 requests per minute
+   * 1000 requests pre minute
    */
   app.use(
     rateLimit({
@@ -79,12 +89,7 @@ async function bootstrap() {
     })
   )
 
-  await app.listen(APP_LISTEN_PORT, APP_LISTEN_HOSTNAME, () => {
-    Logger.info(
-      `Server is running on http://${APP_LISTEN_HOSTNAME}:${APP_LISTEN_PORT}`,
-      'NestApplication'
-    )
-  })
+  await app.listen(APP_LISTEN_PORT, APP_LISTEN_HOSTNAME)
 }
 
 bootstrap()

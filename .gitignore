@@ -36,3 +36,4 @@ lib
 packages/server/static
 *.tsbuildinfo
 
+.qodo

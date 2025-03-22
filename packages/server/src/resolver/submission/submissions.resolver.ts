@@ -1,8 +1,7 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard, Team } from '@decorator'
 import { SubmissionsInput, SubmissionsType } from '@graphql'
 import { TeamModel } from '@model'
+import { Args, Query, Resolver } from '@nestjs/graphql'
 import { SubmissionService } from '@service'
 
 @Resolver()

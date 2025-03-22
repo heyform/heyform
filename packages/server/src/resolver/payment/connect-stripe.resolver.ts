@@ -1,10 +1,8 @@
-import { BadRequestException } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
 import { Auth, FormGuard } from '@decorator'
 import { ConnectStripeInput, ConnectStripeType } from '@graphql'
+import { helper } from '@heyform-inc/utils'
+import { BadRequestException } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService, PaymentService, RedisService } from '@service'
 
 @Resolver()
@@ -18,7 +16,9 @@ export class ConnectStripeResolver {
 
   @Mutation(returns => ConnectStripeType)
   @FormGuard()
-  async connectStripe(@Args('input') input: ConnectStripeInput): Promise<ConnectStripeType> {
+  async connectStripe(
+    @Args('input') input: ConnectStripeInput
+  ): Promise<ConnectStripeType> {
     const key = `connect:stripe:${input.state}`
     const stateCache = await this.redisService.get(key)
 
@@ -30,7 +30,9 @@ export class ConnectStripeResolver {
       throw new BadRequestException('Invalid authorization state')
     }
 
-    const stripeAccount = await this.paymentService.getConnectAccount(input.code)
+    const stripeAccount = await this.paymentService.getConnectAccount(
+      input.code
+    )
 
     await this.formService.update(input.formId, {
       stripeAccount

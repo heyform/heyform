@@ -1,59 +1,74 @@
-import type { FC, ReactNode } from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useRequest } from 'ahooks'
+import { FC, ReactNode, useEffect, useState } from 'react'
 
-interface AsyncProps extends IComponentProps {
-  request: () => Promise<any>
-  immediate?: boolean
-  deps?: any[]
+export interface EmptyRenderProps {
+  refresh: () => Promise<Any>
+}
+
+export interface AsyncProps {
+  loader?: ReactNode
   cacheFirst?: boolean
-  skeleton?: ReactNode
-  emptyState?: ReactNode
+  fetch: () => Promise<boolean>
+  refreshDeps?: any[]
+  emptyRender?: (props: EmptyRenderProps) => ReactNode
   errorRender?: (err: Error) => ReactNode
+  children: ReactNode
 }
 
 export const Async: FC<AsyncProps> = ({
-  className,
-  style,
-  request,
-  immediate = true,
-  deps = [],
+  loader,
   cacheFirst = false,
-  skeleton,
-  emptyState,
+  fetch,
+  refreshDeps,
+  emptyRender,
   errorRender,
   children
 }) => {
-  const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle')
-  const [result, setResult] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
+  const [state, setState] = useState<'idle' | 'pending' | 'success' | 'error'>('idle')
 
-  const execute = useCallback(() => {
-    setStatus('pending')
-    setError(null)
-
-    return request()
-      .then(data => {
-        setResult(data)
-        setStatus('success')
-      })
-      .catch((err: any) => {
-        setError(err)
-        setStatus('error')
-      })
-  }, [request])
+  const {
+    data,
+    error,
+    runAsync: refresh,
+    cancel
+  } = useRequest(
+    async () => {
+      return await fetch()
+    },
+    {
+      refreshDeps,
+      onBefore() {
+        setState('pending')
+      },
+      onSuccess() {
+        setState('success')
+      },
+      onError() {
+        setState('error')
+      }
+    }
+  )
 
   useEffect(() => {
-    if (immediate) {
-      execute()
+    return () => {
+      cancel()
     }
-  }, deps.concat(immediate))
+  }, [])
 
-  return (
-    <div className={className} style={style}>
-      {status === 'idle' && cacheFirst && children}
-      {status === 'pending' && (!cacheFirst ? skeleton : children)}
-      {status === 'error' && (errorRender ? errorRender(error!) : children)}
-      {status === 'success' && (!result && emptyState ? emptyState : children)}
-    </div>
-  )
+  switch (state) {
+    case 'idle':
+      return cacheFirst ? children : null
+
+    case 'pending':
+      return cacheFirst ? children : loader
+
+    case 'success':
+      return !data && emptyRender ? emptyRender({ refresh }) : children
+
+    case 'error':
+      return errorRender ? errorRender(error as Error) : children
+
+    default:
+      return null
+  }
 }

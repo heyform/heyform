@@ -1,16 +1,15 @@
-import { BadRequestException, UseGuards } from '@nestjs/common'
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
-import { helper } from '@heyform-inc/utils'
-
 import { BCRYPT_SALT } from '@environments'
 import { ResetPasswordInput } from '@graphql'
-import { BrowserIdGuard } from '@guard'
+import { DeviceIdGuard } from '@guard'
+import { GqlLang, passwordHash } from '@heyforms/nestjs'
+import { helper } from '@heyform-inc/utils'
+import { UserLangEnum } from '@model'
+import { BadRequestException, UseGuards } from '@nestjs/common'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService, UserService } from '@service'
-import { passwordHash } from '@utils'
 
 @Resolver()
-@UseGuards(BrowserIdGuard)
+@UseGuards(DeviceIdGuard)
 export class ResetPasswordResolver {
   constructor(
     private readonly mailService: MailService,
@@ -19,7 +18,10 @@ export class ResetPasswordResolver {
   ) {}
 
   @Mutation(returns => Boolean)
-  async resetPassword(@Args('input') input: ResetPasswordInput): Promise<boolean> {
+  async resetPassword(
+    @GqlLang() lang: UserLangEnum,
+    @Args('input') input: ResetPasswordInput
+  ): Promise<boolean> {
     const user = await this.userService.findByEmail(input.email)
 
     if (helper.isEmpty(user)) {

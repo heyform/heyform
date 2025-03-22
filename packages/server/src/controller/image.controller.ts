@@ -1,26 +1,31 @@
 import { Controller, Get, Query, Res } from '@nestjs/common'
-import { createReadStream, promises } from 'fs'
+import { ImageResizingDto } from '@dto'
 import got from 'got'
+import { Readable } from 'stream'
+import { md5 } from '@heyforms/nestjs'
+import { mime, qs } from '@heyform-inc/utils'
+import { BUNNY_CACHE_DIR } from '@environments'
+import { createReadStream, promises } from 'fs'
 import { resolve } from 'path'
 import * as sharp from 'sharp'
-import { Readable } from 'stream'
-
-import { qs } from '@heyform-inc/utils'
-
-import { ImageResizingDto } from '@dto'
-import { UPLOAD_DIR } from '@environments'
-import { md5 } from '@utils'
 
 @Controller()
 export class ImageController {
-  @Get('/image')
+  @Get('/api/image')
   async index(@Query() input: ImageResizingDto, @Res() res: any) {
     const filePath = await this._getPath(input)
     const headersPath = `${filePath}.json`
     const isFileExists = await this._isFileExists(filePath)
 
     if (isFileExists) {
-      const headers = JSON.parse((await promises.readFile(headersPath)).toString())
+      const headers = JSON.parse(
+        (await promises.readFile(headersPath)).toString()
+      )
+
+      // Override the content type if the format is provided
+      if (input.format) {
+        headers['Content-Type'] = mime(input.format)
+      }
 
       res.set(headers)
       return createReadStream(filePath).pipe(res)
@@ -39,7 +44,7 @@ export class ImageController {
     }
 
     const headers = {
-      'Content-Type': result.headers['content-type'],
+      'Content-Type': mime(input.format || 'webp'),
       'Content-Length': fileBuffer.length,
       'Cache-Control': 'public, max-age=315360000, must-revalidate'
     }
@@ -66,7 +71,7 @@ export class ImageController {
 
   private async _getPath(input: ImageResizingDto) {
     const hash = md5(qs.stringify(input))
-    const dir = resolve(UPLOAD_DIR, hash.slice(0, 2), hash.slice(2, 4))
+    const dir = resolve(BUNNY_CACHE_DIR, hash.slice(0, 2), hash.slice(2, 4))
 
     await promises.mkdir(dir, {
       recursive: true

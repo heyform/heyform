@@ -1,9 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
-
 import { Auth, FormGuard, Team } from '@decorator'
 import { UpdateFormThemeInput } from '@graphql'
-import { TeamModel } from '@model'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
+import { BadRequestException } from '@nestjs/common'
+import { TeamModel } from '@model'
 
 @Resolver()
 @Auth()
@@ -22,8 +22,15 @@ export class UpdateFormThemeResolver {
     @Team() team: TeamModel,
     @Args('input') input: UpdateFormThemeInput
   ): Promise<boolean> {
+    if (!team.plan.themeCustomization) {
+      throw new BadRequestException(
+        'Upgrade your plan to setup theme customization'
+      )
+    }
+
     return await this.formService.update(input.formId, {
       themeSettings: {
+        logo: input.logo,
         theme: input.theme
       }
     })

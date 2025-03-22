@@ -1,6 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
-
+import { GeoLocation } from '@heyforms/nestjs'
+import { UserAgent } from '@heyforms/nestjs'
 import {
   Answer,
   HiddenFieldAnswer,
@@ -8,8 +7,8 @@ import {
   SubmissionStatusEnum,
   Variable
 } from '@heyform-inc/shared-types-enums'
-
-import { UserAgent } from '@utils'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
 
 export enum ExportSubmissionFormatEnum {
   CSV = 'csv',
@@ -31,6 +30,10 @@ export class SubmissionModel extends Document {
   })
   category: SubmissionCategoryEnum
 
+  // 关联 contact
+  @Prop()
+  contactId?: string
+
   @Prop({ required: true })
   title: string
 
@@ -51,6 +54,9 @@ export class SubmissionModel extends Document {
 
   @Prop()
   ip: string
+
+  @Prop()
+  geoLocation: GeoLocation
 
   @Prop()
   userAgent: UserAgent

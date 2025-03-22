@@ -1,0 +1,1675 @@
+{
+  "languages": {
+    "de": {
+      "original": "Deutsch",
+      "translated": "ドイツ語"
+    },
+    "en": {
+      "original": "English",
+      "translated": "英語"
+    },
+    "fr": {
+      "original": "Français",
+      "translated": "フランス語"
+    },
+    "ja": {
+      "original": "日本語",
+      "translated": "日本語"
+    },
+    "pl": {
+      "original": "Polski",
+      "translated": "ポーランド語"
+    },
+    "zh-cn": {
+      "original": "简体中文",
+      "translated": "簡体字中国語"
+    },
+    "zh-tw": {
+      "original": "繁體中文（台灣）",
+      "translated": "繁体字中国語（台湾）"
+    }
+  },
+  "timezones": {
+    "niue": "ニウエ",
+    "samoa": "サモア",
+    "cookislands": "クック諸島",
+    "hawaiialeutian": "ハワイ・アリューシャン標準時",
+    "tahiti": "タヒチ",
+    "marquesas": "マルキーズ",
+    "gambier": "ガンビエ",
+    "hawaiialeutianadak": "ハワイ・アリューシャン（アダック）",
+    "anchorage": "アンカレッジ",
+    "juneau": "ジュノー",
+    "metlakatla": "メトラカトラ",
+    "nome": "ノーム",
+    "sitka": "シトカ",
+    "yakutat": "ヤクタット",
+    "pitcairn": "ピトケアン",
+    "mexicanpacific": "メキシコ太平洋",
+    "dawsoncreek": "道森クリーク",
+    "fortnelson": "ネルソン砦",
+    "phoenix": "フェニックス",
+    "losangeles": "ロサンゼルス",
+    "tijuana": "ティフアナ",
+    "vancouver": "バンクーバー",
+    "dawson": "ドーソン市",
+    "whitehorse": "ホワイトホース市",
+    "belize": "ベリーズ",
+    "costarica": "コスタリカ",
+    "elsalvador": "エルサルバドル",
+    "guatemala": "グアテマラ",
+    "managua": "マナグア",
+    "regina": "レジャイナ",
+    "swiftcurrent": "スウィフトカレント",
+    "tegucigalpa": "テグシガルパ",
+    "easterisland": "イースター島",
+    "galapagos": "ガラパゴス諸島",
+    "chihuahua": "チワワ州",
+    "mazatlan": "マサトラン",
+    "boise": "ボイシ",
+    "cambridgebay": "ケンブリッジベイ",
+    "denver": "デンバー",
+    "edmonton": "エドモントン",
+    "inuvik": "イヌヴィック",
+    "ojinaga": "オヒナガ",
+    "yellowknife": "イエローナイフ",
+    "eirunepe": "エイルネペ",
+    "riobranco": "リオブランコ",
+    "bahiabanderas": "バンデラス湾",
+    "beulahnorthdakota": "ノースダコタ州ビュラ",
+    "centernorthdakota": "ノースダコタ州中央部",
+    "chicago": "シカゴ",
+    "knoxindiana": "インディアナ州ノックス",
+    "matamoros": "マタモロス",
+    "menominee": "メノミニー",
+    "merida": "メリダ",
+    "mexicocity": "メキシコシティー",
+    "monterrey": "モンテレイ",
+    "newsalemnorthdakota": "ノースダコタ州ニューセーラム",
+    "rainyriver": "レイニーリバー",
+    "rankininlet": "ランキンインレット",
+    "resolute": "レゾリュート",
+    "tellcityindiana": "インディアナ州テルシティ",
+    "winnipeg": "ウィニペグ",
+    "colombia": "コロンビア",
+    "cancun": "カンクン",
+    "jamaica": "ジャマイカ",
+    "panama": "パナマ",
+    "ecuador": "エクアドル",
+    "peru": "ペルー",
+    "boavista": "ボアヴィスタ",
+    "campogrande": "カンポグランデ",
+    "cuiaba": "クイアバ",
+    "manaus": "マナウス",
+    "portovelho": "ポルトヴェーリョ",
+    "barbados": "バルバドス",
+    "martinique": "マルティニーク島",
+    "puertorico": "プエルトリコ",
+    "santodomingo": "サントドミンゴ",
+    "bolivia": "ボリビア",
+    "chile": "チリ",
+    "cuba": "キューバ",
+    "detroit": "デトロイト",
+    "grandturk": "グランドターク島",
+    "indianapolis": "インディアナポリス",
+    "iqaluit": "イカルイト",
+    "louisville": "ルイビル",
+    "marengoindiana": "インディアナ州マレンゴ",
+    "monticellokentucky": "ケンタッキー州モンティセロ",
+    "newyork": "ニューヨーク",
+    "nipigon": "ニピゴン",
+    "pangnirtung": "パンギルタング",
+    "petersburgindiana": "インディアナ州ピーターズバーグ",
+    "portauprince": "ポルトープランス",
+    "thunderbay": "サンダーベイ",
+    "toronto": "トロント",
+    "vevayindiana": "インディアナ州ヴィヴェイ",
+    "vincennesindiana": "インディアナ州ビンセンズ",
+    "winamacindiana": "インディアナ州ウィナマック",
+    "guyana": "ガイアナ",
+    "paraguay": "パラグアイ",
+    "venezuela": "ベネズエラ",
+    "buenosaires": "ブエノスアイレス",
+    "catamarca": "カタマルカ",
+    "cordoba": "コルドバ",
+    "jujuy": "フフイ",
+    "larioja": "ラリオハ",
+    "mendoza": "メンドーサ",
+    "riogallegos": "リオガジェゴス",
+    "salta": "サルタ",
+    "sanjuan": "サンフアン",
+    "sanluis": "サンルイス",
+    "tucuman": "トゥクマン",
+    "ushuaia": "ウシュアイア",
+    "bermuda": "バミューダ",
+    "glacebay": "グレースベイ",
+    "goosebay": "グースベイ",
+    "halifax": "ハリファックス",
+    "moncton": "モンクトン",
+    "thule": "トゥーレ",
+    "araguaina": "アラグアイナ",
+    "bahia": "バイーア",
+    "belem": "ベレン",
+    "fortaleza": "フォルタレザ",
+    "maceio": "マセイオ",
+    "recife": "レシフェ",
+    "santarem": "サンタレン",
+    "saopaulo": "サンパウロ",
+    "falklandislands": "フォークランド諸島",
+    "frenchguiana": "フランス領ギアナ",
+    "palmer": "パルマー",
+    "puntaarenas": "プンタ・アレーナス",
+    "rothera": "ロゼラ",
+    "suriname": "スリナム",
+    "uruguay": "ウルグアイ",
+    "newfoundland": "ニューファンドランド",
+    "fernandodenoronha": "フェルナンド・デ・ノローニャ諸島",
+    "southgeorgia": "サウスジョージア島",
+    "stpierremiquelon": "サンピエール島とミクロン島",
+    "westgreenland": "西グリーンランド",
+    "capeverde": "カーボベルデ",
+    "azores": "アゾレス諸島",
+    "coordinateduniversal": "協定世界時",
+    "eastgreenland": "東グリーンランド",
+    "greenwichmean": "グリニッジ標準時",
+    "abidjan": "アビジャン",
+    "bissau": "ビサウ",
+    "danmarkshavn": "デンマーク港",
+    "monrovia": "モンロビア",
+    "reykjavik": "レイキャビク",
+    "sãotomé": "サントメ",
+    "algiers": "アルジェ",
+    "tunis": "チュニス",
+    "ireland": "アイルランド",
+    "morocco": "モロッコ",
+    "unitedkingdom": "イギリス",
+    "lagos": "ラゴス",
+    "ndjamena": "ンジャメナ",
+    "canary": "カナリア",
+    "faroe": "フェロー",
+    "lisbon": "リスボン",
+    "madeira": "マデイラ",
+    "westernsahara": "西サハラ",
+    "juba": "ジュバ",
+    "khartoum": "ハルツーム",
+    "maputo": "マプト",
+    "windhoek": "ウィントフック",
+    "amsterdam": "アムステルダム",
+    "andorra": "アンドラ",
+    "belgrade": "ベオグラード",
+    "berlin": "ベルリン",
+    "brussels": "ブリュッセル",
+    "budapest": "ブダペスト",
+    "ceuta": "セウタ",
+    "copenhagen": "コペンハーゲン",
+    "gibraltar": "ジブラルタル",
+    "luxembourg": "ルクセンブルク",
+    "madrid": "マドリード",
+    "malta": "マルタ",
+    "monaco": "モナコ",
+    "oslo": "オスロ",
+    "paris": "パリ",
+    "prague": "プラハ",
+    "rome": "ローマ",
+    "stockholm": "ストックホルム",
+    "tirane": "ティラナ",
+    "vienna": "ウィーン",
+    "warsaw": "ワルシャワ",
+    "zurich": "チューリッヒ",
+    "cairo": "カイロ",
+    "kaliningrad": "カリーニングラード",
+    "tripoli": "トリポリ",
+    "southafrica": "南アフリカ",
+    "troll": "トロール",
+    "baghdad": "バグダッド",
+    "qatar": "カタール",
+    "riyadh": "リヤド",
+    "eastAfrica": "東アフリカ",
+    "amman": "アンマン",
+    "athens": "アテネ",
+    "beirut": "ベイルート",
+    "bucharest": "ブカレスト",
+    "chisinau": "キシナウ",
+    "damascus": "ダマスカス",
+    "gaza": "ガザ",
+    "hebron": "ヘブロン",
+    "helsinki": "ヘルシンキ",
+    "kiev": "キーウ（キエフ）",
+    "nicosia": "ニコシア",
+    "riga": "リガ",
+    "sofia": "ソフィア",
+    "tallinn": "タリン",
+    "uzhhorod": "ウジホロド",
+    "vilnius": "ビリニュス",
+    "zaporozhye": "ザポリージャ",
+    "famagusta": "ファマグスタ",
+    "israel": "イスラエル",
+    "kirov": "キーロフ",
+    "minsk": "ミンスク",
+    "moscow": "モスクワ",
+    "simferopol": "シンフェロポリ",
+    "turkey": "トルコ",
+    "volgograd": "ヴォルゴグラード",
+    "armenia": "アルメニア",
+    "astrakhan": "アストラハン",
+    "azerbaijan": "アゼルバイジャン",
+    "georgia": "ジョージア（グルジア）",
+    "gulf": "湾岸地域",
+    "mauritius": "モーリシャス",
+    "réunion": "レユニオン",
+    "samara": "サマラ",
+    "saratov": "サラトフ",
+    "seychelles": "セーシェル",
+    "ulyanovsk": "ウリヤノフスク",
+    "afghanistan": "アフガニスタン",
+    "iran": "イラン",
+    "frenchSouthernAntarctic": "フランス領南方・南極地域",
+    "maldives": "モルディブ",
+    "mawson": "モーソン",
+    "pakistan": "パキスタン",
+    "tajikistan": "タジキスタン",
+    "turkmenistan": "トルクメニスタン",
+    "samarkand": "サマルカンド",
+    "tashkent": "タシケント",
+    "aktau": "アクタウ",
+    "aqtobe": "アクトベ",
+    "atyrau": "アティラウ",
+    "oral": "オラル（ウラリスク）",
+    "qyzylorda": "クズロルダ",
+    "yekaterinburg": "エカテリンブルク",
+    "colombo": "コロンボ",
+    "kolkata": "コルカタ",
+    "nepal": "ネパール",
+    "bangladesh": "バングラデシュ",
+    "bhutan": "ブータン",
+    "almaty": "アルマトイ",
+    "kostanay": "コスタナイ",
+    "indianOcean": "インド洋",
+    "kyrgyzstan": "キルギス",
+    "omsk": "オムスク",
+    "urumqi": "ウルムチ",
+    "vostok": "ヴォストーク",
+    "cocosIslands": "ココス諸島",
+    "myanmar": "ミャンマー",
+    "barnaul": "バルナウル",
+    "christmasIsland": "クリスマス島",
+    "davis": "デービス基地",
+    "hovd": "ホブド",
+    "bangkok": "バンコク",
+    "hoChiMinhCity": "ホーチミン市",
+    "krasnoyarsk": "クラスノヤルスク",
+    "novokuznetsk": "ノヴォクズネツク",
+    "novosibirsk": "ノヴォシビルスク",
+    "tomsk": "トムスク",
+    "jakarta": "ジャカルタ",
+    "pontianak": "ポンティアナック",
+    "australianWestern": "オーストラリア西部",
+    "bruneiDarussalam": "ブルネイ・ダルサラーム国",
+    "centralIndonesia": "インドネシア中部",
+    "macao": "マカオ",
+    "shanghai": "上海",
+    "hongKong": "香港",
+    "irkutsk": "イルクーツク",
+    "kualaLumpur": "クアラルンプール",
+    "kuching": "クチン",
+    "philippine": "フィリピン",
+    "singapore": "シンガポール",
+    "taipei": "台北",
+    "choibalsan": "チョイバルサン",
+    "ulaanbaatar": "ウランバートル",
+    "australianCentralWestern": "オーストラリア中西部",
+    "eastTimor": "東ティモール",
+    "easternIndonesia": "インドネシア東部",
+    "japan": "日本",
+    "pyongyang": "平壌",
+    "seoul": "ソウル",
+    "palau": "パラオ",
+    "chita": "チタ",
+    "khandyga": "カンディガ",
+    "yakutsk": "ヤクーツク",
+    "australianCentral": "オーストラリア中部",
+    "adelaide": "アデレード",
+    "brokenHill": "ブロークンヒル",
+    "brisbane": "ブリスベン",
+    "lindeman": "リンドマン",
+    "chamorro": "チャモロ",
+    "chuuk": "チューク諸島",
+    "hobart": "ホバート",
+    "macquarie": "マッコーリー",
+    "melbourne": "メルボルン",
+    "sydney": "シドニー",
+    "papuaNewGuinea": "パプアニューギニア",
+    "ustNera": "ウスチネラ",
+    "vladivostok": "ウラジオストク",
+    "lordHowe": "ロードハウ島",
+    "bougainville": "ブーゲンビル",
+    "casey": "ケーシー基地",
+    "kosrae": "コスラエ島",
+    "magadan": "マガダン",
+    "newCaledonia": "ニューカレドニア",
+    "norfolkIsland": "ノーフォーク島",
+    "ponape": "ポナペ",
+    "sakhalin": "サハリン",
+    "solomonIslands": "ソロモン諸島",
+    "srednekolymsk": "スレドネコリムスク",
+    "vanuatu": "バヌアツ",
+    "anadyr": "アナディリ",
+    "fiji": "フィジー",
+    "gilbertIslands": "ギルバート諸島",
+    "kwajalein": "クェゼリン",
+    "majuro": "マジュロ",
+    "nauru": "ナウル",
+    "newZealand": "ニュージーランド",
+    "petropavlovskKamchatski": "ペトロパブロフスク・カムチャツキー",
+    "tuvalu": "ツバル",
+    "wakeIsland": "ウェーク島",
+    "wallisFutuna": "ウォリス・フツナ諸島",
+    "chatham": "チャタム諸島",
+    "apia": "アピア",
+    "phoenixIslands": "フェニックス諸島",
+    "tokelau": "トケラウ",
+    "tonga": "トンガ",
+    "lineIsLands": "ライン諸島"
+  },
+  "components": {
+    "add": "追加",
+    "apply": "適用",
+    "cancel": "キャンセル",
+    "change": "変更",
+    "close": "閉じる",
+    "confirm": "確認",
+    "continue": "続行",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "delete": "削除",
+    "enabled": "有効化",
+    "disabled": "無効化",
+    "duplicate": "複製を作成する",
+    "expand": "展開する",
+    "edit": "編集する",
+    "next": "次へ",
+    "optional": "オプション",
+    "permanentlyDelete": "完全に削除",
+    "previous": "前へ",
+    "publish": "公開する",
+    "print": "Print",
+    "revert": "元に戻す",
+    "refresh": "データを更新する",
+    "rename": "名前を変更する",
+    "restore": "復元する",
+    "remove": "削除する",
+    "send": "送信",
+    "save": "保存する",
+    "share": "共有する",
+    "saveChanges": "変更を保存する",
+    "pagination": {
+      "title": "ページ {{page}} から {{maxPage}} まで",
+      "previous": "前へ",
+      "next": "次へ"
+    },
+    "uploader": {
+      "headline": "ファイルをアップロードまたはここにドラッグ＆ドロップしてください",
+      "subHeadline": "{{fileTypes}}, 最大サイズ {{maxSize}} まで",
+      "reselectFile": "再度ファイルを選択してアップロードする",
+      "invalidType": "サポートされていないファイルタイプです",
+      "exceedsMaxSize": "選択したファイルが {{maxSize}} の制限を超えています",
+      "uploading": "アップロード中..."
+    },
+    "password": {
+      "invalid": "パスワードは8文字以上で、少なくとも1つの大文字、1つの小文字、および1つの数字を含む必要があります。"
+    },
+    "imagePicker": {
+      "image": "画像",
+      "unsplash": {
+        "title": "Unsplash",
+        "search": "Unsplash 画像を検索",
+        "emptyState": "結果が見つかりませんでした"
+      },
+      "gradient": {
+        "title": "グラデーション"
+      }
+    },
+    "datePicker": {
+      "time": "時間"
+    },
+    "error": {
+      "title": "エラーが発生しました",
+      "message": "少し時間を置いて再試行してください。エラーが続く場合は、お問い合わせください。",
+      "retry": "再試行する"
+    },
+    "moveto": "移動する"
+  },
+  "login": {
+    "title": "ログイン",
+    "headline": "👋 お帰りなさい！",
+    "subHeadline": "アカウントにログインするか<a>新しいアカウントを作成</a>",
+    "continueWith": "または続行",
+    "email": {
+      "label": "メールアドレス",
+      "required": "メールアドレスは必須です",
+      "invalid": "無効なメールアドレスです"
+    },
+    "password": {
+      "label": "パスワード",
+      "required": "パスワードは必須です",
+      "maxLength": "パスワードは100文字未満である必要があります。"
+    },
+    "forgotPassword": "パスワードをお忘れですか？"
+  },
+  "signUp": {
+    "title": "アカウントを作成",
+    "subHeadline": "7日間の試用を開始し、すべての機能をアンロック",
+    "name": {
+      "label": "名前",
+      "required": "名前は必須です"
+    },
+    "agreement": "登録することで、<a1>利用規約</a1>および<a2>プライバシーポリシー</a2>に同意したことになります。",
+    "haveAccount": "すでにアカウントをお持ちですか？<a>ログイン</a>"
+  },
+  "forgotPassword": {
+    "title": "パスワードを忘れましたか？",
+    "subHeadline": "確認コード付きのメールを送信します",
+    "toLogin": "<a>ログイン</a>に戻る"
+  },
+  "resetPassword": {
+    "title": "パスワードのリセット",
+    "subHeadline": "6桁の確認コードが{{email}}宛てに送信されましたので、ご確認ください。",
+    "verificationCode": {
+      "label": "認証コード",
+      "required": "認証コードは必須です"
+    },
+    "newPassword": {
+      "label": "新しいパスワード"
+    },
+    "repeatPassword": {
+      "label": "新しいパスワードの確認",
+      "invalid": "新しいパスワードと確認用パスワードが一致しません。"
+    }
+  },
+  "verifyEmail": {
+    "title": "メールアドレスの確認",
+    "subHeadline": "{{email}} に6桁の認証コードを含むメールを送信しました。ご確認ください。",
+    "resend": "認証コードが届きませんか？<button>再送信</button>"
+  },
+  "oauth": {
+    "title": "承認",
+    "headline": "{{name}} を接続",
+    "subHeadline": "{{name}} を使用して HeyForm をお好みのアプリ（チャット、メール、SMS など）と統合します。",
+    "would": "{{name}} は次のことを希望しています：",
+    "scopes": [
+      "ワークスペースの読み取り",
+      "HeyForm アカウント内のすべてのワークスペースデータを取得する",
+      "プロジェクトの読み取り",
+      "HeyForm ワークスペース内のすべてのプロジェクトデータを取得する",
+      "フォームの読み取り",
+      "HeyForm プロジェクト内のすべてのフォームデータを取得する",
+      "提出物の読み取り",
+      "収集したフォーム提出データを取得する",
+      "アカウントの読み取り",
+      "HeyForm アカウント情報を取得する"
+    ]
+  },
+  "onboarding": {
+    "title": "オンボーディング"
+  },
+  "workspace": {
+    "notExist": "このワークスペースは存在しません。",
+    "backHome": "HeyForm に戻る",
+    "appearance": {
+      "title": "外観",
+      "system": "システム設定",
+      "light": "ライトモード",
+      "dark": "ダークモード"
+    },
+    "sidebar": {
+      "workspaces": "ワークスペース",
+      "projects": "プロジェクト",
+      "noProjects": "ワークスペースオーナーに連絡してプロジェクトに追加してもらうか、新しいプロジェクトを作成できます。",
+      "search": "検索",
+      "viewProfile": "プロフィールを見る",
+      "accountSettings": "アカウント設定",
+      "language": "言語",
+      "version": "バージョン {{version}}",
+      "logout": "ログアウト",
+      "resources": "リソース",
+      "gettingStarted": "入門ガイド",
+      "help": "ヘルプセンター",
+      "template": "テンプレート",
+      "whatsNew": "新機能"
+    },
+    "creation": {
+      "title": "ワークスペースの作成",
+      "headline": "新しいワークスペースを作成する",
+      "subHeadline": "ワークスペースはメンバーが協力できる共有環境です。ワークスペースを作成した後、他の人を招待できます。",
+      "name": {
+        "label": "ワークスペース名",
+        "required": "ワークスペース名は必須です"
+      },
+      "logo": "ロゴ <span>($t(components.optional))</span>"
+    },
+    "invitation": {
+      "title": "招待",
+      "headline": "<span1>{{owner}}</span1> のワークスペース：<span2>{{name}}</span2> に招待されました",
+      "subHeadline": "今すぐワークスペースに参加してコラボレーションを始めましょう！",
+      "join": "参加する"
+    },
+    "trial": {
+      "title": "7日間の無料トライアルを開始する",
+      "subHeadline": "契約不要、コントロールパネルでクリック一つでダウングレードやキャンセルが可能。",
+      "startTrial": "トライアルを開始",
+      "continueWithFree": "無料プランを続ける"
+    }
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "morning": "おはようございます、{{name}}",
+    "afternoon": "こんにちは、{{name}}",
+    "evening": "こんばんは、{{name}}",
+    "overview": "概要",
+    "forms": "フォーム",
+    "submission": "提出物",
+    "resetsOn": "{{date}} にリセットされます",
+    "members": "メンバー",
+    "storage": "ストレージ",
+    "recentForms": "最近のフォーム",
+    "noForms": "ワークスペースにフォームがありません",
+    "pickTemplate": "テンプレートを選択するか、空白のフォームから始めてください。",
+    "search": {
+      "actions": "アクション",
+      "navigation": "ナビゲーション",
+      "newWorkspace": "新しいワークスペース",
+      "newProject": "新しいプロジェクト",
+      "newForm": "新しいフォーム",
+      "forms": "フォーム",
+      "selectProject": "プロジェクトでフォームを作成する",
+      "placeholder": "フォームとヘルプドキュメントを検索する",
+      "emptyState": "結果が見つかりませんでした。"
+    }
+  },
+  "members": {
+    "title": "メンバー管理",
+    "name": "名前",
+    "role": "役割",
+    "you": "あなた",
+    "owner": "所有者",
+    "member": "メンバー",
+    "lastSeen": "最後にオンライン",
+    "menuTip": "転送、削除、およびその他...",
+    "remove": {
+      "title": "削除",
+      "headline": "{{name}} をこのワークスペースから削除してもよろしいですか？",
+      "subHeadline": "確認すると、このメンバーはこのワークスペースのデータにアクセスできなくなります。",
+      "confirm": "削除"
+    },
+    "transfer": {
+      "title": "所有権を移転する",
+      "headline": "このワークスペースを {{name}} に移転してもよろしいですか？",
+      "subHeadline": "移転を確認すると、あなたはもうこのワークスペースの所有者ではなくなります。",
+      "confirm": "移転する"
+    },
+    "leave": {
+      "title": "ワークスペースを離れる",
+      "headline": "このワークスペースを離れることを確認しますか？",
+      "subHeadline": "一度離れると、このワークスペースのデータにアクセスできなくなります。",
+      "confirm": "離れる"
+    },
+    "invite": {
+      "title": "メンバーを招待する",
+      "headline": "メンバーを招待する",
+      "subHeadline": "メールでチームメイトをワークスペースに招待します。有効期限は7日間です。",
+      "addMore": "さらに追加する",
+      "required": "メールアドレスは必須です",
+      "sentSuccess_one": "{{count}} 件の招待を送信しました",
+      "sentSuccess_other": "{{count}} 件の招待を送信しました",
+      "sentSuccessMessage": "招待されたメンバーにはHeyFormにサインアップするためのメールが送信されました"
+    }
+  },
+  "billing": {
+    "title": "請求書",
+    "planName": "{{name}} プラン",
+    "year": "年",
+    "month": "月",
+    "cycles": ["永久", "毎月", "毎年"],
+    "save16": "16% 節約",
+    "keepFreePlan": "無料プランを続ける",
+    "plans": {
+      "headline": "プラン",
+      "subHeadline": "<strong>{{workspaceName}}</strong> ワークスペースは現在 {{planName}} プランを使用しています。",
+      "view": "プランを見る"
+    },
+    "subscription": {
+      "headline": "現在のプラン",
+      "subHeadline": "ワークスペースは現在 {{planName}} プランを使用しています。",
+      "manage": "サブスクリプションを管理する",
+      "renewsOn": "更新日：{{date}}。",
+      "neverExpires": "無期限。",
+      "canceled": "{{canceledAt}} にキャンセルされ、{{endAt}} まで有効です。"
+    },
+    "invoices": {
+      "headline": "請求書",
+      "subHeadline": "<button>Stripe カスタマーポータル</button> にアクセスして請求書をご覧ください。"
+    },
+    "upgrade": {
+      "title": "プランをアップグレードする",
+      "headline": "プランをアップグレード",
+      "subHeadline": "現在のプランの制限に達したか、高度な機能を使用しようとしています。アップグレードしてこの機能を解除してください。",
+      "removeBranding": "HeyForm のブランド表示を削除するには、プレミアム版にアップグレードしてください",
+      "customDomain": "カスタムドメインを設定するには、プレミアム版にアップグレードしてください",
+      "translations": "フォームの質問を翻訳するには、プレミアム版にアップグレードしてください",
+      "customCSS": "カスタム CSS を設定するには、プレミアム版にアップグレードしてください",
+      "report": "フォームの報告を見るためにはベーシックプランへアップグレードしてください",
+      "customize": "フォームをカスタマイズするためにはベーシックプランへアップグレードしてください",
+      "exportData": "CSV データを書き出すためにはベーシックプランへアップグレードしてください",
+      "theme": "フォームテーマを設定するためにはベーシックプランへアップグレードしてください",
+      "metadata": "リンク設定を行うにはベーシックプランにアップグレードしてください",
+      "confirm": " アップグレード",
+      "remaining_one": "残り{{count}}日",
+      "remaining_other": "残り{{count}}日",
+      "trialing": "試用中",
+      "trialTip_zero": "{{name}}トライアルは今日で終了します",
+      "trialTip_one": "{{name}}トライアルは{{count}}日で終了します",
+      "trialTip_other": "{{name}}トライアルは{{count}}日で終了します",
+      "hiddenFields": "隠しフィールドを追加するにはベーシックプランにアップグレードしてください",
+      "brandKit": "ブランドキットを設定するにはプレミアムにアップグレードしてください",
+      "redirect": "リダイレクトを設定するにはBasicにアップグレード",
+      "upgradeTip": "無料プランは2025年5月1日に終了します。プレミアムプランまたはセルフホスティングソリューションへの移行をご検討ください。"
+    },
+    "payment": {
+      "headline": "プランをアップグレード",
+      "couponCode": {
+        "label": "クーポンコード",
+        "require": "クーポンコードは必須です"
+      },
+      "apply": "適用する",
+      "subtotal": "小計",
+      "discount": "割引",
+      "total": "合計",
+      "confirm": "今すぐアップグレード"
+    },
+    "downgrade": {
+      "headline": "プランをダウングレード",
+      "subHeadline": "一度ダウングレードを確認すると、ワークスペース：<strong>{{workspaceName}}</strong> は <strong>{{planName}}</strong> プランの機能にアクセスできなくなります。",
+      "confirm": "ダウングレードを確認"
+    },
+    "features": {
+      "basic": [
+        "無制限のフォーム",
+        "月に5,000回の応答",
+        "10GBのワークスペースストレージ",
+        "フォームレポート",
+        "カスタムメタデータ",
+        "非表示フィールド",
+        "テーマカスタマイズ",
+        "完了後リダイレクト",
+        "データをダウンロード"
+      ],
+      "premium": [
+        "BASICプランのすべての機能",
+        "月に20,000回の応答",
+        "20GBのワークスペースストレージ",
+        "最大3名までメンバーを招待可能",
+        "カスタムドメイン名",
+        "カスタムCSS",
+        "HeyFormブランドを削除",
+        "優先サポート"
+      ],
+      "business": [
+        "PREMIUMプランのすべての機能",
+        "月に150,000回の応答",
+        "50GB ワークスペースストレージ",
+        "最大10名のメンバーを招待可能",
+        "手数料無料で支払い",
+        "ファイルアップロードにサイズ制限なし"
+      ]
+    },
+    "success": {
+      "title": "支払いが成功しました",
+      "description": "お支払いありがとうございます。ご注文は処理中です。",
+      "button": "ダッシュボードに戻る"
+    }
+  },
+  "settings": {
+    "title": "ワークスペース設定",
+    "branding": {
+      "title": "ブランディング",
+      "removeBrandingHeadline": "HeyFormブランドを削除",
+      "removeBrandingSubHeadline": "HeyFormを完全にあなたのブランドにするために、フォームのフッターからHeyFormロゴを削除します。",
+      "viewBrandKit": "表示する",
+      "logo": {
+        "title": "ロゴ",
+        "required": "ロゴは空白にできません",
+        "invalid": "有効なURLではありませんが、無効として設定されています。トップページビューと体験もご覧いただけます。\"}内容をご確認し、調整してください\":\"ブラディングテーマ"
+      },
+      "presetThemes": "プリセットテーマ",
+      "brandKitHeadline": "ブランドキット",
+      "brandKitSubHeadline": "ブランドキットを使用して、ワークスペースのビジュアル資産をフォームにシームレスに適用できます。ロゴをアップロードし、ワークスペースのすべてのメンバーが利用できるテーマを作成しましょう。",
+      "theme": "テーマ",
+      "brandKitPreview": {
+        "number": "質問 1",
+        "title": "お名前は？",
+        "description": "ここに名前を入力してください",
+        "input": "あなたの回答をここに記入してください",
+        "next": "次へ"
+      }
+    },
+    "customDomain": {
+      "headline": "カスタムドメイン",
+      "subHeadline": "カスタムドメインを使用すると、自分の非HeyFormドメインでフォームにアクセスできます。 <a>詳細はこちら <icon /></a>",
+      "placeholder": "例：yourcustomdomain.com",
+      "invalid": "無効なドメイン",
+      "tip1": "カスタムドメインを使用すると、自分の非HeyFormドメインでフォームにアクセスできます（例：yourcustomdomain.com）。HeyFormはすべてのトップレベルドメインをカスタムドメインとしてサポートしています。<a>詳細はこちら <icon /></a>",
+      "tip2": "以下のDNSレコードをあなたのドメインプロバイダーのDNS設定に追加してください。このツールであなたのドメインDNSレコードを確認できます：<a>DNSクエリ <icon /></a>",
+      "type": "タイプ",
+      "name": "名前",
+      "cname": "CNAME",
+      "aname": "A",
+      "content": "内容",
+      "ttl": "TTL",
+      "ttlAuto": "自動 / デフォルト",
+      "dnsOnly": "DNS のみ",
+      "proxyStatus": "プロキシステータス",
+      "proxyTip": "Cloudflare などのドメインプロバイダーの場合、プロキシ機能を無効にすることをお勧めします。",
+      "dnsError": "DNS レコードを検証できませんでした。既に設定している場合は、後でもう一度お試しください。"
+    },
+    "exportData": {
+      "title": "データのエクスポート",
+      "description": "すべてのフォームと設定が含まれたファイルをメールで受け取ります。",
+      "button": "データをリクエスト",
+      "successTip": "エクスポートの準備が整うと、ダウンロードリンクを含むメールが届きます。"
+    },
+    "deletion": {
+      "title": "ワークスペースの削除",
+      "description": "ワークスペースを削除すると、すべてのフォームとデータが永久に削除されますので、ご注意ください！",
+      "button": "このワークスペースを削除",
+      "headline": "ワークスペース削除リクエストの確認",
+      "sentSuccess": "削除認証コードが送信されました",
+      "sentFailed": "削除認証コードの送信に失敗しました",
+      "tip1": "<strong>{{name}}</strong> ワークスペースを本当に削除する場合は、続行してください。",
+      "tip2": "この操作は元に戻せず、このワークスペースに関連するすべてのデータが永久に削除されることをご注意ください。",
+      "tip3": "一度ワークスペースの削除を確認すると、そのデータにはアクセスできなくなります。",
+      "code": {
+        "label": "<strong>{{email}}</strong> に送信された削除コードを入力してください。",
+        "required": "検証コードは空にできません"
+      }
+    },
+    "general": {
+      "title": "一般",
+      "name": "名前",
+      "logo": "ロゴ",
+      "pickLogo": "ワークスペースのためのロゴを選んでください。"
+    }
+  },
+  "project": {
+    "menuTip": "名前を変更、削除、その他...",
+    "forms": {
+      "title": "フォーム",
+      "headline": "プロジェクトにフォームがありません"
+    },
+    "trash": {
+      "title": "ゴミ箱",
+      "headline": "ゴミ箱にフォームがありません",
+      "subHeadline": "フォームは30日後にゴミ箱から永久に削除されます。",
+      "delete": {
+        "headline": "{{name}} フォームを永久に削除してもよろしいですか？",
+        "subHeadline": "一度フォームの削除を確認すると、そのフォーム関連のすべてのデータが永久に削除されます。"
+      },
+      "tip": "削除されたフォームは、過去30日以内に復元できます。<a>詳細はこちら <icon /></a>"
+    },
+    "members": {
+      "title": "メンバー",
+      "headline": "このプロジェクトのメンバー",
+      "subHeadline": "データ（フォーム、提出物、その他の情報）にアクセスできるのは<strong>このプロジェクトに追加された</strong>ユーザーのみです。",
+      "addMember": "このプロジェクトにメンバーを追加する",
+      "unjoinedMembers": "未参加のメンバー",
+      "add": "追加する",
+      "addSuccess": "メンバーが正常に追加されました",
+      "addFailed": "メンバーの追加に失敗しました",
+      "remove": "削除",
+      "removeSuccess": "メンバーが正常に削除されました",
+      "removeFailed": "メンバーの削除に失敗しました",
+      "leave": "離れる",
+      "leaveSuccess": "プロジェクトから正常に離れました",
+      "leaveFailed": "プロジェクトからの退出に失敗しました"
+    },
+    "creation": {
+      "title": "プロジェクトを作成する",
+      "headline": "新しいプロジェクトを作成する",
+      "subHeadline": "プロジェクトはワークスペース内のサブグループで、メンバーを追加してフォームや統合を共同で処理できます。",
+      "name": {
+        "label": "名前",
+        "required": "名前は必須です"
+      },
+      "logo": "ロゴ <span>($t(components.optional))</span>",
+      "addMembers": "このプロジェクトにメンバーを追加"
+    },
+    "rename": {
+      "headline": "このプロジェクトの名前を変更",
+      "name": {
+        "label": "名称",
+        "required": "名称は必須です"
+      }
+    },
+    "delete": {
+      "headline": "プロジェクト削除リクエストの確認",
+      "sentSuccess": "削除コードが送信されました",
+      "sentFailed": "削除コードの送信に失敗しました",
+      "tip1": "<strong>{{name}}</strong> プロジェクトを本当に削除する場合は、続行してください。",
+      "tip2": "注意: この操作は元に戻せません。このプロジェクトに関連するすべてのデータが永久に削除されます。",
+      "tip3": "プロジェクトを削除すると、そのデータにアクセスできなくなります。",
+      "code": {
+        "label": "<strong>{{email}}</strong> に送信された削除コードを入力してください。",
+        "required": "確認コードは空欄にできません"
+      },
+      "confirm": "プロジェクトを削除"
+    },
+    "moveto": {
+      "headline": "'{{name}}' を移動する",
+      "project": {
+        "required": "プロジェクトは空にできません"
+      }
+    }
+  },
+  "form": {
+    "menuTip": "名前の変更、複製など...",
+    "metadata2_zero": "提出なし · 残り {{date}}",
+    "metadata2_one": "{{count}} 件の提出 · 残り {{date}}",
+    "metadata2_other": "{{count}} 件の提出 · 残り {{date}}",
+    "editForm": "フォームを編集",
+    "active": "アクティブ",
+    "draft": "下書き",
+    "suspended": "一時停止中",
+    "closed": "終了済み",
+    "duplicate": "{{name}} (コピー)",
+    "moveToTrash": "ゴミ箱に移動",
+    "copyLinkToShare": "共有リンクをコピー",
+    "creation": {
+      "title": "フォームの作成",
+      "headline": "新しいフォームを作成",
+      "project": {
+        "label": "プロジェクト",
+        "required": "プロジェクトは空にできません"
+      },
+      "name": {
+        "label": "フォーム名",
+        "required": "フォーム名は必須です"
+      },
+      "scratch": {
+        "headline": "ゼロから始める",
+        "subHeadline": "利用可能な質問タイプから構築するための白紙キャンバスを取得します"
+      },
+      "template": {
+        "headline": "テンプレートを選択する",
+        "subHeadline": "手作りのテンプレートから選んで、すぐに開始できます"
+      },
+      "ai": {
+        "headline": "AI で作成する",
+        "subHeadline": "数秒で AI によってカスタム質問を生成します"
+      },
+      "defaultName": "無題"
+    },
+    "chat": {
+      "title": "HeyForm AI アシスタント",
+      "welcome": "HeyFormのAIアシスタントへようこそ！これは最先端のAI技術によって支えられた革新的な機能で、フォームの質問やロジックを作成するのに役立ちます。",
+      "compose": "何でも聞いてください...",
+      "fieldsUpdated": "フォームの質問が更新されました。",
+      "logicUpdated": "フォームのロジックが更新されました。",
+      "themeUpdated": "フォームのテーマが更新されました。"
+    },
+    "rename": {
+      "headline": "このフォームの名前を変更する",
+      "name": {
+        "label": "名前",
+        "required": "名前は必須です"
+      }
+    },
+    "analytics": {
+      "title": "データ分析",
+      "views": "閲覧数",
+      "submissions": "提出数",
+      "completeRate": "完了率",
+      "averageDuration": "平均時間",
+      "7d": "過去1週間",
+      "1m": "最近1ヶ月",
+      "3m": "最近3ヶ月",
+      "6m": "最近6ヶ月",
+      "1y": "最近1年",
+      "7dTrend": "先週比 {{change}}%",
+      "1mTrend": "先月比 {{change}}%",
+      "3mTrend": "3ヶ月前比 {{change}}%",
+      "6mTrend": "6ヶ月前比 {{change}}%",
+      "1yTrend": "昨年同時期比 {{change}}%",
+      "report": {
+        "headline": "レポート",
+        "submission_zero": "提出はありません",
+        "submission_one": "{{count}} 回の提出",
+        "submission_other": "{{count}} 回の提出",
+        "submission2_zero": "提出はありません · 平均 {{average}}",
+        "submission2_one": "{{count}} 回の提出 · 平均 {{average}}",
+        "submission2_other": "{{count}} 回の提出 · 平均 {{average}}"
+      }
+    },
+    "submissions": {
+      "title": "提出リスト",
+      "headline": "まだ提出がありません",
+      "subHeadline": "オンラインでフォームを共有して、より多くのオーディエンスを引き付けましょう。",
+      "inbox": "受信箱",
+      "spam": "スパム",
+      "view": "表示",
+      "downloadCSV": "CSV をダウンロード",
+      "maximize": "表を最大化",
+      "minimize": "表を最小化",
+      "moveTo": "{{name}} に移動",
+      "detail": {
+        "headline": "提出の詳細",
+        "menuTip": "印刷など..."
+      }
+    },
+    "integrations": {
+      "title": "統合アプリケーション",
+      "connect": "接続する",
+      "connectWith": "{{name}} と接続する",
+      "readMore": "{{name}} 統合についてさらに詳しく <icon /> ",
+      "reporting": "報告",
+      "analytics": "分析",
+      "marketing": "マーケティング",
+      "automation": "自動化",
+      "customerSupport": "カスタマーサポート",
+      "developerTools": "開発者ツール",
+      "productivity": "生産性向上",
+      "itEngineering": "IT とエンジニアリング",
+      "fileManagement": "ファイル管理",
+      "mapFields": {
+        "headline": "フィールドのマッピング",
+        "subHeadline": "HeyForm を {{name}} の列にマッピングします。{{name}} 上の列を変更した場合は、ここで更新してください。そうしないと統合が正常に機能しません。",
+        "requried": "マッピングフィールドは空にできません",
+        "leftPlaceholder": "HeyForm の質問を選択",
+        "rightPlaceholder": "{{name}} 列",
+        "requireLeft": "フィールド {{index}} の左側は空にできません",
+        "requireRight": "フィールド {{index}} の右側は空にできません",
+        "addMore": "フィールドを追加"
+      },
+      "authorization": {
+        "headline": "認証",
+        "subHeadline": "まず、HeyForm にデータへのアクセス権を与えてください。",
+        "loginWith": "{{name}} でログインする"
+      },
+      "webhook": {
+        "label": "エンドポイント URL",
+        "invalid": "エンドポイントURLが無効です"
+      },
+      "telegram": {
+        "label": "チャットID",
+        "required": "チャットIDは必須です",
+        "footer": "<a>@HeyForm_bot</a>をTelegramグループに追加し、グループ内で<code>/start@HeyForm_bot</code>と入力してください。その後、チャットIDが含まれたメッセージを受け取ります。"
+      },
+      "legacyslack": {
+        "label": "Webhook URL",
+        "invalid": "Webhook URLが無効です",
+        "footer": "<a1>Slackアプリ</a1>を作成し、<a2>Incoming Webhooks</a2>を有効にしてから、この場所にWebhook URLを貼り付けてください。"
+      },
+      "slack": {
+        "channel": {
+          "headline": "チャンネル"
+        }
+      },
+      "lark": {
+        "label": "Webhook URL",
+        "invalid": "Webhook URLが無効です",
+        "footer": "グループに<a>カスタムボット</a>を追加し、その後この場所にWebhook URLを貼り付けてください。"
+      },
+      "email": {
+        "label": "メールアドレス",
+        "invalid": "無効なメールアドレスです",
+        "deprecation": "この統合は廃止されました。<a>フォーム設定</a>で設定してください。"
+      },
+      "facebookpixel": {
+        "label": "ピクセルID",
+        "required": "ピクセルIDは必須です",
+        "placeholder": "例: 100xxxxxxxxxxxxx",
+        "footer": "Facebook Pixel IDをここにコピーして貼り付けてください。<a>Pixel IDの見つけ方</a>"
+      },
+      "googleanalytics": {
+        "label": "トラッキングコード",
+        "required": "トラッキングコードは必須です",
+        "placeholder": "例: UA-XXXXX-Y",
+        "footer": "Google Analyticsのトラッキングコードを下にコピーして貼り付けてください。<a>トラッキングコードの見つけ方</a>"
+      },
+      "googledrive": {
+        "drive": {
+          "headline": "クラウドドライブを選択",
+          "footer": "自分の Google ドライブまたは接続された <a>Google 共有ドライブ</a> を選択できます。"
+        },
+        "folder": {
+          "headline": "フォルダを選択",
+          "footer": "HeyForm からアップロードされたファイルを保存するフォルダを選択できます。"
+        }
+      },
+      "googlesheets": {
+        "spreadsheet": "スプレッドシートを選択",
+        "worksheet": "ワークシートを選択"
+      },
+      "osticket": {
+        "serverURL": {
+          "headline": "サーバー URL",
+          "footer": "サーバー URL は、システムフロントエンドにアクセスするための URL です。例: <span>https://support.domain.com</span>"
+        },
+        "apiKey": {
+          "headline": "API キー",
+          "footer": "<a>管理 -> API キー</a> に移動して API トークンを生成し、それがチケット作成権限を持っていることを確認してください。"
+        },
+        "userName": {
+          "headline": "ユーザー名"
+        },
+        "emailAddress": {
+          "headline": "メールアドレス"
+        },
+        "phoneNumber": {
+          "headline": "電話番号（任意）"
+        },
+        "subject": {
+          "headline": "件名"
+        },
+        "message": {
+          "headline": "メッセージ"
+        }
+      },
+      "hubspot": {
+        "fullName": {
+          "headline": "フルネーム"
+        },
+        "jobTitle": {
+          "headline": "職位（任意）"
+        }
+      },
+      "mailChimp": {
+        "audience": {
+          "headline": "オーディエンス",
+          "placeholder": "オーディエンスを選択してください"
+        },
+        "subscriberEmail": {
+          "headline": "購読者のメールアドレス"
+        },
+        "address": {
+          "headline": "住所"
+        }
+      },
+      "airtable": {
+        "base": {
+          "headline": "ベース"
+        },
+        "table": {
+          "headline": "テーブル"
+        }
+      },
+      "monday": {
+        "board": {
+          "headline": "ボード"
+        },
+        "group": {
+          "headline": "グループ（任意）"
+        },
+        "itemName": {
+          "headline": "アイテム名"
+        },
+        "columnValues": {
+          "headline": "列の値（任意）"
+        }
+      },
+      "supportPal": {
+        "systemURL": {
+          "headline": "システムURL",
+          "subHeadline": "サーバーURLは、システムのフロントエンドにアクセスするためのアドレスです。例：<span>https://support.domain.com</span>。"
+        },
+        "token": {
+          "headline": "APIトークン",
+          "subHeadline": "操作パネルの設定 -> 一般 -> APIトークンでAPIトークンを生成し、読み書き権限があることを確認してください。"
+        },
+        "userName": {
+          "headline": "ユーザー名（任意）"
+        },
+        "email": {
+          "headline": "メールアドレス（任意）"
+        },
+        "subject": {
+          "headline": "件名"
+        },
+        "text": {
+          "headline": "テキスト"
+        },
+        "department": {
+          "headline": "部門"
+        },
+        "priority": {
+          "headline": "優先度"
+        },
+        "status": {
+          "headline": "ステータス"
+        }
+      },
+      "notion": {
+        "database": {
+          "headline": "データベース"
+        }
+      }
+    },
+    "share": {
+      "title": "フォームの共有",
+      "unpublishedTip": "このフォームには未公開の変更があります。フォームを共有する前に最新バージョンを公開してください。",
+      "link": {
+        "headline": "共有リンク",
+        "viaX": "X に共有",
+        "viaFacebook": "Facebook に共有",
+        "viaLinkedIn": "LinkedInで共有",
+        "qrcode": {
+          "title": "QRコードで共有",
+          "headline": "フォームを埋め込む",
+          "subHeadline": "以下は、ウェブサイトにフォームを統合するためのオプションです。",
+          "download": "ダウンロード"
+        },
+        "email": {
+          "title": "メールで共有",
+          "subject": "このheyformにご記入いただけますか？",
+          "body": "このフォームにご記入いただけると幸いです：{{url}}。ありがとうございます。"
+        },
+        "useCustomDomain": "カスタムドメインを使用する"
+      },
+      "settings": {
+        "headline": "リンク設定",
+        "subHeadline": "リンクをソーシャルメディアで共有する際に、フォームの表示方法を設定します。",
+        "title": "タイトル",
+        "description": "説明",
+        "preview": {
+          "headline": "プレビュー",
+          "subHeadline": "HeyFormは自動的に<a>Open Graph</a>画像を生成します。<button>独自の画像をアップロードする</button>こともできます。",
+          "uploadTitle": "独自のOpen Graph画像をアップロード",
+          "uploadDescription": "推奨サイズ: 1200x630 | JPG, PNG."
+        }
+      },
+      "embed": {
+        "title": "埋め込み",
+        "headline": "フォームを埋め込む",
+        "subHeadline": "以下は、フォームをウェブサイトに統合するためのいくつかのオプションです。",
+        "standard": "標準",
+        "modal": "モーダルウィンドウ",
+        "popup": "ポップアップ",
+        "fullpage": "全画面表示",
+        "getCode": "コードを取得する",
+        "settings": "設定",
+        "width": "幅",
+        "height": "高さ",
+        "auto": "自動",
+        "fixed": "固定",
+        "size": "モーダルサイズ",
+        "small": "小",
+        "medium": "中",
+        "large": "大",
+        "launch": "起動",
+        "click": "ボタンをクリックした時",
+        "load": "ページ読み込み時に",
+        "delay": "遅延後に",
+        "exit": "退出意図時",
+        "scroll": "スクロール後",
+        "triggerBackground": "トリガー背景",
+        "triggerText": "トリガーテキスト",
+        "hideAfterSubmit": "送信後に閉じる",
+        "secondsDelay": "秒遅延",
+        "pageScrolled": "ページのスクロール割合",
+        "position": "位置",
+        "bottomLeft": "左下隅",
+        "bottomRight": "右下隅",
+        "transparentBackground": "透明な背景",
+        "code": {
+          "headline": "HeyFormをあなたのウェブサイトに追加する",
+          "subHeadline": "以下のコードスニペットをあなたのウェブサイトのbody部分に貼り付けてください。"
+        }
+      }
+    },
+    "settings": {
+      "title": "フォーム設定",
+      "general": {
+        "title": "一般設定",
+        "archive": {
+          "headline": "提出アーカイブ",
+          "subHeadline": "HeyFormがあなたの提出データを保存しないようにしたい場合は、提出アーカイブ機能をオフにしてください。"
+        },
+        "redirect": {
+          "headline": "完了後リダイレクト",
+          "subHeadline": "フォーム送信後、カスタムURLへリダイレクトします。",
+          "placeholder": "ここにリダイレクトURLを入力してください。例：https://example.com",
+          "invalidUrl": "無効なリダイレクトURL"
+        },
+        "progressBar": {
+          "headline": "進捗バー",
+          "subHeadline": "回答者がフォームの完了までどれくらいかを簡単に把握できるようにします。"
+        },
+        "viewQuestions": {
+          "headline": "すべての質問を見る",
+          "subHeadline": "この機能を有効にすると、回答者はすべての質問を閲覧できます。"
+        },
+        "navigationArrows": {
+          "headline": "ナビゲーション矢印",
+          "subHeadline": "この機能を有効にすると、回答者は質問間を移動できます。"
+        }
+      },
+      "access": {
+        "title": "アクセス",
+        "closeForm": {
+          "headline": "フォームを閉じる",
+          "subHeadline": "このフォームを閉じ、新しい提出物の受け取りと公共アクセスを停止することができます。"
+        },
+        "scheduledDate": {
+          "headline": "予定日にフォームを閉じる",
+          "subHeadline": "特定の日付範囲内で提出を受け取りたい場合は、ここで開始日と終了日を設定できます。",
+          "startDate": "開始日",
+          "endDate": "終了日"
+        },
+        "countdown": {
+          "headline": "カウントダウン",
+          "subHeadline": "カウントダウンが終了した後に提出をブロックしたい場合は、ここで許可される時間を設定できます。",
+          "days": "日",
+          "seconds": "秒",
+          "minutes": "分",
+          "hours": "時間"
+        },
+        "limitIP": {
+          "headline": "同一 IP アドレスの提出頻度制限",
+          "subHeadline": "同一 IP アドレスからの一定期間内の提出回数を制限したい場合は、ここで設定できます。",
+          "times": "回数",
+          "inEvery": "毎"
+        },
+        "quotaLimit": {
+          "headline": "提出数の制限",
+          "subHeadline": "これは、フォームで許可される特定の総提出数を設定することができます。",
+          "invalid": "無効な提出数"
+        },
+        "closedMessage": {
+          "headline": "フォーム閉鎖メッセージ",
+          "subHeadline": "上記のオプションでフォームを閉じた場合、受信者はこれらの内容を見ることになります。",
+          "title": "閉鎖メッセージタイトル",
+          "description": "閉鎖メッセージ説明"
+        }
+      },
+      "translations": {
+        "title": "多言語対応",
+        "primaryLanguage": {
+          "headline": "主要言語",
+          "subHeadline": "回答者が見るフォームの主要言語を選択します。デフォルトボタンや検証エラーなど、カスタムテキスト以外に適用されます。"
+        },
+        "translations": {
+          "headline": "翻訳",
+          "subHeadline": "<a>OpenAI ChatGPT</a> を使用してフォームの質問を自動的に選択した言語に翻訳します。",
+          "placeholder": "言語を選択"
+        }
+      },
+      "emailNotification": {
+        "title": "メール通知",
+        "self": {
+          "headline": "自己メール通知",
+          "subHeadline": "誰かがこのフォームを完了すると、メールで通知されます。"
+        },
+        "respondent": {
+          "headline": "回答者へのメール通知",
+          "subHeadline": "フォーム送信後、カスタムテキストのメールを回答者に送信します。"
+        }
+      },
+      "protection": {
+        "title": "保護",
+        "password": {
+          "headline": "パスワード保護",
+          "subHeadline": "簡単に覚えられるパスワードでフォームを保護します。"
+        },
+        "bot": {
+          "headline": "ロボット防止",
+          "subHeadline": "キャプチャを有効にしてロボットの送信を防ぎます。"
+        },
+        "antiSpam": {
+          "headline": "スパム防止",
+          "subHeadline": "この機能を有効にすると、スパム送信を防ぐことができます。"
+        }
+      }
+    },
+    "builder": {
+      "title": "ビルダー",
+      "question": {
+        "menuTip": "複製、削除など...",
+        "title": "質問",
+        "answer": "回答",
+        "recommended": "おすすめ",
+        "multipleChoice": "複数選択",
+        "phoneNumber": "電話番号",
+        "shortText": "短文",
+        "longText": "長文",
+        "questionGroup": "質問グループ",
+        "statement": "声明",
+        "pictureChoice": "画像選択",
+        "yesNo": "はい/いいえ",
+        "email": "メールアドレス",
+        "fullName": "氏名",
+        "opinionScale": "意見スケール",
+        "dateTime": "日付と時間",
+        "dateRange": "日付範囲",
+        "fileUpload": "ファイルアップロード",
+        "address": "住所",
+        "country": "国",
+        "legalTerms": "法的条件",
+        "signature": "署名",
+        "website": "ウェブサイト",
+        "inputTable": "入力テーブル",
+        "submitDate": "提出日",
+        "hiddenFields": "非表示フィールド",
+        "contactInfo": "連絡先情報",
+        "choices": "選択肢",
+        "text": "テキスト",
+        "number": "数値",
+        "rating": "評価",
+        "data": "データ",
+        "formStructure": "フォーム構造",
+        "legalConsent": "法的同意",
+        "date": "日付",
+        "payment": "支払い",
+        "string": "文字列",
+        "welcome": "ウェルカム画面",
+        "thankYou": "終了画面"
+      },
+      "sidebar": {
+        "questions": "質問",
+        "addQuestion": "質問を追加",
+        "endings": "エンディング",
+        "addEndingTip": "新しいエンディングを追加します。複数のエンディングを作成し、どれを見るかを決定するロジックを実装できます。"
+      },
+      "compose": {
+        "question": "質問を入力",
+        "description": "説明を追加（任意）",
+        "pasteLink": "リンクを貼り付けまたは入力してください",
+        "choicePlaceholder": "選択肢",
+        "otherChoice": "その他",
+        "addChoice": "選択肢を追加",
+        "dateRangeTo": "から",
+        "addColumn": "列を追加",
+        "columnPlaceholder": "列 {{index}}"
+      },
+      "settings": {
+        "title": "設定",
+        "required": "必須",
+        "dateFormat": "日付形式",
+        "timeField": "時間フィールド",
+        "multipleSelection": "複数選択",
+        "randomize": "ランダム化",
+        "allowOther": "「その他」オプション",
+        "total": "合計",
+        "labels": "ラベル",
+        "leftLabel": "左ラベル",
+        "centerLabel": "中央ラベル",
+        "rightLabel": "右ラベル",
+        "defaultCountry": "デフォルトの国",
+        "buttonText": "ボタンテキスト",
+        "redirect": "完了後にリダイレクト",
+        "shape": "形状",
+        "star": "星",
+        "heart": "ハート",
+        "crown": "クラウン",
+        "happy": "幸せな顔",
+        "thumb_up": "いいね！",
+        "layout": "レイアウト",
+        "brightness": "明るさ",
+        "questionType": {
+          "headline": "質問タイプを変更しますか？",
+          "subHeadline": "異なる質問タイプには異なるデータ構造があります。切り替えると一部の回答が失われる可能性があります。\n続行する前に、回答をエクスポートしてください。"
+        },
+        "payment": {
+          "title": "支払い",
+          "headline": "Stripe に接続する",
+          "subHeadline": "<div>Stripe を通じて直接銀行口座に入金されます。</div><div>無料の HeyForm ユーザーは収益時に<a>5% の HeyForm 手数料 + Stripe 取引手数料</a>がかかります。</div><div>5% の HeyForm 手数料を解除するには、<button>HeyForm Premium</button> にアップグレードしてください。</div>",
+          "stripeAccount": "Stripe アカウント",
+          "revoke": "取り消す",
+          "price": "価格",
+          "currency": "通貨",
+          "eur": "EUR — ユーロ",
+          "gbp": "GBP — ポンド",
+          "usd": "USD — 米ドル",
+          "aud": "AUD — オーストラリアドル",
+          "cad": "CAD — カナダドル",
+          "chf": "CHF — スイスフラン",
+          "nok": "NOK — ノルウェークローネ",
+          "sek": "SEK — スウェーデンクローナ",
+          "dkk": "DKK — デンマーククローネ",
+          "mxn": "MXN — メキシコペソ",
+          "nzd": "NZD — ニュージーランドドル",
+          "brl": "BRL — ブラジルレアル"
+        },
+        "multipleChoice": {
+          "unlimited": "無制限",
+          "exactNumber": "正確な数",
+          "range": "範囲",
+          "badge": {
+            "title": "バッジ",
+            "letter": "文字",
+            "number": "番号"
+          },
+          "verticalAlignment": "垂直配置"
+        }
+      },
+      "design": {
+        "title": "デザイン",
+        "theme": {
+          "title": "テーマ",
+          "success": "テーマが正常に更新されました。",
+          "failed": "テーマの更新に失敗しました。"
+        },
+        "customize": {
+          "title": "カスタマイズ",
+          "systemFonts": "システムフォント",
+          "question": "質問",
+          "answer": "回答",
+          "buttons": "ボタン",
+          "buttonText": "ボタンテキスト",
+          "background": "背景",
+          "backgroundImage": "背景画像",
+          "brightness": "明るさ",
+          "customCSS": "カスタム CSS"
+        }
+      },
+      "logic": {
+        "title": "ロジック",
+        "hiddenFields": {
+          "menuTip": "編集、削除、その他...",
+          "subHeadline": "隠しフィールドは調査対象を追跡するために使用できます。これらはフォーム記入者には見えませんが、データの収集と利用に効果的です。",
+          "addHiddenField": "隠しフィールドを追加",
+          "updateHiddenField": "隠しフィールドを更新",
+          "name": "名前",
+          "headline": "非表示フィールド",
+          "emptyState": "隠しフィールドは見えない効率的なデータ収集を可能にします。 <a>詳細はこちら <icon /></a>"
+        },
+        "variable": {
+          "headline": "変数",
+          "subHeadline": "フォームの変数は、回答者の応答に基づいた非表示の計算値を表します。例えば、クイズのスコアを計算するために使用できます。",
+          "addVariable": "変数を追加",
+          "updateVariable": "変数を更新",
+          "type": "タイプ",
+          "name": "名前",
+          "defaultValue": "デフォルト値",
+          "emptyState": "変数は回答から隠れた値を計算します。 <a>詳細はこちら <icon /></a>"
+        },
+        "rule": {
+          "headline": "ルール",
+          "bulkEdit": {
+            "headline": "一括編集",
+            "subHeadline": "複数の質問のロジックを一度に一括編集します。"
+          },
+          "removeAll": "すべて削除",
+          "when": "条件が満たされたとき",
+          "then": "その場合は",
+          "deleteRule": "ルールを削除する",
+          "singleRule": "1つのルールが設定されています",
+          "multipleRules": "{{count}}個のルールが設定されています",
+          "redirect": "完了後にリダイレクト",
+          "required": "ロジックルールは空にできません",
+          "addRule": "ルールを追加",
+          "ruleCount_one": "1つのルールが設定されています",
+          "ruleCount_other": "{{count}}個のルールが設定されています",
+          "is": "等しい",
+          "isNot": "等しくない",
+          "contains": "含む",
+          "doesNotContain": "含まない",
+          "startsWith": "で始まる",
+          "endsWith": "で終わる",
+          "equal": "=",
+          "notEqual": "!=",
+          "greaterThan": ">",
+          "lessThan": "<",
+          "greaterOrEqualThan": ">=",
+          "lessOrEqualThan": "<=",
+          "isBefore": "の前にある",
+          "isAfter": "の後にある",
+          "isEmpty": "空である",
+          "isNotEmpty": "空ではない",
+          "addition": "加算 (+)",
+          "subtraction": "減算 (-)",
+          "multiplication": "乗算 (×)",
+          "division": "除算 (÷)",
+          "assignment": "代入 (=)",
+          "navigate": "移動する",
+          "calculate": "計算する",
+          "emptyState": "ロジックは回答に応じてフォームが反応するようにします。 <a>詳細はこちら <icon /></a>"
+        }
+      },
+      "preview": {
+        "title": "プレビュー",
+        "desktop": "デスクトップ版",
+        "mobile": "モバイル版"
+      },
+      "mention": {
+        "mention": "質問に言及",
+        "hiddenfield": "隠しフィールドに言及",
+        "variable": "変数に言及",
+        "emptyState": "結果が見つかりませんでした。"
+      },
+      "navbar": {
+        "syncing": "質問を保存中…"
+      }
+    },
+    "suspend": {
+      "headline": "フォームが一時停止されました",
+      "subHeadline": "一時停止に関する質問がある場合は、下のボタンをクリックしてお問い合わせください。",
+      "contactUs": "お問い合わせ"
+    },
+    "metadata_zero": "まだ提出はありません · 編集日 {{date}}",
+    "metadata_one": "{{count}} 件の提出 · 編集日 {{date}}",
+    "metadata_other": "{{count}} 件の提出 · 編集日 {{date}}",
+    "metadata3_zero": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_one": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_other": "<span>{{status}}</span> · $t(form.metadata)",
+    "template": {
+      "headline": "テンプレート",
+      "categories": [
+        "アンケート",
+        "リードジェネレーション",
+        "カスタマーサポート",
+        "フィードバック",
+        "従業員/仕事",
+        "予約と注文",
+        "マーケティング",
+        "登録",
+        "教育",
+        "イベント",
+        "医療",
+        "申請書",
+        "アンケート & クイズ",
+        "リモートワーク",
+        "連絡先",
+        "ビジネス",
+        "COVID-19（新型コロナウイルス）",
+        "投票",
+        "リクエスト",
+        "銀行・金融",
+        "寄付・慈善"
+      ],
+      "use": "このテンプレートを使用する"
+    },
+    "ai": {
+      "topic": {
+        "label": "何を作成したいですか？",
+        "description": "作成したいフォームについて、できるだけ詳しくご提供ください。",
+        "ideasForYou": "あなたへのアイデア",
+        "examples": [
+          "候補者の詳細と履歴書を収集するための求人応募フォームを作成します。",
+          "製品品質と顧客サービスを評価するための顧客満足度調査。",
+          "参加者情報を収集するためのイベント登録フォームが欲しいです。"
+        ],
+        "required": "このフィールドは空にすることはできません"
+      },
+      "reference": {
+        "label": "参考（任意）",
+        "description": "参考を提供した後、AIは指定された範囲内で質問と選択肢を生成します。"
+      },
+      "submit": "質問を生成"
+    },
+    "customReport": {
+      "title": "カスタムレポート",
+      "metadata_zero": "まだ提出がありません",
+      "metadata_one": "{{count}} 件の提出物",
+      "metadata_other": "{{count}} 件の提出物",
+      "enablePublicAccess": "公開アクセスを有効にする",
+      "copyLink": "レポートリンクをコピーする",
+      "theme": "テーマ",
+      "heading": "見出し",
+      "question": "質問",
+      "chart": "チャート",
+      "background": "背景",
+      "showQuestion": "質問を表示",
+      "hideQuestion": "質問を非表示"
+    }
+  },
+  "user": {
+    "headline": "アカウント設定",
+    "subHeadline": "アカウント設定の変更はすべてのワークスペースに適用されます。",
+    "avatar": {
+      "headline": "アバター",
+      "subHeadline": "デフォルトでは Gravatar が HeyForm のアバターとして使用されますが、ここでカスタムアバターをアップロードできます。"
+    },
+    "name": "あなたの名前",
+    "email": {
+      "headline": "メールアドレスを変更",
+      "subHeadline": "6桁の確認コードをあなたのメールアドレスに送信します。",
+      "label": "メールアドレス",
+      "invalid": "無効なメールアドレスです",
+      "code": {
+        "label": "<strong>{{email}}</strong> に送信された確認コードを入力してください。",
+        "required": "確認コードは必須です"
+      },
+      "button": "メールアドレスを変更"
+    },
+    "password": {
+      "headline": "パスワードを変更",
+      "subHeadline": "6桁の確認コードをあなたのメールアドレスに送信します。",
+      "button": "パスワードを変更"
+    },
+    "deletion": {
+      "headline": "アカウントの削除",
+      "subHeadline": "これにより、アカウント全体が永久に削除されます。すべてのフォーム、提出物、およびワークスペースが削除されます。",
+      "tip": "この操作は元に戻せません。これにより、アカウント全体が永久に削除されます。作成したすべてのワークスペースが削除され、共有ワークスペースからもすべて解除されます。\nアカウントを本当に削除する場合は、以下で続行してください。",
+      "code": {
+        "label": "<strong>{{email}}</strong> に送信されたコードを入力してください。",
+        "required": "確認コードは空白にはできません"
+      },
+      "sentSuccess": "確認コードが送信されました",
+      "sentFailed": "確認コードの送信に失敗しました",
+      "button": "私のアカウントを削除する",
+      "scheduled": {
+        "title": "あなたのアカウントは削除予定です",
+        "description": "リクエスト後{{remainingTime}}時間以内に、ワークスペースやプロジェクト、フォームおよび提出内容などを含むすべてのデータが永久的に削除されます。\n誤って操作した場合は、下記でキャンセルできます。",
+        "cancel": "削除の予定をキャンセル"
+      }
+    }
+  },
+  "template": {
+    "use": {
+      "title": "テンプレート",
+      "workspace": "ワークスペース",
+      "createWorkspace": "ワークスペースを作成",
+      "project": "プロジェクト",
+      "createProject": "プロジェクトを作成",
+      "submit": "このテンプレートで開始"
+    }
+  }
+}

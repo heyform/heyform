@@ -1,60 +1,66 @@
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { RedirectUriLink } from '@/components'
-import { Form, Input } from '@/components/ui'
-import { AuthService } from '@/service'
-import { useStore } from '@/store'
-import { useQueryURL, useRouter } from '@/utils'
+import { Form, Input } from '@/components'
+import { AuthService } from '@/services'
+import { useUserStore } from '@/store'
+import { useRouter } from '@/utils'
 
 const ForgotPassword = () => {
-  const router = useRouter()
-  const appStore = useStore('appStore')
   const { t } = useTranslation()
-  const nextURL = useQueryURL('/reset-password')
 
-  async function handleFinish(values: IMapType) {
-    await AuthService.sendResetEmail(values.email)
-    appStore.resetPasswordEmail = values.email
-    router.push(nextURL)
+  const router = useRouter()
+  const { setTemporaryEmail } = useUserStore()
+
+  async function fetch({ email }: any) {
+    await AuthService.sendResetEmail(email)
+
+    setTemporaryEmail(email)
+    router.replace('/reset-password')
   }
 
   return (
-    <div>
-      <div>
-        <h1 className="mt-6 text-center text-3xl font-bold text-slate-900">
-          {t('auth.forgotPassword.forgot')}
-        </h1>
-        <p className="mt-2 text-center text-sm text-slate-500">
-          {t('auth.forgotPassword.sendEmail')}
-        </p>
+    <div className="mx-auto grid w-[21.875rem] gap-6 py-12 lg:py-0">
+      <div className="grid gap-2 text-center">
+        <h1 className="text-3xl font-bold">{t('forgotPassword.title')}</h1>
+        <p className="text-sm text-secondary">{t('forgotPassword.subHeadline')}</p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
-          <Form.Custom
-            submitText={t('auth.forgotPassword.continue')}
-            submitOptions={{
-              type: 'primary',
-              block: true
-            }}
-            request={handleFinish}
-          >
-            <Form.Item
-              name="email"
-              label={t('login.Email')}
-              rules={[{ type: 'email', required: true, message: t('login.EmailRequired') }]}
-            >
-              <Input type="email" />
-            </Form.Item>
-          </Form.Custom>
+      <Form.Simple
+        className="space-y-4"
+        fetch={fetch}
+        submitProps={{
+          label: t('components.continue'),
+          className: 'w-full'
+        }}
+      >
+        <Form.Item
+          name="email"
+          label={t('login.email.label')}
+          rules={[
+            {
+              required: true,
+              message: t('login.email.required')
+            },
+            {
+              type: 'email',
+              message: t('login.email.invalid')
+            }
+          ]}
+        >
+          <Input type="email" />
+        </Form.Item>
+      </Form.Simple>
 
-          <div className="mt-6 text-center text-blue-700 hover:text-blue-800 sm:text-sm">
-            <RedirectUriLink href="/login" className="inline-flex items-center">
-              {t('auth.forgotPassword.link')}
-            </RedirectUriLink>
-          </div>
-        </div>
-      </div>
+      <p className="text-center text-sm text-secondary">
+        <Trans
+          t={t}
+          i18nKey="forgotPassword.toLogin"
+          components={{
+            a: <Link className="underline underline-offset-4 hover:text-primary" to="/login" />
+          }}
+        />
+      </p>
     </div>
   )
 }
