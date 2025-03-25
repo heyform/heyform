@@ -37,3 +37,4 @@ packages/server/static
 *.tsbuildinfo
 
 .qodo
+packages/server/cache

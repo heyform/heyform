@@ -2,7 +2,7 @@ import { INVITE_CODE_EXPIRE_DAYS } from '@environments'
 import { date, hs, nanoid, timestamp } from '@heyform-inc/utils'
 import {
   FormModel,
-  PlanGradeEnum,
+  // PlanGradeEnum,
   SubscriptionStatusEnum,
   TeamInvitationModel,
   TeamMemberModel,
@@ -11,7 +11,7 @@ import {
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { PlanService } from './plan.service'
+// import { PlanService } from './plan.service'
 
 @Injectable()
 export class TeamService {
@@ -20,8 +20,7 @@ export class TeamService {
     @InjectModel(TeamMemberModel.name)
     private readonly teamMemberModel: Model<TeamMemberModel>,
     @InjectModel(TeamInvitationModel.name)
-    private readonly teamInvitationModel: Model<TeamInvitationModel>,
-    private readonly planService: PlanService
+    private readonly teamInvitationModel: Model<TeamInvitationModel> // private readonly planService: PlanService
   ) {}
 
   async findById(id: string): Promise<TeamModel | null> {
@@ -47,12 +46,12 @@ export class TeamService {
       return null
     }
 
-    team.plan = await this.planService.findById(team.subscription.planId)
+    // team.plan = await this.planService.findById(team.subscription.planId)
 
     // Replace with Free Plan if the team's subscription is expired or with a pending payment
-    if (team.subscription.status !== SubscriptionStatusEnum.ACTIVE) {
-      team.plan = await this.planService.findByGrade(PlanGradeEnum.FREE)
-    }
+    // if (team.subscription.status !== SubscriptionStatusEnum.ACTIVE) {
+    //   team.plan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+    // }
 
     return team
   }

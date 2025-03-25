@@ -9,6 +9,10 @@ import { Auth } from '@decorator'
 export class ChangelogController {
   @Get('/api/changelog/latest')
   async latest() {
+    if (!CHANGELOG_API_URL) {
+      return { id: 'unavailable', title: 'No changelog available' }
+    }
+
     const { posts } = await got
       .get(CHANGELOG_API_URL, {
         searchParams: {
@@ -18,11 +22,17 @@ export class ChangelogController {
       })
       .json<any>()
 
-    return pickObject(posts[0], ['id', 'title'])
+    return posts && posts.length > 0
+      ? pickObject(posts[0], ['id', 'title'])
+      : { id: 'unavailable', title: 'No changelog available' }
   }
 
   @Get('/api/changelogs')
   async changelogs() {
+    if (!CHANGELOG_API_URL) {
+      return []
+    }
+
     const { posts } = await got
       .get(CHANGELOG_API_URL, {
         searchParams: {
@@ -31,8 +41,15 @@ export class ChangelogController {
       })
       .json<any>()
 
-    return posts.map(p =>
-      pickObject(p, ['id', 'title', 'html', ['published_at', 'publishedAt']])
-    )
+    return posts && posts.length > 0
+      ? posts.map(p =>
+          pickObject(p, [
+            'id',
+            'title',
+            'html',
+            ['published_at', 'publishedAt']
+          ])
+        )
+      : []
   }
 }

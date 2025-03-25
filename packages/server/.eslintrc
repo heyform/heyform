@@ -1,5 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
   "extends": [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
@@ -16,12 +20,14 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-var-requires": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "import/named": "off"
   },
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": "."
+        "project": "./tsconfig.json",
+        "alwaysTryTypes": true
       },
       "node": {
         "extensions": [

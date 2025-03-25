@@ -6,7 +6,13 @@ import {
   QUESTION_FIELD_KINDS,
   SubmissionCategoryEnum
 } from '@heyform-inc/shared-types-enums'
-import { IconDownload, IconMaximize, IconMinimize, IconTrash } from '@tabler/icons-react'
+import {
+  IconAdjustmentsHorizontal,
+  IconDownload,
+  IconMaximize,
+  IconMinimize,
+  IconTrash
+} from '@tabler/icons-react'
 import { useBoolean, useRequest } from 'ahooks'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,7 +22,6 @@ import {
   Button,
   EmptyState,
   OnboardingBadge,
-  PlanUpgrade,
   Repeat,
   Select,
   Table,
@@ -27,7 +32,7 @@ import {
   Tooltip,
   useOnboardingStorage
 } from '@/components'
-import { MAXIMIZE_TABLE_STORAGE_NAME, PlanGradeEnum } from '@/consts'
+import { MAXIMIZE_TABLE_STORAGE_NAME } from '@/consts'
 import { SubmissionService } from '@/services'
 import { useAppStore, useFormStore } from '@/store'
 import { SubmissionType } from '@/types'
@@ -248,23 +253,11 @@ export default function FormSubmissions() {
           </div>
 
           <div className="flex items-center gap-x-2.5">
-            <PlanUpgrade
-              minimalGrade={PlanGradeEnum.BASIC}
-              isUpgradeShow={false}
-              fallback={openUpgradeModal => (
-                <Tooltip label={t('form.submissions.downloadCSV')}>
-                  <Button.Ghost size="md" iconOnly onClick={openUpgradeModal}>
-                    <IconDownload className="h-5 w-5" />
-                  </Button.Ghost>
-                </Tooltip>
-              )}
-            >
-              <Tooltip label={t('form.submissions.downloadCSV')}>
-                <Button.Ghost size="md" iconOnly onClick={handleDownload}>
-                  <IconDownload className="h-5 w-5" />
-                </Button.Ghost>
-              </Tooltip>
-            </PlanUpgrade>
+            <Tooltip label={t('form.submissions.downloadCSV')}>
+              <Button.Ghost size="md" iconOnly onClick={handleDownload}>
+                <IconDownload className="h-5 w-5" />
+              </Button.Ghost>
+            </Tooltip>
 
             <Tooltip
               label={isMaximized ? t('form.submissions.minimize') : t('form.submissions.maximize')}
@@ -280,10 +273,10 @@ export default function FormSubmissions() {
               </Button.Ghost>
             </Tooltip>
 
-            {/*<Button.Ghost size="md">*/}
-            {/*  <IconAdjustmentsHorizontal className="h-5 w-5" />*/}
-            {/*  <span className="hidden sm:block">{t('form.submissions.view')}</span>*/}
-            {/*</Button.Ghost>*/}
+            <Button.Ghost size="md">
+              <IconAdjustmentsHorizontal className="h-5 w-5" />
+              <span className="hidden sm:block">{t('form.submissions.view')}</span>
+            </Button.Ghost>
           </div>
         </div>
 

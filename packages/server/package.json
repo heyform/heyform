@@ -8,7 +8,7 @@
   "scripts": {
     "build": "nest build && tsc-alias",
     "build:mongoose": "nest build -p mongoose.build.json && tsc-alias",
-    "dev": "concurrently \"nest start --watch\" \"tsc-alias --watch\"",
+		"dev": "concurrently \"nest start --watch\" \"tsc-alias --watch\"",
     "debug": "nest start --debug --watch",
     "start": "pm2 reload ecosystem.config.js",
     "serve": "node -r tsconfig-paths/register dist/main.js",

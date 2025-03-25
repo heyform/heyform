@@ -5,14 +5,12 @@ import { useTranslation } from 'react-i18next'
 
 import { Skeleton } from '@/components'
 import { WorkspaceService } from '@/services'
-import { useWorkspaceStore } from '@/store'
 import { formatDay, useParam } from '@/utils'
 
 export default function Overview() {
   const { t, i18n } = useTranslation()
 
   const { workspaceId } = useParam()
-  const { workspace } = useWorkspaceStore()
 
   const { data, loading } = useRequest(
     async () => {
@@ -43,9 +41,7 @@ export default function Overview() {
           className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-2/5 [&_[data-slot=skeleton]]:sm:h-6"
           loading={loading || !data}
         >
-          <div className="mt-3 text-3xl/8 font-semibold sm:text-2xl/8">
-            {data?.submissionQuota}/{workspace?.plan.submissionLimit}
-          </div>
+          <div className="mt-3 text-3xl/8 font-semibold sm:text-2xl/8">{data?.submissionQuota}</div>
         </Skeleton>
         <div className="mt-1 text-sm/6 text-secondary sm:text-xs/6">
           {t('dashboard.resetsOn', {
@@ -62,7 +58,7 @@ export default function Overview() {
           loading={loading || !data}
         >
           <div className="mt-3 text-3xl/8 font-semibold sm:text-2xl/8">
-            {data?.memberCount}/{workspace?.plan.memberLimit || 1}
+            {data?.memberCount || 1}
           </div>
         </Skeleton>
       </div>
@@ -75,7 +71,7 @@ export default function Overview() {
           loading={loading || !data}
         >
           <div className="mt-3 text-3xl/8 font-semibold sm:text-2xl/8">
-            {formatBytes(data?.storageQuota)}/{workspace?.plan.storageLimit}
+            {formatBytes(data?.storageQuota)}
           </div>
         </Skeleton>
       </div>

@@ -275,11 +275,11 @@ export class PaymentService {
     if (plan.grade === PlanGradeEnum.FREE) {
       await this.stripe.subscriptions.del(subscriptionId)
 
-      const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+      // const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
       await this.teamService.update(team.id, {
         additionalSeats: 0,
         subscription: {
-          planId: freePlan.id,
+          planId: '',
           billingCycle: BillingCycleEnum.FOREVER,
           startAt: timestamp(),
           endAt: -1,

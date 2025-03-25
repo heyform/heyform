@@ -49,9 +49,9 @@ export class AIResolver {
     @User() user: UserModel,
     @Args('input') input: CreateFormWithAIInput
   ) {
-    if (!team.plan.aiForm) {
-      throw new BadRequestException('Upgrade your plan to create form with AI')
-    }
+    // if (!team.plan.aiForm) {
+    //   throw new BadRequestException('Upgrade your plan to create form with AI')
+    // }
 
     const result = await this.openAIService.chatCompletion({
       messages: [
@@ -75,11 +75,11 @@ export class AIResolver {
       )
     }
 
-		interface AIJson {
-			name: string
-			fields: unknown
-			// or whatever types they actually have
-		}
+    interface AIJson {
+      name: string
+      fields: unknown
+      // or whatever types they actually have
+    }
 
     const json = parseJson(content) as AIJson
 

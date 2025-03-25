@@ -130,7 +130,7 @@ export class RoleGuard implements CanActivate {
       isOwner,
       role: member.role,
       storageQuota: team.storageQuota,
-      plan: team.plan,
+      plan: team?.plan,
       subscription: team.subscription
     }
 

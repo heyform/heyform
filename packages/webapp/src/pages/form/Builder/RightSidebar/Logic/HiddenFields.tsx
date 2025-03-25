@@ -4,8 +4,8 @@ import { IconArrowUpRight, IconDots, IconPlus } from '@tabler/icons-react'
 import { FC, startTransition } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { Button, Dropdown, PlanUpgrade, Tooltip } from '@/components'
-import { CUSTOM_FIELDS_CONFIGS, PlanGradeEnum } from '@/consts'
+import { Button, Dropdown, Tooltip } from '@/components'
+import { CUSTOM_FIELDS_CONFIGS } from '@/consts'
 import { useAppStore } from '@/store'
 
 import { QuestionIcon } from '../../LeftSidebar/QuestionList'
@@ -108,21 +108,16 @@ export const HiddenFields: FC = () => {
       <div className="flex items-center justify-between text-sm/6">
         <span className="font-medium">{t('form.builder.logic.hiddenFields.headline')}</span>
 
-        <PlanUpgrade
-          minimalGrade={PlanGradeEnum.BASIC}
-          tooltipLabel={t('billing.upgrade.hiddenFields')}
-        >
-          <Tooltip label={t('form.builder.logic.hiddenFields.addHiddenField')}>
-            <Button.Link
-              className="text-secondary hover:text-primary [&_[data-slot=button]]:gap-x-0"
-              size="sm"
-              iconOnly
-              onClick={handleClick}
-            >
-              <IconPlus className="h-5 w-5" />
-            </Button.Link>
-          </Tooltip>
-        </PlanUpgrade>
+        <Tooltip label={t('form.builder.logic.hiddenFields.addHiddenField')}>
+          <Button.Link
+            className="text-secondary hover:text-primary [&_[data-slot=button]]:gap-x-0"
+            size="sm"
+            iconOnly
+            onClick={handleClick}
+          >
+            <IconPlus className="h-5 w-5" />
+          </Button.Link>
+        </Tooltip>
       </div>
 
       {helper.isValidArray(state.hiddenFields) ? (

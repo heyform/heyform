@@ -1,9 +1,10 @@
 import { helper } from '@heyform-inc/utils'
 import throttle from 'lodash/throttle'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, HTMLAttributes, useCallback, useEffect, useState } from 'react'
 
 import { cn } from '@/utils'
 
+type ComponentProps<E = HTMLElement> = HTMLAttributes<E>
 interface AnchorNavigationProps extends ComponentProps {
   menus: Array<{
     label: string
@@ -24,6 +25,7 @@ export const AnchorNavigation: FC<AnchorNavigationProps> = ({ className, menus }
     setHash(newHash)
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = useCallback(
     throttle(() => {
       let visibleElements: HTMLDivElement[] = []
@@ -62,6 +64,7 @@ export const AnchorNavigation: FC<AnchorNavigationProps> = ({ className, menus }
       window.removeEventListener('hashchange', handleHashChange)
       window.addEventListener('scroll', handleScroll)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

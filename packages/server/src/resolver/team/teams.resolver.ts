@@ -2,8 +2,8 @@ import { Auth, User } from '@decorator'
 import { TeamType } from '@graphql'
 import { helper } from '@heyform-inc/utils'
 import {
-  PlanGradeEnum,
-  SubscriptionStatusEnum,
+  // PlanGradeEnum,
+  // SubscriptionStatusEnum,
   TeamModel,
   UserModel
 } from '@model'
@@ -12,7 +12,7 @@ import {
   BrandKitService,
   CustomDomainService,
   FormService,
-  PlanService,
+  // PlanService,
   ProjectService,
   TeamService
 } from '@service'
@@ -21,7 +21,7 @@ import {
 @Auth()
 export class TeamsResolver {
   constructor(
-    private readonly planService: PlanService,
+    // private readonly planService: PlanService,
     private readonly teamService: TeamService,
     private readonly formService: FormService,
     private readonly customHostnameService: CustomDomainService,
@@ -45,7 +45,7 @@ export class TeamsResolver {
       projects,
       projectMembers,
       formCountMaps,
-      plans,
+      // plans,
       customHostnames,
       brandKits
     ] = await Promise.all([
@@ -53,7 +53,7 @@ export class TeamsResolver {
       this.projectService.findByIds(projectIds),
       this.projectService.findMembers(projectIds),
       this.formService.countMaps(projectIds),
-      this.planService.findAll(),
+      // this.planService.findAll(),
       this.customHostnameService.findAllInTeams(teamIds),
       this.brandKitService.findAllInTeams(teamIds)
     ])
@@ -78,12 +78,12 @@ export class TeamsResolver {
 
       team.brandKits = brandKits.filter(row => row.teamId === team.id)
 
-      // Replace with Free Plan if the team's subscription is expired or pending payment
-      if (team.subscription?.status === SubscriptionStatusEnum.ACTIVE) {
-        team.plan = plans.find(plan => plan.id === team.subscription.planId)
-      } else {
-        team.plan = plans.find(plan => plan.grade === PlanGradeEnum.FREE)
-      }
+      // // Replace with Free Plan if the team's subscription is expired or pending payment
+      // if (team.subscription?.status === SubscriptionStatusEnum.ACTIVE) {
+      //   team.plan = plans.find(plan => plan.id === team.subscription.planId)
+      // } else {
+      //   team.plan = plans.find(plan => plan.grade === PlanGradeEnum.FREE)
+      // }
 
       return team
     })

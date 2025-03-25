@@ -6,17 +6,7 @@ import { useForm as useRCForm } from 'rc-field-form'
 import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Button,
-  ColorPicker,
-  Form,
-  ImagePicker,
-  Input,
-  PlanUpgrade,
-  Select,
-  useToast
-} from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Button, ColorPicker, Form, ImagePicker, Input, Select, useToast } from '@/components'
 import { FormService } from '@/services'
 import { useFormStore } from '@/store'
 import { nextTick, useParam } from '@/utils'
@@ -248,20 +238,10 @@ export default function Customize() {
             label={
               <div className="flex items-center justify-between">
                 <span>{t('form.builder.design.customize.customCSS')}</span>
-                <PlanUpgrade
-                  minimalGrade={PlanGradeEnum.PREMIUM}
-                  tooltipLabel={t('billing.upgrade.customCSS')}
-                />
               </div>
             }
           >
-            <PlanUpgrade
-              minimalGrade={PlanGradeEnum.PREMIUM}
-              isUpgradeShow={false}
-              fallback={() => <Input.TextArea className="mt-2" rows={4} disabled />}
-            >
-              <Input.TextArea className="mt-2" rows={4} />
-            </PlanUpgrade>
+            <Input.TextArea className="mt-2" rows={4} />
           </Form.Item>
         </div>
 

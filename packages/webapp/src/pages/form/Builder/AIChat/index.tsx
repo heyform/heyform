@@ -6,8 +6,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import IconAI from '@/assets/ai.svg?react'
-import { Button, Tooltip, usePlanGrade } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Button, Tooltip } from '@/components'
 
 import ChatBar from './ChatBar'
 import ChatList from './ChatList'
@@ -15,11 +14,10 @@ import ChatList from './ChatList'
 export default function AIChat() {
   const { t } = useTranslation()
 
-  const { isAllowed, openUpgrade } = usePlanGrade(PlanGradeEnum.BASIC)
   const [open, setOpen] = useState(false)
 
   function handleOpenChange(isOpen: boolean) {
-    isAllowed ? setOpen(isOpen) : openUpgrade()
+    setOpen(isOpen)
   }
 
   return (

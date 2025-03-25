@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { Form, PlanUpgrade, Select } from '@/components'
-import { LOCALE_OPTIONS, PlanGradeEnum } from '@/consts'
+import { Form, Select } from '@/components'
+import { LOCALE_OPTIONS } from '@/consts'
 import { useFormStore } from '@/store'
 
 export default function FormSettingsTranslations() {
@@ -57,10 +57,6 @@ export default function FormSettingsTranslations() {
           label={
             <div className="flex items-start justify-between">
               <span>{t('form.settings.translations.translations.headline')}</span>
-              <PlanUpgrade
-                minimalGrade={PlanGradeEnum.PREMIUM}
-                tooltipLabel={t('billing.upgrade.translations')}
-              />
             </div>
           }
           description={
@@ -79,17 +75,16 @@ export default function FormSettingsTranslations() {
               }}
             />
           }
+          isInline
         >
-          <PlanUpgrade minimalGrade={PlanGradeEnum.PREMIUM} isUpgradeShow={false}>
-            <Select.Multi
-              className="[&_[data-slot=label]]:hidden [&_[data-slot=translated]]:text-sm/[1.4rem] [&_[data-slot=translated]]:font-medium [&_[data-slot=translated]]:text-primary"
-              options={restOptions}
-              contentProps={{
-                align: 'end'
-              }}
-              placeholder={t('form.settings.translations.translations.placeholder')}
-            />
-          </PlanUpgrade>
+          <Select.Multi
+            className="[&_[data-slot=label]]:hidden [&_[data-slot=translated]]:text-sm/[1.4rem] [&_[data-slot=translated]]:font-medium [&_[data-slot=translated]]:text-primary"
+            options={restOptions}
+            contentProps={{
+              align: 'end'
+            }}
+            placeholder={t('form.settings.translations.translations.placeholder')}
+          />
         </Form.Item>
       </div>
     </section>

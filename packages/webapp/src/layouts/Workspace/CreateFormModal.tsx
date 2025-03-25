@@ -5,8 +5,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import IconAI from '@/assets/ai.svg?react'
-import { Button, Modal, usePlanGrade } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Button, Modal } from '@/components'
 import { FormService } from '@/services'
 import { useAppStore, useModal } from '@/store'
 import { useParam, useRouter } from '@/utils'
@@ -40,7 +39,6 @@ const CreateFormComponent = () => {
 
   const router = useRouter()
   const { workspaceId, projectId } = useParam()
-  const { isAllowed, openUpgrade } = usePlanGrade(PlanGradeEnum.BASIC)
   const { closeModal } = useAppStore()
 
   const [activeName, setActiveName] = useState<string>()
@@ -71,7 +69,7 @@ const CreateFormComponent = () => {
         break
 
       case 'ai':
-        isAllowed ? setActiveName(name) : openUpgrade()
+        setActiveName(name)
         break
 
       default:

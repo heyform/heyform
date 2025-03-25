@@ -7,17 +7,7 @@ import { useMemo, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import OgIcon from '@/assets/og.svg?react'
-import {
-  Button,
-  Image,
-  ImagePicker,
-  ImagePickerRef,
-  Input,
-  PlanUpgrade,
-  Tooltip,
-  usePlanGrade
-} from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Button, Image, ImagePicker, ImagePickerRef, Input, Tooltip } from '@/components'
 import { FormService } from '@/services'
 import { useFormStore } from '@/store'
 import { useParam } from '@/utils'
@@ -27,8 +17,6 @@ export default function LinkSettings() {
 
   const { formId } = useParam()
   const { form, updateSettings } = useFormStore()
-
-  const { isAllowed, openUpgrade } = usePlanGrade(PlanGradeEnum.BASIC)
   const imagePickerRef = useRef<ImagePickerRef | null>(null)
 
   const { title, description } = useMemo(() => {
@@ -54,10 +42,6 @@ export default function LinkSettings() {
 
   const { run } = useRequest(
     async (name: string, value?: string | null) => {
-      if (!isAllowed) {
-        return openUpgrade()
-      }
-
       const updates = {
         [name]: value
       }
@@ -68,15 +52,11 @@ export default function LinkSettings() {
     {
       debounceWait: 300,
       manual: true,
-      refreshDeps: [formId, isAllowed]
+      refreshDeps: [formId]
     }
   )
 
   function handleUpload() {
-    if (!isAllowed) {
-      return openUpgrade()
-    }
-
     imagePickerRef.current?.open()
   }
 
@@ -84,11 +64,6 @@ export default function LinkSettings() {
     <section id="settings">
       <div className="flex items-center gap-4">
         <h2 className="text-base/6 font-semibold">{t('form.share.settings.headline')}</h2>
-        <PlanUpgrade
-          minimalGrade={PlanGradeEnum.BASIC}
-          tooltipLabel={t('billing.upgrade.metadata')}
-          isUpgradeShow
-        />
       </div>
       <p className="text-sm/6 text-secondary">{t('form.share.settings.subHeadline')}</p>
 
@@ -107,7 +82,7 @@ export default function LinkSettings() {
               id="meta-title"
               maxLength={70}
               value={title}
-              onFocus={openUpgrade}
+              // onFocus={}
               onChange={value => run('metaTitle', value)}
             />
           </div>
@@ -126,7 +101,7 @@ export default function LinkSettings() {
               rows={6}
               maxLength={156}
               value={form?.settings?.metaDescription}
-              onFocus={openUpgrade}
+              // onFocus={}
               onChange={value => run('metaDescription', value)}
             />
           </div>

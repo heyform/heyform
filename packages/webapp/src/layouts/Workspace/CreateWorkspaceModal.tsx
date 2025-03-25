@@ -40,7 +40,7 @@ export const CreateWorkspaceForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> =
     }
 
     // Navigate to new created workspace page
-    router.replace(`/workspace/${result}/trial`)
+    router.replace(`/workspace/${result}`)
   }
 
   function onValuesChange(changes: AnyMap) {

@@ -2,7 +2,6 @@ import { helper } from '@heyform-inc/utils'
 import { Content, Description, Overlay, Portal, Root, Title } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import {
-  IconCreditCard,
   IconHelp,
   IconHome,
   IconLocation,
@@ -16,8 +15,8 @@ import { FC, ForwardRefExoticComponent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
-import { Button, PlanUpgrade, Tooltip } from '@/components'
-import { HELP_CENTER_URL, PlanGradeEnum, TEMPLATES_URL } from '@/consts'
+import { Button, Tooltip } from '@/components'
+import { HELP_CENTER_URL, TEMPLATES_URL } from '@/consts'
 import { useAppStore, useModal, useWorkspaceStore } from '@/store'
 import { cn, useParam } from '@/utils'
 
@@ -28,7 +27,7 @@ import WorkspaceSwitcher from './WorkspaceSwitcher'
 
 interface LinkProps {
   to: string
-  icon: ForwardRefExoticComponent<Any>
+  icon: ForwardRefExoticComponent<any>
   label: string
 }
 
@@ -102,38 +101,14 @@ const WorkspaceSidebarComponent = () => {
           </button>
 
           {/* Members */}
-          <PlanUpgrade
-            minimalGrade={PlanGradeEnum.PREMIUM}
-            isUpgradeShow={false}
-            fallback={openUpgradeModal => (
-              <button
-                className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium hover:bg-primary/5 sm:px-2 sm:py-1.5 lg:py-2"
-                onClick={openUpgradeModal}
-              >
-                <IconUsers
-                  className="h-5 w-5 stroke-secondary group-hover:stroke-primary"
-                  data-slot="icon"
-                />
-                <span className="truncate">{t('members.title')}</span>
-              </button>
-            )}
-          >
-            <Link
-              to={`/workspace/${workspaceId}/members`}
-              icon={IconUsers}
-              label={t('members.title')}
-            />
-          </PlanUpgrade>
+          <Link
+            to={`/workspace/${workspaceId}/members`}
+            icon={IconUsers}
+            label={t('members.title')}
+          />
 
           {workspace.isOwner && (
             <>
-              {/* Billing */}
-              <Link
-                to={`/workspace/${workspaceId}/billing`}
-                icon={IconCreditCard}
-                label={t('billing.title')}
-              />
-
               {/* Settings */}
               <Link
                 to={`/workspace/${workspaceId}/settings`}

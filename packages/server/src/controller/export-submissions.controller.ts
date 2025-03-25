@@ -2,10 +2,9 @@
  * Created by jiangwei on 2020/10/22.
  * Copyright (c) 2020 Heyooo, Inc. all rights reserved
  */
-import { Auth, FormGuard, Team } from '@decorator'
+import { Auth, FormGuard } from '@decorator'
 import { ExportSubmissionsDto } from '@dto'
 import { date } from '@heyform-inc/utils'
-import { TeamModel } from '@model'
 import {
   BadRequestException,
   Controller,
@@ -29,15 +28,8 @@ export class ExportSubmissionsController {
   @FormGuard()
   async exportSubmissions(
     @Query() input: ExportSubmissionsDto,
-    @Team() team: TeamModel,
     @Res() res: Response
   ): Promise<void> {
-    if (!team.plan.fileExport) {
-      throw new BadRequestException(
-        "Workspace can't export submissions, please upgrade the plan"
-      )
-    }
-
     const form = await this.formService.findById(input.formId)
     if (!form) {
       throw new BadRequestException('The form does not exist')

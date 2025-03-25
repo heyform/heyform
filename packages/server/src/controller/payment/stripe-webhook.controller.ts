@@ -1,6 +1,6 @@
 import { STRIPE_SUBSCRIPTION_SECRET_KEY } from '@environments'
-import { dayjs, helper, unixDate } from '@heyform-inc/utils'
-import { PlanGradeEnum, SubscriptionStatusEnum } from '@model'
+import { helper, unixDate } from '@heyform-inc/utils'
+import { SubscriptionStatusEnum } from '@model'
 import {
   BadRequestException,
   Controller,
@@ -136,7 +136,7 @@ export class StripeWebhookController {
       await this.teamService.update(teamId, updates)
     } else {
       // Renewal subscription
-      const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+      // const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
 
       // New subscription
       if (object.plan?.id) {
@@ -146,11 +146,11 @@ export class StripeWebhookController {
           throw new BadRequestException('Invalid plan')
         }
 
-        planId = plan.id
-        billingCycle = plan.price!.billingCycle
+        planId = plan?.id
+        billingCycle = plan?.price?.billingCycle
       } else {
-        planId = team.plan.id
-        billingCycle = team.subscription.billingCycle
+        planId = team.plan?.id
+        billingCycle = team.subscription?.billingCycle
       }
 
       // await this.invoiceService.update(invoiceId, {
@@ -160,9 +160,7 @@ export class StripeWebhookController {
       //   billingCycle
       // })
 
-      const isSubscriptionActive =
-        team.subscription.status === SubscriptionStatusEnum.ACTIVE &&
-        dayjs().unix() <= team.subscription.endAt + dayjs().add(30, 'minute').unix()
+      const isSubscriptionActive = true
 
       console.log(
         'Subscription id:%s, isActive: %s',
@@ -172,11 +170,7 @@ export class StripeWebhookController {
       console.log('Webhook id: %s, status: %s', object.id, object.status)
 
       // Prevent multiple webhook conflicts
-      if (
-        isSubscriptionActive &&
-        team.subscription.planId !== freePlan.id &&
-        object.status !== 'active'
-      ) {
+      if (isSubscriptionActive && object.status !== 'active') {
         return
       }
 

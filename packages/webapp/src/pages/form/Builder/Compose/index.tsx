@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useOnboardingStorage, useToast } from '@/components'
 import { ADD_QUESTION2_STORAGE_NAME } from '@/consts'
 import { FormService } from '@/services'
-import { useFormStore, useWorkspaceStore } from '@/store'
+import { useFormStore } from '@/store'
 import { cn, useParam } from '@/utils'
 
 import { useStoreContext } from '../store'
@@ -183,7 +183,6 @@ export default function BuilderCompose() {
   const { formId } = useParam()
   const toast = useToast()
   const { state, dispatch } = useStoreContext()
-  const { workspace } = useWorkspaceStore()
   const { form, themeSettings, updateForm } = useFormStore()
   const { setItem } = useOnboardingStorage()
 
@@ -206,6 +205,7 @@ export default function BuilderCompose() {
         message: err.message
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formId, state.fields, form?.version])
 
   queue.on(event => {
@@ -243,12 +243,14 @@ export default function BuilderCompose() {
       setItem(ADD_QUESTION2_STORAGE_NAME, true)
       queue.add()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.version])
 
   useEffect(() => {
     return () => {
       queue.clear()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -261,13 +263,7 @@ export default function BuilderCompose() {
         <div className="heyform-wrapper">
           <div className="heyform-header">
             <div className="heyform-header-wrapper">
-              <div className="heyform-header-left">
-                {workspace?.plan?.whitelabelBranding && themeSettings?.logo && (
-                  <div className="heyform-logo">
-                    <img src={themeSettings.logo} alt="" />
-                  </div>
-                )}
-              </div>
+              <div className="heyform-header-left"></div>
               <div className="heyform-header-right"></div>
             </div>
           </div>

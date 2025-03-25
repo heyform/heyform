@@ -9,8 +9,7 @@ import { useRequest } from 'ahooks'
 import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Async, Button, EmptyState, PlanUpgrade, Repeat } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Async, Button, Repeat } from '@/components'
 import { FormService } from '@/services'
 import { useAppStore, useFormStore } from '@/store'
 import { useParam } from '@/utils'
@@ -27,7 +26,7 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
   const { formId } = useParam()
   const { form } = useFormStore()
 
-  const [responses, setResponses] = useState<Any[]>([])
+  const [responses, setResponses] = useState<any[]>([])
 
   const fetch = useCallback(async () => {
     const result = await FormService.report(formId)
@@ -70,10 +69,10 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
         }
 
         row.title = helper.isArray(field.title)
-          ? htmlUtils.plain(htmlUtils.serialize(field.title as Any))
+          ? htmlUtils.plain(htmlUtils.serialize(field.title as any))
           : field.title
         row.kind = field.kind
-        row.properties = pickValidValues((field.properties as Any) || {}, [
+        row.properties = pickValidValues((field.properties as any) || {}, [
           'tableColumns',
           'total',
           'average',
@@ -164,38 +163,14 @@ export default function FormAnalyticsReport() {
       <div className="mt-14 flex items-center justify-between">
         <h2 className="text-base/6 font-semibold">{t('form.analytics.report.headline')}</h2>
 
-        <PlanUpgrade
-          minimalGrade={PlanGradeEnum.BASIC}
-          isUpgradeShow={false}
-          fallback={openUpgradeModal => (
-            <Button size="md" onClick={openUpgradeModal}>
-              {t('form.customReport.title')}
-            </Button>
-          )}
-        >
-          <Button size="md" loading={loading} onClick={run}>
-            {t('form.customReport.title')}
-          </Button>
-        </PlanUpgrade>
+        <Button size="md" loading={loading} onClick={run}>
+          {t('form.customReport.title')}
+        </Button>
       </div>
 
-      <PlanUpgrade
-        minimalGrade={PlanGradeEnum.BASIC}
-        isUpgradeShow={false}
-        fallback={openUpgradeModal => (
-          <div className="mt-4 flex flex-1 items-center justify-center rounded-lg border border-dashed border-accent-light py-36 shadow-sm">
-            <EmptyState
-              headline={t('billing.upgrade.report')}
-              buttonTitle={t('billing.upgrade.title')}
-              onClick={openUpgradeModal}
-            />
-          </div>
-        )}
-      >
-        <div className="heyform-report">
-          <ReportList />
-        </div>
-      </PlanUpgrade>
+      <div className="heyform-report">
+        <ReportList />
+      </div>
     </>
   )
 }

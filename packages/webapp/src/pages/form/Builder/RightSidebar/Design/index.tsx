@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { EmptyState, PlanUpgrade, Tabs } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Tabs } from '@/components'
 
 import { useStoreContext } from '../../store'
 import Customize from './Customize'
@@ -38,25 +37,11 @@ export default function Design() {
   }
 
   return (
-    <PlanUpgrade
-      minimalGrade={PlanGradeEnum.BASIC}
-      isUpgradeShow={false}
-      fallback={openUpgradeModal => (
-        <div className="flex h-full flex-1 items-center justify-center rounded-lg py-36 shadow-sm">
-          <EmptyState
-            headline={t('billing.upgrade.customize')}
-            buttonTitle={t('billing.upgrade.title')}
-            onClick={openUpgradeModal}
-          />
-        </div>
-      )}
-    >
-      <Tabs.SegmentedControl
-        className="[&_[data-slot=nav]]:mx-4 [&_[data-slot=nav]]:mt-4"
-        tabs={tabs}
-        defaultTab="theme"
-        onChange={handleChange}
-      />
-    </PlanUpgrade>
+    <Tabs.SegmentedControl
+      className="[&_[data-slot=nav]]:mx-4 [&_[data-slot=nav]]:mt-4"
+      tabs={tabs}
+      defaultTab="theme"
+      onChange={handleChange}
+    />
   )
 }

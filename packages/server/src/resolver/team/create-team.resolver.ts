@@ -3,19 +3,19 @@ import { CreateTeamInput } from '@graphql'
 import { timestamp } from '@heyform-inc/utils'
 import {
   BillingCycleEnum,
-  PlanGradeEnum,
+  // PlanGradeEnum,
   SubscriptionStatusEnum,
   TeamRoleEnum,
   UserModel
 } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { PlanService, ProjectService, TeamService } from '@service'
+import { ProjectService, TeamService } from '@service'
 
 @Resolver()
 @Auth()
 export class CreateTeamResolver {
   constructor(
-    private readonly planService: PlanService,
+    // private readonly planService: PlanService,
     private readonly teamService: TeamService,
     private readonly projectService: ProjectService
   ) {}
@@ -26,7 +26,7 @@ export class CreateTeamResolver {
     @Args('input') input: CreateTeamInput
   ): Promise<string> {
     // Attached Free plan to newly created team
-    const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+    // const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
 
     const teamId = await this.teamService.create({
       ownerId: user.id,
@@ -34,7 +34,7 @@ export class CreateTeamResolver {
       avatar: input.avatar,
       storageQuota: 0,
       subscription: {
-        planId: freePlan.id,
+        planId: '',
         billingCycle: BillingCycleEnum.FOREVER,
         startAt: timestamp(),
         endAt: -1,

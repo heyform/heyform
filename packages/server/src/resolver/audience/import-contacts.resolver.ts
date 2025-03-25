@@ -16,11 +16,11 @@ export class ImportContactsResolver {
     @Team() team: TeamModel,
     @Args('input') input: ImportContactsInput
   ): Promise<boolean> {
-    await this.contactService.checkQuota(
-      input.teamId,
-      team.plan.contactLimit,
-      input.contacts.length
-    )
+    // await this.contactService.checkQuota(
+    //   input.teamId,
+    //   team.plan?.contactLimit,
+    //   input.contacts.length
+    // )
 
     const contacts = input.contacts.map(row => ({
       teamId: input.teamId,

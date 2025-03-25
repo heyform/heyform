@@ -3,7 +3,7 @@ import { FormDetailInput, FormType } from '@graphql'
 import { FormModel, TeamModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import {
-  FormCustomReportService,
+  // FormCustomReportService,
   FormService,
   SubmissionService
 } from '@service'
@@ -14,8 +14,7 @@ import { date } from '@heyform-inc/utils'
 export class FormDetailResolver {
   constructor(
     private readonly formService: FormService,
-    private readonly submissionService: SubmissionService,
-    private readonly formCustomReportService: FormCustomReportService
+    private readonly submissionService: SubmissionService // private readonly formCustomReportService: FormCustomReportService
   ) {}
 
   /**
@@ -32,9 +31,7 @@ export class FormDetailResolver {
     const [form, submissionCount, customReport] = await Promise.all([
       this.formService.findById(input.formId),
       this.submissionService.count({ formId: input.formId }),
-      team.plan.formReport
-        ? this.formCustomReportService.findByFormId(input.formId)
-        : null
+      null
     ])
 
     //@ts-ignore

@@ -1,15 +1,14 @@
-import { helper, timestamp, toInt, toSecond, unixDate } from '@heyform-inc/utils'
+import { helper, timestamp } from '@heyform-inc/utils'
 import { LayoutProps } from '@heyooo-inc/react-router'
-import { IconChevronLeft, IconDiamond, IconMenu, IconX } from '@tabler/icons-react'
-import { useAsyncEffect, useSessionStorageState } from 'ahooks'
-import dayjs from 'dayjs'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { IconChevronLeft, IconMenu } from '@tabler/icons-react'
+import { useAsyncEffect } from 'ahooks'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
 
 import Logo from '@/assets/logo.svg?react'
 import { Button, useAlert } from '@/components'
-import { PlanGradeEnum, REDIRECT_COOKIE_NAME } from '@/consts'
+import { REDIRECT_COOKIE_NAME } from '@/consts'
 import { UserService, WorkspaceService } from '@/services'
 import { useAppStore, useUserStore, useWorkspaceStore } from '@/store'
 import { clearCookie, cn, getCookie, useParam, useRouter } from '@/utils'
@@ -20,9 +19,7 @@ import CreateFormModal from './CreateFormModal'
 import CreateProjectModal from './CreateProjectModal'
 import CreateWorkspaceModal from './CreateWorkspaceModal'
 import DeleteProjectModal from './DeleteProjectModal'
-import PaymentModal from './PaymentModal'
 import SearchModal from './SearchModal'
-import UpgradeModal from './UpgradeModal'
 import UserAccountModal from './UserAccountModal'
 import UserDeletionModal from './UserDeletionModal'
 import WorkspaceAccount from './WorkspaceAccount'
@@ -102,7 +99,6 @@ export const WorkspaceGuard: FC<LayoutProps> = ({ options, children }) => {
     selectWorkspace,
     selectProject
   } = useWorkspaceStore()
-  const { openModal } = useAppStore()
 
   const [isMounted, setMounted] = useState(false)
 
@@ -164,27 +160,6 @@ export const WorkspaceGuard: FC<LayoutProps> = ({ options, children }) => {
   }, [location])
 
   useEffect(() => {
-    if (
-      isMounted &&
-      workspace?.id === workspaceId &&
-      /\/workspace\//i.test(location.pathname) &&
-      !/\/trial/i.test(location.pathname)
-    ) {
-      if (workspace.plan.grade === PlanGradeEnum.FREE) {
-        const upgradeLastAlertedAt = toInt(localStorage.getItem('HEYFORM_UPGRADE'), 0)!
-
-        if (upgradeLastAlertedAt + toSecond('5m')! < timestamp()) {
-          openModal('UpgradeModal', {
-            isBillingPage: true
-          })
-
-          localStorage.setItem('HEYFORM_UPGRADE', timestamp().toString())
-        }
-      }
-    }
-  }, [isMounted, location, workspace, workspaceId])
-
-  useEffect(() => {
     selectWorkspace(workspaceId)
 
     if (workspaceId) {
@@ -219,7 +194,6 @@ export const WorkspaceGuard: FC<LayoutProps> = ({ options, children }) => {
       <UserAccountModal />
       <UserDeletionModal />
       <ChangePasswordModal />
-      <UpgradeModal />
       <SearchModal />
     </LoginGuard>
   )
@@ -264,31 +238,8 @@ const LayoutComponent: FC<LayoutProps> = ({ options, children }) => {
   const { t } = useTranslation()
 
   const { workspaceId } = useParam()
-  const location = useLocation()
   const { openModal } = useAppStore()
-  const { workspace, workspaces } = useWorkspaceStore()
-
-  const [isTrialBannerHidden, setTrialBannerHidden] = useSessionStorageState(
-    `${workspaceId}:isTrialBannerHidden`,
-    {
-      defaultValue: false
-    }
-  )
-
-  const [isUpgradeBannerShow, setUpgradeBannerShow] = useState(
-    workspace &&
-      workspace.plan.grade === PlanGradeEnum.FREE &&
-      !(workspace.trialEndAt && workspace.trialEndAt > 0)
-  )
-
-  const isTrialBannerShow = useMemo(
-    () => workspace?.subscription?.trialing && !isTrialBannerHidden,
-    [isTrialBannerHidden, workspace?.subscription?.trialing]
-  )
-
-  useEffect(() => {
-    setUpgradeBannerShow(true)
-  }, [location])
+  const { workspaces } = useWorkspaceStore()
 
   if (!workspaces.find(w => w.id === workspaceId)) {
     return (
@@ -315,58 +266,11 @@ const LayoutComponent: FC<LayoutProps> = ({ options, children }) => {
           'relative isolate flex min-h-svh w-full bg-foreground max-lg:flex-col lg:bg-background',
           {
             '[&_[data-slot=layout-main]]:pt-16 [&_[data-slot=layout-main]]:lg:pt-16 [&_[data-slot=layout-sidebar]]:top-16':
-              isTrialBannerShow
+              false
           },
           options?.className
         )}
       >
-        {isUpgradeBannerShow && (
-          <div className="fixed left-0 right-0 top-0 flex h-[3.875rem] items-center justify-center p-2">
-            <div className="flex h-full w-full items-center justify-center gap-x-2 rounded-lg bg-yellow-100 py-1 text-sm/6 dark:bg-yellow-800">
-              <IconDiamond className="h-5 w-5 text-yellow-700 dark:text-yellow-200" />
-              <span>{t('billing.upgrade.upgradeTip')}</span>
-              <Button size="sm" className="ml-3" onClick={() => openModal('UpgradeModal')}>
-                {t('billing.payment.confirm')}
-              </Button>
-            </div>
-
-            <Button.Link
-              size="sm"
-              className="absolute right-4 text-secondary hover:text-primary"
-              iconOnly
-              onClick={() => setUpgradeBannerShow(false)}
-            >
-              <IconX className="h-5 w-5" />
-            </Button.Link>
-          </div>
-        )}
-
-        {isTrialBannerShow && (
-          <div className="fixed left-0 right-0 top-0 flex h-[3.875rem] items-center justify-center p-2">
-            <div className="flex h-full w-full items-center justify-center gap-x-2 rounded-lg bg-yellow-100 py-1 text-sm/6 dark:bg-yellow-800">
-              <IconDiamond className="h-5 w-5 text-yellow-700 dark:text-yellow-200" />
-              <span>
-                {t('billing.upgrade.trialTip', {
-                  name: workspace.plan?.name,
-                  count: unixDate(workspace.trialEndAt).diff(dayjs(), 'day')
-                })}
-              </span>
-              <Button size="sm" className="ml-3" onClick={() => openModal('UpgradeModal')}>
-                {t('billing.payment.confirm')}
-              </Button>
-            </div>
-
-            <Button.Link
-              size="sm"
-              className="absolute right-4 text-secondary hover:text-primary"
-              iconOnly
-              onClick={() => setTrialBannerHidden(true)}
-            >
-              <IconX className="h-5 w-5" />
-            </Button.Link>
-          </div>
-        )}
-
         <WorkspaceSidebar />
 
         <main
@@ -406,7 +310,6 @@ const LayoutComponent: FC<LayoutProps> = ({ options, children }) => {
       <CreateProjectModal />
       <CreateFormModal />
       <DeleteProjectModal />
-      <PaymentModal />
       <ChangelogsModal />
     </>
   )

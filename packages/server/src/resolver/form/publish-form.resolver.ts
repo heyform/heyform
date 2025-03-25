@@ -47,10 +47,7 @@ export class PublishFormResolver {
       updates.publishedAt = updates.fieldsUpdatedAt
     }
 
-    if (
-      team.plan.multiLanguage &&
-      helper.isValidArray(form.settings?.languages)
-    ) {
+    if (helper.isValidArray(form.settings?.languages)) {
       this.formService.addTranslateQueue(input.formId, form.settings!.languages)
     }
 

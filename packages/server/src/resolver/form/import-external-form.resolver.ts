@@ -42,7 +42,8 @@ export class ImportExternalFormResolver {
       )
     }
 
-    await this.formService.checkQuota(team.id, team.plan.formLimit)
+    // made completely free
+    // await this.formService.checkQuota(team.id, team.plan.formLimit)
 
     return await this.formService.create({
       name: 'Untitled form',

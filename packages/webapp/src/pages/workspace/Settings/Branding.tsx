@@ -1,8 +1,7 @@
 import { useRequest } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
-import { PlanUpgrade, Switch } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Switch } from '@/components'
 import { WorkspaceService } from '@/services'
 import { useWorkspaceStore } from '@/store'
 import { useParam } from '@/utils'
@@ -49,12 +48,7 @@ export default function WorkspaceBranding() {
           </div>
 
           <div className="pt-2">
-            <PlanUpgrade
-              minimalGrade={PlanGradeEnum.PREMIUM}
-              tooltipLabel={t('billing.upgrade.removeBranding')}
-            >
-              <Switch value={workspace?.removeBranding} onChange={handleRemoveBrandingChange} />
-            </PlanUpgrade>
+            <Switch value={workspace?.removeBranding} onChange={handleRemoveBrandingChange} />
           </div>
         </div>
 

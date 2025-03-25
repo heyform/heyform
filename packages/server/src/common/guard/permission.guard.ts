@@ -1,5 +1,4 @@
 import { helper, timestamp } from '@heyform-inc/utils'
-import { PlanGradeEnum } from '@model'
 import {
   BadRequestException,
   CanActivate,
@@ -116,7 +115,7 @@ export class PermissionGuard implements CanActivate {
 
     // Only team owner can access the team with Free Plan
     const isOwner = team.ownerId === user.id
-    if (team.plan.grade === PlanGradeEnum.FREE && !isOwner) {
+    if (!isOwner) {
       throw new BadRequestException(
         "You don't have permission to access the workspace"
       )
@@ -131,7 +130,7 @@ export class PermissionGuard implements CanActivate {
       storageQuota: team.storageQuota,
       // Discard at Dec 20, 2021 (v2021.12.3)
       // submissionQuota: team.submissionQuota,
-      plan: team.plan,
+      plan: team?.plan,
       subscription: team.subscription,
       inviteCode: team.inviteCode,
       // Add at Dec 29, 2021 (v2021.12.4)

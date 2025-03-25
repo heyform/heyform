@@ -2,20 +2,22 @@ import { stopEvent } from '@heyform-inc/form-renderer'
 import { IconCircleArrowUp } from '@tabler/icons-react'
 import {
   FC,
+  HTMLAttributes,
   MouseEvent,
   ReactElement,
   ReactNode,
   cloneElement,
   isValidElement,
-  useCallback,
-  useMemo
+  useCallback
 } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PlanGradeEnum } from '@/consts'
-import { useAppStore, useWorkspaceStore } from '@/store'
+import { useAppStore } from '@/store'
 
 import { Tooltip } from './Tooltip'
+
+type ComponentProps<E = HTMLElement> = HTMLAttributes<E>
 
 interface UpgradeProps extends ComponentProps {
   minimalGrade: PlanGradeEnum
@@ -25,13 +27,12 @@ interface UpgradeProps extends ComponentProps {
 }
 
 export const usePlanGrade = (minimalGrade: PlanGradeEnum) => {
-  const { openModal } = useAppStore()
-  const { workspace } = useWorkspaceStore()
+  if (!minimalGrade) console.log('minimalGrade: ', minimalGrade)
 
-  const isAllowed = useMemo(
-    () => (workspace?.plan.grade || PlanGradeEnum.FREE) >= minimalGrade,
-    [minimalGrade, workspace?.plan.grade]
-  )
+  const { openModal } = useAppStore()
+  // const { workspace } = useWorkspaceStore()
+
+  const isAllowed = false
   const openUpgrade = useCallback(() => {
     if (!isAllowed) {
       openModal('UpgradeModal')
@@ -66,7 +67,7 @@ export const PlanUpgrade: FC<UpgradeProps> = ({
   if (isAllowed) {
     return isValidElement(children)
       ? cloneElement(children as ReactElement, {
-          ...(children as Any).props,
+          ...(children as any).props,
           ...restProps
         })
       : null

@@ -1,8 +1,7 @@
 import { IconChevronRight } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 
-import { Button, PlanUpgrade } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Button } from '@/components'
 import { useAppStore } from '@/store'
 
 export default function WorkspaceBrandKit() {
@@ -21,15 +20,10 @@ export default function WorkspaceBrandKit() {
       </div>
 
       <div className="pt-2">
-        <PlanUpgrade
-          minimalGrade={PlanGradeEnum.PREMIUM}
-          tooltipLabel={t('billing.upgrade.brandKit')}
-        >
-          <Button.Ghost size="sm" onClick={() => openModal('BrandKitModal')}>
-            {t('settings.branding.viewBrandKit')}
-            <IconChevronRight className="-ml-1 h-4 w-4" />
-          </Button.Ghost>
-        </PlanUpgrade>
+        <Button.Ghost size="sm" onClick={() => openModal('BrandKitModal')}>
+          {t('settings.branding.viewBrandKit')}
+          <IconChevronRight className="-ml-1 h-4 w-4" />
+        </Button.Ghost>
       </div>
     </div>
   )

@@ -19,7 +19,7 @@ export default function WorkspaceSettings() {
         <div className="mx-auto max-w-4xl">
           <h1 className="text-2xl/8 font-semibold sm:text-xl/8">{t('settings.title')}</h1>
 
-          <hr className="my-10 mt-6 w-full border-t border-accent-light " />
+          <hr className="my-10 mt-6 w-full border-t border-accent-light" />
 
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-16 lg:space-y-0">
             <aside className="-mx-3 lg:w-1/4">

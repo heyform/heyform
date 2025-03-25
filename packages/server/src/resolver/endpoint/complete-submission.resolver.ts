@@ -14,7 +14,6 @@ import {
   Variable
 } from '@heyform-inc/shared-types-enums'
 import { helper, timestamp } from '@heyform-inc/utils'
-import { SubscriptionStatusEnum } from '@model'
 import { BadRequestException, Headers, UseGuards } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import {
@@ -22,13 +21,10 @@ import {
   FormReportService,
   FormService,
   IntegrationService,
-  PaymentService,
   QueueService,
   SubmissionIpLimitService,
-  SubmissionService,
-  TeamService
+  SubmissionService
 } from '@service'
-import Big from 'big.js'
 import { ClientInfo, GqlClient } from '@decorator'
 
 @Resolver()
@@ -36,13 +32,11 @@ import { ClientInfo, GqlClient } from '@decorator'
 export class CompleteSubmissionResolver {
   constructor(
     private readonly endpointService: EndpointService,
-    private readonly teamService: TeamService,
     private readonly formService: FormService,
     private readonly submissionService: SubmissionService,
     private readonly submissionIpLimitService: SubmissionIpLimitService,
     private readonly formReportService: FormReportService,
     private readonly integrationService: IntegrationService,
-    private readonly paymentService: PaymentService,
     private readonly queueService: QueueService
   ) {}
 
@@ -70,30 +64,22 @@ export class CompleteSubmissionResolver {
       throw new BadRequestException('The form does not have content')
     }
 
-    const team = await this.teamService.findWithPlanById(form.teamId)
+    // const team = await this.teamService.findWithPlanById(form.teamId)
 
     /**
      * If team subscription has expired, submit submission is prohibited
      */
-    if (team.subscription.status !== SubscriptionStatusEnum.ACTIVE) {
-      throw new BadRequestException('The workspace subscription expired')
-    }
+    // if (team.subscription.status !== SubscriptionStatusEnum.ACTIVE) {
+    //   throw new BadRequestException('The workspace subscription expired')
+    // }
 
-    const submissionQuota = await this.submissionService.countAllInTeam(team.id)
+    // const submissionQuota = await this.submissionService.countAllInTeam(team.id)
 
     /**
      * If the submission limit in the plan equals `-1`,
      * then the number of submissions will not be limited
      */
     // Refactor at Jan 2, 2024
-    if (
-      submissionQuota >= team.plan.submissionLimit &&
-      team.plan.submissionLimit !== -1
-    ) {
-      throw new BadRequestException(
-        'The submission quota exceeds, new submissions are no longer accepted'
-      )
-    }
 
     // Discard at Dec 20, 2021 (v2021.12.3)
     // /**
@@ -110,19 +96,19 @@ export class CompleteSubmissionResolver {
     // }
 
     // 检查是否超出了 form 自定义的可以接收的的数量
-    if (
-      form.settings.enableQuotaLimit &&
-      helper.isValid(form.settings.quotaLimit) &&
-      form.settings.quotaLimit > 0
-    ) {
-      const count = await this.submissionService.countInForm(input.formId)
+    // if (
+    //   form.settings.enableQuotaLimit &&
+    //   helper.isValid(form.settings.quotaLimit) &&
+    //   form.settings.quotaLimit > 0
+    // ) {
+    //   const count = await this.submissionService.countInForm(input.formId)
 
-      if (count >= form.settings.quotaLimit) {
-        throw new BadRequestException(
-          'The submission quota exceeds, new submissions are no longer accepted'
-        )
-      }
-    }
+    //   if (count >= form.settings.quotaLimit) {
+    //     throw new BadRequestException(
+    //       'The submission quota exceeds, new submissions are no longer accepted'
+    //     )
+    //   }
+    // }
 
     // 检查是否有 IP 限制
     if (
@@ -235,21 +221,22 @@ export class CompleteSubmissionResolver {
     const result: CompleteSubmissionType = {}
 
     if (helper.isValid(answer)) {
-      const amount = answer.value.amount
-      const applicationFeeAmount = Big(answer.value.amount)
-        .times(team.plan.commissionRate)
-        .toNumber()
+      // const amount = answer.value.amount
+      // const applicationFeeAmount = Big(answer.value.amount)
+      //   .times(team.plan?.commissionRate)
+      //   .toNumber()
+      const applicationFeeAmount = 0
 
-      result.clientSecret = await this.paymentService.createPaymentIntent({
-        amount,
-        currency: answer.value.currency,
-        applicationFeeAmount,
-        stripeAccountId: form.stripeAccount.accountId,
-        metadata: {
-          submissionId,
-          fieldId: answer.id
-        }
-      })
+      // result.clientSecret = await this.paymentService.createPaymentIntent({
+      //   amount,
+      //   currency: answer.value.currency,
+      //   applicationFeeAmount,
+      //   stripeAccountId: form.stripeAccount.accountId,
+      //   metadata: {
+      //     submissionId,
+      //     fieldId: answer.id
+      //   }
+      // })
 
       await this.submissionService.updateAnswer(submissionId, {
         ...answer,

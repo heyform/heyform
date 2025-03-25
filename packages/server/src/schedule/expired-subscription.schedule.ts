@@ -1,9 +1,9 @@
 import { date, timestamp } from '@heyform-inc/utils'
-import { BillingCycleEnum, PlanGradeEnum, SubscriptionStatusEnum } from '@model'
+import { BillingCycleEnum, SubscriptionStatusEnum } from '@model'
 import { Process, Processor } from '@nestjs/bull'
 import {
   FailedTaskService,
-  PlanService,
+  // PlanService,
   QueueService,
   TeamService,
   UserService
@@ -16,7 +16,7 @@ export class ExpiredSubscriptionSchedule extends BaseQueue {
   constructor(
     failedTaskService: FailedTaskService,
     private readonly teamService: TeamService,
-    private readonly planService: PlanService,
+    // private readonly planService: PlanService,
     private readonly userService: UserService,
     private readonly queueService: QueueService
   ) {
@@ -38,12 +38,12 @@ export class ExpiredSubscriptionSchedule extends BaseQueue {
     })
 
     const teamIds = teams.map(team => team.id)
-    const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
+    // const freePlan = await this.planService.findByGrade(PlanGradeEnum.FREE)
 
     // Downgrade to Basic Plan once subscription expired
     await this.teamService.updateAll(teamIds, {
       'subscription.id': undefined,
-      'subscription.planId': freePlan.id,
+      'subscription.planId': '',
       'subscription.billingCycle': BillingCycleEnum.FOREVER,
       'subscription.startAt': timestamp(),
       'subscription.endAt': -1,

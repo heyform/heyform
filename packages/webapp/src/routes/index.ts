@@ -24,14 +24,11 @@ import ProjectForms from '@/pages/project/Forms'
 import ProjectTrash from '@/pages/project/Trash'
 import Onboarding from '@/pages/user/Onboarding'
 import Template from '@/pages/user/Template'
-import WorkspaceBilling from '@/pages/workspace/Billing'
-import BillingSuccess from '@/pages/workspace/BillingSuccess'
 import CreateWorkspace from '@/pages/workspace/Create'
 import WorkspaceDashboard from '@/pages/workspace/Dashboard'
 import WorkspaceInvitation from '@/pages/workspace/Invitation'
 import WorkspaceMembers from '@/pages/workspace/Members'
 import WorkspaceSettings from '@/pages/workspace/Settings'
-import WorkspaceTrial from '@/pages/workspace/Trial'
 
 const routes = [
   // Auth
@@ -133,33 +130,6 @@ const routes = [
     options: {
       loginRequired: true,
       title: 'workspace.invitation.title'
-    }
-  },
-  {
-    path: '/workspace/:workspaceId/trial',
-    layout: WorkspaceGuard,
-    component: WorkspaceTrial,
-    options: {
-      loginRequired: true,
-      title: 'workspace.trial.title'
-    }
-  },
-  {
-    path: '/workspace/:workspaceId/billing',
-    layout: WorkspaceLayout,
-    component: WorkspaceBilling,
-    options: {
-      loginRequired: true,
-      title: 'billing.title'
-    }
-  },
-  {
-    path: '/workspace/:workspaceId/billing/success',
-    layout: BaseLayout,
-    component: BillingSuccess,
-    options: {
-      loginRequired: true,
-      title: 'billing.success.title'
     }
   },
   {

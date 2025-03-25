@@ -82,11 +82,7 @@ export class UpdateFormResolver {
       helper.isValidArray(input.languages) &&
       !input.languages.every(t => form.settings?.languages?.includes(t))
     ) {
-      if (team.plan.multiLanguage) {
-        this.formService.addTranslateQueue(input.formId, input.languages!)
-      } else {
-        input.languages = []
-      }
+      this.formService.addTranslateQueue(input.formId, input.languages!)
     }
 
     // Add at Jul 12, 2024

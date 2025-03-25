@@ -3,8 +3,7 @@ import { IconArrowUpRight } from '@tabler/icons-react'
 import { useRequest } from 'ahooks'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { Form, Input, PlanUpgrade, Switch } from '@/components'
-import { PlanGradeEnum } from '@/consts'
+import { Form, Input, Switch } from '@/components'
 import { WorkspaceService } from '@/services'
 import { useAppStore, useWorkspaceStore } from '@/store'
 import { useParam } from '@/utils'
@@ -64,51 +63,44 @@ export default function WorkspaceCustomDomain() {
         </div>
 
         <div className="pt-2">
-          <PlanUpgrade
-            minimalGrade={PlanGradeEnum.PREMIUM}
-            tooltipLabel={t('billing.upgrade.customDomain')}
-          >
-            <Switch value={workspace?.enableCustomDomain} onChange={run} />
-          </PlanUpgrade>
+          <Switch value={workspace?.enableCustomDomain} onChange={run} />
         </div>
       </div>
 
-      <PlanUpgrade minimalGrade={PlanGradeEnum.PREMIUM} isUpgradeShow={false}>
-        {workspace?.enableCustomDomain && (
-          <Form.Simple
-            className="flex items-start gap-x-2.5 [&_[data-slot=control]]:space-y-0 [&_[data-slot=item]]:flex-1"
-            initialValues={{
-              domain: workspace?.customDomain
-            }}
-            submitProps={{
-              label: t('components.continue'),
-              className: 'min-w-[6rem]'
-            }}
-            submitOnChangedOnly
-            onFinish={handleFinish}
+      {workspace?.enableCustomDomain && (
+        <Form.Simple
+          className="flex items-start gap-x-2.5 [&_[data-slot=control]]:space-y-0 [&_[data-slot=item]]:flex-1"
+          initialValues={{
+            domain: workspace?.customDomain
+          }}
+          submitProps={{
+            label: t('components.continue'),
+            className: 'min-w-[6rem]'
+          }}
+          submitOnChangedOnly
+          onFinish={handleFinish}
+        >
+          <Form.Item
+            name="domain"
+            rules={[
+              {
+                validator: async (rule, value) => {
+                  if (!helper.isFQDN(value)) {
+                    throw new Error(rule.message as string)
+                  }
+                },
+                message: t('settings.customDomain.invalid')
+              }
+            ]}
           >
-            <Form.Item
-              name="domain"
-              rules={[
-                {
-                  validator: async (rule, value) => {
-                    if (!helper.isFQDN(value)) {
-                      throw new Error(rule.message as string)
-                    }
-                  },
-                  message: t('settings.customDomain.invalid')
-                }
-              ]}
-            >
-              <Input
-                value={workspace?.customDomain}
-                placeholder={t('settings.customDomain.placeholder')}
-                autoComplete="off"
-              />
-            </Form.Item>
-          </Form.Simple>
-        )}
-      </PlanUpgrade>
+            <Input
+              value={workspace?.customDomain}
+              placeholder={t('settings.customDomain.placeholder')}
+              autoComplete="off"
+            />
+          </Form.Item>
+        </Form.Simple>
+      )}
     </div>
   )
 }

@@ -17,7 +17,7 @@ export class CreateContactResolver {
     @Team() team: TeamModel,
     @Args('input') input: CreateContactInput
   ): Promise<string> {
-    await this.contactService.checkQuota(input.teamId, team.plan.contactLimit)
+    // await this.contactService.checkQuota(input.teamId, team?.plan?.contactLimit)
 
     // 检查是否已经存在
     const exists = await this.contactService.findByTeamAndEmail(

@@ -1,7 +1,7 @@
 import { Auth, FormGuard, Team, User } from '@decorator'
 import { ChatDto } from '@dto'
 import {
-  BadRequestException,
+  // BadRequestException,
   Body,
   Controller,
   Post,
@@ -30,10 +30,6 @@ export class ChatController {
     @Body() input: ChatDto,
     @Res() res: Response
   ) {
-    if (!team.plan.aiForm) {
-      throw new BadRequestException('Upgrade your plan to chat with AI')
-    }
-
     try {
       await this.redisService.throttler(`chat:${user.id}`, 60, '1h')
 

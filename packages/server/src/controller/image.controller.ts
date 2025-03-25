@@ -71,7 +71,8 @@ export class ImageController {
 
   private async _getPath(input: ImageResizingDto) {
     const hash = md5(qs.stringify(input))
-    const dir = resolve(BUNNY_CACHE_DIR, hash.slice(0, 2), hash.slice(2, 4))
+    const cacheDir = BUNNY_CACHE_DIR || './cache/bunny'
+    const dir = resolve(cacheDir, hash.slice(0, 2), hash.slice(2, 4))
 
     await promises.mkdir(dir, {
       recursive: true
