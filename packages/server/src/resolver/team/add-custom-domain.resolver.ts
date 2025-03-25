@@ -23,9 +23,9 @@ export class AddCustomDomainResolver {
     }
 
     // Only Pro, Ultimate Plan can custom domain
-    if (!team.plan.customDomain) {
-      throw new BadRequestException('Upgrade your plan to add custom domain')
-    }
+    // if (!team.plan.customDomain) {
+    //   throw new BadRequestException('Upgrade your plan to add custom domain')
+    // }
 
     const domain = input.domain.toLowerCase().trim()
     const existed = await this.customDomainService.findByDomain(domain)

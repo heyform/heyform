@@ -432,9 +432,9 @@ export class FormService {
 
     // 是否支持白标
     const team = await this.teamService.findWithPlanById(form.teamId)
-    if (team && team.plan.whitelabelBranding) {
-      masked.settings.removeBranding = team.removeBranding
-    }
+    // if (team && team.plan.whitelabelBranding) {
+    // }
+    masked.settings.removeBranding = team.removeBranding
 
     // 是否使用 Google reCaptcha
     if (form.settings?.captchaKind === CaptchaKindEnum.GOOGLE_RECAPTCHA) {

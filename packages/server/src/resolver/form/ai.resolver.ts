@@ -124,10 +124,6 @@ export class AIResolver {
     @Form() form: FormModel,
     @Args('input') input: CreateFieldsWithAIInput
   ) {
-    if (!team.plan.aiForm) {
-      throw new BadRequestException('Upgrade your plan to edit form with AI')
-    }
-
     const result = await this.openAIService.chatCompletion({
       messages: [
         {

@@ -1,9 +1,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { Auth, FormGuard, Team } from '@decorator'
-import { TeamModel } from '@model'
+import { Auth, FormGuard } from '@decorator'
 import { UpdateFormCustomReportInput } from '@graphql'
 import { FormCustomReportService } from '@service'
-import { BadRequestException } from '@nestjs/common'
 import { pickObject } from '@heyform-inc/utils'
 
 @Resolver()
@@ -16,12 +14,12 @@ export class UpdateFormCustomReportResolver {
   @Mutation(returns => Boolean)
   @FormGuard()
   async updateFormCustomReport(
-    @Team() team: TeamModel,
+    // @Team() team: TeamModel,
     @Args('input') input: UpdateFormCustomReportInput
   ): Promise<boolean> {
-    if (!team.plan.formReport) {
-      throw new BadRequestException('Upgrade your plan to setup custom report')
-    }
+    // if (!team.plan.formReport) {
+    //   throw new BadRequestException('Upgrade your plan to setup custom report')
+    // }
 
     return this.formCustomReportService.update(
       input.formId,

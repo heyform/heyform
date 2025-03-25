@@ -1,7 +1,7 @@
-import { Auth, Team, TeamGuard, User } from '@decorator'
+import { Auth, Team, TeamGuard } from '@decorator'
 import { UpdateTeamInput } from '@graphql'
 import { helper, pickValidValues } from '@heyform-inc/utils'
-import { TeamModel, UserModel } from '@model'
+import { TeamModel } from '@model'
 import { BadRequestException } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { TeamService } from '@service'
@@ -14,7 +14,7 @@ export class UpdateTeamResolver {
   @Mutation(returns => Boolean)
   @TeamGuard()
   async updateTeam(
-    @User() user: UserModel,
+    // @User() user: UserModel,
     @Team() team: TeamModel,
     @Args('input') input: UpdateTeamInput
   ): Promise<boolean> {
@@ -31,9 +31,9 @@ export class UpdateTeamResolver {
 
     // Only Pro, Ultimate Plan can custom domain
     if (!helper.isNil(input.enableCustomDomain)) {
-      if (!team.plan.customDomain) {
-        throw new BadRequestException('Upgrade your plan to add custom domain')
-      }
+      // if (!team.plan.customDomain) {
+      //   throw new BadRequestException('Upgrade your plan to add custom domain')
+      // }
 
       updates = {
         ...updates,
@@ -43,9 +43,9 @@ export class UpdateTeamResolver {
 
     // Only Ultimate Plan can remove branding
     if (!helper.isNil(input.removeBranding)) {
-      if (!team.plan.whitelabelBranding) {
-        throw new BadRequestException('Upgrade your plan to remove branding')
-      }
+      // if (!team.plan.whitelabelBranding) {
+      //   throw new BadRequestException('Upgrade your plan to remove branding')
+      // }
 
       updates.removeBranding = input.removeBranding
     }

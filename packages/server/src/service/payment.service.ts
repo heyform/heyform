@@ -264,7 +264,7 @@ export class PaymentService {
     ])
     const memberLimit = plan.memberLimit || 1
 
-    if (plan.grade < team.plan.grade && memberCount > memberLimit) {
+    if (plan?.grade < team?.plan?.grade && memberCount > memberLimit) {
       throw new BadRequestException({
         code: 'PLAN_MEMBER_LIMIT',
         message: `Downgrading to the ${plan.name} plan allows for only ${memberLimit} member(s). Please remove excess members before proceeding.`
@@ -292,9 +292,9 @@ export class PaymentService {
 
     let note = ''
 
-    if (plan.grade < team.plan.grade) {
+    if (plan?.grade < team?.plan?.grade) {
       note = `Downgraded to ${plan.name} plan ${BILLING_CYCLE_MAPS[billingCycle]}`
-    } else if (plan.grade > team.plan.grade) {
+    } else if (plan?.grade > team?.plan?.grade) {
       note = `Upgraded to ${plan.name} plan ${BILLING_CYCLE_MAPS[billingCycle]}`
     } else {
       if (additionalSeats > 0) {

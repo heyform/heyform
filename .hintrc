@@ -4,6 +4,10 @@
   ],
   "hints": {
     "typescript-config/consistent-casing": "off",
-    "typescript-config/strict": "off"
+    "typescript-config/strict": "off",
+    "axe/aria": "off",
+    "axe/name-role-value": "off",
+    "disown-opener": "off",
+    "no-inline-styles": "off"
   }
 }

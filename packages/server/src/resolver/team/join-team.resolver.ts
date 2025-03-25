@@ -51,13 +51,13 @@ export class JoinTeamResolver {
       throw new BadRequestException('The invitation email does not match')
     }
 
-    const teamMemberCount = await this.teamService.memberCount(input.teamId)
+    // const teamMemberCount = await this.teamService.memberCount(input.teamId)
 
-    if (teamMemberCount >= team.plan.memberLimit + team.additionalSeats) {
-      throw new BadRequestException(
-        'The workspace member quota exceeds, new members are no longer accepted'
-      )
-    }
+    // if (teamMemberCount >= team.plan.memberLimit + team.additionalSeats) {
+    //   throw new BadRequestException(
+    //     'The workspace member quota exceeds, new members are no longer accepted'
+    //   )
+    // }
 
     const teamMember = await this.teamService.findMemberById(
       input.teamId,

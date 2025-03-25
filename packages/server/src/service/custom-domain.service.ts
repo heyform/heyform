@@ -87,13 +87,14 @@ export class CustomDomainService {
       return false
     }
 
-    const team = await this.teamService.findWithPlanById(customDomain.teamId)
+    // const team = await this.teamService.findWithPlanById(customDomain.teamId)
 
-    return (
-      team &&
-      team.subscription.status === SubscriptionStatusEnum.ACTIVE &&
-      team.plan.customDomain
-    )
+    // return (
+    //   team &&
+    //   team.subscription.status === SubscriptionStatusEnum.ACTIVE &&
+    //   team.plan.customDomain
+    // )
+    true
   }
 
   public async create(customDomain: CustomDomainModel | any): Promise<boolean> {

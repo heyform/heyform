@@ -40,11 +40,11 @@ export class PublicTeamDetailResolver {
     }
 
     if (team.allowJoinByInviteLink) {
-      const teamMemberCount = await this.teamService.memberCount(input.teamId)
+      // const teamMemberCount = await this.teamService.memberCount(input.teamId)
 
-      if (teamMemberCount < team.plan.memberLimit) {
-        detail.allowJoinByInviteLink = true
-      }
+      // if (teamMemberCount < team.plan.memberLimit) {
+      // }
+      detail.allowJoinByInviteLink = true
     }
 
     return detail

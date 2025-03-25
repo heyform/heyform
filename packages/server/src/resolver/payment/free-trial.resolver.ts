@@ -25,7 +25,7 @@ export class FreeTrialResolver {
       throw new BadRequestException('Unable to start the free trial')
     }
 
-    if (team.plan.grade > PlanGradeEnum.FREE) {
+    if (team.plan?.grade > PlanGradeEnum.FREE) {
       throw new BadRequestException(
         'Unable to start the free trial for subscribed workspace'
       )
@@ -33,7 +33,7 @@ export class FreeTrialResolver {
 
     const plan = await this.planService.findById(input.planId)
 
-    if (!plan || plan.grade <= PlanGradeEnum.FREE) {
+    if (!plan || plan?.grade <= PlanGradeEnum.FREE) {
       throw new BadRequestException('Invalid plan for the free trial')
     }
 

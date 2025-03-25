@@ -6,7 +6,7 @@ import {
 import { CdnTokenType, UploadFormFileInput } from '@graphql'
 import { EndpointAnonymousIdGuard } from '@guard'
 import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
-import { bytes, nanoid } from '@heyform-inc/utils'
+import { nanoid } from '@heyform-inc/utils'
 import { SubscriptionStatusEnum } from '@model'
 import { BadRequestException, UseGuards } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
@@ -66,11 +66,11 @@ export class UploadFileTokenResolver {
       )
     }
 
-    if (team.storageQuota >= bytes(team.plan.storageLimit)) {
-      throw new BadRequestException(
-        'The workspace file storage quota exceeds, new files are no longer accepted'
-      )
-    }
+    // if (team.storageQuota >= bytes(team.plan.storageLimit)) {
+    //   throw new BadRequestException(
+    //     'The workspace file storage quota exceeds, new files are no longer accepted'
+    //   )
+    // }
 
     const key = `${team.id}/${form.id}/${nanoid()}_${encodeURIComponent(
       input.filename
