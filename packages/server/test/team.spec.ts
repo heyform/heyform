@@ -148,8 +148,8 @@ describe('Team', () => {
           variables: {
             input: {
               teamId: users.owner.teamId,
-              name: users.owner.teamName,
-              enableCustomDomain: true
+              name: users.owner.teamName
+              // enableCustomDomain: true
             }
           }
         })
@@ -190,8 +190,8 @@ describe('Team', () => {
           query: UPDATE_TEAM_SETTINGS,
           variables: {
             input: {
-              teamId: users.member.teamId,
-              enableCustomDomain: true
+              teamId: users.member.teamId
+              // enableCustomDomain: true
             }
           }
         })

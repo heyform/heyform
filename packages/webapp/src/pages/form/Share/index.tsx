@@ -8,7 +8,6 @@ import {
 } from '@tabler/icons-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import { Button, Tooltip } from '@/components'
 import { FORM_EMBED_OPTIONS } from '@/consts'
@@ -22,9 +21,9 @@ import QRCodeModal from './QRCodeModal'
 export default function FormShare() {
   const { t } = useTranslation()
 
-  const { workspaceId, formId } = useParam()
+  const { formId } = useParam()
   const { openModal } = useAppStore()
-  const { workspace, sharingURLPrefix } = useWorkspaceStore()
+  const { sharingURLPrefix } = useWorkspaceStore()
   const { form, selectEmbedType } = useFormStore()
 
   const shareLink = useMemo(() => sharingURLPrefix + '/f/' + formId, [formId, sharingURLPrefix])
@@ -90,12 +89,6 @@ export default function FormShare() {
                 <div className="h-10 flex-1 truncate pl-4 leading-10">{shareLink}</div>
                 <Button.Copy className="rounded-l-none" text={shareLink} />
               </div>
-
-              {workspace.isOwner && (
-                <Link to={`/workspace/${workspaceId}/settings#branding`}>
-                  {t('form.share.link.useCustomDomain')}
-                </Link>
-              )}
             </div>
 
             <div className="mt-2 flex items-center gap-x-2">

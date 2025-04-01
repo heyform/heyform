@@ -797,6 +797,11 @@
       "name": "Nazwa",
       "logo": "Logo",
       "pickLogo": "Wybierz logo dla swojego miejsca pracy."
+    },
+    "form": {
+      "exportImport": "Eksportuj/Importuj",
+      "exportImportDescription": "Eksportuj ten formularz jako plik JSON lub zaimportuj plik JSON, aby utworzyć nowy formularz.",
+      "exportJson": "Eksportuj jako JSON"
     }
   },
   "project": {

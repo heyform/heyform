@@ -797,6 +797,11 @@
       "name": "名称",
       "logo": "标志（Logo）",
       "pickLogo": "为您的工作区选择一个标志。"
+    },
+    "form": {
+      "exportImport": "导出/导入",
+      "exportImportDescription": "将此表单导出为JSON文件，或导入JSON文件以创建新表单。",
+      "exportJson": "导出为JSON"
     }
   },
   "project": {

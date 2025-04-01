@@ -1,11 +1,11 @@
 import { FormRenderer, insertWebFont } from '@heyform-inc/form-renderer'
 import { slugify } from '@heyform-inc/utils'
-import { IconChevronLeft } from '@tabler/icons-react'
+import { IconChevronLeft, IconUpload } from '@tabler/icons-react'
 import { useRequest } from 'ahooks'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Async, Button, Image, Loader, Tabs } from '@/components'
+import { Async, Button, Image, Loader, Tabs, useToast } from '@/components'
 import { TEMPLATE_CATEGORIES } from '@/consts'
 import { insertThemeStyle } from '@/pages/form/Builder/utils'
 import { FormService } from '@/services'
@@ -144,9 +144,62 @@ const TemplatePreview: FC<TemplatePreviewProps> = ({ template: rawTemplate, onBa
 
 export default function TemplatesModel({ onBack }: TemplatesModelProps) {
   const { t } = useTranslation()
+  const router = useRouter()
+  const { workspaceId, projectId } = useParam()
+  const { closeModal } = useAppStore()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const toast = useToast()
 
   const [templateGroups, setTemplateGroups] = useState<TemplateGroupType[]>([])
   const [template, setTemplate] = useState<TemplateType>()
+
+  const { loading: importLoading, run: importForm } = useRequest(
+    async (formJson: string) => {
+      try {
+        const result = await FormService.importFromJSON(projectId, formJson)
+        closeModal('CreateFormModal')
+        router.push(`/workspace/${workspaceId}/project/${projectId}/form/${result}/create`)
+      } catch (error) {
+        toast({
+          title: t('components.error.title'),
+          message: t(
+            'form.template.importError',
+            'Failed to import form. Please check the JSON format.'
+          )
+        })
+      }
+    },
+    {
+      manual: true
+    }
+  )
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = e => {
+      try {
+        const json = e.target?.result as string
+        // Validate JSON format before sending
+        JSON.parse(json)
+        importForm(json)
+      } catch (error) {
+        toast({
+          title: t('components.error.title'),
+          message: t('form.template.invalidJson', 'Invalid JSON format. Please check your file.')
+        })
+      }
+    }
+    reader.onerror = () => {
+      toast({
+        title: t('components.error.title'),
+        message: t('form.template.fileReadError', 'Failed to read file. Please try again.')
+      })
+    }
+    reader.readAsText(file)
+  }
 
   async function fetch() {
     const result = await FormService.templates()
@@ -175,23 +228,42 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
 
   return (
     <div className="min-h-[calc(90vh-3.125rem)] w-[90vw]">
-      <div className="flex items-center justify-between">
-        <button
-          type="button"
-          className="-ml-[0.15rem] inline-flex items-center gap-1 text-sm/6"
-          onClick={onBack}
-        >
-          <IconChevronLeft className="h-5 w-5" />
-          <span className="font-semibold">{t('form.template.headline')}</span>
-        </button>
-      </div>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            className="-ml-[0.15rem] inline-flex items-center gap-1 text-sm/6"
+            onClick={onBack}
+          >
+            <IconChevronLeft className="h-5 w-5" />
+            <span className="font-semibold">{t('form.template.headline')}</span>
+          </button>
+        </div>
 
-      <div className="mb-5 mt-6 flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-accent-light pb-5">
-        {templateGroups.map(row => (
-          <Button.Ghost key={row.id} size="sm" onClick={() => handleScrollIntoView(row.id)}>
-            {row.category}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-accent-light">
+          {templateGroups.map(row => (
+            <Button.Ghost key={row.id} size="sm" onClick={() => handleScrollIntoView(row.id)}>
+              {row.category}
+            </Button.Ghost>
+          ))}
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept=".json"
+            onChange={handleFileChange}
+            aria-label={t('form.template.importJson')}
+          />
+          <Button.Ghost
+            size="sm"
+            loading={importLoading}
+            onClick={() => fileInputRef.current?.click()}
+            className="inline-flex items-center gap-1"
+          >
+            <IconUpload className="h-4 w-4" />
+            {t('form.template.importJson', 'Import from JSON')}
           </Button.Ghost>
-        ))}
+        </div>
       </div>
 
       <Async

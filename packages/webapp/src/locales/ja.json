@@ -797,6 +797,11 @@
       "name": "名前",
       "logo": "ロゴ",
       "pickLogo": "ワークスペースのためのロゴを選んでください。"
+    },
+    "form": {
+      "exportImport": "エクスポート/インポート",
+      "exportImportDescription": "このフォームをJSONファイルとしてエクスポートするか、JSONファイルをインポートして新しいフォームを作成します。",
+      "exportJson": "JSONとしてエクスポート"
     }
   },
   "project": {

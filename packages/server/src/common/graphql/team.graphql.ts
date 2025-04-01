@@ -14,7 +14,6 @@ import {
   IsArray,
   IsEmail,
   IsEnum,
-  IsFQDN,
   IsObject,
   IsOptional,
   IsUrl,
@@ -94,13 +93,6 @@ export class TeamCdnTokenInput {
 }
 
 @InputType()
-export class AddCustomDomainInput extends TeamDetailInput {
-  @Field()
-  @IsFQDN()
-  domain: string
-}
-
-@InputType()
 export class CreateBrandKitInput extends TeamDetailInput {
   @Field()
   @IsUrl()
@@ -124,21 +116,6 @@ export class UpdateBrandKitInput extends TeamDetailInput {
   theme: Record<string, any>
 }
 
-@ObjectType()
-export class CustomHostnameType {
-  @Field()
-  active: boolean
-
-  @Field()
-  ssl: boolean
-
-  @Field()
-  ownership: boolean
-
-  @Field(type => [String], { nullable: true })
-  errors?: string[]
-}
-
 @InputType()
 export class UpdateTeamInput extends TeamDetailInput {
   @Field({ nullable: true })
@@ -155,15 +132,15 @@ export class UpdateTeamInput extends TeamDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  customDomain?: string
-
-  @Field({ nullable: true })
-  @IsOptional()
-  enableCustomDomain?: boolean
-
-  @Field({ nullable: true })
-  @IsOptional()
   removeBranding?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  aiKey?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  aiModel?: string
 }
 
 @InputType()
@@ -295,11 +272,11 @@ export class TeamType extends PublicTeamType {
   @Field()
   ownerId: string
 
-  @Field({ nullable: true })
-  enableCustomDomain?: boolean
+  // @Field({ nullable: true })
+  // enableCustomDomain?: boolean
 
-  @Field({ nullable: true })
-  customDomain?: string
+  // @Field({ nullable: true })
+  // customDomain?: string
 
   @Field({ nullable: true })
   removeBranding?: boolean

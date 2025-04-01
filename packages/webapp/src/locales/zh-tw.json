@@ -797,6 +797,11 @@
       "name": "名稱",
       "logo": "商標",
       "pickLogo": "選擇一個適合您的工作區的商標。"
+    },
+    "form": {
+      "exportImport": "匯出/匯入",
+      "exportImportDescription": "將此表單匯出為JSON檔案，或匯入JSON檔案以建立新表單。",
+      "exportJson": "匯出為JSON"
     }
   },
   "project": {

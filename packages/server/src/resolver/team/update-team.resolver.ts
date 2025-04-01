@@ -24,21 +24,18 @@ export class UpdateTeamResolver {
       )
     }
 
-    let updates: Record<string, any> = pickValidValues(input as any, [
+    const updates: Record<string, any> = pickValidValues(input as any, [
       'name',
       'avatar'
     ])
 
-    // Only Pro, Ultimate Plan can custom domain
-    if (!helper.isNil(input.enableCustomDomain)) {
-      // if (!team.plan.customDomain) {
-      //   throw new BadRequestException('Upgrade your plan to add custom domain')
-      // }
+    // Add custom AI configuration fields
+    if (!helper.isNil(input.aiKey)) {
+      updates.aiKey = input.aiKey
+    }
 
-      updates = {
-        ...updates,
-        enableCustomDomain: input.enableCustomDomain
-      }
+    if (!helper.isNil(input.aiModel)) {
+      updates.aiModel = input.aiModel
     }
 
     // Only Ultimate Plan can remove branding

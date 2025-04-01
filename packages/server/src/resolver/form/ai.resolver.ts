@@ -53,17 +53,20 @@ export class AIResolver {
     //   throw new BadRequestException('Upgrade your plan to create form with AI')
     // }
 
-    const result = await this.openAIService.chatCompletion({
-      messages: [
-        {
-          role: 'user',
-          content: template.render(CREATE_FORM_PROMPT, {
-            topic: input.topic,
-            reference: input.reference
-          })
-        }
-      ]
-    })
+    const result = await this.openAIService.chatCompletion(
+      {
+        messages: [
+          {
+            role: 'user',
+            content: template.render(CREATE_FORM_PROMPT, {
+              topic: input.topic,
+              reference: input.reference
+            })
+          }
+        ]
+      },
+      team
+    )
 
     this.logger.info(result)
 
@@ -124,18 +127,21 @@ export class AIResolver {
     @Form() form: FormModel,
     @Args('input') input: CreateFieldsWithAIInput
   ) {
-    const result = await this.openAIService.chatCompletion({
-      messages: [
-        {
-          role: 'user',
-          content: template.render(CREATE_FIELDS_PROMPT, {
-            name: form.name,
-            questions: parseJson(form._drafts),
-            prompt: input.prompt
-          })
-        }
-      ]
-    })
+    const result = await this.openAIService.chatCompletion(
+      {
+        messages: [
+          {
+            role: 'user',
+            content: template.render(CREATE_FIELDS_PROMPT, {
+              name: form.name,
+              questions: parseJson(form._drafts),
+              prompt: input.prompt
+            })
+          }
+        ]
+      },
+      team
+    )
 
     this.logger.info(result)
 
@@ -168,18 +174,21 @@ export class AIResolver {
       throw new BadRequestException('Upgrade your plan to setup logics with AI')
     }
 
-    const result = await this.openAIService.chatCompletion({
-      messages: [
-        {
-          role: 'user',
-          content: template.render(LOGIC_PROMPT, {
-            questions: parseJson(form._drafts),
-            logics: form.logics,
-            prompt: input.prompt
-          })
-        }
-      ]
-    })
+    const result = await this.openAIService.chatCompletion(
+      {
+        messages: [
+          {
+            role: 'user',
+            content: template.render(LOGIC_PROMPT, {
+              questions: parseJson(form._drafts),
+              logics: form.logics,
+              prompt: input.prompt
+            })
+          }
+        ]
+      },
+      team
+    )
 
     this.logger.info(result)
 
@@ -217,16 +226,19 @@ export class AIResolver {
       throw new BadRequestException('Upgrade your plan to setup theme with AI')
     }
 
-    const result = await this.openAIService.chatCompletion({
-      messages: [
-        {
-          role: 'user',
-          content: template.render(THEME_PROMPT, {
-            theme: input.theme
-          })
-        }
-      ]
-    })
+    const result = await this.openAIService.chatCompletion(
+      {
+        messages: [
+          {
+            role: 'user',
+            content: template.render(THEME_PROMPT, {
+              theme: input.theme
+            })
+          }
+        ]
+      },
+      team
+    )
 
     this.logger.info(result)
 

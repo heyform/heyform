@@ -1316,3 +1316,19 @@ export class FormIntegrationType {
   @Field(type => Number)
   status: IntegrationStatusEnum
 }
+
+// Add export form to JSON input type
+@InputType()
+export class ExportFormToJSONInput extends FormDetailInput {
+  // No additional fields needed
+}
+
+// Add import form from JSON input type
+@InputType()
+export class ImportFormFromJSONInput {
+  @Field()
+  projectId: string
+
+  @Field()
+  formJson: string
+}

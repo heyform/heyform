@@ -10,7 +10,6 @@ import {
 import { Query, Resolver } from '@nestjs/graphql'
 import {
   BrandKitService,
-  CustomDomainService,
   FormService,
   // PlanService,
   ProjectService,
@@ -24,7 +23,7 @@ export class TeamsResolver {
     // private readonly planService: PlanService,
     private readonly teamService: TeamService,
     private readonly formService: FormService,
-    private readonly customHostnameService: CustomDomainService,
+    // private readonly customHostnameService: CustomDomainService,
     private readonly projectService: ProjectService,
     private readonly brandKitService: BrandKitService
   ) {}
@@ -46,7 +45,7 @@ export class TeamsResolver {
       projectMembers,
       formCountMaps,
       // plans,
-      customHostnames,
+      // customHostnames,
       brandKits
     ] = await Promise.all([
       this.teamService.memberCountMaps(teamIds),
@@ -54,7 +53,7 @@ export class TeamsResolver {
       this.projectService.findMembers(projectIds),
       this.formService.countMaps(projectIds),
       // this.planService.findAll(),
-      this.customHostnameService.findAllInTeams(teamIds),
+      // this.customHostnameService.findAllInTeams(teamIds),
       this.brandKitService.findAllInTeams(teamIds)
     ])
 
@@ -72,9 +71,9 @@ export class TeamsResolver {
       team.isOwner = team.ownerId === user.id
       team.memberCount =
         memberCountMaps.find(row => row._id === team.id)?.count || 0
-      team.customDomain = customHostnames.find(
-        row => row.teamId === team.id
-      )?.domain
+      // team.customDomain = customHostnames.find(
+      //   row => row.teamId === team.id
+      // )?.domain
 
       team.brandKits = brandKits.filter(row => row.teamId === team.id)
 

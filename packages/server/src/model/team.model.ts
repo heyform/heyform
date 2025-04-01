@@ -2,7 +2,8 @@ import { INVITE_CODE_EXPIRE_DAYS } from '@environments'
 import { date, nanoid } from '@heyform-inc/utils'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { CustomDomainModel } from 'src/model/custom-domain.model'
+// Custom domain feature removed
+// import { CustomDomainModel } from 'src/model/custom-domain.model'
 import { GroupModel } from './group.model'
 import { BillingCycleEnum } from './invoice.model'
 import { PlanModel } from './plan.model'
@@ -70,13 +71,17 @@ export class TeamModel extends Document {
 
   // Discard
   @Prop()
-  customDomain?: string
-
-  @Prop()
-  enableCustomDomain?: boolean
-
-  @Prop()
   removeBranding?: boolean
+
+  // Add custom AI configuration fields
+  @Prop()
+  aiKey?: string
+
+  @Prop()
+  aiEndpoint?: string
+
+  @Prop()
+  aiModel?: string
 
   @Prop({ default: () => nanoid(), unique: true })
   inviteCode: string
@@ -146,8 +151,8 @@ export class TeamModel extends Document {
   // Contact count
   contactCount?: number
 
-  // Custom hostnames
-  customHostnames?: CustomDomainModel[]
+  // Custom hostnames - custom domain feature removed
+  // customHostnames?: CustomDomainModel[]
 
   // Brand kit
   brandKits?: BrandKitModel[]

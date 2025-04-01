@@ -141,7 +141,17 @@ export function useWindow(
     return () => {
       window.removeEventListener('message', messageListener)
     }
-  }, [])
+  }, [messageListener])
 
   return openWindow
+}
+
+export function useApiError() {
+  const handleApiError = (error: Error) => {
+    console.error('API Error:', error)
+    // Here you would normally use a notification system to show the error
+    // For example: notification.error({ message: 'Error', description: error.message })
+  }
+
+  return { handleApiError }
 }

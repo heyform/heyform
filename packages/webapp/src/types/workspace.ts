@@ -40,7 +40,7 @@ export interface WorkspaceType {
   name: string
   ownerId: string
   avatar?: string
-  enableCustomDomain?: boolean
+  // enableCustomDomain?: boolean
   customDomain?: string
   removeBranding?: boolean
   inviteCode: string
@@ -59,6 +59,8 @@ export interface WorkspaceType {
   createdAt?: number
   projects: ProjectType[]
   members: UserType[]
+  aiKey?: string
+  aiModel?: string
 }
 
 export interface MemberType {

@@ -797,6 +797,11 @@
         "label": "Enter deletion code sent to <strong>{{email}}</strong>.",
         "required": "The verification code is not allow to be empty"
       }
+    },
+    "form": {
+      "exportImport": "Export/Import",
+      "exportImportDescription": "Export this form as a JSON file or import a JSON file to create a new form.",
+      "exportJson": "Export as JSON"
     }
   },
   "project": {

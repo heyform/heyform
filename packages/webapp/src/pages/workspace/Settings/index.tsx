@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next'
 
 import { AnchorNavigation } from '@/components'
 
+import AISettings from './AISettings'
 import BrandKitModal from './BrandKitModal'
 import WorkspaceBranding from './Branding'
-import CustomDomainModal from './CustomDomainModal'
 import WorkspaceDeletion from './Deletion'
 import WorkspaceDeletionModal from './DeletionModal'
 import WorkspaceExportData from './ExportData'
@@ -30,6 +30,10 @@ export default function WorkspaceSettings() {
                     value: 'general'
                   },
                   {
+                    label: t('settings.ai.title', 'AI Configuration'),
+                    value: 'ai-settings'
+                  },
+                  {
                     label: t('settings.branding.title'),
                     value: 'branding'
                   },
@@ -47,6 +51,7 @@ export default function WorkspaceSettings() {
 
             <div className="flex-1">
               <WorkspaceGeneral />
+              <AISettings />
               <WorkspaceBranding />
               <WorkspaceExportData />
               <WorkspaceDeletion />
@@ -55,7 +60,6 @@ export default function WorkspaceSettings() {
         </div>
       </div>
 
-      <CustomDomainModal />
       <BrandKitModal />
       <WorkspaceDeletionModal />
     </>

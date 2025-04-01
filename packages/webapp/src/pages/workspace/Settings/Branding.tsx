@@ -7,7 +7,6 @@ import { useWorkspaceStore } from '@/store'
 import { useParam } from '@/utils'
 
 import WorkspaceBrandKit from './BrandKit'
-import WorkspaceCustomDomain from './CustomDomain'
 
 export default function WorkspaceBranding() {
   const { t } = useTranslation()
@@ -51,8 +50,6 @@ export default function WorkspaceBranding() {
             <Switch value={workspace?.removeBranding} onChange={handleRemoveBrandingChange} />
           </div>
         </div>
-
-        <WorkspaceCustomDomain />
       </div>
     </section>
   )
