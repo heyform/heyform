@@ -42,17 +42,6 @@ export * from './image.controller'
  */
 export * from './custom-domain-verification.controller'
 
-export * from './internal-api/larkbot.controller'
-export * from './internal-api/espocrm.controller'
-export * from './public-api/users-count.controller'
-
-/**
- * Changelog
- *
- * /api/changelog
- */
-export * from './changelog.controller'
-
 /**
  * Chat
  *

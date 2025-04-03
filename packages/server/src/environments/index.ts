@@ -19,10 +19,6 @@ export const APP_LISTEN_HOSTNAME: string =
   process.env.APP_LISTEN_HOSTNAME || '127.0.0.1'
 export const APP_HOMEPAGE: string = process.env.APP_HOMEPAGE
 
-// public api
-export const PUBLIC_API_VERIFICATION_KEY =
-  process.env.PUBLIC_API_VERIFICATION_KEY
-
 // cookie
 export const COOKIE_MAX_AGE: string = process.env.COOKIE_MAX_AGE || '1y'
 export const COOKIE_DOMAIN: string = process.env.COOKIE_DOMAIN
@@ -70,16 +66,6 @@ export const SMTP_HOST: string = process.env.SMTP_HOST
 export const SMTP_PORT: number = +process.env.SMTP_PORT
 export const SMTP_USER: string = process.env.SMTP_USER
 export const SMTP_PASSWORD: string = process.env.SMTP_PASSWORD
-
-// qiniu
-export const QINIU_ACCESS_KEY: string = process.env.QINIU_ACCESS_KEY
-export const QINIU_SECRET_KEY: string = process.env.QINIU_SECRET_KEY
-export const QINIU_BUCKET: string = process.env.QINIU_BUCKET
-export const QINIU_URL_PREFIX: string = process.env.QINIU_URL_PREFIX
-export const QINIU_CALLBACK_URL: string = process.env.QINIU_CALLBACK_URL
-export const QINIU_TEMPORARY_BUCKET: string = process.env.QINIU_TEMPORARY_BUCKET
-export const QINIU_TEMPORARY_URL_PREFIX: string =
-  process.env.QINIU_TEMPORARY_URL_PREFIX
 
 // google recaptcha
 export const GOOGLE_RECAPTCHA_KEY: string = process.env.GOOGLE_RECAPTCHA_KEY
@@ -148,13 +134,6 @@ export const OPEN_APP_REFRESH_EXPIRES: string =
 // Form report rate
 export const FORM_REPORT_RATE: string = process.env.FORM_REPORT_RATE || '5s'
 
-// CloudflareService API token
-export const CLOUDFLARE_API_PREFIX: string = process.env.CLOUDFLARE_API_PREFIX
-export const CLOUDFLARE_API_TOKEN: string = process.env.CLOUDFLARE_API_TOKEN
-export const CLOUDFLARE_ZONE_ID: string = process.env.CLOUDFLARE_ZONE_ID
-export const CLOUDFLARE_FALLBACK_ORIGIN: string =
-  process.env.CLOUDFLARE_FALLBACK_ORIGIN
-
 // Verification code
 export const VERIFICATION_CODE_EXPIRE: string =
   process.env.VERIFICATION_CODE_EXPIRE || '10m'
@@ -168,22 +147,6 @@ export const ACCOUNT_DELETION_SCHEDULE_INTERVAL: string =
 // Unsplash
 export const UNSPLASH_CLIENT_ID: string = process.env.UNSPLASH_CLIENT_ID
 
-// Caddy api key
-export const CADDY_API_KEY: string = process.env.KEY3
-export const CADDY_CNAME_PROXY: string = process.env.CADDY_CNAME_PROXY
-export const CADDY_ANAME_PROXY: string = process.env.CADDY_ANAME_PROXY
-
-export const CADDY_API_URL = process.env.CADDY_API_URL
-export const CADDY_UPSTREAM = process.env.CADDY_UPSTREAM
-export const CADDY_SERVER_ID = process.env.CADDY_SERVER_ID
-export const CADDY_TLS_AUTOMATION_POLICY_ID =
-  process.env.CADDY_TLS_AUTOMATION_POLICY_ID
-
-// Sendy
-export const SENDY_API_URL: string = process.env.SENDY_API_URL
-export const SENDY_API_KEY: string = process.env.SENDY_API_KEY
-export const SENDY_SUBSCRIBE_LIST: string = process.env.SENDY_SUBSCRIBE_LIST
-
 // EspoCRM
 export const ESPOCRM_API_URL: string = process.env.ESPOCRM_API_URL
 export const ESPOCRM_API_KEY: string = process.env.ESPOCRM_API_KEY
@@ -191,36 +154,7 @@ export const ESPOCRM_API_KEY: string = process.env.ESPOCRM_API_KEY
 // Free trial
 export const FREE_TRIAL_DAYS: number = +process.env.FREE_TRIAL_DAYS || 7
 
-// Bunny
-export const BUNNY_API_URL = process.env.BUNNY_API_URL
-export const BUNNY_API_ACCESS_KEY = process.env.BUNNY_API_ACCESS_KEY
-export const BUNNY_CACHE_DIR = process.env.BUNNY_CACHE_DIR
-export const BUNNY_URL_PREFIX = process.env.BUNNY_URL_PREFIX
-export const BUNNY_TOKEN_KEY = process.env.BUNNY_TOKEN_KEY
-
 // OpenAI
 export const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-4o'
-
-// Loops
-export const LOOPS_API_KEY = process.env.LOOPS_API_KEY
-
-// Plunk
-export const PLUNK_API_URL = process.env.PLUNK_API_URL
-export const PLUNK_API_KEY = process.env.PLUNK_API_KEY
-
-// Changelog
-export const CHANGELOG_API_URL = process.env.CHANGELOG_API_URL
-export const CHANGELOG_API_KEY = process.env.CHANGELOG_API_KEY
-
-// Help center
-export const HELP_CENTER_API_URL = process.env.HELP_CENTER_API_URL
-
-// Templates
-export const TEMPLATES_TEAM_ID = process.env.TEMPLATES_TEAM_ID
-
-// Teable
-export const TEABLE_API_URL = process.env.TEABLE_API_URL
-export const TEABLE_API_KEY = process.env.TEABLE_API_KEY
-export const TEABLE_TEMPLATE_TABLE_ID = process.env.TEABLE_TEMPLATE_TABLE_ID
