@@ -1,6 +1,6 @@
 import { CURRENCY_SYMBOLS, htmlUtils } from '@heyform-inc/answer-utils'
 import { Answer, Choice, Column, FieldKindEnum } from '@heyform-inc/shared-types-enums'
-import { helper, unixDate } from '@heyform-inc/utils'
+import { helper } from '@heyform-inc/utils'
 import { IconArrowUpRight, IconCheck, IconClock, IconFile } from '@tabler/icons-react'
 import Big from 'big.js'
 import { FC, Fragment } from 'react'
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { Badge, Checkbox, Image } from '@/components'
 import { ALL_FIELD_CONFIGS, CUSTOM_FIELDS_CONFIGS } from '@/consts'
 import { FormFieldType, SubmissionType } from '@/types'
-import { cn, formatDay } from '@/utils'
+import { cn, formatDay, unixDate } from '@/utils'
 
 import { QuestionIcon } from '../Builder/LeftSidebar/QuestionList'
 

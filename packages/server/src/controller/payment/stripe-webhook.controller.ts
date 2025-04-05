@@ -11,7 +11,6 @@ import {
 import {
   PaymentService,
   PlanService,
-  PlunkService,
   QueueService,
   TeamService,
   UserService
@@ -50,7 +49,6 @@ export class StripeWebhookController {
     private readonly paymentService: PaymentService,
     private readonly teamService: TeamService,
     private readonly planService: PlanService,
-    private readonly plunkService: PlunkService,
     private readonly userService: UserService,
     private readonly queueService: QueueService
   ) {}
@@ -91,14 +89,7 @@ export class StripeWebhookController {
     const team = await this.teamService.findWithPlanById(teamId)
 
     if (object.status === 'canceled') {
-      const owner = await this.userService.findById(team.ownerId)
-
-      this.plunkService.addQueue({
-        type: 'trackEvent',
-        email: owner.email,
-        event: 'user-churn',
-        data: {}
-      })
+      // Removed Plunk service call for tracking user churn
     }
 
     // Payment for extra fee or changing to another plan

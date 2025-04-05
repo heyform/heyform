@@ -1,7 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "tsconfig.json",
+    "tsconfigRootDir": ".",
     "sourceType": "module"
   },
   "extends": [
@@ -27,6 +28,7 @@
     "import/resolver": {
       "typescript": {
         "project": "./tsconfig.json",
+        "tsconfigRootDir": ".",
         "alwaysTryTypes": true
       },
       "node": {

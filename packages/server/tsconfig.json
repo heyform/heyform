@@ -37,5 +37,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false
   },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dashboard", "dist", "**/node_modules/@heyform-inc/shared-types-enums"]
 }

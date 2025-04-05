@@ -7,7 +7,7 @@ import {
 import { Injectable } from '@nestjs/common'
 import { nanoid, timestamp } from '@heyform-inc/utils'
 import got from 'got'
-import { aesEncryptObject } from '@heyforms/nestjs'
+import { aesEncryptObject, aesDecryptObject } from '@heyforms/nestjs'
 
 @Injectable()
 export class CdnService {
@@ -43,5 +43,34 @@ export class CdnService {
     }
 
     return aesEncryptObject(json, BUNNY_TOKEN_KEY)
+  }
+
+  verifyToken(token: string): any {
+    try {
+      const data = aesDecryptObject(token, BUNNY_TOKEN_KEY)
+
+      if (data.expiresAt < timestamp()) {
+        return null
+      }
+
+      return data
+    } catch (error) {
+      return null
+    }
+  }
+
+  async upload(key: string, buffer: Buffer): Promise<boolean> {
+    try {
+      await got.put(BUNNY_API_URL + key, {
+        body: buffer,
+        headers: {
+          AccessKey: BUNNY_API_ACCESS_KEY
+        }
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }

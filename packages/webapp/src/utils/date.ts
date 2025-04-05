@@ -77,6 +77,10 @@ export function getTimePeriod() {
   return timePeriod
 }
 
+export function unixDate(unix: number) {
+  return dayjs.unix(unix)
+}
+
 export function unixToDayjs(unix: number, timezone?: string) {
   const date = dayjs.unix(unix)
 

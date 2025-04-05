@@ -1,55 +1,43 @@
 import { Controller, Get } from '@nestjs/common'
-import got from 'got'
-import { CHANGELOG_API_KEY, CHANGELOG_API_URL } from '@environments'
-import { pickObject } from '@heyform-inc/utils'
-import { Auth } from '@decorator'
+import axios from 'axios'
 
 @Controller()
-@Auth()
 export class ChangelogController {
   @Get('/api/changelog/latest')
   async latest() {
-    if (!CHANGELOG_API_URL) {
+    try {
+      const response = await axios.get(
+        'https://api.github.com/repos/heyform/heyform/releases/latest'
+      )
+
+      const { id, name, body, published_at } = response.data
+
+      return {
+        id: id.toString(),
+        title: name,
+        html: body,
+        publishedAt: published_at
+      }
+    } catch (error) {
       return { id: 'unavailable', title: 'No changelog available' }
     }
-
-    const { posts } = await got
-      .get(CHANGELOG_API_URL, {
-        searchParams: {
-          key: CHANGELOG_API_KEY,
-          limit: 1
-        }
-      })
-      .json<any>()
-
-    return posts && posts.length > 0
-      ? pickObject(posts[0], ['id', 'title'])
-      : { id: 'unavailable', title: 'No changelog available' }
   }
 
   @Get('/api/changelogs')
   async changelogs() {
-    if (!CHANGELOG_API_URL) {
+    try {
+      const response = await axios.get(
+        'https://api.github.com/repos/heyform/heyform/releases'
+      )
+
+      return response.data.map(item => ({
+        id: item.id.toString(),
+        title: item.name,
+        html: item.body,
+        publishedAt: item.published_at
+      }))
+    } catch (error) {
       return []
     }
-
-    const { posts } = await got
-      .get(CHANGELOG_API_URL, {
-        searchParams: {
-          key: CHANGELOG_API_KEY
-        }
-      })
-      .json<any>()
-
-    return posts && posts.length > 0
-      ? posts.map(p =>
-          pickObject(p, [
-            'id',
-            'title',
-            'html',
-            ['published_at', 'publishedAt']
-          ])
-        )
-      : []
   }
 }

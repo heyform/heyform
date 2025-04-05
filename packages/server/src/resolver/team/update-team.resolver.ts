@@ -34,6 +34,10 @@ export class UpdateTeamResolver {
       updates.aiKey = input.aiKey
     }
 
+    if (!helper.isNil(input.aiEndpoint)) {
+      updates.aiEndpoint = input.aiEndpoint
+    }
+
     if (!helper.isNil(input.aiModel)) {
       updates.aiModel = input.aiModel
     }

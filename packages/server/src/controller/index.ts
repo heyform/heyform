@@ -6,9 +6,9 @@
  * /connect/:kind
  * /connect/:kind/callback
  */
-export * from './connect-stripe.controller'
-export * from './third-party-authorize.controller'
-export * from './social-login.controller'
+export { ConnectStripeController } from './connect-stripe.controller'
+export { ThirdPartyAuthorizeController } from './third-party-authorize.controller'
+export { SocialLoginController } from './social-login.controller'
 
 /**
  * Payment
@@ -17,37 +17,33 @@ export * from './social-login.controller'
  * /payment/payment-intent/webhook
  * /connect-stripe
  */
-export * from './payment/stripe-webhook.controller'
-export * from './payment/payment-intent-webhook.controller'
+export { StripeWebhookController } from './payment/stripe-webhook.controller'
+export { PaymentIntentWebhookController } from './payment/payment-intent-webhook.controller'
 
 /**
  * Export submissions csv
  *
  * /export/submissions
  */
-export * from './export-submissions.controller'
+export { ExportSubmissionsController } from './export-submissions.controller'
 
 /**
  * CDN Callback
  *
  * /cdn/callback
  * /api/image
+ * /api/upload
  */
-export * from './cdn/callback.controller'
-export * from './image.controller'
-/**
- * Custom domain records verification
- *
- * /custom-domain-verification
- */
-export * from './custom-domain-verification.controller'
+export { CallbackController } from './cdn/callback.controller'
+export { ImageController } from './image.controller'
+export { UploadController } from './upload.controller'
 
 /**
  * Chat
  *
  * /api/chat
  */
-export * from './chat.controller'
+export { ChatController } from './chat.controller'
 
 /**
  * Auth
@@ -55,11 +51,11 @@ export * from './chat.controller'
  * /sign-up
  * /logout
  */
-export * from './sign-up.controller'
-export * from './logout.controller'
+export { SignUpController } from './sign-up.controller'
+export { LogoutController } from './logout.controller'
 
 /**
  * The dashboard controller must be put at the end,
  * cause the dashboard route is "/*"
  */
-export * from './dashboard.controller'
+export { DashboardController } from './dashboard.controller'

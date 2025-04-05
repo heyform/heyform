@@ -56,10 +56,9 @@ export default function ImportFormModal({ projectId }: ImportFormModalProps) {
 
   return (
     <Modal
-      title={t('form.import.title', 'Import Form')}
-      description={t('form.import.description', 'Import a form from a JSON file')}
       visible
-      onClose={closeModal}
+      description={t('form.import.description', 'Import a form from a JSON file')}
+      onClose={() => closeModal('ImportFormModal')}
     >
       <div className="mt-4 space-y-4">
         <input
@@ -87,7 +86,11 @@ export default function ImportFormModal({ projectId }: ImportFormModalProps) {
         </div>
 
         <div className="flex justify-end space-x-2">
-          <Button variant="outline" disabled={loading} onClick={closeModal}>
+          <Button
+            variant="outline"
+            disabled={loading}
+            onClick={() => closeModal('ImportFormModal')}
+          >
             {t('components.cancel', 'Cancel')}
           </Button>
           <Button disabled={!formJson || loading} onClick={handleImport} loading={loading}>

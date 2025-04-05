@@ -34,7 +34,6 @@ export { CreateGroupResolver } from './audience/create-group.resolver'
 export { UpdateGroupResolver } from './audience/update-group.resolver'
 export { AddContactsToGroupResolver } from './audience/add-contacts-to-group.resolver'
 export { DeleteGroupResolver } from './audience/delete-group.resolver'
-export { ShareToAudienceResolver } from './audience/share-to-audience.resolver'
 
 export { ProjectsResolver } from './project/projects.resolver'
 export { DeleteProjectCodeResolver } from './project/delete-project-code.resolver'

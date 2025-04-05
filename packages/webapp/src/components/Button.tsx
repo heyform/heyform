@@ -13,6 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg'
   iconOnly?: boolean
   loading?: boolean
+  variant?: 'default' | 'outline' | 'ghost' | 'link'
 }
 
 interface CopyButtonProps extends Omit<ButtonProps, 'children'> {
@@ -29,13 +30,25 @@ const ButtonComponent: FC<ButtonProps> = ({
   iconOnly,
   loading,
   disabled,
+  variant = 'default',
   children,
   ...restProps
 }) => {
+  let variantClasses =
+    'border-transparent bg-primary text-primary-light data-[size=lg]:hover:bg-opacity-80 data-[size=md]:hover:bg-opacity-80'
+
+  if (variant === 'outline') {
+    variantClasses = 'border border-input bg-foreground text-primary hover:bg-accent-light'
+  } else if (variant === 'ghost' || variant === 'link') {
+    variantClasses =
+      'border-0 bg-transparent text-primary outline-0 hover:bg-accent-light hover:outline-0 aria-expanded:bg-accent-light'
+  }
+
   return (
     <button
       className={cn(
-        'relative h-11 cursor-pointer rounded-lg border border-transparent bg-primary px-3.5 text-base/6 font-medium text-primary-light transition-colors duration-100 focus:outline-none focus-visible:outline-none focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=md]:h-9 data-[size=sm]:h-9 data-[size=lg]:hover:bg-opacity-80 data-[size=md]:hover:bg-opacity-80 sm:h-10 sm:px-3 sm:text-sm/6 data-[size=md]:sm:h-9 data-[size=sm]:sm:h-8',
+        'relative h-11 cursor-pointer rounded-lg border px-3.5 text-base/6 font-medium transition-colors duration-100 focus:outline-none focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=md]:h-9 data-[size=sm]:h-9 sm:h-10 sm:px-3 sm:text-sm/6 data-[size=md]:sm:h-9 data-[size=sm]:sm:h-8',
+        variantClasses,
         {
           '[&_[data-slot=button]]:opacity-0': loading,
           'w-11 px-0 data-[size=md]:w-9 data-[size=sm]:w-9 sm:w-10 sm:px-0 data-[size=md]:sm:w-9 data-[size=sm]:sm:w-8':
@@ -62,23 +75,11 @@ const ButtonComponent: FC<ButtonProps> = ({
 }
 
 const GhostButton: FC<ButtonProps> = ({ className, ...restProps }) => (
-  <ButtonComponent
-    className={cn(
-      'border border-input bg-foreground text-primary hover:bg-accent-light',
-      className
-    )}
-    {...restProps}
-  />
+  <ButtonComponent variant="ghost" className={className} {...restProps} />
 )
 
 const LinkButton: FC<ButtonProps> = ({ className, ...restProps }) => (
-  <ButtonComponent
-    className={cn(
-      'border-0 bg-transparent text-primary outline-0 hover:bg-accent-light hover:outline-0 aria-expanded:bg-accent-light',
-      className
-    )}
-    {...restProps}
-  />
+  <ButtonComponent variant="link" className={className} {...restProps} />
 )
 
 export const CopyButton: FC<CopyButtonProps> = ({

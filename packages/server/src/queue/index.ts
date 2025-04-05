@@ -24,7 +24,6 @@ import { WebhookQueue } from './webhook.queue'
 import { Lark2Queue } from './lark2.queue'
 import { TranslateFormQueue } from './translate-form.queue'
 import { SlackQueue } from './slack.queue'
-import { PlunkQueue } from './plunk.queue'
 import { NotionQueue } from './notion.queue'
 
 export const QueueProviders = {
@@ -57,8 +56,6 @@ export const QueueProviders = {
   // Add at Jul 6, 2024
   SlackQueue,
   TranslateFormQueue,
-  // Add at Jul 9, 2024
-  PlunkQueue,
   // Add at Sep 20, 2024
   NotionQueue
 }

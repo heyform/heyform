@@ -23,7 +23,6 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { QueueService } from './queue.service'
 import { UserService } from './user.service'
-import { PlunkService } from './plunk.service'
 import { COOKIE_UTM_SOURCE_NAME } from '@config'
 import { EspoCRMAction } from '@utils'
 
@@ -45,8 +44,7 @@ export class SocialLoginService {
     @InjectModel(UserSocialAccountModel.name)
     private readonly userSocialAccountModel: Model<UserSocialAccountModel>,
     private readonly userService: UserService,
-    private readonly queueService: QueueService,
-    private readonly plunkService: PlunkService
+    private readonly queueService: QueueService
   ) {}
 
   private static callbackUrl(kind: SocialLoginTypeEnum): string {
@@ -216,18 +214,6 @@ export class SocialLoginService {
             userId,
             lead: {
               emailAddress: userInfo!.user.email,
-              name: `${userInfo!.user.firstName} ${userInfo!.user.lastName}`,
-              source
-            }
-          })
-
-          // Add at Jul 9, 2024
-          // Add to Loops
-          this.plunkService.addQueue({
-            type: 'createContact',
-            email: userInfo!.user.email,
-            data: {
-              userId: userId!,
               name: `${userInfo!.user.firstName} ${userInfo!.user.lastName}`,
               source
             }

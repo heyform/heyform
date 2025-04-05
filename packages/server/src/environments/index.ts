@@ -88,7 +88,8 @@ export const APPLE_LOGIN_TEAM_ID: string = process.env.APPLE_LOGIN_TEAM_ID
 export const APPLE_LOGIN_WEB_CLIENT_ID: string =
   process.env.APPLE_LOGIN_WEB_CLIENT_ID
 export const APPLE_LOGIN_KEY_ID: string = process.env.APPLE_LOGIN_KEY_ID
-export const APPLE_LOGIN_PRIVATE_KEY: Buffer | undefined = process.env.APPLE_LOGIN_PRIVATE_KEY
+export const APPLE_LOGIN_PRIVATE_KEY: Buffer | undefined = process.env
+  .APPLE_LOGIN_PRIVATE_KEY
   ? fs.readFileSync(process.env.APPLE_LOGIN_PRIVATE_KEY)
   : undefined
 export const GOOGLE_LOGIN_CLIENT_ID: string = process.env.GOOGLE_LOGIN_CLIENT_ID
@@ -158,3 +159,28 @@ export const FREE_TRIAL_DAYS: number = +process.env.FREE_TRIAL_DAYS || 7
 export const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export const OPENAI_GPT_MODEL = process.env.OPENAI_GPT_MODEL || 'gpt-4o'
+
+// CDN related environment variables
+export const BUNNY_API_ACCESS_KEY = process.env.BUNNY_API_ACCESS_KEY || ''
+export const BUNNY_API_URL = process.env.BUNNY_API_URL || ''
+export const BUNNY_TOKEN_KEY = process.env.BUNNY_TOKEN_KEY || 'heyform-cdn'
+export const BUNNY_URL_PREFIX = process.env.BUNNY_URL_PREFIX || ''
+export const BUNNY_CACHE_DIR = process.env.BUNNY_CACHE_DIR || '/tmp/heyform-cdn'
+export const QINIU_CALLBACK_URL = process.env.QINIU_CALLBACK_URL || ''
+
+// Sendy
+export const SENDY_API_KEY = process.env.SENDY_API_KEY || ''
+export const SENDY_API_URL = process.env.SENDY_API_URL || ''
+export const SENDY_SUBSCRIBE_LIST = process.env.SENDY_SUBSCRIBE_LIST || ''
+
+// Help Center
+export const HELP_CENTER_API_URL = process.env.HELP_CENTER_API_URL || ''
+
+// Templates
+export const TEMPLATES_TEAM_ID = process.env.TEMPLATES_TEAM_ID || ''
+
+// Teable
+export const TEABLE_API_KEY = process.env.TEABLE_API_KEY || ''
+export const TEABLE_API_URL = process.env.TEABLE_API_URL || ''
+export const TEABLE_TEMPLATE_TABLE_ID =
+  process.env.TEABLE_TEMPLATE_TABLE_ID || ''

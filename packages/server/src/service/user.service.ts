@@ -1,4 +1,4 @@
-import { hs, nanoid, timestamp } from '@heyform-inc/utils'
+import { nanoid, timestamp } from '@heyform-inc/utils'
 import { UserModel } from '@model'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
@@ -7,7 +7,6 @@ import { RedisService } from './redis.service'
 import { Queue } from 'bull'
 import { InjectQueue } from '@nestjs/bull'
 import { Lark2QueueJob } from '../queue/lark2.queue'
-import { larkBotConfig } from '@config'
 
 @Injectable()
 export class UserService {
@@ -105,7 +104,7 @@ export class UserService {
   public report(email: string) {
     this.lark2Queue.add({
       queueName: 'Lark2Queue',
-      webhookUrl: larkBotConfig.reportUrl,
+      webhookUrl: null,
       message: {
         msg_type: 'text',
         content: {
@@ -113,22 +112,5 @@ export class UserService {
         }
       }
     })
-  }
-
-  public async blockUsers(ids: string[]) {
-    await this.userModel.updateMany(
-      {
-        _id: {
-          $in: ids
-        },
-        isBlocked: false
-      },
-      {
-        isBlocked: true,
-        blockedAt: timestamp(),
-        isDeletionScheduled: true,
-        deletionScheduledAt: timestamp() + hs('30d')
-      }
-    )
   }
 }

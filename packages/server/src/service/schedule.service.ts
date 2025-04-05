@@ -23,9 +23,7 @@ export class ScheduleService implements OnApplicationBootstrap {
     private readonly resumeFailedTaskSchedule: Queue,
     // Add at Dec 27, 2021 (v2021.12.4)
     @InjectQueue('DeleteUserAccountSchedule')
-    private readonly deleteUserAccountSchedule: Queue,
-    @InjectQueue('BlockUserSchedule')
-    private readonly blockUserSchedule: Queue
+    private readonly deleteUserAccountSchedule: Queue
   ) {}
 
   /**
@@ -72,11 +70,6 @@ export class ScheduleService implements OnApplicationBootstrap {
       }),
       // Add at Dec 27, 2021 (v2021.12.4)
       this.deleteUserAccountSchedule.add(null, {
-        repeat: {
-          cron: '0 0 */1 * * *'
-        }
-      }),
-      this.blockUserSchedule.add(null, {
         repeat: {
           cron: '0 0 */1 * * *'
         }

@@ -30,7 +30,11 @@ interface ModalProps extends DOMProps {
   overlayProps?: DialogOverlayProps
   contentProps?: DialogContentProps
   isCloseButtonShow?: boolean
+  visible?: boolean
+  title?: ReactNode
+  description?: ReactNode
   onOpenChange?: (open: boolean) => void
+  onClose?: (name?: string) => void
 }
 
 const ModalComponent: FC<ModalProps> = ({
@@ -39,21 +43,26 @@ const ModalComponent: FC<ModalProps> = ({
   overlayProps,
   contentProps,
   isCloseButtonShow = true,
+  visible,
   onOpenChange,
+  onClose,
   children
 }) => {
   const { t } = useTranslation()
 
   const timerRef = useRef<Timeout>(undefined)
-  const [lazyOpen, setLazyOpen] = useState(open)
+  const [lazyOpen, setLazyOpen] = useState(open || visible)
 
   const handleOpenChange = useCallback(
     (open: boolean) => {
       if (!loading) {
         onOpenChange?.(open)
+        if (!open && onClose) {
+          onClose()
+        }
       }
     },
-    [loading, onOpenChange]
+    [loading, onOpenChange, onClose]
   )
 
   useEffect(() => {
@@ -61,15 +70,15 @@ const ModalComponent: FC<ModalProps> = ({
       clearTimeout(timerRef.current)
     }
 
-    if (open === false) {
+    if (open === false && visible === false) {
       timerRef.current = setTimeout(() => setLazyOpen(false), 200)
     } else {
       setLazyOpen(true)
     }
-  }, [open])
+  }, [open, visible])
 
   return (
-    <Root open={open} onOpenChange={handleOpenChange}>
+    <Root open={open || visible} onOpenChange={handleOpenChange}>
       <Portal>
         <Overlay
           className={cn(
@@ -114,10 +123,7 @@ const ModalComponent: FC<ModalProps> = ({
   )
 }
 
-interface SimpleModalProps extends ModalProps {
-  title?: ReactNode
-  description?: ReactNode
-}
+interface SimpleModalProps extends ModalProps {}
 
 const SimpleModal: FC<SimpleModalProps> = ({ title, description, children, ...restProps }) => {
   return (

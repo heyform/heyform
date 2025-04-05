@@ -1,7 +1,7 @@
 import { Auth, FormGuard, Team, User } from '@decorator'
 import { UpdateFormSchemasInput } from '@graphql'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { FormService, PlunkService, UserService } from '@service'
+import { FormService, UserService } from '@service'
 import { BadRequestException, HttpStatus } from '@nestjs/common'
 import { helper, timestamp } from '@heyform-inc/utils'
 import { TeamModel, UserModel } from '@model'
@@ -11,8 +11,7 @@ import { TeamModel, UserModel } from '@model'
 export class PublishFormResolver {
   constructor(
     private readonly formService: FormService,
-    private readonly userService: UserService,
-    private readonly plunkService: PlunkService
+    private readonly userService: UserService
   ) {}
 
   /**
@@ -54,13 +53,6 @@ export class PublishFormResolver {
     if (!user.hasPublishedForm) {
       await this.userService.update(user.id, {
         publishedFormAt: timestamp()
-      })
-
-      this.plunkService.addQueue({
-        type: 'trackEvent',
-        email: user.email,
-        event: 'user-publish',
-        data: {}
       })
     }
 

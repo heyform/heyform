@@ -27,7 +27,7 @@ export class OpenAIService {
       return new OpenAIApi(
         new Configuration({
           apiKey: team.aiKey,
-          basePath: OPENAI_BASE_URL
+          basePath: team.aiEndpoint || OPENAI_BASE_URL
         })
       )
     }

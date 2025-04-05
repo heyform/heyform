@@ -82,7 +82,7 @@ i18n
       order: ['cookie', 'navigator'],
       caches: ['cookie'],
       lookupCookie: LOCALE_COOKIE_NAME,
-      convertDetectedLanguage: lng => {
+      convertDetectedLanguage: (lng: string) => {
         const lowerLng = lng.toLowerCase()
 
         return (

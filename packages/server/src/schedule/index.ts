@@ -6,7 +6,6 @@ import { ExpiredSubscriptionSchedule } from './expired-subscription.schedule'
 import { RefreshThirdPartyOauthSchedule } from './refresh-third-party-oauth.schedule'
 import { ResumeFailedTaskSchedule } from './resume-failed-task.schedule'
 import { DeleteUserAccountSchedule } from './delete-user-account.schedule'
-import { BlockUserSchedule } from './block-user.schedule'
 
 export const ScheduleProviders = {
   DeleteFormInTrashSchedule,
@@ -19,8 +18,7 @@ export const ScheduleProviders = {
   // ResetSubmissionQuotaSchedule,
   ResumeFailedTaskSchedule,
   // Add at Dec 27, 2021 (v2021.12.4)
-  DeleteUserAccountSchedule,
-  BlockUserSchedule
+  DeleteUserAccountSchedule
 }
 
 export const ScheduleModules = Object.keys(ScheduleProviders).map(

@@ -4,7 +4,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 // Custom domain feature removed
 // import { CustomDomainModel } from 'src/model/custom-domain.model'
-import { GroupModel } from './group.model'
 import { BillingCycleEnum } from './invoice.model'
 import { PlanModel } from './plan.model'
 import { ProjectModel } from './project.model'
@@ -138,9 +137,6 @@ export class TeamModel extends Document {
    */
   // Projects
   projects?: ProjectModel[]
-
-  // Audience Groups
-  groups?: GroupModel[]
 
   // Team Plan
   plan?: PlanModel

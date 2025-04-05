@@ -140,6 +140,10 @@ export class UpdateTeamInput extends TeamDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
+  aiEndpoint?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
   aiModel?: string
 }
 
@@ -319,6 +323,15 @@ export class TeamType extends PublicTeamType {
 
   @Field({ nullable: true })
   trialEndAt?: number
+
+  @Field({ nullable: true })
+  aiKey?: string
+
+  @Field({ nullable: true })
+  aiEndpoint?: string
+
+  @Field({ nullable: true })
+  aiModel?: string
 
   @Field()
   createdAt: Date
