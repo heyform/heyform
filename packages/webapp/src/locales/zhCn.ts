@@ -719,6 +719,7 @@ export default {
   },
   languages: {
     en: 'English',
+    ptBr: 'Português brasileiro',
     zhCn: 'Chinese (simplified)',
     zhTw: 'Chinese (traditional)',
     fr: 'French',
