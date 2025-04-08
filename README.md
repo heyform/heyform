@@ -92,6 +92,7 @@ You'll find a lot of resources to help you get started with HeyForm in the [help
 
 - Have a question? Join the [Discord server](https://discord.gg/sgT4v4GSTe) and get instant help.
 - Found a bug? [Create an issue](https://github.com/heyform/heyform/issues/new/choose)
+- You can also [Ask HeyForm Guru](https://gurubase.io/g/heyform), it is a HeyForm-focused AI to answer your questions.
 
 ## License
 
