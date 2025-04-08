@@ -75,8 +75,12 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 	<img src="https://d16t0pc4846x52.cloudfront.net/deploylobe.svg" alt="Deploy to RepoCloud" height="36" />
 </a>
 
-<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-a47e56f0ea9f460d8d33" style="margin-left:24px">
+<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-a47e56f0ea9f460d8d33" style="margin-left:32px">
 	<img src="https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg" alt="Deploy on Alibaba Cloud" height="36" />
+</a>
+
+<a href="https://template.run.claw.cloud/?referralCode=6Z97QQWKHWR9&openapp=system-fastdeploy%3FtemplateName%3Dheyform" style="margin-left:40px">
+	<img src="https://raw.githubusercontent.com/ClawCloud/Run-Template/refs/heads/main/Run-on-ClawCloud.svg" alt="Run on ClawCloud Run" height="36" />
 </a>
 
 ## Local development
