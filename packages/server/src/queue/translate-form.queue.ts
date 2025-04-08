@@ -18,6 +18,7 @@ interface TranslateFormQueueJob {
 
 const LANGUAGES = {
   en: 'English',
+  es: 'Spanish',
   de: 'German',
   fr: 'French',
 	pl: 'Polish',
