@@ -173,9 +173,6 @@ export const SENDY_API_KEY = process.env.SENDY_API_KEY || ''
 export const SENDY_API_URL = process.env.SENDY_API_URL || ''
 export const SENDY_SUBSCRIBE_LIST = process.env.SENDY_SUBSCRIBE_LIST || ''
 
-// Help Center
-export const HELP_CENTER_API_URL = process.env.HELP_CENTER_API_URL || ''
-
 // Templates
 export const TEMPLATES_TEAM_ID = process.env.TEMPLATES_TEAM_ID || ''
 

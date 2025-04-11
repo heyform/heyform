@@ -39,3 +39,4 @@ packages/server/static
 .qodo
 packages/server/cache
 .gitlab-ci.yml
+.tasks

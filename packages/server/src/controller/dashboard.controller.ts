@@ -3,7 +3,8 @@ import { Response } from 'express'
 
 @Controller()
 export class DashboardController {
-  @Get('/*')
+  // @Get('/*')
+  @Get(['/', '/dashboard', '/dashboard/*'])
   @Header('X-Frame-Options', 'SAMEORIGIN')
   index(@Res() res: Response) {
     return res.render('index', {

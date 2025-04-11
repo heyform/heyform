@@ -29,6 +29,7 @@ import { QueueModules, QueueProviders } from './queue'
 import * as Resolvers from './resolver'
 import { ScheduleModules, ScheduleProviders } from './schedule'
 import * as Services from './service'
+import { ApiModule } from './api/api.module'
 
 @Module({
   imports: [
@@ -53,7 +54,8 @@ class ServiceModule {}
       ttl: hs('1m'),
       limit: 1000
     }),
-    ServiceModule
+    ServiceModule,
+    ApiModule
   ],
   controllers: [...Object.values(Controllers)],
   providers: [...Object.values(Resolvers), LowerCaseScalar]
