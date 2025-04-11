@@ -27,7 +27,7 @@ export class ChangelogService {
         .json<GitHubRelease>()
 
       // Log the response for debugging
-      console.log('GitHub API Response:', response)
+      // console.log('GitHub API Response:', response)
 
       return {
         version: response.tag_name || 'unknown',

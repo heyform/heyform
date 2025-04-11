@@ -6,12 +6,14 @@ import {
 } from '@heyform-inc/utils'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
+import { resolve } from 'path'
 import * as process from 'process'
 
 dotenv.config()
 
 // environment
 export const NODE_ENV: string = process.env.NODE_ENV || 'development'
+export const ROOT_PATH = process.cwd()
 
 // application
 export const APP_LISTEN_PORT: number = +process.env.APP_LISTEN_PORT || 8080
@@ -25,6 +27,17 @@ export const COOKIE_DOMAIN: string = process.env.COOKIE_DOMAIN
 export const SESSION_KEYS: string[] = [process.env.KEY1]
 export const SESSION_MAX_AGE: string = process.env.SESSION_MAX_AGE || '15d'
 
+// Email templates
+export const EMAIL_TEMPLATES_DIR: string = resolve(
+  ROOT_PATH,
+  'resources/email-templates'
+)
+
+// static
+export const STATIC_DIR: string = resolve(ROOT_PATH, 'static')
+export const VIEW_DIR: string = resolve(ROOT_PATH, 'view')
+export const STATIC: string = process.env.STATIC || 'static'
+
 // upload
 export const UPLOAD_IMAGE_TYPE: string[] = (process.env.UPLOAD_IMAGE_TYPE
   ? process.env.UPLOAD_IMAGE_TYPE.split(',').map(mime)
@@ -36,9 +49,7 @@ export const UPLOAD_FILE_TYPE: string[] = (process.env.UPLOAD_FILE_TYPE
   : commonFileMimeTypes) as any
 export const UPLOAD_FILE_SIZE: number =
   +process.env.UPLOAD_FILE_SIZE || bytes('10mb')
-
-// static
-export const STATIC: string = process.env.STATIC || 'static'
+export const UPLOAD_DIR: string = resolve(STATIC_DIR, 'upload')
 
 // encryption
 export const ENCRYPTION_KEY: string = process.env.KEY2

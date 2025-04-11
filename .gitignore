@@ -40,3 +40,4 @@ packages/server/static
 packages/server/cache
 .gitlab-ci.yml
 .tasks
+packages/server/uploads

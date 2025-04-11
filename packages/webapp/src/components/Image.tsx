@@ -19,6 +19,26 @@ interface BackgroundProps extends ComponentProps {
   }
 }
 
+// Helper function to process avatar paths
+function processImagePath(src: string, resize?: { width?: number; height?: number }) {
+  // Check if it's a relative path (starts with slash but not http/https) - these are likely DB avatar paths
+  if (src && src.startsWith('/') && !src.startsWith('//') && !src.startsWith('/static/')) {
+    // This is likely a DB avatar path - prefix with API path to properly resolve it
+    let avatarUrl = `/api/avatar${src}`
+
+    // Add resize parameters directly to avatar URL if needed
+    if (resize && (helper.isNumber(resize.width) || helper.isNumber(resize.height))) {
+      const params: Record<string, string> = {}
+      if (helper.isNumber(resize.width)) params.w = String(resize.width)
+      if (helper.isNumber(resize.height)) params.h = String(resize.height)
+      avatarUrl = getDecoratedURL(avatarUrl, params)
+    }
+
+    return avatarUrl
+  }
+  return src
+}
+
 const Background: FC<BackgroundProps> = ({
   as: Tag = 'div',
   className,
@@ -31,21 +51,29 @@ const Background: FC<BackgroundProps> = ({
   const { width, height } = resize
 
   const src = useMemo(() => {
-    if (helper.isURL(rawSrc) && (helper.isNumber(width) || helper.isNumber(height))) {
+    // Process avatar paths with resize parameters included
+    const processedSrc = processImagePath(rawSrc as string, resize)
+
+    // Only use the image API for actual URLs, not for avatar paths
+    if (
+      helper.isURL(processedSrc) &&
+      !processedSrc.startsWith('/api/avatar') &&
+      (helper.isNumber(width) || helper.isNumber(height))
+    ) {
       return getDecoratedURL(
         '/api/image',
         removeObjectNil({
-          url: rawSrc as string,
+          url: processedSrc as string,
           w: width,
           h: height
         })
       )
     }
 
-    return rawSrc
+    return processedSrc
   }, [rawSrc, height, width])
 
-  const isImage = useMemo(() => helper.isURL(src), [src])
+  const isImage = useMemo(() => helper.isURL(src) || src?.startsWith('/api/avatar'), [src])
 
   return (
     <Tag
@@ -61,8 +89,6 @@ const Background: FC<BackgroundProps> = ({
   )
 }
 
-const isURL = (url: string) => /^https?:\/\//i.test(url)
-
 const ImageComponent: FC<ImageProps> = ({
   className,
   src: rawSrc,
@@ -75,22 +101,28 @@ const ImageComponent: FC<ImageProps> = ({
   const { width, height } = resize
 
   const src = useMemo(() => {
-    if (!isURL(rawSrc as string)) {
-      return
+    // Process avatar paths with resize parameters included
+    const processedSrc = processImagePath(rawSrc as string, resize)
+
+    if (!helper.isValid(processedSrc)) {
+      return undefined
     }
 
+    // Only use the image API for actual URLs, not for avatar paths
     if (helper.isNumber(width) || helper.isNumber(height)) {
-      return getDecoratedURL(
-        '/api/image',
-        removeObjectNil({
-          url: rawSrc as string,
-          w: width,
-          h: height
-        })
-      )
+      if (!processedSrc.startsWith('/api/avatar')) {
+        return getDecoratedURL(
+          '/api/image',
+          removeObjectNil({
+            url: processedSrc as string,
+            w: width,
+            h: height
+          })
+        )
+      }
     }
 
-    return rawSrc
+    return processedSrc
   }, [rawSrc, height, width])
 
   function handleLoad(event: SyntheticEvent<HTMLImageElement, Event>) {

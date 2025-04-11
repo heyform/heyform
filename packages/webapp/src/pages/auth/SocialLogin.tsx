@@ -26,15 +26,15 @@ const SocialLogin: FC<SocialLoginProps> = () => {
   return (
     <>
       <div className="flex items-center gap-4">
-        <Button.Ghost className="block w-full" onClick={() => handleConnect('google')}>
+        <Button variant="outline" className="block w-full" onClick={() => handleConnect('google')}>
           <IconGoogle className="h-4 w-4" />
           <span>Google</span>
-        </Button.Ghost>
+        </Button>
 
-        <Button.Ghost className="block w-full" onClick={() => handleConnect('apple')}>
+        <Button variant="outline" className="block w-full" onClick={() => handleConnect('apple')}>
           <IconApple className="-mt-0.5 h-4 w-4" />
           <span>Apple</span>
-        </Button.Ghost>
+        </Button>
       </div>
 
       <Divider>{t('login.continueWith')}</Divider>

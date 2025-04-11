@@ -1,11 +1,12 @@
-import { SMTP_FROM } from '@environments'
-import { helper } from '@heyform-inc/utils'
-import { EmailTemplateModel, UserLangEnum } from '@model'
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
-import { InjectModel } from '@nestjs/mongoose'
 import { JobOptions, Queue } from 'bull'
-import { Model } from 'mongoose'
+import { readFileSync, readdirSync } from 'fs'
+import { basename, join, extname } from 'path'
+
+import { helper } from '@heyform-inc/utils'
+
+import { EMAIL_TEMPLATES_DIR, SMTP_FROM } from '@environments'
 
 interface JoinWorkspaceAlertOptions {
   teamName: string
@@ -53,13 +54,19 @@ interface UserSecurityAlertOptions {
   geoLocation: string
 }
 
+const HTML_EXT = '.html'
+const TEMPLATE_META_REGEX = /^---([\s\S]*?)---[\n\s\S]\n/
+
 @Injectable()
 export class MailService {
-  constructor(
-    @InjectQueue('MailQueue') private readonly mailQueue: Queue,
-    @InjectModel(EmailTemplateModel.name)
-    private readonly emailTemplateModel: Model<EmailTemplateModel>
-  ) {}
+  private readonly emailTemplates: Record<
+    string,
+    { subject: string; html: string }
+  > = {}
+
+  constructor(@InjectQueue('MailQueue') private readonly mailQueue: Queue) {
+    this.init()
+  }
 
   async accountDeletionAlert(to: string) {
     await this.addQueue('account_deletion_alert', to)
@@ -141,16 +148,46 @@ export class MailService {
     await this.addQueue('user_security_alert', to, options)
   }
 
+  private init() {
+    const allFiles = readdirSync(EMAIL_TEMPLATES_DIR)
+    const filePaths = allFiles
+      .filter(file => extname(file) === HTML_EXT)
+      .map(file => join(EMAIL_TEMPLATES_DIR, file))
+
+    for (const filePath of filePaths) {
+      const name = basename(filePath, HTML_EXT)
+      const content = readFileSync(filePath).toString('utf8')
+      const matches = content.match(TEMPLATE_META_REGEX)
+
+      const html = content.replace(TEMPLATE_META_REGEX, '')
+
+      if (matches) {
+        const metaLines = matches[1].split('\n')
+        const metaObject: Record<string, string> = {}
+
+        metaLines.forEach(line => {
+          const [key, value] = line.split(':')
+
+          if (helper.isValid(key) && helper.isValid(value)) {
+            metaObject[key.trim()] = value.trim()
+          }
+        })
+
+        this.emailTemplates[name] = {
+          subject: metaObject.title,
+          html
+        }
+      }
+    }
+  }
+
   private async addQueue(
     templateName: string,
     to: string,
     replacements?: Record<string, any>,
     options?: JobOptions
   ) {
-    const result = await this.emailTemplateModel.findOne({
-      name: templateName,
-      lang: UserLangEnum.EN
-    })
+    const result = this.emailTemplates[templateName]
 
     if (helper.isEmpty(result)) {
       return
@@ -158,7 +195,6 @@ export class MailService {
 
     let subject = result!.subject
     let html = result!.html
-    let text = result!.text
 
     if (helper.isValid(replacements) && helper.isPlainObject(replacements)) {
       Object.keys(replacements!).forEach(key => {
@@ -167,7 +203,6 @@ export class MailService {
 
         subject = subject.replace(regex, value)
         html = html?.replace(regex, value)
-        text = text?.replace(regex, value)
       })
     }
 
@@ -175,10 +210,9 @@ export class MailService {
       {
         queueName: 'MailQueue',
         data: {
-          from: result!.from || SMTP_FROM,
+          from: SMTP_FROM,
           to,
           subject,
-          text,
           html
         }
       },

@@ -26,6 +26,15 @@ declare global {
         windowHeight: number
         screenHeight: number
       }
+      homepageURL?: string
+      cookieDomain?: string
+      stripePublishableKey?: string
+      geetestCaptchaId?: string
+      googleRecaptchaKey?: string
+      appDisableRegistration?: boolean | string
+      disableLoginWithApple?: boolean | string
+      disableLoginWithGoogle?: boolean | string
+      verifyUserEmail?: boolean | string
     }
     __APOLLO_DEVTOOLS_GLOBAL_HOOK__: boolean
   }

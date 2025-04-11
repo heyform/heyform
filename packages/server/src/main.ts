@@ -61,6 +61,32 @@ async function bootstrap() {
     })
   )
 
+  // Serve uploaded files - used by the community version
+  app.use(
+    '/static/upload',
+    serveStatic(join(process.cwd(), 'uploads'), {
+      maxAge: '30d',
+      extensions: ['png', 'jpg', 'jpeg', 'webp', 'gif']
+    })
+  )
+
+  // Middleware is no longer needed as we'll be using absolute URLs for avatars
+  // This code is kept but commented out for reference
+  /*
+  app.use((req, res, next) => {
+    // Check if URL looks like a profile avatar path from DB (starts with slash, then has segments)
+    if (req.path && req.path.match(/^\/[A-Za-z0-9]{8}\/[A-Za-z0-9]{24}\//)) {
+      // Extract the filename (last segment)
+      const segments = req.path.split('/');
+      const filename = segments[segments.length - 1];
+
+      // Redirect to the actual file in uploads directory
+      return res.redirect(`/static/upload/${filename}`);
+    }
+    next();
+  });
+  */
+
   // Template rendering
   app.engine('html', hbs.__express)
   app.setBaseViewsDir(join(__dirname, '..', 'view'))

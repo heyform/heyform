@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>{{title}}</title>
-    <meta name="description" content="{{description}}" />
+    <title>HeyForm</title>
+    <link href="https://fonts.gstatic.com" rel="dns-prefetch" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link href="/static/favicon.ico" rel="shortcut icon" />
     <link href="/static/favicon.svg" rel="mask-icon" />
@@ -15,196 +15,49 @@
     <meta content="#fff" name="theme-color" />
     <meta content="HeyForm" name="apple-mobile-web-app-title" />
     <meta content="telephone=no,email=no" name="format-detection" />
-
-    <meta content="noindex,nofollow" name="robots" />
-
-    <meta property="og:url" content="https://my.heyform.net" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="{{title}}" />
-    <meta property="og:description" content="{{description}}" />
-    <meta property="og:image" content="https://forms.b-cdn.net/website/og.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://my.heyform.net" />
-    <meta name="twitter:title" content="{{title}}" />
-    <meta name="twitter:description" content="{{description}}" />
-    <meta name="twitter:image" content="https://forms.b-cdn.net/website/og.png" />
-
+    <meta content="on" http-equiv="x-dns-prefetch-control" />
+    <link href="/static/initial.css" rel="stylesheet" />
     <link href="/static/manifest.webmanifest" rel="manifest" />
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            font-family: Inter, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        #root:not(:empty) + #loading {
-            display: none;
-        }
-
-        @-webkit-keyframes loading-spin {
-            to {
-                -webkit-transform: rotate(1turn);
-                transform: rotate(1turn);
-            }
-        }
-
-        @keyframes loading-spin {
-            to {
-                transform: rotate(1turn);
-            }
-        }
-
-        #loading {
-            position: relative;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-            height: 100vh;
-            background: rgb(244, 244, 245);
-        }
-
-        #loading .loading-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: rgb(9, 9, 11);
-            -webkit-animation: loading-spin 1s linear infinite;
-            animation: loading-spin 1s linear infinite;
-        }
-
-        #loading .loading-icon circle {
-            opacity: 0.25;
-        }
-
-        #loading .loading-icon path {
-            opacity: 0.75;
-        }
-
-        #loading .loading-logo {
-          position: absolute;
-          top: 1rem;
-          left: 1rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        #loading .loading-logo svg {
-          width: auto;
-          height: 2rem;
-        }
-
-        #loading .loading-logo span {
-          font-weight: 500;
-          font-size: 1.25rem;
-          line-height: 1.75rem;
-        }
-
-        .dark #loading {
-            background: rgb(9, 9, 11);
-        }
-
-        .dark #loading .loading-icon {
-            color: rgb(255, 255, 255);
-        }
-
-        .dark #loading .loading-logo {
-            color: rgb(255, 255, 255);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            #loading {
-                background: rgb(9, 9, 11);
-            }
-
-            #loading .loading-icon {
-                color: rgb(255, 255, 255);
-            }
-        }
-    </style>
-    <script src="https://cdn.trackdesk.com/tracking.js"></script>
+    <link
+      defer
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link defer href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/css/flag-icons.min.css" rel="stylesheet" />
     <script>
-      // https://github.com/heyform/heyform/blob/11f0ffcb42793d9fbbeadef46131604bbff83db8/packages/webapp/index.html#L30
-      // https://github.com/heyform/heyform/blob/11f0ffcb42793d9fbbeadef46131604bbff83db8/packages/form-renderer/src/Renderer.tsx#L116
       ;(function () {
         const userAgent = window.navigator.userAgent;
-        const heyform = {};
-
-        heyform.device = {
-          ios: /iPad|iPhone|iPod/i.test(userAgent),
-          android: /Android/i.test(userAgent),
-          mobile: /Android|iPad|iPhone|iPod/i.test(userAgent),
-          windowHeight: window.innerHeight,
-          screenHeight: window.screen.height
+        // Initialize heyform with device info first
+        const heyform = {
+          device: {
+            ios: /iPad|iPhone|iPod/i.test(userAgent),
+            android: /Android/i.test(userAgent),
+            mobile: /Android|iPad|iPhone|iPod/i.test(userAgent),
+            windowHeight: window.innerHeight,
+            screenHeight: window.screen.height
+          }
         };
-
         window.heyform = heyform;
-
-        // Dark mode
-        const APPEARANCE_STORAGE_KEY = 'HEYFORM_APPEARANCE';
-        const darkMode = (
-          window.localStorage.getItem(APPEARANCE_STORAGE_KEY) === JSON.stringify('dark') ||
-          window.matchMedia('(prefers-color-scheme: dark)').matches
-        );
-
-        if (darkMode) {
-          document.documentElement.classList.add('dark');
-        }
       })()
     </script>
+    <!-- {{#if rendererData}}
+    <script>
+      // Merge rendererData from server if it exists
+      window.heyform = Object.assign(window.heyform || {}, {{{json rendererData}}});
+    </script>
+    {{/if}} -->
   </head>
   <body>
     <div id="root"></div>
     <div id="loading">
-      <div class="loading-logo">
-        <svg width="107" height="108" viewBox="0 0 107 108" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M51.1725 2.20023C53.1182 3.66395 54.199 5.65879 54.4151 8.18475L54.449 8.16536L54.449 8.75802C54.4534 8.8894 54.4556 9.02212 54.4556 9.1562L54.4489 9.15981L54.4489 60.4292C54.4944 63.1036 55.4938 65.2214 57.4471 66.7825C60.375 68.8737 63.428 69.0681 66.6062 67.3656L25.0451 91.3037C21.9599 92.8928 19.009 92.7549 16.1923 90.8901C14.2508 89.4296 13.1705 87.4401 12.9512 84.9219L12.9093 84.9459L12.9094 32.4261C12.8106 29.8624 11.8134 27.823 9.91771 26.3079C8.98241 25.6398 8.03433 25.1654 7.07349 24.8845C5.70877 24.5233 5.70877 22.8209 6.71476 22.2942C9.00727 20.9738 20.8756 14.1379 42.3197 1.78665C45.4049 0.197598 48.3559 0.335461 51.1725 2.20023Z" fill="#9DE8FF"></path>
-          <path d="M54.4488 60.422C54.4197 55.2586 50.2053 47.7514 41.6675 47.7514C39.2951 47.7514 37.0837 48.3714 35.0334 49.6112L73.1372 27.6703C75.0261 26.5729 77.223 25.9442 79.5674 25.9442C86.5978 25.9442 92.3025 31.5984 92.3485 38.5907C92.3485 38.5921 92.3486 38.6206 92.3486 38.6762L92.3488 77.404C92.3948 80.0776 93.3942 82.1947 95.347 83.7554C96.2931 84.4312 97.2522 84.9088 98.2245 85.1885C99.6261 85.6432 99.4651 87.2821 98.5564 87.7654C93.2607 90.8157 82.6035 96.9644 66.5848 106.212C63.4996 107.801 60.5487 107.663 57.7321 105.798C55.7857 104.334 54.7048 102.338 54.4892 99.8109L54.449 99.834V90.2561C54.449 80.3041 54.4489 60.434 54.4488 60.422Z" fill="#106BF3"></path>
-          <path d="M41.6675 47.7514C48.7265 47.7514 54.449 53.4517 54.449 60.4833C54.449 67.5415 54.449 72.1719 54.449 74.3743C54.449 74.3743 32.457 87.032 29.2694 88.8667C29.0203 89.01 24.9033 91.3733 24.9033 91.3733C28.5598 89.01 28.8861 85.8399 28.8861 84.4322C28.8861 80.3505 28.8861 72.3676 28.8861 60.4833C28.8861 53.4517 34.6085 47.7514 41.6675 47.7514Z" fill="#57AAF9"></path>
-        </svg>
-        <span>HeyForm</span>
-      </div>
-      <svg
-        class="loading-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="12"
-          cy="12"
-          r="9"
-          stroke="currentColor"
-          stroke-opacity="0.25"
-          stroke-width="2"
-          stroke-linejoin="round"
-        ></circle>
+      <svg class="loading-icon" fill="none" style="width:1.25rem; height:1.25rem;" viewBox="0 0 24 24"
+           xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path
-          d="M6.70993 19.2812C5.1723 18.164 4.02781 16.5887 3.44049 14.7812C2.85317 12.9736 2.85317 11.0264 3.44049 9.21885C4.02781 7.41126 5.1723 5.836 6.70993 4.71885C8.24756 3.60169 10.0994 3 12 3"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></path>
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          fill="currentColor"></path>
       </svg>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script src="./src/main.tsx" type="module"></script>
   </body>
 </html>

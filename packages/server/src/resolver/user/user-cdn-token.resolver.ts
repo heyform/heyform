@@ -25,7 +25,15 @@ export class UserCdnTokenResolver {
       throw new BadRequestException('Upload file type not supported')
     }
 
-    const key = `${user.id}/${nanoid()}_${encodeURIComponent(input.filename)}`
+    // Generate a random prefix for the avatar path
+    const randomPrefix = nanoid(8)
+
+    // Create the key in the format expected by the database
+    // Format: /{randomPrefix}/{userId}/{nanoid}_{filename}
+    const key = `/${randomPrefix}/${user.id}/${nanoid()}_${encodeURIComponent(
+      input.filename
+    )}`
+
     const token = this.cdnService.uploadToken(
       UPLOAD_IMAGE_TYPE,
       UPLOAD_IMAGE_SIZE,
