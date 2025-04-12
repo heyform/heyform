@@ -22,7 +22,13 @@ interface BackgroundProps extends ComponentProps {
 // Helper function to process avatar paths
 function processImagePath(src: string, resize?: { width?: number; height?: number }) {
   // Check if it's a relative path (starts with slash but not http/https) - these are likely DB avatar paths
-  if (src && src.startsWith('/') && !src.startsWith('//') && !src.startsWith('/static/')) {
+  if (
+    src &&
+    src.startsWith('/') &&
+    !src.startsWith('//') &&
+    !src.startsWith('/static/') &&
+    !src.startsWith('http')
+  ) {
     // This is likely a DB avatar path - prefix with API path to properly resolve it
     let avatarUrl = `/api/avatar${src}`
 
