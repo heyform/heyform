@@ -67,8 +67,8 @@ Interested in self-hosting HeyForm on your server? Take a look at the [self-host
 	<img src="https://zeabur.com/button.svg" alt="Deploy on Zeabur" />
 </a>
 
-<a href="https://cloud.sealos.io/?openapp=system-template%3FtemplateName%3Dheyform" style="margin-left:16px">
-	<img src="https://cdn.jsdelivr.net/gh/labring-actions/templates@main/Deploy-on-Sealos.svg" alt="Deploy on Sealos" height="36" />
+<a href="https://template.sealos.io/deploy?templateName=heyform" style="margin-left:16px">
+	<img src="https://sealos.io/Deploy-on-Sealos.svg" alt="Deploy on Sealos" height="36" />
 </a>
 
 <a href="https://repocloud.io/details/?app_id=283" style="margin-left:24px">
