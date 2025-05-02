@@ -20,7 +20,6 @@ export const APP_LISTEN_PORT: number = +process.env.APP_LISTEN_PORT || 8080
 export const APP_LISTEN_HOSTNAME: string =
   process.env.APP_LISTEN_HOSTNAME || '127.0.0.1'
 export const APP_HOMEPAGE: string = process.env.APP_HOMEPAGE
-
 // cookie
 export const COOKIE_MAX_AGE: string = process.env.COOKIE_MAX_AGE || '1y'
 export const COOKIE_DOMAIN: string = process.env.COOKIE_DOMAIN

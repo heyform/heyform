@@ -26,7 +26,7 @@ export default function FormShare() {
   const { sharingURLPrefix } = useWorkspaceStore()
   const { form, selectEmbedType } = useFormStore()
 
-  const shareLink = useMemo(() => sharingURLPrefix + '/f/' + formId, [formId, sharingURLPrefix])
+  const shareLink = useMemo(() => sharingURLPrefix + '/form/' + formId, [formId, sharingURLPrefix])
 
   function handleShareEmail() {
     const url = getDecoratedURL('mailto:', {

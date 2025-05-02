@@ -1,7 +1,9 @@
-import { FC, SVGAttributes } from 'react'
+import { FC, HTMLAttributes, SVGAttributes } from 'react'
 
 import Icon from '@/assets/loader.svg?react'
 import { cn } from '@/utils'
+
+type ComponentProps<E = HTMLElement> = HTMLAttributes<E>
 
 const LoaderComponent: FC<Omit<ComponentProps<SVGSVGElement>, 'children'>> = ({
   className,
@@ -10,7 +12,7 @@ const LoaderComponent: FC<Omit<ComponentProps<SVGSVGElement>, 'children'>> = ({
   return <Icon className={cn('h-5 w-5 animate-spin', className)} {...restProps} />
 }
 
-const ThreeDot: FC<SVGAttributes<HTMLOrSVGElement>> = props => {
+const ThreeDot: FC<SVGAttributes<SVGElement>> = props => {
   return (
     <svg width="22" height="5" viewBox="0 0 21 5" fill="none" {...props}>
       <rect className="loader-span" width="5" height="5" rx="2.5" fill="currentColor" />

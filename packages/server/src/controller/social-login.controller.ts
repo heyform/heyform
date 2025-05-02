@@ -110,7 +110,7 @@ export class SocialLoginController {
       })
 
       const user = await this.userService.findById(userId)
-      const baseUri = user.isOnboarded ? '/' : '/onboarding'
+      const baseUri = !user.isOnboardRequired ? '/' : '/onboarding'
 
       const key = `redirect_uri:${query.state}`
       let redirectUri = await this.redisService.get(key)

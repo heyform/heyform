@@ -37,7 +37,7 @@ export class ChangelogService {
       }
     } catch (error) {
       // Log the error for debugging
-      console.error('GitHub API Error:', error)
+      // console.error('GitHub API Error:', error)
 
       if (error instanceof got.HTTPError) {
         throw new HttpException(
@@ -70,7 +70,7 @@ export class ChangelogService {
         publishedAt: release.published_at
       }))
     } catch (error) {
-      console.error('GitHub API Error:', error)
+      // console.error('GitHub API Error:', error)
       return [{ id: 'unavailable', title: 'No changelog available' }]
     }
   }

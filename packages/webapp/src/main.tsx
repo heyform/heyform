@@ -2,7 +2,7 @@ import { ApolloError } from '@apollo/client'
 import Router, { Route } from '@heyooo-inc/react-router'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import * as Sentry from '@sentry/react'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 import {
@@ -62,7 +62,7 @@ const Fallback = () => {
 }
 
 const App = () => {
-  function render(options?: any) {
+  function render(options?: any, children?: ReactNode) {
     const isLoggedIn = getAuthState()
 
     if (options?.loginRequired) {
@@ -73,8 +73,10 @@ const App = () => {
         return <Navigate to="/login" replace />
       }
     } else {
-      if (isLoggedIn) {
+      if (isLoggedIn && options?.redirectIfLogged) {
         return <Navigate to="/" replace />
+      } else {
+        return children
       }
     }
   }

@@ -13,6 +13,7 @@ export interface AsyncProps {
   emptyRender?: (props: EmptyRenderProps) => ReactNode
   errorRender?: (err: Error) => ReactNode
   children: ReactNode
+  className?: string
 }
 
 export const Async: FC<AsyncProps> = ({

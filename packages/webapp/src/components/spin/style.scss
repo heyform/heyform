@@ -1,0 +1,11 @@
+.spin {
+  @apply w-5 h-5 animate-spin;
+}
+
+.spin-circle {
+  @apply opacity-25;
+}
+
+.spin-path {
+  @apply opacity-75;
+}

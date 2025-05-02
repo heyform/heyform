@@ -1,0 +1,233 @@
+// /* FormComponents base styles */
+
+// .heyform-root {
+//   position: relative;
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+//   min-height: 500px;
+//   overflow: hidden;
+//   border-radius: 0.5rem;
+//   font-family: var(--heyform-font-family, 'Public Sans, system-ui, sans-serif');
+//   background-color: white;
+
+//   * {
+//     box-sizing: border-box;
+//   }
+// }
+
+// .heyform-wrapper {
+//   position: relative;
+//   flex: 1;
+//   height: 100%;
+//   min-height: 400px;
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   overflow: hidden;
+//   background-color: var(--heyform-background-color, #fff);
+//   border: 2px dashed purple; /* Debug */
+// }
+
+// .heyform-body {
+//   position: relative;
+//   display: flex;
+//   height: 100%;
+//   min-height: 300px;
+//   width: 100%;
+//   flex-direction: column;
+//   overflow: hidden;
+//   z-index: 10;
+//   border: 2px dashed green; /* Debug */
+// }
+
+// .heyform-block-container {
+//   position: relative;
+//   width: 100%;
+//   max-width: 100%;
+//   height: 100%;
+//   min-height: 200px;
+//   padding: 1rem;
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: column;
+//   border: 2px dashed orange; /* Debug */
+// }
+
+// .heyform-block {
+//   position: relative;
+//   width: 100%;
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   border: 2px dashed yellow; /* Debug */
+// }
+
+// .heyform-block-scroll {
+//   flex: 1;
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// .heyform-scroll-wrapper {
+//   flex: 1;
+//   overflow-y: auto;
+//   -webkit-overflow-scrolling: touch;
+// }
+
+// .heyform-block-header {
+//   padding: 1rem;
+//   margin-bottom: 1rem;
+// }
+
+// .heyform-block-title {
+//   font-size: 1.5rem;
+//   line-height: 1.25;
+//   font-weight: 600;
+//   margin-bottom: 0.5rem;
+//   color: var(--heyform-question-color, #000);
+// }
+
+// .heyform-block-description {
+//   font-size: 1rem;
+//   line-height: 1.5;
+//   margin-top: 0.5rem;
+//   color: var(--heyform-description-color, rgba(0, 0, 0, 0.7));
+// }
+
+// .heyform-body-split-layout {
+//   .heyform-block-container {
+//     padding: 0;
+//   }
+// }
+
+// .heyform-layout {
+//   position: relative;
+//   width: 100%;
+//   height: 220px;
+//   min-height: 220px;
+//   overflow: hidden;
+//   display: block;
+//   border: 3px solid red; /* Debug */
+//   z-index: 5;
+
+//   img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//     display: block;
+//   }
+// }
+
+// .heyform-layout-split_right,
+// .heyform-layout-split_left {
+//   height: 100%;
+//   position: absolute;
+//   top: 0;
+//   width: 50%;
+//   z-index: 5;
+// }
+
+// .heyform-layout-split_left {
+//   left: 0;
+// }
+
+// .heyform-layout-split_right {
+//   right: 0;
+// }
+
+// .heyform-form {
+//   padding: 1rem;
+// }
+
+// /* Sidebar styles */
+// .heyform-sidebar {
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   width: 320px;
+//   height: 100%;
+//   background-color: #fff;
+//   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+//   z-index: 50;
+//   overflow: hidden;
+//   border-left: 1px solid rgba(0, 0, 0, 0.1);
+// }
+
+// .heyform-sidebar-container {
+//   height: 100%;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// .heyform-sidebar-heading {
+//   padding: 1rem;
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+// }
+
+// .heyform-sidebar-title {
+//   font-size: 1.25rem;
+//   font-weight: 600;
+//   margin: 0;
+// }
+
+// .heyform-sidebar-content {
+//   flex: 1;
+//   overflow-y: auto;
+//   padding: 1rem;
+// }
+
+// .heyform-sidebar-question {
+//   margin-bottom: 0.75rem;
+//   cursor: pointer;
+// }
+
+// .heyform-sidebar-question-title {
+//   padding: 0.5rem;
+//   font-size: 0.875rem;
+//   transition: background-color 0.2s ease;
+//   border-radius: 0.25rem;
+
+//   &:hover {
+//     background-color: rgba(0, 0, 0, 0.05);
+//   }
+// }
+
+// .heyform-sidebar-question-selected .heyform-sidebar-question-title {
+//   background-color: rgba(0, 0, 0, 0.1);
+//   font-weight: 600;
+// }
+
+// /* Scrollbar styling */
+// .scrollbar {
+//   &::-webkit-scrollbar {
+//     width: 6px;
+//   }
+
+//   &::-webkit-scrollbar-track {
+//     background: rgba(0, 0, 0, 0.05);
+//   }
+
+//   &::-webkit-scrollbar-thumb {
+//     background: rgba(0, 0, 0, 0.2);
+//     border-radius: 3px;
+//   }
+// }
+
+// .heyform-root-open {
+//   padding-right: 320px;
+// }
+
+// /* Fix for theme background */
+// .heyform-theme-background {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   z-index: 2;
+// }

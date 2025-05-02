@@ -28,7 +28,7 @@ export class UpdateUserInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  isOnboarded?: boolean
+  isOnboardRequired?: boolean
 }
 
 @InputType()
@@ -108,7 +108,7 @@ export class UserDetailType {
   isEmailVerified: boolean
 
   @Field()
-  isOnboarded: boolean
+  isOnboardRequired: boolean
 
   @Field()
   isSocialAccount: boolean

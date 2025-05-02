@@ -5,6 +5,7 @@ import {
   FormStatusEnum,
   FormTheme,
   HiddenField,
+  HiddenFieldAnswer,
   InteractiveModeEnum,
   Logic,
   Variable
@@ -12,6 +13,7 @@ import {
 import { parse } from 'best-effort-json-parser'
 
 import {
+  COMPLETE_SUBMISSION_GQL,
   CREATE_FIELDS_WITH_AI_GQL,
   CREATE_FORM_CUSTOM_REPORT_GQL,
   CREATE_FORM_FIELD_GQL,
@@ -33,6 +35,8 @@ import {
   IMPORT_FORM_GQL,
   MOVE_FORM_TO_PROJECT_GQL,
   MOVE_FORM_TO_TRASH_GQL,
+  OPEN_FORM_GQL,
+  PUBLIC_FORM_GQL,
   PUBLISH_FORM_SQL,
   RESTORE_FORM_GQL,
   SEARCH_FORM_GQL,
@@ -48,7 +52,8 @@ import {
   UPDATE_FORM_SCHEMAS_GQL,
   UPDATE_FORM_THEME_GQL,
   UPDATE_FORM_VARIABLES_GQL,
-  USE_TEMPLATE_GQL
+  USE_TEMPLATE_GQL,
+  VERIFY_FORM_PASSWORD_GQL
 } from '@/consts'
 import { TemplateType } from '@/types'
 import { apollo, clearAuthState } from '@/utils'
@@ -70,6 +75,28 @@ export class FormService {
         }
       },
       fetchPolicy: 'network-only'
+    })
+  }
+
+  static async completeSubmission(input: {
+    formId: string
+    openToken?: string
+    passwordToken?: string
+    answers: Record<string, any>
+    hiddenFields: HiddenFieldAnswer[]
+    // Google reCAPTCHA token
+    recaptchaToken?: string
+    // GeeTest Captcha token
+    geetestChallenge?: string
+    geetestValidate?: string
+    geetestSeccode?: string
+    partialSubmission?: boolean
+  }) {
+    return apollo.mutate({
+      mutation: COMPLETE_SUBMISSION_GQL,
+      variables: {
+        input
+      }
     })
   }
 
@@ -192,6 +219,17 @@ export class FormService {
         }
       },
       fetchPolicy: 'network-only'
+    })
+  }
+
+  static async openForm(formId: string) {
+    return apollo.query({
+      query: OPEN_FORM_GQL,
+      variables: {
+        input: {
+          formId
+        }
+      }
     })
   }
 
@@ -555,6 +593,30 @@ export class FormService {
         input: {
           projectId,
           formJson
+        }
+      }
+    })
+  }
+
+  static async publicForm(formId: string) {
+    return apollo.query({
+      query: PUBLIC_FORM_GQL,
+      variables: {
+        input: {
+          formId
+        }
+      },
+      fetchPolicy: 'network-only'
+    })
+  }
+
+  static async verifyFormPassword(formId: string, password: string) {
+    return apollo.query({
+      query: VERIFY_FORM_PASSWORD_GQL,
+      variables: {
+        input: {
+          formId,
+          password
         }
       }
     })

@@ -1,6 +1,8 @@
 {
   "extends": "./packages/webapp/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   }
 }

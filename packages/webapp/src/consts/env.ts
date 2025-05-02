@@ -8,7 +8,8 @@ export const REDIRECT_COOKIE_NAME = 'HEYFORM_REDIRECT'
 export const HOMEPAGE_URL =
   window.heyform?.homepageURL || (import.meta.env.VITE_DASHBOARD_URL as string)
 export const DASHBOARD_URL = HOMEPAGE_URL
-export const WEBSITE_URL = import.meta.env.VITE_WEBSITE_URL as string
+export const WEBSITE_URL =
+  window.heyform?.websiteURL || (import.meta.env.VITE_HOMEPAGE_URL as string)
 
 export const GRAPHQL_API_URL = import.meta.env.VITE_GRAPHQL_API_URL as string
 export const CDN_UPLOAD_URL = import.meta.env.VITE_CDN_UPLOAD_URL as string
@@ -44,7 +45,7 @@ export const CUSTOM_DOMAIN_ANAME_VALUE = import.meta.env.VITE_CUSTOM_DOMAIN_ANAM
 export const TEMPLATES_URL = import.meta.env.VITE_TEMPLATES_URL as string
 export const HELP_CENTER_URL = import.meta.env.VITE_HELP_CENTER_URL as string
 
-export const ONBOARDING_FORM_URL = import.meta.env.VITE_ONBOARDING_FORM_URL as string
+export const ONBOARDING_FORM_URL = import.meta.env.VITE_ONBOARDING_FORM_URL as string || HOMEPAGE_URL
 
 export const IS_PROD = import.meta.env.NODE_ENV === 'production'
 export const PACKAGE_VERSION = import.meta.env.PACKAGE_VERSION

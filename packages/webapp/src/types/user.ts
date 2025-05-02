@@ -16,5 +16,5 @@ export interface UserType {
   isAssigned?: boolean
   isOwner?: boolean
   isYou?: boolean
-  isOnboarded: boolean
+  isOnboardRequired: boolean
 }

@@ -1,9 +1,12 @@
+// import { FormRenderer } from '@heyform-inc/form-renderer'
+import { lazy } from 'react'
+
 import {
   AuthLayout,
   BaseLayout,
   FormLayout,
   LoginGuard,
-  ProjectLayout,
+  ProjectLayout, // PublicLayout,
   TemplateLayout,
   WorkspaceGuard,
   WorkspaceLayout
@@ -29,6 +32,9 @@ import WorkspaceDashboard from '@/pages/workspace/Dashboard'
 import WorkspaceInvitation from '@/pages/workspace/Invitation'
 import WorkspaceMembers from '@/pages/workspace/Members'
 import WorkspaceSettings from '@/pages/workspace/Settings'
+// import FormRender from '@/pages/form/Render'
+
+const FormRender = lazy(() => import('@/pages/form/Render'))
 
 const routes = [
   // Auth
@@ -228,6 +234,19 @@ const routes = [
     options: {
       loginRequired: true,
       title: 'form.builder.title'
+    }
+  },
+
+  // Render Form
+  {
+    path: '/form/:formId',
+    // layout: PublicLayout,
+    // component: FormRenderer,
+    component: FormRender,
+    options: {
+      loginRequired: false,
+      title: 'form.render.title'
+      // redirectIfLogged: false
     }
   },
 

@@ -40,7 +40,7 @@ export const LoginGuard: FC<LayoutProps> = ({ options, children }) => {
       return router.replace('/verify-email')
     }
 
-    if (!options?.isOnboardingPage && !user.isOnboarded) {
+    if (!options?.isOnboardingPage && user.isOnboardRequired) {
       return router.redirect('/onboarding')
     }
   }, [])

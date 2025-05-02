@@ -25,7 +25,7 @@ export class UpdateUserResolver {
       updates.avatar = input.avatar
     }
 
-    if (input.isOnboarded) {
+    if (input.isOnboardRequired === false) {
       updates.onboardedAt = timestamp()
     }
 

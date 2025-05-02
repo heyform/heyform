@@ -8,14 +8,17 @@ import { DEFAULT_PROJECT_NAMES, REDIRECT_COOKIE_NAME } from '@/consts'
 import { WorkspaceService } from '@/services'
 import { useModal, useUserStore } from '@/store'
 import { clearCookie, getCookie, useRouter } from '@/utils'
+import { useAppStore } from '@/store'
 
-export const CreateWorkspaceForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> = ({
-  onLoadingChange
+export const CreateWorkspaceForm: FC<Pick<SimpleFormProps, 'onLoadingChange'> & { onSuccess?: () => void }> = ({
+  onLoadingChange,
+  onSuccess
 }) => {
   const { t, i18n } = useTranslation()
 
   const router = useRouter()
   const { user } = useUserStore()
+  const { closeModal } = useAppStore()
 
   const redirectUri = getCookie(REDIRECT_COOKIE_NAME) as string
   const [name, setName] = useState<string>('H')
@@ -33,13 +36,16 @@ export const CreateWorkspaceForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> =
 
     if (helper.isValid(redirectUri)) {
       clearCookie(REDIRECT_COOKIE_NAME)
-
+      if (onSuccess) onSuccess()
+      closeModal('CreateWorkspaceModal')
       return router.redirect(redirectUri, {
         extend: false
       })
     }
 
     // Navigate to new created workspace page
+    if (onSuccess) onSuccess()
+    closeModal('CreateWorkspaceModal')
     router.replace(`/workspace/${result}`)
   }
 
@@ -94,7 +100,7 @@ export const CreateWorkspaceForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> =
 }
 
 export default function CreateWorkspaceModal() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const { isOpen, onOpenChange } = useModal('CreateWorkspaceModal')
   const [loading, { set }] = useBoolean(false)
@@ -107,7 +113,7 @@ export default function CreateWorkspaceModal() {
       loading={loading}
       onOpenChange={onOpenChange}
     >
-      <CreateWorkspaceForm onLoadingChange={set} />
+      <CreateWorkspaceForm onLoadingChange={set} onSuccess={() => {}} />
     </Modal.Simple>
   )
 }

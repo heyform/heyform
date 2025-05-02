@@ -36,6 +36,7 @@ export default ({ mode }: ConfigEnv) => {
       assetsDir: 'static',
       assetsInlineLimit: 0,
       rollupOptions: {
+        external: ['react', 'react-dom'],
         output: {
           manualChunks: {
             vendor: [

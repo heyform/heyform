@@ -57,7 +57,7 @@ const CustomReportComponent = () => {
   const { form, updateCustomReport } = useFormStore()
 
   const shareLink = useMemo(
-    () => sharingURLPrefix + '/f/' + formId + '/report',
+    () => sharingURLPrefix + '/form/' + formId + '/report',
     [formId, sharingURLPrefix]
   )
 

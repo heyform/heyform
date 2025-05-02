@@ -297,7 +297,7 @@ export const FormLayout: FC<LayoutProps> = ({ options, children }) => {
           <Button.Copy
             size="md"
             className="order-last sm:order-first"
-            text={`${sharingURLPrefix}/f/${formId}`}
+            text={`${sharingURLPrefix}/form/${formId}`}
             label={t('form.copyLinkToShare')}
             icon={<IconLink className="h-5 w-5" />}
           />

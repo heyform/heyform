@@ -89,11 +89,6 @@ export class UserModel extends Document {
   isSocialAccount?: boolean
 
   /**
-   * Check if user is onboarded
-   */
-  isOnboarded: boolean
-
-  /**
    * Check if user has published form or not
    */
   hasPublishedForm: boolean
@@ -101,13 +96,14 @@ export class UserModel extends Document {
 
 export const UserSchema = SchemaFactory.createForClass(UserModel)
 
-UserSchema.virtual('isOnboarded').get(function () {
-  if (!this.isOnboardRequired) {
-    return true
-  } else {
-    return this.onboardedAt && this.onboardedAt > 0
-  }
-})
+// // I have removed the virtual definition for isOnboardRequired from UserSchema since it is already defined as a real field in the Mongoose schema.
+// UserSchema.virtual('isOnboardRequired').get(function () {
+//   if (!this.isOnboardRequired) {
+//     return true
+//   } else {
+//     return this.onboardedAt && this.onboardedAt > 0
+//   }
+// })
 
 UserSchema.virtual('hasPublishedForm').get(function () {
   return this.publishedFormAt && this.publishedFormAt > 0

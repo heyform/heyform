@@ -27,6 +27,7 @@ declare global {
         screenHeight: number
       }
       homepageURL?: string
+      websiteURL?: string
       cookieDomain?: string
       stripePublishableKey?: string
       geetestCaptchaId?: string

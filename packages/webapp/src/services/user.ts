@@ -24,7 +24,7 @@ export class UserService {
     name?: string
     avatar?: string
     restoreGravatar?: boolean
-    isOnboarded?: boolean
+    isOnboardRequired?: boolean
   }) {
     return apollo.mutate({
       mutation: UPDATE_USER_DETAIL_GQL,

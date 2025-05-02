@@ -363,9 +363,19 @@ export class FormService {
     if (!form || !form.settings.active) {
       return {
         id: formId,
+        teamId: form?.teamId,
+        projectId: form?.projectId,
+        memberId: form?.memberId,
         name: form?.name,
+        fields: [],
+        hiddenFields: [],
         settings: {
-          active: false
+          active: false,
+          ...pickObject(form?.settings || {}, [
+            'enableClosedMessage',
+            'closedFormTitle',
+            'closedFormDescription'
+          ])
         },
         themeSettings: form?.themeSettings
       }
@@ -380,9 +390,19 @@ export class FormService {
     ) {
       return {
         id: formId,
+        teamId: form.teamId,
+        projectId: form.projectId,
+        memberId: form.memberId,
         name: form?.name,
+        fields: [],
+        hiddenFields: [],
         settings: {
-          active: false
+          active: false,
+          ...pickObject(form?.settings || {}, [
+            'enableClosedMessage',
+            'closedFormTitle',
+            'closedFormDescription'
+          ])
         },
         themeSettings: form.themeSettings
       }
@@ -390,9 +410,16 @@ export class FormService {
 
     const masked: Record<string, any> = pickObject(form.toObject(), [
       ['_id', 'id'],
+      'teamId',
+      'projectId',
+      'memberId',
+      'nameSchema',
       'name',
       'interactiveMode',
       'kind',
+      'hiddenFields',
+      'logics',
+      'variables',
       'themeSettings'
     ])
 

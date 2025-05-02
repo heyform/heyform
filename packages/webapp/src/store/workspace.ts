@@ -62,7 +62,7 @@ const computeState = (state: WorkspaceStoreType): ComputedStoreType => {
       forms = state._formMap[project.id] || []
     }
 
-    sharingURLPrefix = `https://localhost:3000`
+    sharingURLPrefix = `http://localhost:3000`
   }
 
   return {

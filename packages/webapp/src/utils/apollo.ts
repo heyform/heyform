@@ -41,10 +41,12 @@ const timeoutLink = new ApolloLinkTimeout(30_000)
 
 const headerLink = setContext((_, { headers }) => {
   // get `User-ID` from local storage or cookie if it exists
+  const deviceId = getDeviceId()
   return {
     headers: {
       ...headers,
-      'X-Device-Id': getDeviceId()
+      'X-Device-Id': deviceId,
+      'x-anonymous-id': deviceId
     }
   }
 })

@@ -21,6 +21,7 @@ export class DashboardController {
         "Simplify your form creation process with HeyForm's intuitive dashboard. Design, customize, and manage forms all in one place, with no coding required.",
       rendererData: {
         homepageURL: APP_HOMEPAGE,
+        websiteURL: APP_HOMEPAGE,
         cookieDomain: COOKIE_DOMAIN,
         stripePublishableKey: STRIPE_PUBLISHABLE_KEY,
         geetestCaptchaId: GEETEST_CAPTCHA_KEY,

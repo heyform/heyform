@@ -25,7 +25,7 @@ export class UserDetailResolver {
       isSocialAccount: isValid(result),
       isDeletionScheduled: user.isDeletionScheduled,
       deletionScheduledAt: user.deletionScheduledAt,
-      isOnboarded: user.isOnboarded
+      isOnboardRequired: user.isOnboardRequired
     }
   }
 }

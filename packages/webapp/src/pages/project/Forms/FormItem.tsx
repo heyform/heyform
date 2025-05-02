@@ -322,7 +322,7 @@ const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange }) => {
 
       <div className="flex items-center gap-4">
         {!isInTrash && !form.suspended && (
-          <div className="flex hidden items-center group-hover:block">
+          <div className="flex _hidden items-center group-hover:block">
             <Tooltip label={t('components.edit')}>
               <Button.Link size="sm" iconOnly onClick={handleEdit}>
                 <IconPencil className="h-5 w-5" />
@@ -332,7 +332,7 @@ const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange }) => {
             <Button.Copy
               size="sm"
               className="order-last text-primary sm:order-first [&_svg]:h-[1.125rem] [&_svg]:w-[1.125rem]"
-              text={`${sharingURLPrefix}/f/${form.id}`}
+              text={`${sharingURLPrefix}/form/${form.id}`}
               label={t('form.copyLinkToShare')}
               icon={<IconLink strokeWidth={2.2} />}
             />

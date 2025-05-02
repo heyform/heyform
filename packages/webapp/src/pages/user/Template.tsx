@@ -144,7 +144,7 @@ export default function Template() {
       <div className="relative h-full flex-1">
         <iframe
           className="h-full w-full"
-          src={`${WEBSITE_URL}/f/${templateId}`}
+          src={`${WEBSITE_URL}/form/${templateId}`}
           onLoad={handleLoad}
         />
         {!isLoaded && (

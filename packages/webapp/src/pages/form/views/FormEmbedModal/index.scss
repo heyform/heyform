@@ -1,0 +1,51 @@
+.form-embed-modal {
+  .modal-container {
+    @apply p-0;
+  }
+
+  .modal-content {
+    @apply p-0 w-full max-w-full h-full bg-slate-50 rounded-none;
+  }
+
+  .modal-body {
+    @apply p-0 w-full h-full;
+  }
+
+  .modal-close-button {
+    @apply fixed top-16 right-16 z-50;
+  }
+}
+
+
+.form-embed-header {
+  @apply flex items-center justify-between border-b border-gray-200 bg-white;
+  height: 3.75rem;
+}
+
+.form-embed-body {
+  height: calc(100vh - 3.75rem);
+	@apply flex;
+}
+
+.form-embed-width-input {
+	@apply flex;
+
+	.input,
+	.select {
+		@apply w-[75px];
+	}
+
+	.input {
+		@apply rounded-r-none
+	}
+
+	.select-button {
+		@apply border-l-0 rounded-l-none;
+	}
+}
+
+.form-embed-preview {
+	iframe {
+		@apply w-full h-full;
+	}
+}

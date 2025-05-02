@@ -769,6 +769,20 @@ export const FORM_DETAIL_GQL = gql`
   }
 `
 
+export const OPEN_FORM_GQL = gql`
+  query openForm($input: OpenFormInput!) {
+    openForm(input: $input)
+  }
+`
+
+export const COMPLETE_SUBMISSION_GQL = gql`
+  mutation completeSubmission($input: CompleteSubmissionInput!) {
+    completeSubmission(input: $input) {
+      clientSecret
+    }
+  }
+`
+
 export const CREATE_FORM_GQL = gql`
   mutation createForm($input: CreateFormInput!) {
     createForm(input: $input)
@@ -1064,7 +1078,7 @@ export const USER_DETAILS_GQL = gql`
       isSocialAccount
       isDeletionScheduled
       deletionScheduledAt
-      isOnboarded
+      isOnboardRequired
     }
   }
 `
@@ -1552,5 +1566,91 @@ export const EXPORT_FORM_TO_JSON_GQL = gql`
 export const IMPORT_FORM_FROM_JSON_GQL = gql`
   mutation importFormFromJSON($input: ImportFormFromJSONInput!) {
     importFormFromJSON(input: $input)
+  }
+`
+
+export const PUBLIC_FORM_GQL = gql`
+  query publicForm($input: FormDetailInput!) {
+    publicForm(input: $input) {
+      id
+      teamId
+      memberId
+      name
+      description
+      interactiveMode
+      kind
+      stripeAccount {
+        accountId
+        email
+      }
+      settings {
+        captchaKind
+        active
+        enableExpirationDate
+        expirationTimeZone
+        enabledAt
+        closedAt
+        enableTimeLimit
+        timeLimit
+        filterSpam
+        allowArchive
+        password
+        requirePassword
+        enableQuotaLimit
+        quotaLimit
+        enableIpLimit
+        ipLimitCount
+        ipLimitTime
+        enableProgress
+        enableQuestionList
+        locale
+        languages
+        enableClosedMessage
+        closedFormTitle
+        closedFormDescription
+      }
+      drafts {
+        id
+        title
+        titleSchema
+        description
+        kind
+        validations
+        properties
+        layout
+      }
+      fields {
+        id
+        title
+        titleSchema
+        description
+        kind
+        validations
+        properties
+        layout
+      }
+      translations
+      hiddenFields {
+        id
+        name
+      }
+      logics
+      variables
+      fieldsUpdatedAt
+      themeSettings {
+        theme
+      }
+      retentionAt
+      suspended
+      isDraft
+      status
+      integrations
+    }
+  }
+`
+
+export const VERIFY_FORM_PASSWORD_GQL = gql`
+  query verifyFormPassword($input: VerifyPasswordInput!) {
+    verifyFormPassword(input: $input)
   }
 `

@@ -361,7 +361,7 @@ const EmbedComponent = () => {
     return `<div
 \tdata-heyform-id="${formId}"
 \tdata-heyform-type="${embedType}"
-\tdata-heyform-custom-url="${sharingURLPrefix}/f/${formId}"
+\tdata-heyform-custom-url="${sharingURLPrefix}/form/${formId}"
 \t${attributes.join('\n\t')}
 >
   ${embedType === 'modal' ? `<button class="heyform__trigger-button" type="button" onclick="HeyForm.openModal('${formId}Modal')">${embedConfig.triggerText}</button>` : ''}

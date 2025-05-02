@@ -26,12 +26,12 @@ export default function Onboarding() {
       event.data.eventName === 'FORM_SUBMITTED'
     ) {
       const result = await UserService.update({
-        isOnboarded: true
+        isOnboardRequired: true
       })
 
       if (result) {
         updateUser({
-          isOnboarded: true
+          isOnboardRequired: true
         })
 
         if (helper.isValid(redirectUri)) {
@@ -48,7 +48,7 @@ export default function Onboarding() {
   }
 
   useEffect(() => {
-    if (helper.isValid(user) && user.isOnboarded) {
+    if (helper.isValid(user) && !user.isOnboardRequired) {
       router.replace('/')
     }
   }, [user])
@@ -60,6 +60,9 @@ export default function Onboarding() {
       window.removeEventListener('message', handleMessage, false)
     }
   }, [])
+
+  console.log('ONBOARDING_FORM_URL')
+  console.log(ONBOARDING_FORM_URL)
 
   return (
     <div className="h-screen w-screen">

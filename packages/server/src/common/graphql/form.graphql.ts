@@ -1210,6 +1210,18 @@ export class FormType {
 }
 
 @ObjectType()
+export class PublicFormType extends FormType {
+  @Field(type => [FormFieldType], { nullable: true })
+  fields: FormField[]
+
+  @Field(type => GraphQLJSONObject, { nullable: true })
+  translations: FormModel['translations']
+
+  @Field(type => GraphQLJSONObject, { nullable: true })
+  integrations?: Record<string, string>
+}
+
+@ObjectType()
 export class SearchFormType {
   @Field({ nullable: true })
   teamId?: string
