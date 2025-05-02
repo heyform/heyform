@@ -1,4 +1,3 @@
-import { random } from '@heyform-inc/utils'
 import {
   IconBrandFacebook,
   IconBrandLinkedin,
@@ -7,15 +6,13 @@ import {
   IconX
 } from '@tabler/icons-react'
 import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import { CopyButton } from '@/components'
-import { Button, Modal, Switch, Tooltip, notification } from '@/components'
+import { Button, Modal, Tooltip } from '@/components'
 import { HOMEPAGE_URL } from '@/consts'
-import { FormService } from '@/services'
-import { useStore } from '@/store'
+import { useAppStore, useFormStore } from '@/store'
 import { urlBuilder, useParam } from '@/utils'
 
 import { FORM_EMBED_OPTIONS } from './FormEmbedModal'
@@ -26,25 +23,14 @@ function getShareURL(formId?: string) {
 
 export const FormShareModal = observer(() => {
   const { workspaceId, projectId, formId } = useParam()
-  const formStore = useStore('formStore')
-  const appStore = useStore('appStore')
+  const formStore = useFormStore()
+  const appStore = useAppStore()
 
-  const sharingLinkUrl = getShareURL(formStore.current?.id)
+  const sharingLinkUrl = getShareURL(formStore.form?.id)
   const { t } = useTranslation()
 
-  async function handleUpdate(updates: IMapType) {
-    try {
-      await FormService.update(formStore.current!.id, updates)
-      formStore.updateSettings(updates)
-    } catch (err: any) {
-      notification.error({
-        title: 'Failed to update form settings'
-      })
-    }
-  }
-
   function handleClose() {
-    appStore.isFormShareModalOpen = false
+    appStore.closeModal('formShareModal')
   }
 
   function handleEmail() {
@@ -72,23 +58,18 @@ export const FormShareModal = observer(() => {
   function handleTwitter() {
     const url = urlBuilder('https://twitter.com/share', {
       url: sharingLinkUrl,
-      title: formStore.current!.name
+      title: formStore.form?.name
     })
     window.open(url)
   }
 
-  function openEmbedModal(type: string) {
-    appStore.isFormShareModalOpen = false
+  function openEmbedModal(type: 'standard' | 'modal' | 'popup' | 'fullpage') {
+    appStore.closeModal('formShareModal')
     formStore.embedType = type
   }
 
   return (
-    <Modal
-      className="share-modal"
-      contentClassName="max-w-md md:max-w-lg"
-      visible={appStore.isFormShareModalOpen}
-      onClose={handleClose}
-    >
+    <Modal visible={appStore.modals.get('formShareModal')} onClose={handleClose}>
       <div className="space-y-6 text-sm text-slate-900">
         <div className="flex items-center justify-between">
           <h1 className="text-lg font-bold leading-6 text-slate-900">{t('share.title')}</h1>
@@ -99,39 +80,35 @@ export const FormShareModal = observer(() => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Tooltip ariaLabel="Share on X">
+          <Tooltip aria-label="Share on X">
             <div>
-              <Button.Link
-                leading={<IconBrandX className="text-slate-900" />}
-                onClick={handleTwitter}
-              />
+              <Button variant="default" size="sm" onClick={handleTwitter}>
+                <IconBrandX className="text-slate-900" />
+              </Button>
             </div>
           </Tooltip>
 
-          <Tooltip ariaLabel="Share on Facebook">
+          <Tooltip aria-label="Share on Facebook">
             <div>
-              <Button.Link
-                leading={<IconBrandFacebook className="text-slate-900" />}
-                onClick={handleFacebook}
-              />
+              <Button variant="link" size="sm" onClick={handleFacebook}>
+                <IconBrandFacebook className="text-slate-900" />
+              </Button>
             </div>
           </Tooltip>
 
-          <Tooltip ariaLabel="Share on LinkedIn">
+          <Tooltip aria-label="Share on LinkedIn">
             <div>
-              <Button.Link
-                leading={<IconBrandLinkedin className="text-slate-900" />}
-                onClick={handleLinkedin}
-              />
+              <Button variant="link" size="sm" onClick={handleLinkedin}>
+                <IconBrandLinkedin className="text-slate-900" />
+              </Button>
             </div>
           </Tooltip>
 
-          <Tooltip ariaLabel="Share via Email">
+          <Tooltip aria-label="Share via Email">
             <div>
-              <Button.Link
-                leading={<IconMail className="text-slate-900" />}
-                onClick={handleEmail}
-              />
+              <Button variant="link" size="sm" onClick={handleEmail}>
+                <IconMail className="text-slate-900" />
+              </Button>
             </div>
           </Tooltip>
         </div>
@@ -161,7 +138,13 @@ export const FormShareModal = observer(() => {
 
           <div className="grid grid-cols-4 gap-5">
             {FORM_EMBED_OPTIONS.map((row, key) => (
-              <div className="cursor-pointer" onClick={() => openEmbedModal(row.type)} key={key}>
+              <div
+                className="cursor-pointer"
+                onClick={() =>
+                  openEmbedModal(row.type as 'standard' | 'modal' | 'popup' | 'fullpage')
+                }
+                key={key}
+              >
                 <div className="rounded-md border border-black/10">
                   <row.icon className="w-full rounded-md" />
                 </div>

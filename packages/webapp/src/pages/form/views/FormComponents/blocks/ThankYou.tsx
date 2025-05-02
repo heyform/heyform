@@ -9,7 +9,7 @@ import { Block } from './Block'
 
 const isURL = (arg: any) => /^https?:\/\//i.test(arg)
 
-export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
+export const ThankYou: FC<BlockProps> = ({ field, className, ...restProps }) => {
   const { state } = useStore()
 
   useEffect(() => {
@@ -22,7 +22,11 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
 
       window.location.href = redirectUrl
     }
-  }, [])
+  }, [
+    field.properties?.redirectOnCompletion,
+    field.properties?.redirectUrl,
+    state.customUrlRedirects
+  ])
 
   return (
     <>

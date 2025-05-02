@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
-import { FC, useCallback, useEffect, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 
 import { Input, Select } from '@/components'
-import { useStore } from '@/store'
+import { useFormStore } from '@/store'
 
 interface WidthInputProps {
-  typeKey: string
+  typeKey: 'fullpage' | 'standard' | 'modal' | 'popup'
   inputKey: string
 }
 
@@ -22,21 +22,28 @@ const OPTIONS = [
 ]
 
 export const WidthInput: FC<WidthInputProps> = observer(({ typeKey, inputKey }) => {
-  const formStore = useStore('formStore')
+  const formStore = useFormStore()
 
   const widthType = useMemo(
-    () => formStore.currentEmbedConfig[typeKey],
-    [formStore.currentEmbedConfig, typeKey]
+    () =>
+      formStore.embedConfigs[typeKey]?.[
+        inputKey as keyof (typeof formStore.embedConfigs)[typeof typeKey]
+      ],
+    [formStore, inputKey, typeKey]
   )
-  const width = useMemo(
-    () => formStore.currentEmbedConfig[inputKey],
-    [formStore.currentEmbedConfig, inputKey]
-  )
+  const width =
+    useMemo(
+      () =>
+        formStore.embedConfigs[typeKey]?.[
+          inputKey as keyof (typeof formStore.embedConfigs)[typeof typeKey]
+        ],
+      [formStore, inputKey, typeKey]
+    ) || 100
   const maxWidth = useMemo(() => OPTIONS.find(row => row.value === widthType)?.max, [widthType])
 
   const handleTypeChange = useCallback(
     (newWidthType: any) => {
-      let newWidth = width ?? 100
+      let newWidth = (width as any) ?? 100
 
       if (newWidthType === '%' && width > 100) {
         newWidth = 100
@@ -47,7 +54,7 @@ export const WidthInput: FC<WidthInputProps> = observer(({ typeKey, inputKey }) 
         [inputKey]: newWidth
       })
     },
-    [width]
+    [width, formStore, inputKey, typeKey]
   )
 
   function handleWidthChange(newWidth: any) {

@@ -6,67 +6,59 @@ import { preventDefault, stopPropagation } from '@/components'
 import { useTranslation } from '../utils'
 
 interface TextareaProps {
-  disabled?: boolean
   value?: any
   placeholder?: string
   onChange?: (value?: any) => void
 }
 
-export const Textarea: FC<TextareaProps> = ({
-  value: rawValue,
-  disabled,
-  onChange,
-  ...restProps
-}) => {
+export const Textarea: FC<TextareaProps> = ({ value: rawValue, onChange, ...restProps }) => {
   const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)
   const [value] = useState(rawValue)
-  const [isCompositing, setIsCompositing] = useState(false)
   const [isTipShow, setTipShow] = useState(true)
 
-  function handleUpdate() {
+  const handleUpdate = useCallback(() => {
     startTransition(() => {
       onChange?.(ref.current?.innerText)
     })
-  }
+  }, [onChange, ref])
 
-  function handleComposition(event: any) {
-    switch (event.type) {
-      case 'compositionstart':
-        setIsCompositing(true)
-        break
+  const handleComposition = useCallback(
+    (event: any) => {
+      switch (event.type) {
+        case 'compositionstart': {
+          break
+        }
+        case 'compositionend': {
+          handleUpdate()
+          break
+        }
+        default:
+          break
+      }
+    },
+    [handleUpdate]
+  )
 
-      case 'compositionend':
-        setIsCompositing(false)
-        handleUpdate()
-        break
-    }
-  }
+  const handlePaste = useCallback(
+    (event: ClipboardEvent) => {
+      preventDefault(event)
+      const text = event.clipboardData!.getData('text/plain')
+      document.execCommand('insertText', false, text)
+      handleUpdate()
+    },
+    [handleUpdate]
+  )
 
-  function handlePaste(event: ClipboardEvent) {
-    preventDefault(event)
-
-    const text = event.clipboardData!.getData('text/plain')
-    document.execCommand('insertText', false, text)
-
-    handleUpdate()
-  }
-
-  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       preventDefault(event)
-
       if (e.shiftKey || window.heyform.device.mobile) {
         stopPropagation(event)
         document.execCommand('insertText', false, '\n')
       }
     }
-  }
-
-  const handleUpdateCallback = useCallback(handleUpdate, [])
-  const handleCompositionCallback = useCallback(handleComposition, [isCompositing])
-  const handleKeyDownCallback = useCallback(handleKeyDown, [])
-  const handlePasteCallback = useCallback(handlePaste, [])
+  }, [])
 
   useEffect(() => {
     if (ref.current && value) {
@@ -88,11 +80,11 @@ export const Textarea: FC<TextareaProps> = ({
         suppressContentEditableWarning={true}
         className="heyform-textarea"
         placeholder={t('Your answer goes here')}
-        onCompositionStart={handleCompositionCallback}
-        onCompositionEnd={handleCompositionCallback}
-        onInput={handleUpdateCallback}
-        onKeyDown={handleKeyDownCallback}
-        onPaste={handlePasteCallback}
+        onCompositionStart={handleComposition}
+        onCompositionEnd={handleComposition}
+        onInput={handleUpdate}
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
         {...restProps}
       />
       {isTipShow && (
