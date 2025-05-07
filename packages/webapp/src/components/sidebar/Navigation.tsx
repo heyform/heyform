@@ -116,7 +116,7 @@ export const Navigation: FC<NavigationProps> = observer(
           </h3>
           <div className="mt-1 space-y-1" aria-labelledby="resources-headline">
             <a
-              href="https://docs.heyform.net/create-your-first-heyform"
+              href="https://docs.heyform.net/quickstart/create-a-form"
               target="_blank"
               className="group flex items-center rounded-md px-2 py-1 text-sm text-slate-700 hover:bg-slate-200 hover:text-slate-900"
             >
