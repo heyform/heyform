@@ -16,6 +16,7 @@ import {
   IconLibrary,
   IconLocation,
   IconMail,
+  IconNetwork,
   IconPhone,
   IconStar,
   IconUpload,
@@ -76,6 +77,13 @@ export const CUSTOM_FIELDS_CONFIGS: FieldConfig[] = [
     label: 'formBuilder.contact',
     textColor: '#1d4ed8',
     backgroundColor: '#dbeafe'
+  },
+  {
+    kind: 'ip_address' as FieldKindEnum,
+    icon: IconNetwork,
+    label: 'formBuilder.ipAddress',
+    textColor: '#0369a1',
+    backgroundColor: '#e0f2fe'
   },
   {
     kind: 'submit_date' as FieldKindEnum,
