@@ -154,6 +154,9 @@ export class SubmissionType {
 
   @Field()
   endAt: number
+  
+  @Field({ nullable: true })
+  ip?: string
 }
 
 @ObjectType()

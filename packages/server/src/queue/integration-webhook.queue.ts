@@ -34,7 +34,8 @@ export class IntegrationWebhookQueue extends BaseQueue {
           formName: form.name,
           fields: form.fields,
           answers: submission.answers,
-          hiddenFields: submission.hiddenFields
+          hiddenFields: submission.hiddenFields,
+          ip: submission.ip
         }
       })
       .text()

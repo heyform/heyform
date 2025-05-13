@@ -61,6 +61,24 @@ const HiddenFieldItem: FC<SheetCellProps> = ({ column, row }) => {
 
   return (
     <div className="min-h-11 whitespace-pre-line rounded-lg bg-white p-[10px] text-sm font-normal leading-6 text-slate-800">
+      {value || '--'}
+    </div>
+  )
+}
+
+const IPAddressItem: FC<SheetCellProps> = ({ column, row }) => {
+  const value = useMemo(() => {
+    const v = row[column.key]
+    
+    if (helper.isString(v)) {
+      return v
+    }
+    
+    return 'N/A'
+  }, [column.key, row])
+
+  return (
+    <div className="min-h-11 whitespace-pre-line rounded-lg bg-white p-[10px] text-sm font-normal leading-6 text-slate-800">
       {value}
     </div>
   )
@@ -608,6 +626,9 @@ export const SheetRowModal: FC<SheetRowModalProps> = ({
 
                               case 'hidden_fields':
                                 return <HiddenFieldItem row={row!} column={column} />
+
+                              case 'ip_address':
+                                return <IPAddressItem row={row!} column={column} />
 
                               default:
                                 return <InputItem row={row!} column={column} />
