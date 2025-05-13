@@ -9,6 +9,7 @@ import { FileUploadCell } from './FileUploadCell'
 import { FullNameCell } from './FullNameCell'
 import { HiddenFieldCell } from './HiddenFieldCell'
 import { InputTableCell } from './InputTableCell'
+import { IPAddressCell } from './IPAddressCell'
 import { MultipleChoiceCell } from './MultipleChoiceCell'
 import { OpinionScaleCell } from './OpinionScaleCell'
 import { PaymentCell } from './PaymentCell'
@@ -22,6 +23,9 @@ export const SheetCell: FC<SheetCellProps> = props => {
   switch (props.column.kind) {
     case 'submit_date':
       return <SubmitDateCell {...props} />
+
+    case 'ip_address':
+      return <IPAddressCell {...props} />
 
     case FieldKindEnum.YES_NO:
       return <DropPickerCell {...props} />

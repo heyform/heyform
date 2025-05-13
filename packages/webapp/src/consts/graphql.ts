@@ -638,6 +638,7 @@ export const SUBMISSIONS_GQL = gql`
           value
         }
         endAt
+        ip
       }
     }
   }

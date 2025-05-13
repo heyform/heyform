@@ -197,6 +197,17 @@ export const Sheet: FC<SheetProps> = ({
         resizable: true,
         headerRenderer: cellHeaderRenderer,
         formatter: cellFormatter
+      },
+      {
+        key: 'ip_address',
+        kind: 'ip_address',
+        name: 'IP Address',
+        width: 160,
+        minWidth: 80,
+        properties: {},
+        resizable: true,
+        headerRenderer: cellHeaderRenderer,
+        formatter: cellFormatter
       }
     ]
 
@@ -247,7 +258,8 @@ export const Sheet: FC<SheetProps> = ({
       const values: IMapType = {
         id: row.id,
         contact: row.contact,
-        endAt: row.endAt
+        endAt: row.endAt,
+        ip_address: row.ip || 'N/A'
       }
 
       row.answers.forEach(row2 => {
