@@ -37,7 +37,7 @@ export const HiddenFields = () => {
           <h2 className="flex items-center gap-1">
             <span>{t('formBuilder.hiddenFields')}</span>
             <Tooltip ariaLabel={t('formBuilder.hiddenFieldsTip')}>
-              <a href="https://docs.heyform.net/hidden-fields" target="_blank">
+              <a href="https://docs.heyform.net/features/hidden-fields" target="_blank">
                 <IconHelp className="h-5 w-5 text-slate-400" />
               </a>
             </Tooltip>
