@@ -20,7 +20,8 @@ const LANGUAGES = {
   en: 'English',
   de: 'German',
   fr: 'French',
-	pl: 'Polish',
+  pl: 'Polish',
+  sl: 'Slovenian',
   tr: 'Turkish',
   'zh-cn': 'Simplified Chinese',
   'zh-tw': 'Traditional Chinese'

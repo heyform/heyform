@@ -19,6 +19,10 @@ export const LOCALES_OPTIONS = [
     value: 'pl'
   },
   {
+    label: 'Slovenian',
+    value: 'sl'
+  },
+  {
     label: 'Türkçe',
     value: 'tr'
   },
@@ -36,6 +40,10 @@ export const FORM_LOCALES_OPTIONS = [
   {
     label: 'English',
     value: 'en'
+  },
+  {
+    label: 'Slovenian',
+    value: 'sl'
   },
   {
     label: 'German',

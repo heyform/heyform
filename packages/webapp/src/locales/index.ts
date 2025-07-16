@@ -4,14 +4,15 @@ import { initReactI18next } from 'react-i18next'
 
 import { locales } from '@/pages/form/views/FormComponents'
 
+import cs from './cs'
 import en from './en'
 import es from './es'
 import pl from './pl'
 import ptBr from './ptBr'
+import sl from './sl'
 import tr from './tr'
 import zhCn from './zhCn'
 import zhTw from './zhTw'
-import cs from './cs'
 
 const resources = {
   en: {
@@ -64,6 +65,12 @@ const resources = {
       ...locales.cs.translation
     }
   },
+  sl: {
+    translation: {
+      ...sl,
+      ...locales.sl.translation
+    }
+  }
 }
 
 const LANG_ALIASES: Record<string, string> = {

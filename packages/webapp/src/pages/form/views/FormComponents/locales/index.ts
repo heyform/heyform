@@ -1,13 +1,14 @@
+import cs from './cs'
 import de from './de'
 import en from './en'
 import es from './es'
 import fr from './fr'
 import pl from './pl'
 import ptBr from './pt-br'
+import sl from './sl'
 import tr from './tr'
 import zhCn from './zh-cn'
 import zhTw from './zh-tw'
-import cs from './cs'
 
 export default {
   en: {
@@ -40,4 +41,7 @@ export default {
   cs: {
     translation: cs
   },
+  sl: {
+    translation: sl
+  }
 }
