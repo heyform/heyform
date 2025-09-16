@@ -12,6 +12,7 @@ import tr from './tr'
 import zhCn from './zhCn'
 import zhTw from './zhTw'
 import cs from './cs'
+import ko from './ko'
 
 const resources = {
   en: {
@@ -63,7 +64,13 @@ const resources = {
       ...cs,
       ...locales.cs.translation
     }
-  },
+	},
+	ko: {
+		translation: {
+			...ko,
+			...locales.ko.translation
+		}
+	}
 }
 
 const LANG_ALIASES: Record<string, string> = {
