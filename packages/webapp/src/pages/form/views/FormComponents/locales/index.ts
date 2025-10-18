@@ -8,10 +8,14 @@ import tr from './tr'
 import zhCn from './zh-cn'
 import zhTw from './zh-tw'
 import cs from './cs'
+import ru from './ru'
 
 export default {
   en: {
     translation: en
+  },
+	ru: {
+    translation: ru
   },
   fr: {
     translation: fr
