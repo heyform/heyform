@@ -10,7 +10,7 @@ import '@/styles/render.scss'
 
 import { Renderer } from './components/Renderer'
 
-const LANGUAGES = ['en', 'de', 'fr', 'pl', 'ja', 'zh-cn', 'zh-tw']
+const LANGUAGES = ['en', 'de', 'fr', 'pl', 'ja', 'nl', 'zh-cn', 'zh-tw']
 
 export default function FormRender() {
   const { formId } = useParam()

@@ -8,6 +8,7 @@ import de from '@/locales/de.json'
 import en from '@/locales/en.json'
 import fr from '@/locales/fr.json'
 import ja from '@/locales/ja.json'
+import nl from '@/locales/nl.json'
 import pl from '@/locales/pl.json'
 import zhCN from '@/locales/zh-cn.json'
 import zhTW from '@/locales/zh-tw.json'
@@ -35,6 +36,12 @@ const resources = {
     translation: {
       ...ja,
       ...locales.ja.translation
+    }
+  },
+  nl: {
+    translation: {
+      ...nl,
+      ...locales.nl.translation
     }
   },
   pl: {
