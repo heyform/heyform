@@ -19,6 +19,10 @@ export const LOCALES_OPTIONS = [
     value: 'pl'
   },
   {
+    label: 'Português Brasileiro',
+    value: 'pt-br'
+  },
+  {
     label: 'Türkçe',
     value: 'tr'
   },
@@ -48,6 +52,10 @@ export const FORM_LOCALES_OPTIONS = [
   {
     label: 'Polish',
     value: 'pl'
+  },
+  {
+    label: 'Brazilian Portuguese',
+    value: 'pt-br'
   },
   {
     label: 'Turkish',
