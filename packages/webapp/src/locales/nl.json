@@ -1,0 +1,1548 @@
+{
+  "languages": {
+    "de": {
+      "original": "Deutsch",
+      "translated": "German"
+    },
+    "en": {
+      "original": "English",
+      "translated": "English"
+    },
+    "fr": {
+      "original": "Français",
+      "translated": "French"
+    },
+    "ja": {
+      "original": "日本語",
+      "translated": "Japanese"
+    },
+    "nl": {
+      "original": "Nederlands",
+      "translated": "Dutch"
+    },
+    "pl": {
+      "original": "Polski",
+      "translated": "Polish"
+    },
+    "zh-cn": {
+      "original": "简体中文",
+      "translated": "Chinese (Simplified)"
+    },
+    "zh-tw": {
+      "original": "繁體中文（台灣）",
+      "translated": "Chinese (Taiwan)"
+    }
+  },
+  "timezones": {
+    "niue": "Niue",
+    "samoa": "Samoa",
+    "cookislands": "Cook Islands",
+    "hawaiialeutian": "Hawaii-Aleutian",
+    "tahiti": "Tahiti",
+    "marquesas": "Marquesas",
+    "gambier": "Gambier",
+    "hawaiialeutianadak": "Hawaii-Aleutian (Adak)",
+    "anchorage": "Anchorage",
+    "juneau": "Juneau",
+    "metlakatla": "Metlakatla",
+    "nome": "Nome",
+    "sitka": "Sitka",
+    "yakutat": "Yakutat",
+    "pitcairn": "Pitcairn",
+    "mexicanpacific": "Mexican Pacific",
+    "dawsoncreek": "Dawson Creek",
+    "fortnelson": "Fort Nelson",
+    "phoenix": "Phoenix",
+    "losangeles": "Los Angeles",
+    "tijuana": "Tijuana",
+    "vancouver": "Vancouver",
+    "dawson": "Dawson",
+    "whitehorse": "Whitehorse",
+    "belize": "Belize",
+    "costarica": "Costa Rica",
+    "elsalvador": "El Salvador",
+    "guatemala": "Guatemala",
+    "managua": "Managua",
+    "regina": "Regina",
+    "swiftcurrent": "Swift Current",
+    "tegucigalpa": "Tegucigalpa",
+    "easterisland": "Easter Island",
+    "galapagos": "Galapagos",
+    "chihuahua": "Chihuahua",
+    "mazatlan": "Mazatlan",
+    "boise": "Boise",
+    "cambridgebay": "Cambridge Bay",
+    "denver": "Denver",
+    "edmonton": "Edmonton",
+    "inuvik": "Inuvik",
+    "ojinaga": "Ojinaga",
+    "yellowknife": "Yellowknife",
+    "eirunepe": "Eirunepe",
+    "riobranco": "Rio Branco",
+    "bahiabanderas": "Bahia Banderas",
+    "beulahnorthdakota": "Beulah, North Dakota",
+    "centernorthdakota": "Center, North Dakota",
+    "chicago": "Chicago",
+    "knoxindiana": "Knox, Indiana",
+    "matamoros": "Matamoros",
+    "menominee": "Menominee",
+    "merida": "Merida",
+    "mexicocity": "Mexico City",
+    "monterrey": "Monterrey",
+    "newsalemnorthdakota": "New Salem, North Dakota",
+    "rainyriver": "Rainy River",
+    "rankininlet": "Rankin Inlet",
+    "resolute": "Resolute",
+    "tellcityindiana": "Tell City, Indiana",
+    "winnipeg": "Winnipeg",
+    "colombia": "Colombia",
+    "cancun": "Cancun",
+    "jamaica": "Jamaica",
+    "panama": "Panama",
+    "ecuador": "Ecuador",
+    "peru": "Peru",
+    "boavista": "Boa Vista",
+    "campogrande": "Campo Grande",
+    "cuiaba": "Cuiaba",
+    "manaus": "Manaus",
+    "portovelho": "Porto Velho",
+    "barbados": "Barbados",
+    "martinique": "Martinique",
+    "puertorico": "Puerto Rico",
+    "santodomingo": "Santo Domingo",
+    "bolivia": "Bolivia",
+    "chile": "Chile",
+    "cuba": "Cuba",
+    "detroit": "Detroit",
+    "grandturk": "Grand Turk",
+    "indianapolis": "Indianapolis",
+    "iqaluit": "Iqaluit",
+    "louisville": "Louisville",
+    "marengoindiana": "Marengo, Indiana",
+    "monticellokentucky": "Monticello, Kentucky",
+    "newyork": "New York",
+    "nipigon": "Nipigon",
+    "pangnirtung": "Pangnirtung",
+    "petersburgindiana": "Petersburg, Indiana",
+    "portauprince": "Port-au-Prince",
+    "thunderbay": "Thunder Bay",
+    "toronto": "Toronto",
+    "vevayindiana": "Vevay, Indiana",
+    "vincennesindiana": "Vincennes, Indiana",
+    "winamacindiana": "Winamac, Indiana",
+    "guyana": "Guyana",
+    "paraguay": "Paraguay",
+    "venezuela": "Venezuela",
+    "buenosaires": "Buenos Aires",
+    "catamarca": "Catamarca",
+    "cordoba": "Cordoba",
+    "jujuy": "Jujuy",
+    "larioja": "La Rioja",
+    "mendoza": "Mendoza",
+    "riogallegos": "Rio Gallegos",
+    "salta": "Salta",
+    "sanjuan": "San Juan",
+    "sanluis": "San Luis",
+    "tucuman": "Tucuman",
+    "ushuaia": "Ushuaia",
+    "bermuda": "Bermuda",
+    "glacebay": "Glace Bay",
+    "goosebay": "Goose Bay",
+    "halifax": "Halifax",
+    "moncton": "Moncton",
+    "thule": "Thule",
+    "araguaina": "Araguaina",
+    "bahia": "Bahia",
+    "belem": "Belem",
+    "fortaleza": "Fortaleza",
+    "maceio": "Maceio",
+    "recife": "Recife",
+    "santarem": "Santarem",
+    "saopaulo": "Sao Paulo",
+    "falklandislands": "Falkland Islands",
+    "frenchguiana": "French Guiana",
+    "palmer": "Palmer",
+    "puntaarenas": "Punta Arenas",
+    "rothera": "Rothera",
+    "suriname": "Suriname",
+    "uruguay": "Uruguay",
+    "newfoundland": "Newfoundland",
+    "fernandodenoronha": "Fernando de Noronha",
+    "southgeorgia": "South Georgia",
+    "stpierremiquelon": "St Pierre & Miquelon",
+    "westgreenland": "West Greenland",
+    "capeverde": "Cape Verde",
+    "azores": "Azores",
+    "coordinateduniversal": "Coordinated Universal",
+    "eastgreenland": "East Greenland",
+    "greenwichmean": "Greenwich Mean",
+    "abidjan": "Abidjan",
+    "bissau": "Bissau",
+    "danmarkshavn": "Danmarkshavn",
+    "monrovia": "Monrovia",
+    "reykjavik": "Reykjavik",
+    "sãotomé": "São Tomé",
+    "algiers": "Algiers",
+    "tunis": "Tunis",
+    "ireland": "Ireland",
+    "morocco": "Morocco",
+    "unitedkingdom": "United Kingdom",
+    "lagos": "Lagos",
+    "ndjamena": "Ndjamena",
+    "canary": "Canary",
+    "faroe": "Faroe",
+    "lisbon": "Lisbon",
+    "madeira": "Madeira",
+    "westernsahara": "Western Sahara",
+    "juba": "Juba",
+    "khartoum": "Khartoum",
+    "maputo": "Maputo",
+    "windhoek": "Windhoek",
+    "amsterdam": "Amsterdam",
+    "andorra": "Andorra",
+    "belgrade": "Belgrade",
+    "berlin": "Berlin",
+    "brussels": "Brussels",
+    "budapest": "Budapest",
+    "ceuta": "Ceuta",
+    "copenhagen": "Copenhagen",
+    "gibraltar": "Gibraltar",
+    "luxembourg": "Luxembourg",
+    "madrid": "Madrid",
+    "malta": "Malta",
+    "monaco": "Monaco",
+    "oslo": "Oslo",
+    "paris": "Paris",
+    "prague": "Prague",
+    "rome": "Rome",
+    "stockholm": "Stockholm",
+    "tirane": "Tirane",
+    "vienna": "Vienna",
+    "warsaw": "Warsaw",
+    "zurich": "Zurich",
+    "cairo": "Cairo",
+    "kaliningrad": "Kaliningrad",
+    "tripoli": "Tripoli",
+    "southafrica": "South Africa",
+    "troll": "Troll",
+    "baghdad": "Baghdad",
+    "qatar": "Qatar",
+    "riyadh": "Riyadh",
+    "eastAfrica": "East Africa",
+    "amman": "Amman",
+    "athens": "Athens",
+    "beirut": "Beirut",
+    "bucharest": "Bucharest",
+    "chisinau": "Chisinau",
+    "damascus": "Damascus",
+    "gaza": "Gaza",
+    "hebron": "Hebron",
+    "helsinki": "Helsinki",
+    "kiev": "Kiev",
+    "nicosia": "Nicosia",
+    "riga": "Riga",
+    "sofia": "Sofia",
+    "tallinn": "Tallinn",
+    "uzhhorod": "Uzhhorod",
+    "vilnius": "Vilnius",
+    "zaporozhye": "Zaporozhye",
+    "famagusta": "Famagusta",
+    "israel": "Israel",
+    "kirov": "Kirov",
+    "minsk": "Minsk",
+    "moscow": "Moscow",
+    "simferopol": "Simferopol",
+    "turkey": "Turkey",
+    "volgograd": "Volgograd",
+    "armenia": "Armenia",
+    "astrakhan": "Astrakhan",
+    "azerbaijan": "Azerbaijan",
+    "georgia": "Georgia",
+    "gulf": "Gulf",
+    "mauritius": "Mauritius",
+    "réunion": "Réunion",
+    "samara": "Samara",
+    "saratov": "Saratov",
+    "seychelles": "Seychelles",
+    "ulyanovsk": "Ulyanovsk",
+    "afghanistan": "Afghanistan",
+    "iran": "Iran",
+    "frenchSouthernAntarctic": "French Southern & Antarctic",
+    "maldives": "Maldives",
+    "mawson": "Mawson",
+    "pakistan": "Pakistan",
+    "tajikistan": "Tajikistan",
+    "turkmenistan": "Turkmenistan",
+    "samarkand": "Samarkand",
+    "tashkent": "Tashkent",
+    "aktau": "Aktau",
+    "aqtobe": "Aqtobe",
+    "atyrau": "Atyrau",
+    "oral": "Oral",
+    "qyzylorda": "Qyzylorda",
+    "yekaterinburg": "Yekaterinburg",
+    "colombo": "Colombo",
+    "kolkata": "Kolkata",
+    "nepal": "Nepal",
+    "bangladesh": "Bangladesh",
+    "bhutan": "Bhutan",
+    "almaty": "Almaty",
+    "kostanay": "Kostanay",
+    "indianOcean": "Indian Ocean",
+    "kyrgyzstan": "Kyrgyzstan",
+    "omsk": "Omsk",
+    "urumqi": "Urumqi",
+    "vostok": "Vostok",
+    "cocosIslands": "Cocos Islands",
+    "myanmar": "Myanmar",
+    "barnaul": "Barnaul",
+    "christmasIsland": "Christmas Island",
+    "davis": "Davis",
+    "hovd": "Hovd",
+    "bangkok": "Bangkok",
+    "hoChiMinhCity": "Ho Chi Minh City",
+    "krasnoyarsk": "Krasnoyarsk",
+    "novokuznetsk": "Novokuznetsk",
+    "novosibirsk": "Novosibirsk",
+    "tomsk": "Tomsk",
+    "jakarta": "Jakarta",
+    "pontianak": "Pontianak",
+    "australianWestern": "Australian Western",
+    "bruneiDarussalam": "Brunei Darussalam",
+    "centralIndonesia": "Central Indonesia",
+    "macao": "Macao",
+    "shanghai": "Shanghai",
+    "hongKong": "Hong Kong",
+    "irkutsk": "Irkutsk",
+    "kualaLumpur": "Kuala Lumpur",
+    "kuching": "Kuching",
+    "philippine": "Philippine",
+    "singapore": "Singapore",
+    "taipei": "Taipei",
+    "choibalsan": "Choibalsan",
+    "ulaanbaatar": "Ulaanbaatar",
+    "australianCentralWestern": "Australian Central Western",
+    "eastTimor": "East Timor",
+    "easternIndonesia": "Eastern Indonesia",
+    "japan": "Japan",
+    "pyongyang": "Pyongyang",
+    "seoul": "Seoul",
+    "palau": "Palau",
+    "chita": "Chita",
+    "khandyga": "Khandyga",
+    "yakutsk": "Yakutsk",
+    "australianCentral": "Australian Central",
+    "adelaide": "Adelaide",
+    "brokenHill": "Broken Hill",
+    "brisbane": "Brisbane",
+    "lindeman": "Lindeman",
+    "chamorro": "Chamorro",
+    "chuuk": "Chuuk",
+    "hobart": "Hobart",
+    "macquarie": "Macquarie",
+    "melbourne": "Melbourne",
+    "sydney": "Sydney",
+    "papuaNewGuinea": "Papua New Guinea",
+    "ustNera": "Ust-Nera",
+    "vladivostok": "Vladivostok",
+    "lordHowe": "Lord Howe",
+    "bougainville": "Bougainville",
+    "casey": "Casey",
+    "kosrae": "Kosrae",
+    "magadan": "Magadan",
+    "newCaledonia": "New Caledonia",
+    "norfolkIsland": "Norfolk Island",
+    "ponape": "Ponape",
+    "sakhalin": "Sakhalin",
+    "solomonIslands": "Solomon Islands",
+    "srednekolymsk": "Srednekolymsk",
+    "vanuatu": "Vanuatu",
+    "anadyr": "Anadyr",
+    "fiji": "Fiji",
+    "gilbertIslands": "Gilbert Islands",
+    "kwajalein": "Kwajalein",
+    "majuro": "Majuro",
+    "nauru": "Nauru",
+    "newZealand": "New Zealand",
+    "petropavlovskKamchatski": "Petropavlovsk-Kamchatski",
+    "tuvalu": "Tuvalu",
+    "wakeIsland": "Wake Island",
+    "wallisFutuna": "Wallis & Futuna",
+    "chatham": "Chatham",
+    "apia": "Apia",
+    "phoenixIslands": "Phoenix Islands",
+    "tokelau": "Tokelau",
+    "tonga": "Tonga",
+    "lineIsLands": "Line Islands"
+  },
+  "components": {
+    "add": "Toevoegen",
+    "apply": "Toepassen",
+    "cancel": "Annuleren",
+    "change": "Wijzigen",
+    "close": "Sluiten",
+    "confirm": "Bevestigen",
+    "continue": "Doorgaan",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "delete": "Verwijderen",
+    "enabled": "Ingeschakeld",
+    "disabled": "Uitgeschakeld",
+    "duplicate": "Dupliceren",
+    "expand": "Uitklappen",
+    "edit": "Bewerken",
+    "moveto": "Verplaatsen naar",
+    "next": "Volgende",
+    "optional": "optioneel",
+    "permanentlyDelete": "Definitief verwijderen",
+    "previous": "Vorige",
+    "publish": "Publiceren",
+    "print": "Afdrukken",
+    "revert": "Herstellen",
+    "refresh": "Verversen",
+    "rename": "Hernoemen",
+    "restore": "Terugzetten",
+    "remove": "Verwijderen",
+    "send": "Verzenden",
+    "save": "Opslaan",
+    "share": "Delen",
+    "saveChanges": "Wijzigingen opslaan",
+    "pagination": {
+      "title": "Pagina {{page}} tot {{maxPage}}",
+      "previous": "Vorige",
+      "next": "Volgende"
+    },
+    "uploader": {
+      "headline": "Upload een bestand of sleep het hier naartoe",
+      "subHeadline": "{{fileTypes}} tot {{maxSize}}",
+      "reselectFile": "Selecteer opnieuw een bestand om te uploaden",
+      "invalidType": "Niet-ondersteund bestandstype",
+      "exceedsMaxSize": "Het bestand dat je hebt geselecteerd overschrijdt de limiet van {{maxSize}}",
+      "uploading": "Uploaden..."
+    },
+    "password": {
+      "invalid": "Wachtwoord moet minimaal 8 tekens bevatten, waaronder minimaal 1 hoofdletter, 1 kleine letter en 1 cijfer."
+    },
+    "imagePicker": {
+      "image": "Afbeelding",
+      "unsplash": {
+        "title": "Unsplash",
+        "search": "Zoek Unsplash afbeeldingen",
+        "emptyState": "Geen resultaten gevonden"
+      },
+      "gradient": {
+        "title": "Verloop"
+      }
+    },
+    "datePicker": {
+      "time": "Tijd"
+    },
+    "error": {
+      "title": "Er is iets misgegaan",
+      "message": "Neem even de tijd en probeer het opnieuw. Als de fout aanhoudt, neem dan contact met ons op.",
+      "retry": "Opnieuw proberen"
+    }
+  },
+  "login": {
+    "title": "Inloggen",
+    "headline": "👋 Welkom terug!",
+    "subHeadline": "Log in op je account of <a>maak een account aan</a>",
+    "continueWith": "Of ga verder met",
+    "email": {
+      "label": "E-mailadres",
+      "required": "Het e-mailadres mag niet leeg zijn",
+      "invalid": "Het e-mailadres is niet geldig"
+    },
+    "password": {
+      "label": "Wachtwoord",
+      "required": "Het wachtwoord mag niet leeg zijn",
+      "maxLength": "Het wachtwoord moet minder dan 100 tekens bevatten."
+    },
+    "forgotPassword": "Wachtwoord vergeten?"
+  },
+  "signUp": {
+    "title": "Account aanmaken",
+    "subHeadline": "Start een 7-daagse proefperiode met alle functies ontgrendeld",
+    "name": {
+      "label": "Naam",
+      "required": "De naam mag niet leeg zijn"
+    },
+    "agreement": "Door je aan te melden, ga je akkoord met onze <a1>servicevoorwaarden</a1> en <a2>privacybeleid</a2>.",
+    "haveAccount": "Heb je al een account? <a>Log in</a>."
+  },
+  "forgotPassword": {
+    "title": "Wachtwoord vergeten?",
+    "subHeadline": "We sturen je een e-mail met een verificatiecode",
+    "toLogin": "Terug naar <a>Inloggen</a>"
+  },
+  "resetPassword": {
+    "title": "Wachtwoord opnieuw instellen",
+    "subHeadline": "We hebben je een e-mail gestuurd met een 6-cijferige verificatiecode, controleer je inbox op {{email}}.",
+    "verificationCode": {
+      "label": "Verificatiecode",
+      "required": "De verificatiecode mag niet leeg zijn"
+    },
+    "newPassword": {
+      "label": "Nieuw wachtwoord"
+    },
+    "repeatPassword": {
+      "label": "Nieuw wachtwoord",
+      "invalid": "Het nieuwe wachtwoord en herhaal wachtwoord komen niet overeen."
+    }
+  },
+  "verifyEmail": {
+    "title": "E-mailadres verifiëren",
+    "subHeadline": "We hebben je een e-mail gestuurd met een 6-cijferige verificatiecode. Controleer je inbox op {{email}}.",
+    "resend": "Code niet ontvangen? <button>Opnieuw verzenden</button>"
+  },
+  "oauth": {
+    "title": "Autoriseren",
+    "headline": "Verbinden met {{name}}",
+    "subHeadline": "Gebruik {{name}} om HeyForm te integreren met je favoriete apps, zoals Chat, E-mail of SMS.",
+    "would": "{{name}} wil graag:",
+    "scopes": [
+      "Workspace Lezen",
+      "Gegevens ophalen over alle workspaces in je HeyForm-account",
+      "Project Lezen",
+      "Gegevens ophalen over alle projecten in je HeyForm-workspace",
+      "Formulier Lezen",
+      "Gegevens ophalen over alle formulieren in je HeyForm-project",
+      "Inzendingen Lezen",
+      "Formulierinzendingen ophalen die je hebt verzameld",
+      "Accounts Lezen",
+      "Je HeyForm-accountinformatie ophalen"
+    ]
+  },
+  "workspace": {
+    "notExist": "Deze workspace bestaat niet.",
+    "backHome": "Terug naar HeyForm",
+    "appearance": {
+      "title": "Weergave",
+      "system": "Systeemvoorkeur",
+      "light": "Licht",
+      "dark": "Donker"
+    },
+    "sidebar": {
+      "workspaces": "Workspaces",
+      "projects": "Projecten",
+      "noProjects": "Je kunt contact opnemen met de eigenaar van de workspace om je aan een project toe te voegen, of je kunt er zelf een nieuwe maken.",
+      "search": "Zoeken",
+      "viewProfile": "Profiel bekijken",
+      "accountSettings": "Accountinstellingen",
+      "language": "Taal",
+      "version": "Versie {{version}}",
+      "logout": "Uitloggen",
+      "resources": "Bronnen",
+      "gettingStarted": "Aan de slag",
+      "help": "Helpcentrum",
+      "template": "Sjabloon",
+      "whatsNew": "Wat is er nieuw"
+    },
+    "creation": {
+      "title": "Workspace Aanmaken",
+      "headline": "Maak een nieuwe workspace aan",
+      "subHeadline": "Workspaces zijn gedeelde omgevingen waar leden kunnen samenwerken. Na het aanmaken van een workspace, kun je anderen uitnodigen om deel te nemen.",
+      "name": {
+        "label": "Workspace naam",
+        "required": "De workspace naam mag niet leeg zijn"
+      },
+      "logo": "Logo <span>($t(components.optional))</span>"
+    },
+    "invitation": {
+      "title": "Uitnodiging",
+      "headline": "Je bent uitgenodigd om deel te nemen aan <span1>{{owner}}</span1>'s workspace: <span2>{{name}}</span2>",
+      "subHeadline": "Word lid van de workspace en begin vandaag nog met samenwerken!",
+      "join": "Deelnemen"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "morning": "Goedemorgen, {{name}}",
+    "afternoon": "Goedemiddag, {{name}}",
+    "evening": "Goedenavond, {{name}}",
+    "overview": "Overzicht",
+    "forms": "Formulieren",
+    "submission": "Inzending",
+    "resetsOn": "Reset op {{date}}",
+    "members": "Leden",
+    "storage": "Opslag",
+    "recentForms": "Recente formulieren",
+    "noForms": "Er zijn geen formulieren in de workspace",
+    "pickTemplate": "Kies simpelweg een sjabloon of begin vanaf nul.",
+    "search": {
+      "actions": "Acties",
+      "navigation": "Navigatie",
+      "newWorkspace": "Nieuwe workspace",
+      "newProject": "Nieuw project",
+      "newForm": "Nieuw formulier",
+      "forms": "Formulieren",
+      "selectProject": "Maak een formulier aan in project",
+      "placeholder": "Zoek naar formulieren en helpdocumenten",
+      "emptyState": "Geen resultaten gevonden."
+    }
+  },
+  "members": {
+    "title": "Leden",
+    "name": "Naam",
+    "role": "Rol",
+    "you": "Jij",
+    "owner": "Eigenaar",
+    "member": "Lid",
+    "lastSeen": "Laatst gezien",
+    "menuTip": "Overdragen, verwijderen en meer...",
+    "remove": {
+      "title": "Verwijderen",
+      "headline": "Weet je zeker dat je {{name}} uit deze workspace wilt verwijderen?",
+      "subHeadline": "Zodra je dit bevestigt, heeft het lid geen toegang meer tot de gegevens van deze workspace.",
+      "confirm": "Verwijderen"
+    },
+    "transfer": {
+      "title": "Eigendom overdragen",
+      "headline": "Weet je zeker dat je deze workspace wilt overdragen aan {{name}}?",
+      "subHeadline": "Zodra je de overdracht bevestigt, ben je niet langer de eigenaar van deze workspace.",
+      "confirm": "Overdragen"
+    },
+    "leave": {
+      "title": "Workspace verlaten",
+      "headline": "Weet je zeker dat je de workspace wilt verlaten?",
+      "subHeadline": "Zodra je bevestigt deze workspace te verlaten, heb je geen toegang meer tot de gegevens ervan.",
+      "confirm": "Verlaten"
+    },
+    "invite": {
+      "title": "Lid uitnodigen",
+      "headline": "Leden uitnodigen",
+      "subHeadline": "Nodig je teamgenoten uit om deel te nemen aan de workspace via e-mail. De uitnodiging is 7 dagen geldig.",
+      "addMore": "Meer toevoegen",
+      "required": "Het e-mailadres mag niet leeg zijn",
+      "sentSuccess_one": "{{count}} uitnodiging verzonden",
+      "sentSuccess_other": "{{count}} uitnodigingen verzonden",
+      "sentSuccessMessage": "Uitgenodigde leden zijn per e-mail op de hoogte gebracht om zich aan te melden voor HeyForm"
+    }
+  },
+  "settings": {
+    "title": "Workspace Instellingen",
+    "general": {
+      "title": "Algemeen",
+      "name": "Naam",
+      "logo": "Logo",
+      "pickLogo": "Kies een logo voor je workspace."
+    },
+    "branding": {
+      "title": "Branding",
+      "removeBrandingHeadline": "HeyForm branding verwijderen",
+      "removeBrandingSubHeadline": "Om HeyForm het gevoel te geven dat het volledig eigendom is van jouw merk, verwijder je het HeyForm-logo in de formuliervoettekst.",
+      "viewBrandKit": "Bekijken",
+      "logo": {
+        "title": "Logo",
+        "required": "Het logo mag niet leeg zijn",
+        "invalid": "Het logo is geen geldige URL"
+      },
+      "theme": "Thema",
+      "presetThemes": "Vooraf ingestelde thema's",
+      "brandKitHeadline": "Brand Kit",
+      "brandKitSubHeadline": "Pas naadloos de visuele elementen van je workspace toe op je formulieren met behulp van de Brand kit. Upload je logo en maak een thema dat elk lid in je workspace kan gebruiken.",
+      "brandKitPreview": {
+        "number": "Vraag 1",
+        "title": "Wat is je naam?",
+        "description": "Typ hier je naam",
+        "input": "Je antwoord komt hier",
+        "next": "Volgende"
+      }
+    },
+    "exportData": {
+      "title": "Gegevens Exporteren",
+      "description": "Ontvang een e-mail met al je formulieren en instellingen in één bestand.",
+      "button": "Vraag je gegevens aan",
+      "successTip": "Zodra de export klaar is, ontvang je een e-mail met de downloadlink."
+    },
+    "deletion": {
+      "title": "Workspace verwijderen",
+      "description": "Het verwijderen van de workspace zal permanent alle formulieren en gegevens wissen. Ga voorzichtig te werk!",
+      "button": "Verwijder deze workspace",
+      "headline": "Verifieer workspace verwijderingsverzoek",
+      "sentSuccess": "Verificatiecode voor verwijdering verzonden",
+      "sentFailed": "Verzenden van verificatiecode voor verwijdering mislukt",
+      "tip1": "Als je zeker weet dat je wilt doorgaan met het verwijderen van de workspace <strong>{{name}}</strong>, ga dan hieronder verder.",
+      "tip2": "Houd er rekening mee dat deze bewerking onomkeerbaar is en permanent alle gegevens die zijn gekoppeld aan deze workspace zal wissen.",
+      "tip3": "Zodra je het verwijderen van de workspace bevestigt, heb je geen toegang meer tot de workspace-gegevens.",
+      "code": {
+        "label": "Voer de verwijderingscode in die is verzonden naar <strong>{{email}}</strong>.",
+        "required": "De verificatiecode mag niet leeg zijn"
+      }
+    },
+    "form": {
+      "exportImport": "Exporteren/Importeren",
+      "exportImportDescription": "Exporteer dit formulier als een JSON-bestand of importeer een JSON-bestand om een nieuw formulier te maken.",
+      "exportJson": "Exporteren als JSON"
+    }
+  },
+  "project": {
+    "menuTip": "Hernoemen, verwijderen en meer...",
+    "forms": {
+      "title": "Formulieren",
+      "headline": "Er zijn geen formulieren in het project"
+    },
+    "trash": {
+      "title": "Prullenbak",
+      "headline": "Er zijn geen formulieren in de prullenbak",
+      "subHeadline": "Formulieren worden na 30 dagen permanent verwijderd uit de prullenbak.",
+      "delete": {
+        "headline": "Weet je zeker dat je het formulier permanent wilt verwijderen: {{name}}?",
+        "subHeadline": "Zodra je het verwijderen van het formulier bevestigt, worden alle gegevens die gerelateerd zijn aan het formulier permanent verwijderd."
+      },
+      "tip": "Je kunt elk formulier herstellen dat binnen de afgelopen 30 dagen is verwijderd. <a>Lees meer <icon /></a>"
+    },
+    "members": {
+      "title": "Leden",
+      "headline": "Leden in dit project",
+      "subHeadline": "Alleen gebruikers die zijn <strong>toegevoegd aan dit project</strong> hebben toegang tot de gegevens, inclusief formulieren en inzendingen.",
+      "addMember": "Voeg lid toe aan dit project",
+      "unjoinedMembers": "Leden die niet deelnemen",
+      "add": "Toevoegen",
+      "addSuccess": "Het lid is succesvol toegevoegd",
+      "addFailed": "Toevoegen van het lid mislukt",
+      "remove": "Verwijderen",
+      "removeSuccess": "Het lid is succesvol verwijderd",
+      "removeFailed": "Verwijderen van het lid mislukt",
+      "leave": "Verlaten",
+      "leaveSuccess": "Je hebt het project succesvol verlaten",
+      "leaveFailed": "Verlaten van het project mislukt"
+    },
+    "creation": {
+      "title": "Project Aanmaken",
+      "headline": "Maak een nieuw project aan",
+      "subHeadline": "Projecten zijn subgroepen binnen een workspace, waardoor je leden kunt toevoegen om samen te werken aan formulieren en integraties.",
+      "name": {
+        "label": "Projectnaam",
+        "required": "De projectnaam mag niet leeg zijn"
+      },
+      "logo": "Logo <span>($t(components.optional))</span>",
+      "addMembers": "Voeg leden toe aan dit project"
+    },
+    "rename": {
+      "headline": "Hernoem dit project",
+      "name": {
+        "label": "Naam",
+        "required": "De naam mag niet leeg zijn"
+      }
+    },
+    "moveto": {
+      "headline": "Verplaats '{{name}}' naar",
+      "project": {
+        "required": "Het project mag niet leeg zijn"
+      }
+    },
+    "delete": {
+      "headline": "Verifieer project verwijderingsverzoek",
+      "sentSuccess": "Verificatiecode voor verwijdering verzonden",
+      "sentFailed": "Verzenden van verificatiecode voor verwijdering mislukt",
+      "tip1": "Als je zeker weet dat je wilt doorgaan met het verwijderen van het project <strong>{{name}}</strong>, ga dan hieronder verder.",
+      "tip2": "Houd er rekening mee dat deze bewerking onomkeerbaar is en permanent alle gegevens die zijn gekoppeld aan dit project zal wissen.",
+      "tip3": "Zodra je het verwijderen van het project bevestigt, heb je geen toegang meer tot de projectgegevens.",
+      "code": {
+        "label": "Voer de verwijderingscode in die is verzonden naar <strong>{{email}}</strong>.",
+        "required": "De verificatiecode mag niet leeg zijn"
+      },
+      "confirm": "Project verwijderen"
+    }
+  },
+  "form": {
+    "menuTip": "Hernoemen, dupliceren en meer...",
+    "metadata_zero": "Nog geen inzendingen · Bewerkt {{date}}",
+    "metadata_one": "{{count}} inzending · Bewerkt {{date}}",
+    "metadata_other": "{{count}} inzendingen · Bewerkt {{date}}",
+    "metadata2_zero": "Nog geen inzendingen · {{date}} over",
+    "metadata2_one": "{{count}} inzending · {{date}} over",
+    "metadata2_other": "{{count}} inzendingen · {{date}} over",
+    "metadata3_zero": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_one": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_other": "<span>{{status}}</span> · $t(form.metadata)",
+    "editForm": "Formulier bewerken",
+    "active": "Actief",
+    "draft": "Concept",
+    "suspended": "Opgeschort",
+    "closed": "Gesloten",
+    "duplicate": "{{name}} (Kopie)",
+    "moveToTrash": "Verplaatsen naar prullenbak",
+    "copyLinkToShare": "Kopieer link om te delen",
+    "creation": {
+      "title": "Formulier Aanmaken",
+      "headline": "Maak een nieuw formulier aan",
+      "defaultName": "Naamloos",
+      "scratch": {
+        "headline": "Begin vanaf nul",
+        "subHeadline": "Bouw vanaf een lijst met beschikbare vraagtypen"
+      },
+      "template": {
+        "headline": "Selecteer een sjabloon",
+        "subHeadline": "Kies uit handgemaakte sjablonen om direct te beginnen"
+      },
+      "ai": {
+        "headline": "Maak met AI",
+        "subHeadline": "Genereer aangepaste vragen met AI in seconden"
+      },
+      "project": {
+        "label": "Project",
+        "required": "Het project mag niet leeg zijn"
+      }
+    },
+    "template": {
+      "headline": "Sjablonen",
+      "categories": [
+        "Enquête",
+        "Leadgeneratie",
+        "Klantenondersteuning",
+        "Feedback",
+        "Medewerker/Baan",
+        "Boeking & Bestelling",
+        "Marketing",
+        "Registratie",
+        "Onderwijs",
+        "Evenement",
+        "Gezondheidszorg",
+        "Applicatie",
+        "Vragenlijst & Quiz",
+        "Werken op afstand",
+        "Contact",
+        "Bedrijf",
+        "COVID-19",
+        "Peiling",
+        "Aanvraag",
+        "Bankieren & Financiën",
+        "Donatie & Liefdadigheid"
+      ],
+      "use": "Gebruik dit sjabloon"
+    },
+    "ai": {
+      "topic": {
+        "label": "Wat wil je maken?",
+        "description": "Geef zoveel mogelijk details over het formulier dat je wilt maken.",
+        "ideasForYou": "Ideeën voor jou",
+        "examples": [
+          "Maak een sollicitatieformulier om kandidaatgegevens en cv's te verzamelen.",
+          "Klanttevredenheidsenquête om productkwaliteit en klantenservice te evalueren.",
+          "Geef me een evenementregistratieformulier om deelnemersinformatie te verzamelen."
+        ],
+        "required": "Dit veld mag niet leeg zijn"
+      },
+      "reference": {
+        "label": "Referentie (optioneel)",
+        "description": "Na het verstrekken van de Referentie, zal de AI vragen en opties genereren strikt binnen het bereik gespecificeerd door de Referentie."
+      },
+      "submit": "Genereer vragen"
+    },
+    "chat": {
+      "title": "HeyForm AI Assistent",
+      "welcome": "Welkom bij HeyForm's AI Assistent! Dit is een innovatieve functie aangedreven door geavanceerde AI-technologie, ontworpen om je te helpen formuliervragen en logica te maken.",
+      "compose": "Vraag me wat je wilt...",
+      "fieldsUpdated": "De vragen van je formulier zijn bijgewerkt.",
+      "logicUpdated": "De logica van je formulier is bijgewerkt.",
+      "themeUpdated": "Het thema van je formulier is bijgewerkt."
+    },
+    "rename": {
+      "headline": "Hernoem dit formulier",
+      "name": {
+        "label": "Naam",
+        "required": "De naam mag niet leeg zijn"
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "views": "Weergaven",
+      "submissions": "Inzendingen",
+      "completeRate": "Voltooiingspercentage",
+      "averageDuration": "Gemiddelde duur",
+      "7d": "Afgelopen week",
+      "1m": "Afgelopen maand",
+      "3m": "Afgelopen 3 maanden",
+      "6m": "Afgelopen 6 maanden",
+      "1y": "Afgelopen jaar",
+      "7dTrend": "{{change}}% ten opzichte van vorige week",
+      "1mTrend": "{{change}}% ten opzichte van vorige maand",
+      "3mTrend": "{{change}}% ten opzichte van afgelopen 3 maanden",
+      "6mTrend": "{{change}}% ten opzichte van afgelopen 6 maanden",
+      "1yTrend": "{{change}}% ten opzichte van vorig jaar",
+      "report": {
+        "headline": "Rapport",
+        "submission_zero": "Nog geen inzendingen",
+        "submission_one": "{{count}} inzending",
+        "submission_other": "{{count}} inzendingen",
+        "submission2_zero": "Nog geen inzendingen · {{average}} gemiddeld",
+        "submission2_one": "{{count}} inzending · {{average}} gemiddeld",
+        "submission2_other": "{{count}} inzendingen · {{average}} gemiddeld"
+      }
+    },
+    "customReport": {
+      "title": "Aangepast rapport",
+      "metadata_zero": "Nog geen inzendingen",
+      "metadata_one": "{{count}} inzending",
+      "metadata_other": "{{count}} inzendingen",
+      "enablePublicAccess": "Openbare toegang inschakelen",
+      "copyLink": "Kopieer rapportlink",
+      "theme": "Thema",
+      "heading": "Kop",
+      "question": "Vraag",
+      "showQuestion": "Toon vraag",
+      "hideQuestion": "Verberg vraag",
+      "chart": "Grafiek",
+      "background": "Achtergrond"
+    },
+    "submissions": {
+      "title": "Inzendingen",
+      "headline": "Nog geen inzendingen",
+      "subHeadline": "Deel het formulier online om een breder publiek te bereiken.",
+      "inbox": "Inbox",
+      "spam": "Spam",
+      "view": "Bekijken",
+      "downloadCSV": "Download CSV",
+      "maximize": "Tabel maximaliseren",
+      "minimize": "Tabel minimaliseren",
+      "moveTo": "Verplaatsen naar {{name}}",
+      "detail": {
+        "headline": "Inzendingsdetails",
+        "menuTip": "Afdrukken en meer..."
+      }
+    },
+    "integrations": {
+      "title": "Integraties",
+      "connect": "Verbinden",
+      "connectWith": "Verbinden met {{name}}",
+      "readMore": "Lees meer over {{name}} integratie <icon />",
+      "reporting": "Rapportage",
+      "analytics": "Analytics",
+      "marketing": "Marketing",
+      "automation": "Automatisering",
+      "customerSupport": "Klantenondersteuning",
+      "developerTools": "Ontwikkeltools",
+      "productivity": "Productiviteit",
+      "itEngineering": "IT & Engineering",
+      "fileManagement": "Bestandsbeheer",
+      "mapFields": {
+        "headline": "Velden koppelen",
+        "subHeadline": "Koppel HeyForm aan {{name}} kolommen. Als je een kolom wijzigt op {{name}}, werk deze dan ook hier bij, anders werkt de integratie niet zoals verwacht.",
+        "requried": "De veldkoppelingen mogen niet leeg zijn",
+        "leftPlaceholder": "Selecteer een HeyForm vraag",
+        "rightPlaceholder": "{{name}} kolom",
+        "requireLeft": "De linkerkant van veld {{index}} mag niet leeg zijn",
+        "requireRight": "De rechterkant van veld {{index}} mag niet leeg zijn",
+        "addMore": "Veld toevoegen"
+      },
+      "authorization": {
+        "headline": "Autorisatie",
+        "subHeadline": "Allereerst, autoriseer HeyForm om toegang te krijgen tot je gegevens.",
+        "loginWith": "Inloggen met {{name}}"
+      },
+      "webhook": {
+        "label": "Endpoint URL",
+        "invalid": "De endpoint URL is niet geldig"
+      },
+      "telegram": {
+        "label": "Chat ID",
+        "required": "De Chat ID mag niet leeg zijn",
+        "footer": "Voeg <a>@HeyForm_bot</a> toe aan je Telegram-groep en typ <code>/start@HeyForm_bot</code> in de groep. Je ontvangt dan een bericht met een Chat ID."
+      },
+      "legacyslack": {
+        "label": "Webhook URL",
+        "invalid": "De webhook URL is niet geldig",
+        "footer": "Maak je <a1>Slack app</a1> aan, schakel <a2>Incoming Webhooks</a2> in en plak de Webhook URL hier."
+      },
+      "slack": {
+        "channel": {
+          "headline": "Kanaal"
+        }
+      },
+      "lark": {
+        "label": "Webhook URL",
+        "invalid": "De webhook URL is niet geldig",
+        "footer": "Voeg een <a>Custom bot</a> toe aan je groep en plak de Webhook URL hier."
+      },
+      "email": {
+        "label": "E-mailadres",
+        "invalid": "Het e-mailadres is niet geldig",
+        "deprecation": "Deze integratie is verouderd. Stel deze in via de <a>Formulierinstellingen</a>."
+      },
+      "facebookpixel": {
+        "label": "Pixel ID",
+        "required": "De Pixel ID mag niet leeg zijn",
+        "placeholder": "bijv. 100xxxxxxxxxxxxx",
+        "footer": "Kopieer en plak je Facebook Pixel ID hier. <a>Hoe vind ik mijn Pixel ID</a>?"
+      },
+      "googleanalytics": {
+        "label": "Trackingcode",
+        "required": "De trackingcode mag niet leeg zijn",
+        "placeholder": "bijv. UA-XXXXX-Y",
+        "footer": "Kopieer en plak je Google Analytics trackingcode hieronder. <a>Hoe vind ik mijn trackingcode</a>?"
+      },
+      "googledrive": {
+        "drive": {
+          "headline": "Selecteer een drive",
+          "footer": "Je kunt je eigen Google Drive selecteren of <a>Google gedeelde drives</a> waar je mee verbonden bent."
+        },
+        "folder": {
+          "headline": "Selecteer een map",
+          "footer": "Je kunt een map selecteren om de bestanden die zijn geüpload vanuit je HeyForm te plaatsen."
+        }
+      },
+      "googlesheets": {
+        "spreadsheet": "Selecteer een spreadsheet",
+        "worksheet": "Selecteer een werkblad"
+      },
+      "osticket": {
+        "serverURL": {
+          "headline": "Server URL",
+          "footer": "De server URL is de URL waarmee je toegang hebt tot de frontend van het systeem. bijv. <span>https://support.domain.com</span>."
+        },
+        "apiKey": {
+          "headline": "API Sleutel",
+          "footer": "Genereer een API-token door naar <a>Beheren -> API-sleutels</a> te gaan in het beheerpaneel, en zorg ervoor dat het toestemming heeft om tickets aan te maken."
+        },
+        "userName": {
+          "headline": "Gebruikersnaam"
+        },
+        "emailAddress": {
+          "headline": "E-mailadres"
+        },
+        "phoneNumber": {
+          "headline": "Telefoonnummer (optioneel)"
+        },
+        "subject": {
+          "headline": "Onderwerp"
+        },
+        "message": {
+          "headline": "Bericht"
+        }
+      },
+      "hubspot": {
+        "fullName": {
+          "headline": "Volledige naam"
+        },
+        "jobTitle": {
+          "headline": "Functietitel (optioneel)"
+        }
+      },
+      "mailChimp": {
+        "audience": {
+          "headline": "Doelgroep",
+          "placeholder": "Selecteer een doelgroep"
+        },
+        "subscriberEmail": {
+          "headline": "E-mail abonnee"
+        },
+        "address": {
+          "headline": "Adres"
+        }
+      },
+      "airtable": {
+        "base": {
+          "headline": "Base"
+        },
+        "table": {
+          "headline": "Tabel"
+        }
+      },
+      "monday": {
+        "board": {
+          "headline": "Bord"
+        },
+        "group": {
+          "headline": "Groep (optioneel)"
+        },
+        "itemName": {
+          "headline": "Itemnaam"
+        },
+        "columnValues": {
+          "headline": "Kolomwaarden (optioneel)"
+        }
+      },
+      "supportPal": {
+        "systemURL": {
+          "headline": "Systeem URL",
+          "subHeadline": "De server URL is de URL waarmee je toegang hebt tot de frontend van het systeem. bijv. <span>https://support.domain.com</span>."
+        },
+        "token": {
+          "headline": "API Token",
+          "subHeadline": "Genereer een API-token door naar Instellingen -> Algemeen -> API Tokens te gaan in het operatorpaneel, en zorg ervoor dat het Lees- en Schrijftoegang heeft."
+        },
+        "userName": {
+          "headline": "Gebruikersnaam (optioneel)"
+        },
+        "email": {
+          "headline": "E-mailadres (optioneel)"
+        },
+        "subject": {
+          "headline": "Onderwerp"
+        },
+        "text": {
+          "headline": "Tekst"
+        },
+        "department": {
+          "headline": "Afdeling"
+        },
+        "priority": {
+          "headline": "Prioriteit"
+        },
+        "status": {
+          "headline": "Status"
+        }
+      },
+      "notion": {
+        "database": {
+          "headline": "Database"
+        }
+      }
+    },
+    "share": {
+      "title": "Delen",
+      "unpublishedTip": "Dit formulier heeft niet-gepubliceerde wijzigingen. Publiceer de nieuwste versie voordat je het formulier deelt.",
+      "link": {
+        "headline": "Link Delen",
+        "viaX": "Delen op X",
+        "viaFacebook": "Delen op Facebook",
+        "viaLinkedIn": "Delen op LinkedIn",
+        "qrcode": {
+          "title": "Delen via QR Code",
+          "headline": "Formulier insluiten",
+          "subHeadline": "Hier zijn enkele opties om je formulier te integreren in je website.",
+          "download": "Downloaden"
+        },
+        "email": {
+          "title": "Delen via e-mail",
+          "subject": "Zou je een moment kunnen nemen om dit heyform in te vullen?",
+          "body": "We zouden het zeer waarderen als je dit formulier invult: {{url}}. Dank je wel."
+        },
+        "useCustomDomain": "Gebruik aangepast domein"
+      },
+      "settings": {
+        "headline": "Link instellingen",
+        "subHeadline": "Stel in hoe je formulier verschijnt wanneer je de link deelt op sociale media.",
+        "title": "Titel",
+        "description": "Beschrijving",
+        "preview": {
+          "headline": "Voorbeeld",
+          "subHeadline": "HeyForm genereert automatisch een <a>Open Graph</a> afbeelding voor je. Je kunt ook <button>je eigen afbeelding uploaden</button>.",
+          "uploadTitle": "Upload je eigen Open Graph afbeelding",
+          "uploadDescription": "Aanbevolen grootte: 1200x630 | JPG, PNG."
+        }
+      },
+      "embed": {
+        "title": "Insluiten",
+        "headline": "Formulier insluiten",
+        "subHeadline": "Hier zijn enkele opties om je formulier te integreren in je website.",
+        "standard": "Standaard",
+        "modal": "Modal",
+        "popup": "Popup",
+        "fullpage": "Volledige pagina",
+        "getCode": "Krijg de code",
+        "settings": "Instellingen",
+        "width": "Breedte",
+        "height": "Hoogte",
+        "auto": "Automatisch",
+        "fixed": "Vast",
+        "size": "Modal grootte",
+        "small": "Klein",
+        "medium": "Middel",
+        "large": "Groot",
+        "launch": "Lanceren",
+        "click": "Bij knop klik",
+        "load": "Bij pagina laden",
+        "delay": "Na verstreken tijd",
+        "exit": "Bij afsluiten",
+        "scroll": "Na scrollen",
+        "triggerBackground": "Trigger achtergrond",
+        "triggerText": "Trigger tekst",
+        "hideAfterSubmit": "Sluiten bij indienen",
+        "secondsDelay": "seconden vertraging",
+        "pageScrolled": "% van pagina gescrolld",
+        "position": "Positie",
+        "bottomLeft": "Linksonder",
+        "bottomRight": "Rechtsonder",
+        "transparentBackground": "Transparante achtergrond",
+        "code": {
+          "headline": "Voeg HeyForm toe aan je website",
+          "subHeadline": "Plak het volgende codefragment in het body-gedeelte van je website."
+        }
+      }
+    },
+    "settings": {
+      "title": "Formulierinstellingen",
+      "general": {
+        "title": "Algemeen",
+        "archive": {
+          "headline": "Inzendingsarchief",
+          "subHeadline": "Schakel het inzendingsarchief uit als je liever hebt dat HeyForm je inzendingen niet opslaat."
+        },
+        "redirect": {
+          "headline": "Doorsturen bij voltooiing",
+          "subHeadline": "Doorsturen naar een aangepaste URL wanneer het formulier is ingediend.",
+          "placeholder": "Voer hier de doorstuur-URL in, bijv. https://example.com",
+          "invalidUrl": "De doorstuur-URL is niet geldig"
+        },
+        "progressBar": {
+          "headline": "Voortgangsbalk",
+          "subHeadline": "Je kunt respondenten gemakkelijk laten weten hoe dicht ze bij het voltooien van je formulier zijn."
+        },
+        "viewQuestions": {
+          "headline": "Bekijk alle vragen",
+          "subHeadline": "Je kunt dit inschakelen om respondenten door alle vragen te laten bladeren."
+        },
+        "navigationArrows": {
+          "headline": "Navigatiepijlen",
+          "subHeadline": "Je kunt dit inschakelen om respondenten tussen vragen te laten navigeren."
+        }
+      },
+      "access": {
+        "title": "Toegang",
+        "closeForm": {
+          "headline": "Formulier sluiten",
+          "subHeadline": "Je kunt dit formulier sluiten om te stoppen met het ontvangen van nieuwe inzendingen en openbare toegang tot het formulier te voorkomen."
+        },
+        "scheduledDate": {
+          "headline": "Formulier sluiten op een geplande datum",
+          "subHeadline": "Wanneer je inzendingen wilt ontvangen binnen een bepaald datumbereik, kun je hier de start- en einddatums instellen.",
+          "startDate": "Startdatum",
+          "endDate": "Einddatum"
+        },
+        "countdown": {
+          "headline": "Aftelling",
+          "subHeadline": "Je kunt hier een toegestane tijd instellen als je de inzending wilt blokkeren nadat de aftelling is afgelopen.",
+          "days": "Dagen",
+          "seconds": "Seconden",
+          "minutes": "Minuten",
+          "hours": "Uren"
+        },
+        "limitIP": {
+          "headline": "Beperk de frequentie van indienen voor hetzelfde IP-adres",
+          "subHeadline": "Je kunt dit hier instellen als je het aantal indieningkeren van hetzelfde IP-adres in een periode wilt beperken.",
+          "times": "keer",
+          "inEvery": "in elke"
+        },
+        "quotaLimit": {
+          "headline": "Beperk het aantal inzendingen",
+          "subHeadline": "Hiermee kun je een specifiek totaal aantal toegestane inzendingen voor je formulier instellen.",
+          "invalid": "Het aantal inzendingen is niet geldig"
+        },
+        "closedMessage": {
+          "headline": "Gesloten formulier bericht",
+          "subHeadline": "Dit is wat de ontvangers zien als je het formulier hebt gesloten met een van de bovenstaande opties.",
+          "title": "Titel van gesloten bericht",
+          "description": "Beschrijving van gesloten bericht"
+        }
+      },
+      "translations": {
+        "title": "Vertalingen",
+        "primaryLanguage": {
+          "headline": "Primaire taal",
+          "subHeadline": "Selecteer de primaire taal waarin respondenten je formulier zullen zien. Van toepassing op niet-aangepaste tekst, zoals standaardknoppen, validatiefouten, enz."
+        },
+        "translations": {
+          "headline": "Vertalingen",
+          "subHeadline": "Vertaal de vragen van het formulier automatisch naar je gekozen talen met behulp van <a>OpenAI ChatGPT</a>.",
+          "placeholder": "Selecteer talen"
+        }
+      },
+      "emailNotification": {
+        "title": "E-mailmeldingen",
+        "self": {
+          "headline": "E-mailmeldingen voor jezelf",
+          "subHeadline": "Ontvang een e-mail wanneer iemand dit formulier invult."
+        },
+        "respondent": {
+          "headline": "E-mailmeldingen voor respondent",
+          "subHeadline": "Stuur een aangepaste tekst-e-mail naar respondenten na het indienen van het formulier."
+        }
+      },
+      "protection": {
+        "title": "Beveiliging",
+        "password": {
+          "headline": "Wachtwoordbeveiliging",
+          "subHeadline": "Beveilig je formulier met een enkel, gemakkelijk te onthouden wachtwoord."
+        },
+        "bot": {
+          "headline": "Botpreventie",
+          "subHeadline": "Voorkom botinzendingen door de captcha in te schakelen."
+        },
+        "antiSpam": {
+          "headline": "Anti-spam",
+          "subHeadline": "Je kunt dit inschakelen om spam-inzendingen te voorkomen."
+        }
+      }
+    },
+    "builder": {
+      "title": "Bouwer",
+      "navbar": {
+        "syncing": "Vragen opslaan..."
+      },
+      "question": {
+        "menuTip": "Dupliceren, verwijderen en meer...",
+        "title": "Vraag",
+        "answer": "Antwoord",
+        "recommended": "Aanbevolen",
+        "welcome": "Welkomstscherm",
+        "thankYou": "Eindscherm",
+        "multipleChoice": "Meerkeuze",
+        "phoneNumber": "Telefoonnummer",
+        "shortText": "Korte tekst",
+        "longText": "Lange tekst",
+        "questionGroup": "Vraaggroep",
+        "statement": "Verklaring",
+        "pictureChoice": "Afbeeldingskeuze",
+        "yesNo": "Ja/Nee",
+        "email": "E-mail",
+        "fullName": "Volledige naam",
+        "opinionScale": "Mening schaal",
+        "dateTime": "Datum tijd",
+        "dateRange": "Datumbereik",
+        "fileUpload": "Bestand uploaden",
+        "address": "Adres",
+        "country": "Land",
+        "legalTerms": "Juridische voorwaarden",
+        "signature": "Handtekening",
+        "website": "Website",
+        "inputTable": "Invoertabel",
+        "submitDate": "Inzenddatum",
+        "hiddenFields": "Verborgen velden",
+        "contactInfo": "Contactinformatie",
+        "choices": "Keuzes",
+        "text": "Tekst",
+        "number": "Nummer",
+        "rating": "Beoordeling",
+        "data": "Gegevens",
+        "formStructure": "Formulierstructuur",
+        "legalConsent": "Juridisch & toestemming",
+        "date": "Datum",
+        "payment": "Betaling",
+        "string": "Tekstreeks"
+      },
+      "mention": {
+        "mention": "Vermeld een vraag",
+        "hiddenfield": "Vermeld een verborgen veld",
+        "variable": "Vermeld een variabele",
+        "emptyState": "Geen resultaten gevonden."
+      },
+      "sidebar": {
+        "questions": "Vragen",
+        "addQuestion": "Vraag toevoegen",
+        "endings": "Eindes",
+        "addEndingTip": "Voeg een nieuw einde toe. Je kunt meerdere eindes maken en logica implementeren om te bepalen welke mensen zullen zien."
+      },
+      "compose": {
+        "question": "Typ een vraag",
+        "description": "Voeg een beschrijving toe (optioneel)",
+        "pasteLink": "Plak of voer link hier in",
+        "choicePlaceholder": "Keuze",
+        "otherChoice": "Anders",
+        "addChoice": "Keuze toevoegen",
+        "dateRangeTo": "tot",
+        "addColumn": "Kolom toevoegen",
+        "columnPlaceholder": "Kolom {{index}}"
+      },
+      "settings": {
+        "title": "Instellingen",
+        "required": "Verplicht",
+        "dateFormat": "Datumformaat",
+        "timeField": "Tijdveld",
+        "multipleSelection": "Meervoudige selectie",
+        "randomize": "Willekeurig maken",
+        "allowOther": "\"Anders\" optie",
+        "total": "Totaal",
+        "labels": "Labels",
+        "leftLabel": "Linker label",
+        "centerLabel": "Midden label",
+        "rightLabel": "Rechter label",
+        "defaultCountry": "Standaard land",
+        "buttonText": "Knoptekst",
+        "redirect": "Doorsturen bij voltooiing",
+        "shape": "Vorm",
+        "star": "Ster",
+        "heart": "Hart",
+        "crown": "Kroon",
+        "happy": "Blij",
+        "thumb_up": "Duim omhoog",
+        "layout": "Indeling",
+        "brightness": "Helderheid",
+        "questionType": {
+          "headline": "Vraagtype wijzigen?",
+          "subHeadline": "Verschillende vraagtypen hebben verschillende gegevensstructuren voor hun antwoorden. Wisselen tussen hen kan ertoe leiden dat sommige antwoorden verloren gaan. \nExporteer je antwoorden voordat je doorgaat."
+        },
+        "payment": {
+          "title": "Betaling",
+          "headline": "Verbinden met stripe",
+          "subHeadline": "<div>Verzamel en ontvang betalingen direct op je bankrekening via Stripe.</div><div>Gratis HeyForm-gebruikers verzamelen betalingen tegen het tarief van <a>5% HeyForm commissie + Stripe transactiekosten.</a></div><div>Om de 5% HeyForm commissie op betalingen te verwijderen, upgrade naar <button>HeyForm Premium</button>.</div>",
+          "stripeAccount": "Stripe account",
+          "revoke": "Intrekken",
+          "price": "Prijs",
+          "currency": "Valuta",
+          "eur": "EUR — Euro",
+          "gbp": "GBP — Pond sterling",
+          "usd": "USD — Amerikaanse dollar",
+          "aud": "AUD — Australische dollar",
+          "cad": "CAD — Canadese dollar",
+          "chf": "CHF — Zwitserse frank",
+          "nok": "NOK — Noorse kroon",
+          "sek": "SEK — Zweedse kroon",
+          "dkk": "DKK — Deense kroon",
+          "mxn": "MXN — Mexicaanse peso",
+          "nzd": "NZD — Nieuw-Zeelandse dollar",
+          "brl": "BRL — Braziliaanse real"
+        },
+        "multipleChoice": {
+          "unlimited": "Onbeperkt",
+          "exactNumber": "Exact aantal",
+          "range": "Bereik",
+          "badge": {
+            "title": "Badge",
+            "letter": "Letter",
+            "number": "Nummer"
+          },
+          "verticalAlignment": "Verticale uitlijning"
+        }
+      },
+      "design": {
+        "title": "Design",
+        "theme": {
+          "title": "Thema",
+          "success": "Het thema is succesvol bijgewerkt.",
+          "failed": "Bijwerken van het thema mislukt"
+        },
+        "customize": {
+          "title": "Aanpassen",
+          "systemFonts": "Systeemlettertypen",
+          "question": "Vragen",
+          "answer": "Antwoorden",
+          "buttons": "Knoppen",
+          "buttonText": "Knoptekst",
+          "background": "Achtergrond",
+          "backgroundImage": "Achtergrondafbeelding",
+          "brightness": "Helderheid",
+          "customCSS": "Aangepaste CSS"
+        }
+      },
+      "logic": {
+        "title": "Logica",
+        "hiddenFields": {
+          "menuTip": "Bewerken, verwijderen en meer...",
+          "headline": "Verborgen velden",
+          "subHeadline": "Verborgen velden stellen je in staat om onderwerpen bij te houden die worden onderzocht. Ze blijven onzichtbaar voor iedereen die het formulier invult, maar maken efficiënte gegevensverzameling en -gebruik mogelijk.",
+          "addHiddenField": "Verborgen veld toevoegen",
+          "updateHiddenField": "Verborgen veld bijwerken",
+          "emptyState": "Verborgen veld maakt onzichtbare efficiënte gegevensverzameling mogelijk. <a>Lees meer <icon /></a>",
+          "name": "Naam"
+        },
+        "variable": {
+          "headline": "Variabelen",
+          "subHeadline": "Een formuliervariabele vertegenwoordigt een verborgen berekende waarde op basis van de antwoorden van je respondenten in je formulier. Het kan bijvoorbeeld worden gebruikt om de score van een quiz te berekenen.",
+          "addVariable": "Variabele toevoegen",
+          "updateVariable": "Variabele bijwerken",
+          "emptyState": "Variabele berekent verborgen waarden uit antwoorden. <a>Lees meer <icon /></a>",
+          "type": "Type",
+          "name": "Naam",
+          "defaultValue": "Standaardwaarde"
+        },
+        "rule": {
+          "headline": "Regels",
+          "bulkEdit": {
+            "headline": "Bulk bewerken",
+            "subHeadline": "Bewerk de logica van meerdere vragen tegelijk in bulk."
+          },
+          "removeAll": "Alles verwijderen",
+          "when": "Wanneer",
+          "then": "Dan",
+          "deleteRule": "Regel verwijderen",
+          "emptyState": "Logica stelt formulieren in staat om te reageren op antwoorden. <a>Lees meer <icon /></a>",
+          "singleRule": "1 regel is ingesteld",
+          "multipleRules": "{{count}} regels zijn ingesteld",
+          "redirect": "Doorsturen bij voltooiing",
+          "required": "De logica regel mag niet leeg zijn",
+          "addRule": "Regel toevoegen",
+          "ruleCount_one": "1 regel is ingesteld",
+          "ruleCount_other": "{{count}} regels zijn ingesteld",
+          "is": "Is gelijk aan",
+          "isNot": "Is niet gelijk aan",
+          "contains": "Bevat",
+          "doesNotContain": "Bevat niet",
+          "startsWith": "Begint met",
+          "endsWith": "Eindigt met",
+          "equal": "=",
+          "notEqual": "!=",
+          "greaterThan": ">",
+          "lessThan": "<",
+          "greaterOrEqualThan": ">=",
+          "lessOrEqualThan": "<=",
+          "isBefore": "Is voor",
+          "isAfter": "Is na",
+          "isEmpty": "Is leeg",
+          "isNotEmpty": "Is niet leeg",
+          "addition": "Optellen (+)",
+          "subtraction": "Aftrekken (-)",
+          "multiplication": "Vermenigvuldigen (×)",
+          "division": "Delen (÷)",
+          "assignment": "Toewijzen (=)",
+          "navigate": "Spring naar",
+          "calculate": "Berekenen"
+        }
+      },
+      "preview": {
+        "title": "Voorbeeld",
+        "desktop": "Desktop",
+        "mobile": "Mobiel"
+      }
+    },
+    "suspend": {
+      "headline": "Het formulier is opgeschort",
+      "subHeadline": "Als je vragen hebt over de opschorting, klik dan op de knop hieronder om contact met ons op te nemen.",
+      "contactUs": "Neem contact met ons op"
+    }
+  },
+  "template": {
+    "use": {
+      "title": "Sjabloon",
+      "workspace": "Workspace",
+      "createWorkspace": "Maak een workspace aan",
+      "project": "Project",
+      "createProject": "Maak een project aan",
+      "submit": "Begin met dit sjabloon"
+    }
+  },
+  "user": {
+    "headline": "Accountinstellingen",
+    "subHeadline": "Wijzigingen in accountinstellingen zijn van toepassing op al je workspaces.",
+    "avatar": {
+      "headline": "Avatar",
+      "subHeadline": "Gravatar wordt standaard gebruikt als je HeyForm avatar, je kunt hier je eigen avatar uploaden."
+    },
+    "name": "Je naam",
+    "email": {
+      "headline": "E-mailadres",
+      "subHeadline": "We sturen je een e-mail met een 6-cijferige verificatiecode.",
+      "label": "E-mailadres",
+      "invalid": "Het e-mailadres is niet geldig",
+      "code": {
+        "label": "Voer de code in die is verzonden naar <strong>{{email}}</strong>.",
+        "required": "De verificatiecode mag niet leeg zijn"
+      },
+      "button": "Wijzig e-mailadres"
+    },
+    "password": {
+      "headline": "Wachtwoord",
+      "subHeadline": "We sturen je een e-mail met een 6-cijferige verificatiecode.",
+      "button": "Wijzig wachtwoord"
+    },
+    "deletion": {
+      "headline": "Account verwijderen",
+      "subHeadline": "Dit zal je hele account permanent verwijderen. Al je formulieren, inzendingen en workspaces worden verwijderd.",
+      "tip": "Deze actie kan niet ongedaan worden gemaakt. Dit zal je hele account permanent verwijderen. Alle workspaces die je hebt gemaakt worden verwijderd en je wordt verwijderd uit alle gedeelde workspaces. \nAls je zeker weet dat je wilt doorgaan met het verwijderen van je account, ga dan hieronder verder.",
+      "code": {
+        "label": "Voer de verwijderingscode in die is verzonden naar <strong>{{email}}</strong>.",
+        "required": "De verificatiecode mag niet leeg zijn"
+      },
+      "sentSuccess": "Verificatiecode voor verwijdering verzonden",
+      "sentFailed": "Verzenden van verificatiecode voor verwijdering mislukt",
+      "button": "Verwijder mijn account",
+      "scheduled": {
+        "title": "Je account staat gepland voor verwijdering",
+        "description": "Al je accountgegevens, inclusief maar niet beperkt tot workspaces, projecten, formulieren en inzendingen, worden permanent verwijderd binnen {{remainingTime}} uur na het verwijderingsverzoek. \nAls dit per ongeluk is gedaan, kun je het verwijderen van je account hieronder annuleren.",
+        "cancel": "Geplande verwijdering annuleren"
+      }
+    }
+  }
+}
