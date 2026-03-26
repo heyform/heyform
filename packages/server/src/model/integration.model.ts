@@ -26,7 +26,7 @@ export class IntegrationModel extends Document {
   @Prop({
     type: Number,
     required: true,
-    enum: Object.values(IntegrationStatusEnum),
+    enum: Object.values(IntegrationStatusEnum).filter(v => typeof v === 'number'),
     default: IntegrationStatusEnum.ACTIVE
   })
   status: IntegrationStatusEnum

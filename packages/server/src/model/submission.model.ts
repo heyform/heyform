@@ -57,7 +57,7 @@ export class SubmissionModel extends Document {
   @Prop({
     type: Number,
     required: true,
-    enum: Object.values(SubmissionStatusEnum),
+    enum: Object.values(SubmissionStatusEnum).filter(v => typeof v === 'number'),
     default: SubmissionStatusEnum.PUBLIC
   })
   status: SubmissionStatusEnum

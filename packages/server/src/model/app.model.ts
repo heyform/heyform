@@ -77,7 +77,7 @@ export class AppModel extends Document {
   @Prop({
     type: Number,
     required: true,
-    enum: Object.values(AppStatusEnum)
+    enum: Object.values(AppStatusEnum).filter(v => typeof v === 'number')
   })
   status: AppStatusEnum
 }

@@ -29,7 +29,7 @@ export class AttachmentModel extends Document {
   @Prop({
     type: Number,
     required: true,
-    enum: Object.values(AttachmentStatusEnum),
+    enum: Object.values(AttachmentStatusEnum).filter(v => typeof v === 'number'),
     default: AttachmentStatusEnum.PUBLIC
   })
   status: AttachmentStatusEnum
