@@ -42,7 +42,7 @@ export class SocialLoginController {
       })
     }
 
-    const authUrl = this.socialLoginService.authUrl(kind as any, query.state)
+    const authUrl = await this.socialLoginService.authUrl(kind as any, query.state)
 
     // Store redirect_uri to redis
     if (isValid(query.redirect_uri)) {
@@ -95,7 +95,8 @@ export class SocialLoginController {
     try {
       const userId = await this.socialLoginService.authCallback(
         kind,
-        query.code || query.credential
+        query.code || query.credential,
+        query.iss
       )
 
       await this.authService.login({
