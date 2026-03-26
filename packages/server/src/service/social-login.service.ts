@@ -12,11 +12,14 @@ import {
   APP_DISABLE_REGISTRATION,
   APP_HOMEPAGE_URL,
   GOOGLE_LOGIN_CLIENT_ID,
-  GOOGLE_LOGIN_CLIENT_SECRET
+  GOOGLE_LOGIN_CLIENT_SECRET,
+  OIDC_CLIENT_ID,
+  OIDC_CLIENT_SECRET,
+  OIDC_ISSUER
 } from '@environments'
 import { helper } from '@heyform-inc/utils'
 import { UserSocialAccountModel } from '@model'
-import { UserInfo, appleLoginUrl, appleUserInfo, googleLoginUrl, googleUserInfo } from '@utils'
+import { UserInfo, appleLoginUrl, appleUserInfo, googleLoginUrl, googleUserInfo, oidcLoginUrl, oidcUserInfo } from '@utils'
 
 const appleOptions = {
   webClientId: APPLE_LOGIN_WEB_CLIENT_ID,
@@ -28,6 +31,12 @@ const appleOptions = {
 const googleOptions = {
   clientId: GOOGLE_LOGIN_CLIENT_ID,
   clientSecret: GOOGLE_LOGIN_CLIENT_SECRET
+}
+
+const oidcOptions = {
+  clientId: OIDC_CLIENT_ID,
+  clientSecret: OIDC_CLIENT_SECRET,
+  issuer: OIDC_ISSUER
 }
 
 @Injectable()
@@ -42,7 +51,7 @@ export class SocialLoginService {
     return `${APP_HOMEPAGE_URL}/connect/${kind}/callback`
   }
 
-  public authUrl(kind: SocialLoginTypeEnum, state: string): string {
+  public async authUrl(kind: SocialLoginTypeEnum, state: string): Promise<string> {
     const redirectUrl = SocialLoginService.callbackUrl(kind)
 
     switch (kind) {
@@ -59,10 +68,17 @@ export class SocialLoginService {
           redirectUrl,
           state
         })
+
+      case SocialLoginTypeEnum.OIDC:
+        return oidcLoginUrl({
+          ...oidcOptions,
+          redirectUrl,
+          state
+        })
     }
   }
 
-  public async userInfo(kind: string, code: string): Promise<UserInfo> {
+  public async userInfo(kind: string, code: string, iss?: string): Promise<UserInfo> {
     const redirectUrl = SocialLoginService.callbackUrl(kind as SocialLoginTypeEnum)
 
     switch (kind) {
@@ -77,6 +93,12 @@ export class SocialLoginService {
           ...googleOptions,
           redirectUrl
         })
+
+      case SocialLoginTypeEnum.OIDC:
+        return await oidcUserInfo(code, {
+          ...oidcOptions,
+          redirectUrl
+        }, iss)
     }
   }
 
@@ -108,8 +130,8 @@ export class SocialLoginService {
     })
   }
 
-  async authCallback(kind: SocialLoginTypeEnum, code: string): Promise<string> {
-    const userInfo = await this.userInfo(kind, code)
+  async authCallback(kind: SocialLoginTypeEnum, code: string, iss?: string): Promise<string> {
+    const userInfo = await this.userInfo(kind, code, iss)
 
     if (helper.isEmpty(userInfo)) {
       throw new BadRequestException('Invalid social media user information')
