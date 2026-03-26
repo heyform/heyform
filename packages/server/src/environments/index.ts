@@ -23,6 +23,7 @@ export const APP_LISTEN_HOSTNAME: string = process.env.APP_LISTEN_HOSTNAME || '0
 export const APP_HOMEPAGE_URL: string =
   process.env.APP_HOMEPAGE_URL || `http://${APP_LISTEN_HOSTNAME}:${APP_LISTEN_PORT}`
 export const APP_DISABLE_REGISTRATION: boolean = helper.isTrue(process.env.APP_DISABLE_REGISTRATION)
+export const APP_REMOVE_BRANDING: boolean = helper.isTrue(process.env.APP_REMOVE_BRANDING)
 export const ENABLE_GOOGLE_FONTS: boolean =
   process.env.ENABLE_GOOGLE_FONTS === undefined
     ? true
