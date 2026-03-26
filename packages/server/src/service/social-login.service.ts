@@ -10,6 +10,7 @@ import {
   APPLE_LOGIN_TEAM_ID,
   APPLE_LOGIN_WEB_CLIENT_ID,
   APP_DISABLE_REGISTRATION,
+  ENABLE_SOCIAL_REGISTRATION,
   APP_HOMEPAGE_URL,
   GOOGLE_LOGIN_CLIENT_ID,
   GOOGLE_LOGIN_CLIENT_SECRET,
@@ -160,7 +161,7 @@ export class SocialLoginService {
 
       // Create new user
       if (!userId) {
-        if (APP_DISABLE_REGISTRATION) {
+        if (APP_DISABLE_REGISTRATION && !ENABLE_SOCIAL_REGISTRATION) {
           throw new BadRequestException('Error: Registration is disabled')
         }
 
