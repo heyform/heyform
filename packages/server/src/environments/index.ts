@@ -108,6 +108,16 @@ export const GOOGLE_LOGIN_CLIENT_SECRET: string = process.env.GOOGLE_LOGIN_CLIEN
 export const DISABLE_LOGIN_WITH_GOOGLE =
   helper.isEmpty(GOOGLE_LOGIN_CLIENT_ID) || helper.isEmpty(GOOGLE_LOGIN_CLIENT_SECRET)
 
+// OIDC generic social login
+export const OIDC_CLIENT_ID: string = process.env.OIDC_CLIENT_ID
+export const OIDC_CLIENT_SECRET: string = process.env.OIDC_CLIENT_SECRET
+export const OIDC_ISSUER: string = process.env.OIDC_ISSUER
+export const OIDC_DISPLAY_NAME: string = process.env.OIDC_DISPLAY_NAME || 'SSO'
+export const DISABLE_LOGIN_WITH_OIDC =
+  helper.isEmpty(OIDC_CLIENT_ID) ||
+  helper.isEmpty(OIDC_CLIENT_SECRET) ||
+  helper.isEmpty(OIDC_ISSUER)
+
 // Stripe
 export const STRIPE_VERSION: string = process.env.STRIPE_VERSION
 export const STRIPE_PUBLISHABLE_KEY: string = process.env.STRIPE_PUBLISHABLE_KEY
