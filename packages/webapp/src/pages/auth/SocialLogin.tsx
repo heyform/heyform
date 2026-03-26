@@ -1,4 +1,4 @@
-import { IconBrandAppleFilled } from '@tabler/icons-react'
+import { IconBrandAppleFilled, IconLock } from '@tabler/icons-react'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,7 +6,7 @@ import { getDeviceId, useRouter } from '@/utils'
 
 import IconGoogle from '@/assets/google.svg?react'
 import { Button, Divider } from '@/components'
-import { DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE } from '@/consts'
+import { DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE, DISABLE_LOGIN_WITH_OIDC, OIDC_DISPLAY_NAME } from '@/consts'
 
 interface SocialLoginProps {
   isSignUp?: boolean
@@ -45,6 +45,17 @@ const SocialLogin: FC<SocialLoginProps> = () => {
                 className="shrink-0"
                 color="currentColor"
               />
+            </SocialIcon>
+          )
+        }
+      : null,
+    !DISABLE_LOGIN_WITH_OIDC
+      ? {
+          id: 'oidc',
+          label: OIDC_DISPLAY_NAME,
+          icon: (
+            <SocialIcon>
+              <IconLock size={18} aria-hidden="true" className="shrink-0" color="currentColor" />
             </SocialIcon>
           )
         }
