@@ -5,6 +5,8 @@ import {
   APP_DISABLE_REGISTRATION,
   APP_HOMEPAGE_URL,
   COOKIE_DOMAIN,
+  DISABLE_LOGIN_WITH_APPLE,
+  DISABLE_LOGIN_WITH_GOOGLE,
   ENABLE_GOOGLE_FONTS,
   GOOGLE_RECAPTCHA_KEY,
   STRIPE_PUBLISHABLE_KEY,
@@ -23,7 +25,9 @@ export class DashboardController {
       enableGoogleFonts: ENABLE_GOOGLE_FONTS,
       stripePublishableKey: STRIPE_PUBLISHABLE_KEY,
       googleRecaptchaKey: GOOGLE_RECAPTCHA_KEY,
-      verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000)
+      verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000),
+      disableLoginWithGoogle: DISABLE_LOGIN_WITH_GOOGLE,
+      disableLoginWithApple: DISABLE_LOGIN_WITH_APPLE
     }
   }
 
