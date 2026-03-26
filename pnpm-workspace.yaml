@@ -2,3 +2,4 @@ packages:
   - 'packages/server'
   - 'packages/webapp'
   - 'packages/form-renderer'
+  - 'packages/shared-types-enums'
