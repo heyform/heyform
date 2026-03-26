@@ -1,6 +1,7 @@
 import { BadRequestException, UseGuards } from '@nestjs/common'
 
 import { GraphqlRequest, GraphqlResponse } from '@decorator'
+import { APP_DISABLE_EMAIL_LOGIN } from '@environments'
 import { LoginInput } from '@graphql'
 import { DeviceIdGuard } from '@guard'
 import { date, helper } from '@heyform-inc/utils'
@@ -25,6 +26,10 @@ export class LoginResolver {
     @GraphqlResponse() res: any,
     @Args('input') input: LoginInput
   ): Promise<boolean> {
+    if (APP_DISABLE_EMAIL_LOGIN) {
+      throw new BadRequestException('Email login is disabled.')
+    }
+
     const user = await this.userService.findByEmail(input.email)
 
     if (helper.isEmpty(user)) {

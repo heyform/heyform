@@ -5,7 +5,7 @@ import { AuthService } from '@/services'
 import { useRouter } from '@/utils'
 
 import { Form, Input } from '@/components'
-import { isRegistrationDisabled } from '@/consts'
+import { DISABLE_EMAIL_LOGIN, isRegistrationDisabled } from '@/consts'
 
 import SocialLogin from './SocialLogin'
 
@@ -43,7 +43,7 @@ const Login = () => {
 
       <SocialLogin />
 
-      <Form.Simple
+      {!DISABLE_EMAIL_LOGIN && <Form.Simple
         className="space-y-4"
         fetch={fetch}
         submitProps={{
@@ -87,7 +87,7 @@ const Login = () => {
         >
           <Input.Password />
         </Form.Item>
-      </Form.Simple>
+      </Form.Simple>}
     </div>
   )
 }

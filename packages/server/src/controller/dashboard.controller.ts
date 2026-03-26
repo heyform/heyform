@@ -2,6 +2,7 @@ import { Controller, Get, Header, Res } from '@nestjs/common'
 import { Response } from 'express'
 
 import {
+  APP_DISABLE_EMAIL_LOGIN,
   APP_DISABLE_REGISTRATION,
   APP_HOMEPAGE_URL,
   COOKIE_DOMAIN,
@@ -23,7 +24,8 @@ export class DashboardController {
       enableGoogleFonts: ENABLE_GOOGLE_FONTS,
       stripePublishableKey: STRIPE_PUBLISHABLE_KEY,
       googleRecaptchaKey: GOOGLE_RECAPTCHA_KEY,
-      verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000)
+      verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000),
+      disableEmailLogin: APP_DISABLE_EMAIL_LOGIN
     }
   }
 
