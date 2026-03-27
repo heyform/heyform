@@ -441,7 +441,7 @@
   },
   "login": {
     "title": "Connexion",
-    "headline": "👋 Bon retour parmi nous !",
+    "headline": "📋 Connectez-vous pour créer vos formulaires !",
     "subHeadline": "Connectez-vous à votre compte ou <a>créez un compte</a>",
     "continueWith": "Ou continuez avec",
     "email": {
@@ -618,11 +618,11 @@
     }
   },
   "settings": {
-    "title": "Paramètres de l'espace de travail",
+    "title": "Paramètres",
     "branding": {
-      "title": "Marque",
-      "removeBrandingHeadline": "Supprimer la marque HeyForm",
-      "removeBrandingSubHeadline": "Pour que HeyForm donne l'impression d'appartenir entièrement à votre marque, retirez le logo HeyForm dans le pied de page du formulaire.",
+      "title": "Thème & Identité visuelle",
+      "removeBrandingHeadline": "Supprimer la charte HeyForm",
+      "removeBrandingSubHeadline": "Supprimer la mention « Powered by HeyForm » dans le pied de page du formulaire.",
       "viewBrandKit": "Voir",
       "logo": {
         "title": "Logo",
@@ -631,8 +631,8 @@
       },
       "theme": "Thème",
       "presetThemes": "Thèmes prédéfinis",
-      "brandKitHeadline": "Trousse de marque",
-      "brandKitSubHeadline": "Appliquez facilement les éléments visuels de votre espace de travail à vos formulaires avec la trousse de marque. Téléchargez votre logo et créez un thème que chaque membre de votre espace peut utiliser.",
+      "brandKitHeadline": "Charte graphique",
+      "brandKitSubHeadline": "Appliquez facilement les éléments visuels de votre espace de travail à vos formulaires. Téléchargez votre logo et créez un thème que chaque membre de votre espace peut utiliser.",
       "brandKitPreview": {
         "number": "Question 1 en français",
         "title": "Quel est votre nom ?",
@@ -650,7 +650,7 @@
     "deletion": {
       "title": "Supprimer l'espace de travail",
       "description": "La suppression de l'espace de travail effacera définitivement tous les formulaires et données. Procédez avec prudence !",
-      "button": "Supprimer cet espace de travail",
+      "button": "Supprimer",
       "headline": "Vérifier la demande de suppression d'espace de travail",
       "sentSuccess": "Code de vérification pour la suppression envoyé",
       "sentFailed": "Échec d'envoi du code de vérification pour la suppression",
