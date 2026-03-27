@@ -6,7 +6,8 @@ import { getDeviceId, useRouter } from '@/utils'
 
 import IconGoogle from '@/assets/google.svg?react'
 import { Button, Divider } from '@/components'
-import { DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE } from '@/consts'
+import { DISABLE_EMAIL_LOGIN, DISABLE_LOGIN_WITH_APPLE, DISABLE_LOGIN_WITH_GOOGLE } from '@/consts'
+
 
 interface SocialLoginProps {
   isSignUp?: boolean
@@ -80,7 +81,7 @@ const SocialLogin: FC<SocialLoginProps> = () => {
         ))}
       </div>
 
-      <Divider>{t('login.continueWith')}</Divider>
+      {!DISABLE_EMAIL_LOGIN && <Divider>{t('login.continueWith')}</Divider>}
     </>
   )
 }
