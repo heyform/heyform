@@ -7,6 +7,7 @@ import { LOCALE_COOKIE_NAME } from '@/consts'
 import de from '@/locales/de.json'
 import en from '@/locales/en.json'
 import fr from '@/locales/fr.json'
+import it from '@/locales/it.json'
 import ja from '@/locales/ja.json'
 import pl from '@/locales/pl.json'
 import zhCN from '@/locales/zh-cn.json'
@@ -29,6 +30,12 @@ const resources = {
     translation: {
       ...fr,
       ...locales.fr.translation
+    }
+  },
+  it: {
+    translation: {
+      ...it,
+      ...locales.it.translation
     }
   },
   ja: {

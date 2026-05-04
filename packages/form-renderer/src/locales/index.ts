@@ -3,6 +3,7 @@ import de from './de'
 import en from './en'
 import es from './es'
 import fr from './fr'
+import it from './it'
 import ja from './ja'
 import pl from './pl'
 import ptBr from './pt-br'
@@ -16,6 +17,9 @@ export const locales: Record<string, any> = {
   },
   fr: {
     translation: fr
+  },
+  it: {
+    translation: it
   },
   de: {
     translation: de

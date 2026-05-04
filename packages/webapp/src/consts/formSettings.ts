@@ -45,6 +45,10 @@ export const FORM_LOCALES_OPTIONS = [
     value: 'fr'
   },
   {
+    label: 'Italian',
+    value: 'it'
+  },
+  {
     label: 'Polish',
     value: 'pl'
   },

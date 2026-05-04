@@ -15,6 +15,11 @@ export const LOCALE_OPTIONS = [
     translated: 'languages.fr.translated'
   },
   {
+    value: 'it',
+    label: 'languages.it.original',
+    translated: 'languages.it.translated'
+  },
+  {
     value: 'ja',
     label: 'languages.ja.original',
     translated: 'languages.ja.translated'

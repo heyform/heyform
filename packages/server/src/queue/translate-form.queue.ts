@@ -19,6 +19,7 @@ const LANGUAGES = {
   en: 'English',
   de: 'German',
   fr: 'French',
+  it: 'Italian',
   pl: 'Polish',
   tr: 'Turkish',
   'zh-cn': 'Simplified Chinese',
