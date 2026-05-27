@@ -182,7 +182,7 @@
     "greenwichmean": "Horário médio de Greenwich",
     "abidjan": "Abidjan",
     "bissau": "Bissau",
-    "danmarkshavn": "Dinamarca",
+    "danmarkshavn": "Danmarkshavn",
     "monrovia": "Monróvia",
     "reykjavik": "Reykjavík",
     "sãotomé": "São Tomé",
@@ -193,7 +193,7 @@
     "unitedkingdom": "Reino Unido",
     "lagos": "Lagos",
     "ndjamena": "Ndjamena",
-    "canary": "Canário",
+    "canary": "Ilhas Canárias",
     "faroe": "Faroé",
     "lisbon": "Lisboa",
     "madeira": "Madeira",
@@ -256,7 +256,7 @@
     "minsk": "Minsk",
     "moscow": "Moscou",
     "simferopol": "Simferopol",
-    "turkey": "Peru",
+    "turkey": "Turquia",
     "volgograd": "Volgogrado",
     "armenia": "Armênia",
     "astrakhan": "Astracã",
@@ -320,7 +320,7 @@
     "irkutsk": "Irkutsk",
     "kualaLumpur": "Kuala Lumpur",
     "kuching": "Kuching",
-    "philippine": "filipino",
+    "philippine": "Filípinas",
     "singapore": "Cingapura",
     "taipei": "Taipei",
     "choibalsan": "Choibalsan",
@@ -337,7 +337,7 @@
     "yakutsk": "Iakutsk",
     "australianCentral": "Central Australiana",
     "adelaide": "Adelaide",
-    "brokenHill": "Colina Quebrada",
+    "brokenHill": "Broken Hill",
     "brisbane": "Brisbane",
     "lindeman": "Lindeman",
     "chamorro": "Chamorro",
@@ -349,7 +349,7 @@
     "papuaNewGuinea": "Papua Nova Guiné",
     "ustNera": "Ust-Nera",
     "vladivostok": "Vladivostoque",
-    "lordHowe": "Senhor Howe",
+    "lordHowe": "Lord Howe",
     "bougainville": "Bougainville",
     "casey": "Casey",
     "kosrae": "Kosrae",
@@ -377,22 +377,22 @@
     "phoenixIslands": "Ilhas Fênix",
     "tokelau": "Toquelau",
     "tonga": "Tonga",
-    "lineIsLands": "Ilhas de Linha"
+    "lineIsLands": "Ilhas Line"
   },
   "components": {
     "add": "Adicionar",
     "apply": "Aplicar",
     "cancel": "Cancelar",
-    "change": "Mudar",
+    "change": "Alterar",
     "close": "Fechar",
     "confirm": "Confirmar",
     "continue": "Continuar",
-    "copy": "Cópia",
+    "copy": "Copiar",
     "copied": "Copiado",
     "delete": "Excluir",
-    "enabled": "Habilitado",
-    "disabled": "Desabilitado",
-    "duplicate": "Duplicado",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "duplicate": "Duplicar",
     "expand": "Expandir",
     "edit": "Editar",
     "moveto": "Mover para",
@@ -430,7 +430,7 @@
     "imagePicker": {
       "image": "Imagem",
       "unsplash": {
-        "title": "Remover respingo",
+        "title": "Unsplash",
         "search": "Pesquisar imagens do Unsplash",
         "emptyState": "Nenhum resultado encontrado"
       },
@@ -439,11 +439,11 @@
       }
     },
     "datePicker": {
-      "time": "Tempo"
+      "time": "Hora"
     },
     "error": {
       "title": "Algo deu errado",
-      "message": "Reserve um momento e tente novamente. Se o erro persistir, entre em contato conosco.",
+      "message": "Aguarde um instante e tente novamente. Se o erro persistir, entre em contato conosco.",
       "retry": "Tentar novamente"
     }
   },
@@ -453,7 +453,7 @@
     "subHeadline": "Entre na sua conta ou <a>crie uma conta</a>",
     "continueWith": "Ou continue com",
     "email": {
-      "label": "Endereço de email",
+      "label": "Endereço de e-mail",
       "required": "O endereço de e-mail não pode ficar vazio",
       "invalid": "O endereço de e-mail não é válido"
     },
@@ -485,10 +485,10 @@
       "required": "O código de verificação não pode ficar vazio"
     },
     "newPassword": {
-      "label": "Nova Senha"
+      "label": "Nova senha"
     },
     "repeatPassword": {
-      "label": "Nova Senha",
+      "label": "Nova senha",
       "invalid": "A nova senha e a senha repetida não coincidem."
     }
   },
@@ -507,16 +507,16 @@
     "subHeadline": "Use {{name}} para integrar o HeyForm com seus aplicativos favoritos, como bate-papo, e-mail ou SMS.",
     "would": "{{name}} gostaria de:",
     "scopes": [
-      "Leitura de usuário",
-      "Recupere nome, email, foto de perfil e outras informações da sua conta HeyForm.",
-      "Leitura de workspace",
-      "Recupere informações dos seus workspaces.",
-      "Leitura de projeto",
-      "Recupere informações dos seus projetos.",
-      "Leitura de formulário",
-      "Recupere os formulários que você criou.",
-      "Leitura de envios",
-      "Recupere os envios de formulário coletados."
+      "Ler dados do usuário",
+      "Acessar nome, e-mail, foto de perfil e outras informações da sua conta HeyForm.",
+      "Acessar espaço de trabalho",
+      "Acessar informações dos seus espaços de trabalho.",
+      "Acessar projeto",
+      "Acessar informações dos seus projetos.",
+      "Acessar formulários",
+      "Acessar os formulários que você criou.",
+      "Acessar envios",
+      "Acessar os envios de formulário coletados."
     ]
   },
   "workspace": {
@@ -532,7 +532,7 @@
       "workspaces": "Espaços de trabalho",
       "projects": "Projetos",
       "noProjects": "Você pode entrar em contato com o proprietário do espaço de trabalho para adicioná-lo a um projeto ou pode criar um novo.",
-      "search": "Procurar",
+      "search": "Buscar",
       "viewProfile": "Ver perfil",
       "accountSettings": "Configurações de Conta",
       "language": "Idioma",
@@ -556,8 +556,8 @@
     },
     "invitation": {
       "title": "Convite",
-      "headline": "Você foi convidado para ingressar no espaço de trabalho de <span1>{{owner}}</span1>: <span2>{{name}}</span2>",
-      "subHeadline": "Junte-se ao espaço de trabalho e comece a colaborar hoje mesmo!",
+      "headline": "Você foi convidado a entrar no espaço de trabalho de <span1>{{owner}}</span1>: <span2>{{name}}</span2>",
+      "subHeadline": "Entre no espaço de trabalho e comece a colaborar.",
       "join": "Entrar"
     }
   },
@@ -590,7 +590,7 @@
   "members": {
     "title": "Membros",
     "name": "Nome",
-    "role": "Papel",
+    "role": "Função",
     "you": "Você",
     "owner": "Proprietário",
     "member": "Membro",
@@ -617,7 +617,7 @@
     "invite": {
       "title": "Convidar membro",
       "headline": "Convidar membros",
-      "subHeadline": "Convide seus colegas de equipe para ingressar no espaço de trabalho por e-mail. O convite é válido por 7 dias.",
+      "subHeadline": "Convide seus colegas de equipe a entrar no espaço de trabalho por e-mail. O convite é válido por 7 dias.",
       "addMore": "Adicionar mais",
       "required": "O endereço de e-mail não pode ficar vazio",
       "sentSuccess_one": "{{count}} convite enviado",
@@ -768,7 +768,7 @@
     "draft": "Rascunho",
     "suspended": "Suspenso",
     "closed": "Fechado",
-    "duplicate": "{{name}} (Cópia)",
+    "duplicate": "{{name}} (cópia)",
     "moveToTrash": "Mover para a lixeira",
     "copyLinkToShare": "Copie o link para compartilhar",
     "creation": {
@@ -963,7 +963,7 @@
         "footer": "Adicione um <a>bot personalizado</a> ao seu grupo e cole a URL do webhook aqui."
       },
       "email": {
-        "label": "Endereço de email",
+        "label": "Endereço de e-mail",
         "invalid": "O endereço de e-mail não é válido",
         "deprecation": "Esta integração foi descontinuada. Em vez disso, configure-a nas <a>configurações do formulário</a>."
       },
@@ -1006,7 +1006,7 @@
           "headline": "Nome de usuário"
         },
         "emailAddress": {
-          "headline": "Endereço de email"
+          "headline": "Endereço de e-mail"
         },
         "phoneNumber": {
           "headline": "Número de telefone (opcional)"
@@ -1043,7 +1043,7 @@
           "headline": "Base"
         },
         "table": {
-          "headline": "Mesa"
+          "headline": "Tabela"
         }
       },
       "monday": {
@@ -1146,26 +1146,26 @@
         "subHeadline": "Aqui estão algumas opções para integrar seu formulário ao seu site.",
         "standard": "Padrão",
         "modal": "Modal",
-        "popup": "Aparecer",
+        "popup": "Pop-up",
         "fullpage": "Página inteira",
-        "getCode": "Obtenha o código",
+        "getCode": "Copiar código",
         "settings": "Configurações",
         "width": "Largura",
         "height": "Altura",
         "auto": "Auto",
         "fixed": "Fixo",
-        "size": "Tamanho modal",
+        "size": "Tamanho do modal",
         "small": "Pequeno",
         "medium": "Médio",
         "large": "Grande",
-        "launch": "Lançar",
+        "launch": "Abrir",
         "click": "Ao clicar no botão",
         "load": "No carregamento da página",
-        "delay": "Depois de decorrido o tempo",
-        "exit": "Na intenção de saída",
-        "scroll": "Depois de rolar",
-        "triggerBackground": "Plano de fundo do gatilho",
-        "triggerText": "Texto de gatilho",
+        "delay": "Após um atraso",
+        "exit": "Ao tentar sair da página",
+        "scroll": "Após rolar a página",
+        "triggerBackground": "Fundo do botão",
+        "triggerText": "Texto do botão",
         "hideAfterSubmit": "Fechar ao enviar",
         "secondsDelay": "segundos de atraso",
         "pageScrolled": "% de página rolada",
@@ -1175,7 +1175,7 @@
         "transparentBackground": "Fundo transparente",
         "code": {
           "headline": "Adicione HeyForm ao seu site",
-          "subHeadline": "Cole o seguinte snippet de código na seção do corpo do seu site."
+          "subHeadline": "Cole o seguinte trecho de código na seção do corpo do seu site."
         }
       }
     },
@@ -1364,7 +1364,7 @@
         "labels": "Etiquetas",
         "leftLabel": "Etiqueta esquerda",
         "centerLabel": "Etiqueta intermediária",
-        "rightLabel": "Etiqueta certa",
+        "rightLabel": "Etiqueta direita",
         "defaultCountry": "País padrão",
         "buttonText": "Texto do botão",
         "redirect": "Redirecionar ao concluir",
@@ -1382,9 +1382,9 @@
         },
         "payment": {
           "title": "Pagamento",
-          "headline": "Conecte-se com faixa",
+          "headline": "Conectar ao Stripe",
           "subHeadline": "<div>Colete e receba pagamentos diretamente em sua conta bancária fornecida pelo Stripe.</div><div>Os usuários gratuitos do HeyForm coletam pagamentos à taxa de <a>5% de comissão HeyForm + taxa de transação Stripe.</a></div><div>Para remover a comissão de 5% do HeyForm sobre pagamentos, atualize para <button>HeyForm Premium</button>.</div>",
-          "stripeAccount": "Conta de distribuição",
+          "stripeAccount": "Conta Stripe",
           "revoke": "Revogar",
           "price": "Preço",
           "currency": "Moeda",
@@ -1404,17 +1404,17 @@
         "multipleChoice": {
           "unlimited": "Ilimitado",
           "exactNumber": "Número exato",
-          "range": "Faixa",
+          "range": "Intervalo",
           "badge": {
-            "title": "Distintivo",
-            "letter": "Carta",
+            "title": "Marcador",
+            "letter": "Letra",
             "number": "Número"
           },
           "verticalAlignment": "Alinhamento vertical"
         }
       },
       "design": {
-        "title": "Projeto",
+        "title": "Design",
         "theme": {
           "title": "Tema",
           "success": "O tema foi atualizado com sucesso.",
@@ -1499,8 +1499,8 @@
       },
       "preview": {
         "title": "Visualização",
-        "desktop": "Área de trabalho",
-        "mobile": "Móvel"
+        "desktop": "Computador",
+        "mobile": "Celular"
       }
     },
     "suspend": {
@@ -1528,9 +1528,9 @@
     },
     "name": "Seu nome",
     "email": {
-      "headline": "Endereço de email",
+      "headline": "Endereço de e-mail",
       "subHeadline": "Enviaremos a você um e-mail com um código de verificação de 6 dígitos.",
-      "label": "Endereço de email",
+      "label": "Endereço de e-mail",
       "invalid": "O endereço de e-mail não é válido",
       "code": {
         "label": "Insira o código enviado para <strong>{{email}}</strong>.",
