@@ -479,7 +479,7 @@
   },
   "resetPassword": {
     "title": "Redefinir senha",
-    "subHeadline": "Enviamos a você um e-mail com um código de verificação de 6 dígitos. Verifique sua caixa de entrada em {{email}}.",
+    "subHeadline": "Enviamos para você um e-mail com um código de verificação de 6 dígitos. Verifique sua caixa de entrada em {{email}}.",
     "verificationCode": {
       "label": "Código de verificação",
       "required": "O código de verificação não pode ficar vazio"
@@ -494,7 +494,7 @@
   },
   "verifyEmail": {
     "title": "Verifique o endereço de e-mail",
-    "subHeadline": "Enviamos a você um e-mail com um código de verificação de 6 dígitos. Por favor, verifique sua caixa de entrada em {{email}}.",
+    "subHeadline": "Enviamos para você um e-mail com um código de verificação de 6 dígitos. Por favor, verifique sua caixa de entrada em {{email}}.",
     "resend": "Não recebeu o código? <button>Reenviar</button>",
     "resendLabel": "Não recebeu o código?",
     "resendAction": "Reenviar",
@@ -770,7 +770,7 @@
     "closed": "Fechado",
     "duplicate": "{{name}} (cópia)",
     "moveToTrash": "Mover para a lixeira",
-    "copyLinkToShare": "Copie o link para compartilhar",
+    "copyLinkToShare": "Copiar link para compartilhar",
     "creation": {
       "title": "Criar formulário",
       "headline": "Crie um novo formulário",
@@ -1195,15 +1195,15 @@
         },
         "progressBar": {
           "headline": "Barra de progresso",
-          "subHeadline": "Você pode facilmente informar aos entrevistados o quão perto eles estão de preencher o formulário."
+          "subHeadline": "Você pode facilmente informar aos participantes o quão perto eles estão de preencher o formulário."
         },
         "viewQuestions": {
           "headline": "Ver todas as perguntas",
-          "subHeadline": "Você pode ativá-lo para permitir que os entrevistados respondam a todas as perguntas."
+          "subHeadline": "Você pode ativá-lo para permitir que os participantes respondam a todas as perguntas."
         },
         "navigationArrows": {
           "headline": "Setas de navegação",
-          "subHeadline": "Você pode ativá-lo para permitir que os entrevistados naveguem entre as perguntas."
+          "subHeadline": "Você pode ativá-lo para permitir que os participantes naveguem entre as perguntas."
         }
       },
       "access": {
@@ -1314,7 +1314,7 @@
         "legalTerms": "Termos legais",
         "signature": "Assinatura",
         "website": "Site",
-        "inputTable": "Tabela de entrada",
+        "inputTable": "Tabela",
         "submitDate": "Data de envio",
         "hiddenFields": "Campos ocultos",
         "contactInfo": "Informações de contato",
@@ -1339,7 +1339,7 @@
         "questions": "Perguntas",
         "addQuestion": "Adicionar pergunta",
         "endings": "Finais",
-        "addEndingTip": "Adicione um novo final. Você pode criar vários finais e implementar lógica para determinar qual deles as pessoas verão."
+        "addEndingTip": "Adicione um novo final. Você pode criar vários finais e definir regras para determinar qual deles as pessoas verão."
       },
       "compose": {
         "question": "Digite uma pergunta",
@@ -1529,7 +1529,7 @@
     "name": "Seu nome",
     "email": {
       "headline": "Endereço de e-mail",
-      "subHeadline": "Enviaremos a você um e-mail com um código de verificação de 6 dígitos.",
+      "subHeadline": "Enviaremos para você um e-mail com um código de verificação de 6 dígitos.",
       "label": "Endereço de e-mail",
       "invalid": "O endereço de e-mail não é válido",
       "code": {
@@ -1540,7 +1540,7 @@
     },
     "password": {
       "headline": "Senha",
-      "subHeadline": "Enviaremos a você um e-mail com um código de verificação de 6 dígitos.",
+      "subHeadline": "Enviaremos para você um e-mail com um código de verificação de 6 dígitos.",
       "button": "Alterar a senha"
     },
     "deletion": {
