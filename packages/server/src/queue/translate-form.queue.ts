@@ -22,6 +22,7 @@ const LANGUAGES = {
   fr: 'French',
   it: 'Italian',
   pl: 'Polish',
+  'pt-br': 'Brazilian Portuguese',
   tr: 'Turkish',
   'zh-cn': 'Simplified Chinese',
   'zh-tw': 'Traditional Chinese'

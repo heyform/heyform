@@ -31,6 +31,10 @@
     "zh-tw": {
       "original": "繁體中文（台灣）",
       "translated": "Cinese (Taiwan)"
+    },
+    "pt-br": {
+      "original": "Português (Brasil)",
+      "translated": "Portoghese brasiliano"
     }
   },
   "timezones": {
@@ -1090,6 +1094,16 @@
       "notion": {
         "database": {
           "headline": "Database"
+        }
+      },
+      "apps": {
+        "webhook": {
+          "description": "Con l'integrazione webhook puoi inviare ogni invio direttamente a qualsiasi URL appena viene ricevuto.",
+          "settings": {
+            "endpointUrl": {
+              "label": "URL dell'endpoint"
+            }
+          }
         }
       }
     },

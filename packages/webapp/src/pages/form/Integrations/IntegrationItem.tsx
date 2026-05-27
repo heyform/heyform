@@ -3,6 +3,7 @@ import { useRequest } from 'ahooks'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getIntegrationDescription } from './utils'
 import { IntegrationService } from '@/services'
 import { useParam } from '@/utils'
 import { helper } from '@heyform-inc/utils'
@@ -115,7 +116,7 @@ const IntegrationItem: FC<IntegrationItemProps> = ({ app }) => {
         {children}
       </div>
       <div className="mt-2 font-medium">{app.name}</div>
-      <div className="text-secondary mt-1">{app.description}</div>
+      <div className="text-secondary mt-1">{getIntegrationDescription(t, app)}</div>
     </li>
   )
 }

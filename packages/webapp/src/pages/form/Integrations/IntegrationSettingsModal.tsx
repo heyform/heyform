@@ -2,6 +2,7 @@ import { IconDots, IconLink } from '@tabler/icons-react'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getIntegrationDescription, getIntegrationSetting } from './utils'
 import { IntegrationService } from '@/services'
 import { useParam } from '@/utils'
 
@@ -50,7 +51,10 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, onValuesChange }) => 
       onValuesChange={onValuesChange}
     >
       {app.settings?.map(setting => (
-        <IntegrationSettingsItem key={setting.name} setting={setting} />
+        <IntegrationSettingsItem
+          key={setting.name}
+          setting={getIntegrationSetting(t, app, setting)}
+        />
       ))}
     </Form.Simple>
   )
@@ -88,7 +92,9 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
         <h2 className="mt-6 text-center text-lg/6 font-semibold">
           {t('form.integrations.connectWith', { name: app.name })}
         </h2>
-        <p className="text-secondary mt-2 px-10 text-center text-sm">{app.description}</p>
+        <p className="text-secondary mt-2 px-10 text-center text-sm">
+          {getIntegrationDescription(t, app)}
+        </p>
       </div>
 
       <div className="mt-12">

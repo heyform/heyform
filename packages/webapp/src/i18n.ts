@@ -10,6 +10,7 @@ import fr from '@/locales/fr.json'
 import it from '@/locales/it.json'
 import ja from '@/locales/ja.json'
 import pl from '@/locales/pl.json'
+import ptBR from '@/locales/pt-br.json'
 import zhCN from '@/locales/zh-cn.json'
 import zhTW from '@/locales/zh-tw.json'
 
@@ -48,6 +49,12 @@ const resources = {
     translation: {
       ...pl,
       ...locales.pl.translation
+    }
+  },
+  'pt-br': {
+    translation: {
+      ...ptBR,
+      ...locales['pt-br'].translation
     }
   },
   'zh-cn': {

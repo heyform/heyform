@@ -31,6 +31,10 @@
     "zh-tw": {
       "original": "繁體中文（台灣）",
       "translated": "繁體中文（台灣）"
+    },
+    "pt-br": {
+      "original": "Português (Brasil)",
+      "translated": "巴西葡萄牙語"
     }
   },
   "timezones": {
@@ -1028,6 +1032,16 @@
       "notion": {
         "database": {
           "headline": "資料庫"
+        }
+      },
+      "apps": {
+        "webhook": {
+          "description": "透過 Webhook 整合，你可以在收到每次提交後立即將其傳送到任意 URL。",
+          "settings": {
+            "endpointUrl": {
+              "label": "端點 URL"
+            }
+          }
         }
       }
     },

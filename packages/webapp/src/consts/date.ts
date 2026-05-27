@@ -1737,6 +1737,13 @@ export const DATE_FORMATS = {
     time: 'hh:mm A',
     date: 'DD.MM.YYYY hh:mm A'
   },
+  'pt-br': {
+    year: 'YYYY',
+    month: 'MMMM',
+    day: 'DD/MM/YYYY',
+    time: 'HH:mm',
+    date: 'DD/MM/YYYY HH:mm'
+  },
   'zh-cn': {
     year: 'YYYY年',
     month: 'MMMM',

@@ -31,6 +31,10 @@
     "zh-tw": {
       "original": "繁體中文（台灣）",
       "translated": "Chiński (Tajwan)"
+    },
+    "pt-br": {
+      "original": "Português (Brasil)",
+      "translated": "portugalski (Brazylia)"
     }
   },
   "timezones": {
@@ -1028,6 +1032,16 @@
       "notion": {
         "database": {
           "headline": "Baza danych"
+        }
+      },
+      "apps": {
+        "webhook": {
+          "description": "Dzięki integracji webhooków możesz wysyłać każde zgłoszenie bezpośrednio pod dowolny adres URL natychmiast po jego otrzymaniu.",
+          "settings": {
+            "endpointUrl": {
+              "label": "Adres URL endpointu"
+            }
+          }
         }
       }
     },

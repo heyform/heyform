@@ -251,7 +251,9 @@ const SearchModalComponent = () => {
         ) : (
           <>
             {!loading && (
-              <Command.Empty className="px-4 text-sm/6">No results found.</Command.Empty>
+              <Command.Empty className="px-4 text-sm/6">
+                {t('dashboard.search.emptyState')}
+              </Command.Empty>
             )}
 
             {filteredGroups.map(g => (

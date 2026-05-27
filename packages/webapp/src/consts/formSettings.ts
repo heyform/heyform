@@ -53,6 +53,10 @@ export const FORM_LOCALES_OPTIONS = [
     value: 'pl'
   },
   {
+    label: 'Portuguese (Brazil)',
+    value: 'pt-br'
+  },
+  {
     label: 'Turkish',
     value: 'tr'
   },
