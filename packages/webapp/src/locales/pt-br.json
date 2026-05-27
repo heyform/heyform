@@ -177,7 +177,7 @@
     "westgreenland": "Groenlândia Ocidental",
     "capeverde": "Cabo Verde",
     "azores": "Açores",
-    "coordinateduniversal": "Universal Coordenado",
+    "coordinateduniversal": "Tempo Universal Coordenado",
     "eastgreenland": "Leste da Groenlândia",
     "greenwichmean": "Horário médio de Greenwich",
     "abidjan": "Abidjan",
@@ -300,7 +300,7 @@
     "cocosIslands": "Ilhas Cocos",
     "myanmar": "Mianmar",
     "barnaul": "Barnaul",
-    "christmasIsland": "Ilha Natal",
+    "christmasIsland": "Ilha Christmas",
     "davis": "Davis",
     "hovd": "Hovd",
     "bangkok": "Bangkok",
@@ -374,7 +374,7 @@
     "wallisFutuna": "Wallis e Futuna",
     "chatham": "Chatham",
     "apia": "Ápia",
-    "phoenixIslands": "Ilhas Fênix",
+    "phoenixIslands": "Ilhas Phoenix",
     "tokelau": "Toquelau",
     "tonga": "Tonga",
     "lineIsLands": "Ilhas Line"
@@ -659,7 +659,7 @@
       "title": "Exportar dados",
       "description": "Receba um e-mail com todos os seus formulários e configurações em um arquivo.",
       "button": "Solicitar meus dados",
-      "successTip": "Assim que a exportação estiver pronta, você receberá um email com o link para download."
+      "successTip": "Assim que a exportação estiver pronta, você receberá um e-mail com o link para download."
     },
     "deletion": {
       "title": "Excluir espaço de trabalho",
@@ -883,7 +883,7 @@
       "metadata_zero": "Ainda não há envios",
       "metadata_one": "{{count}} envio",
       "metadata_other": "{{count}} envios",
-      "enablePublicAccess": "Habilitar acesso público",
+      "enablePublicAccess": "Ativar acesso público",
       "copyLink": "Copiar link do relatório",
       "theme": "Tema",
       "heading": "Cabeçalho",
@@ -1199,11 +1199,11 @@
         },
         "viewQuestions": {
           "headline": "Ver todas as perguntas",
-          "subHeadline": "Você pode habilitá-lo para permitir que os entrevistados respondam a todas as perguntas."
+          "subHeadline": "Você pode ativá-lo para permitir que os entrevistados respondam a todas as perguntas."
         },
         "navigationArrows": {
           "headline": "Setas de navegação",
-          "subHeadline": "Você pode habilitá-lo para permitir que os entrevistados naveguem entre as perguntas."
+          "subHeadline": "Você pode ativá-lo para permitir que os entrevistados naveguem entre as perguntas."
         }
       },
       "access": {
@@ -1279,7 +1279,7 @@
         },
         "antiSpam": {
           "headline": "Antispam",
-          "subHeadline": "Você pode habilitá-lo para evitar envios de spam."
+          "subHeadline": "Você pode ativá-lo para evitar envios de spam."
         }
       }
     },
