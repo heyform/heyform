@@ -46,10 +46,14 @@ export class DissolveTeamResolver {
       await this.submissionService.deleteAll(formIds)
     }
 
-    this.mailService.teamDeletionAlert(user.email, {
-      teamName: team.name,
-      userName: user.name
-    })
+    this.mailService.teamDeletionAlert(
+      user.email,
+      {
+        teamName: team.name,
+        userName: user.name
+      },
+      user.lang
+    )
 
     return true
   }

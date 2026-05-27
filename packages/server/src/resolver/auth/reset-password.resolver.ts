@@ -45,7 +45,7 @@ export class ResetPasswordResolver {
     })
 
     await this.authService.invalidateSessions(user.id)
-    this.mailService.passwordChangeAlert(user.email)
+    this.mailService.passwordChangeAlert(user.email, lang)
 
     return true
   }

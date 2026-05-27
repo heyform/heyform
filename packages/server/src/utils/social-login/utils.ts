@@ -12,7 +12,7 @@ export function generateUrl(prefixUri: string, query: Record<string, any>): stri
   return `${prefixUri}?${queryString}`
 }
 
-export const defaultLocales = ['en', 'zh-cn']
+export const defaultLocales = ['en', 'pt-br', 'zh-cn']
 
 export function formatLocale(lang?: string, whiteList?: string[]): string {
   const customWhiteList = whiteList || defaultLocales

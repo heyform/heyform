@@ -32,7 +32,7 @@ export class VerifyUserDeletionResolver {
       deletionScheduledAt: timestamp() + hs(ACCOUNT_DELETION_SCHEDULE_INTERVAL)
     })
 
-    await this.mailService.scheduleAccountDeletionAlert(user.email, user.name)
+    await this.mailService.scheduleAccountDeletionAlert(user.email, user.name, user.lang)
 
     return true
   }

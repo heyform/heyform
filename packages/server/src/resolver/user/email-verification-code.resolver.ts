@@ -22,7 +22,7 @@ export class EmailVerificationCodeResolver {
     const key = `verify_email:${user.id}`
     const code = await this.authService.getVerificationCodeWithRateLimit(key)
 
-    this.mailService.emailVerificationRequest(user.email, code)
+    this.mailService.emailVerificationRequest(user.email, code, user.lang)
 
     return true
   }

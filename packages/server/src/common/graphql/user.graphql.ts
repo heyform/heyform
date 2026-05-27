@@ -26,6 +26,10 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   @IsOptional()
   restoreGravatar?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  lang?: UserLangEnum
 }
 
 @InputType()

@@ -16,7 +16,7 @@ export class UserDeletionCodeResolver {
     const key = `user_deletion:${user.id}`
     const code = await this.authService.getVerificationCode(key)
 
-    await this.mailService.accountDeletionRequest(user.email, code)
+    await this.mailService.accountDeletionRequest(user.email, code, user.lang)
 
     return true
   }

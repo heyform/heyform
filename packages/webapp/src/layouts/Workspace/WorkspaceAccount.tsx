@@ -4,6 +4,7 @@ import { useLocalStorageState } from 'ahooks'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { UserService } from '@/services'
 import { clearAuthState, cn, useRouter } from '@/utils'
 
 import { Avatar, Button } from '@/components'
@@ -28,7 +29,7 @@ export default function WorkspaceAccount({
   const { t, i18n } = useTranslation()
 
   const router = useRouter()
-  const { user } = useUserStore()
+  const { user, updateUser } = useUserStore()
   const { openModal } = useAppStore()
 
   const [appearance, setAppearance] = useLocalStorageState(APPEARANCE_STORAGE_KEY, {
@@ -41,6 +42,15 @@ export default function WorkspaceAccount({
     router.redirect('/logout', {
       extend: false
     })
+  }
+
+  async function handleLanguageChange(lang: string) {
+    await i18n.changeLanguage(lang)
+
+    if (user.lang !== lang) {
+      updateUser({ lang })
+      UserService.update({ lang })
+    }
   }
 
   const handleChange = useCallback(
@@ -140,7 +150,7 @@ export default function WorkspaceAccount({
                     <DropdownMenu.Item
                       key={l.value}
                       className="text-primary data-[highlighted]:bg-accent-light grid cursor-pointer grid-cols-[theme(spacing.5),1fr] items-center gap-x-2.5 rounded-lg px-3 py-2.5 text-base/6 outline-none focus-visible:outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 sm:grid-cols-[theme(spacing.4),1fr] sm:px-2 sm:py-1.5 sm:text-sm/6"
-                      onClick={() => i18n.changeLanguage(l.value)}
+                      onClick={() => handleLanguageChange(l.value)}
                     >
                       {i18n.language === l.value ? (
                         <IconCheck className="text-secondary h-[1.125rem] w-[1.125rem]" />

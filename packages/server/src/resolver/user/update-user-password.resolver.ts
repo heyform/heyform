@@ -38,7 +38,7 @@ export class UpdateUserPasswordResolver {
 
     if (result) {
       await this.authService.invalidateSessions(user.id)
-      this.mailService.passwordChangeAlert(user.email)
+      this.mailService.passwordChangeAlert(user.email, user.lang)
     }
 
     return result

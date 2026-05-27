@@ -28,10 +28,14 @@ export class SubmissionNotificationQueue extends BaseQueue {
     const user = await this.userService.findById(form.memberId)
     const html = answersToHtml(submission.answers)
 
-    await this.mailService.submissionNotification(user.email, {
-      formName: form.name,
-      submission: html,
-      link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/submissions`
-    })
+    await this.mailService.submissionNotification(
+      user.email,
+      {
+        formName: form.name,
+        submission: html,
+        link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/submissions`
+      },
+      user.lang
+    )
   }
 }

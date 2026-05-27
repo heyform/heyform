@@ -40,11 +40,15 @@ export class InviteMemberResolver {
     const emails = helper.uniqueArray(input.emails.filter(email => !exists.includes(email)))
 
     for (const email of emails) {
-      this.mailService.teamInvitation(email, {
-        userName: user.name,
-        teamName: team.name,
-        link: `${APP_HOMEPAGE_URL}/workspace/${team.id}/invitation/${team.inviteCode}`
-      })
+      this.mailService.teamInvitation(
+        email,
+        {
+          userName: user.name,
+          teamName: team.name,
+          link: `${APP_HOMEPAGE_URL}/workspace/${team.id}/invitation/${team.inviteCode}`
+        },
+        user.lang
+      )
     }
 
     return true

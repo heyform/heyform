@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
 import { JobOptions, Queue } from 'bull'
-import { readFileSync, readdirSync } from 'fs'
+import { Dirent, readFileSync, readdirSync } from 'fs'
 import { basename, extname, join } from 'path'
 
 import { EMAIL_TEMPLATES_DIR, SMTP_FROM } from '@environments'
@@ -54,29 +54,45 @@ interface UserSecurityAlertOptions {
 
 const HTML_EXT = '.html'
 const TEMPLATE_META_REGEX = /^---([\s\S]*?)---[\n\s\S]\n/
+const DEFAULT_LOCALE = 'en'
 
 @Injectable()
 export class MailService {
-  private readonly emailTemplates: Record<string, { subject: string; html: string }> = {}
+  private readonly emailTemplates: Record<
+    string,
+    Record<string, { subject: string; html: string }>
+  > = {}
 
   constructor(@InjectQueue('MailQueue') private readonly mailQueue: Queue) {
     this.init()
   }
 
-  async accountDeletionAlert(to: string) {
-    await this.addQueue('account_deletion_alert', to)
+  async accountDeletionAlert(to: string, locale?: string) {
+    await this.addQueue('account_deletion_alert', to, undefined, undefined, locale)
   }
 
-  async accountDeletionRequest(to: string, code: string) {
-    await this.addQueue('account_deletion_request', to, {
-      code
-    })
+  async accountDeletionRequest(to: string, code: string, locale?: string) {
+    await this.addQueue(
+      'account_deletion_request',
+      to,
+      {
+        code
+      },
+      undefined,
+      locale
+    )
   }
 
-  async emailVerificationRequest(to: string, code: string) {
-    await this.addQueue('email_verification_request', to, {
-      code
-    })
+  async emailVerificationRequest(to: string, code: string, locale?: string) {
+    await this.addQueue(
+      'email_verification_request',
+      to,
+      {
+        code
+      },
+      undefined,
+      locale
+    )
   }
 
   async formInvitation(to: string, link: string) {
@@ -89,27 +105,41 @@ export class MailService {
     await this.addQueue('join_workspace_alert', to, options)
   }
 
-  async passwordChangeAlert(to: string) {
-    await this.addQueue('password_change_alert', to)
+  async passwordChangeAlert(to: string, locale?: string) {
+    await this.addQueue('password_change_alert', to, undefined, undefined, locale)
   }
 
-  async projectDeletionAlert(to: string, options: ProjectDeletionAlertOptions) {
-    await this.addQueue('project_deletion_alert', to, options)
+  async projectDeletionAlert(to: string, options: ProjectDeletionAlertOptions, locale?: string) {
+    await this.addQueue('project_deletion_alert', to, options, undefined, locale)
   }
 
-  async projectDeletionRequest(to: string, options: ProjectDeletionRequestOptions) {
-    await this.addQueue('project_deletion_request', to, options)
+  async projectDeletionRequest(
+    to: string,
+    options: ProjectDeletionRequestOptions,
+    locale?: string
+  ) {
+    await this.addQueue('project_deletion_request', to, options, undefined, locale)
   }
 
-  async scheduleAccountDeletionAlert(to: string, fullName: string) {
-    await this.addQueue('schedule_account_deletion_alert', to, {
-      fullName,
-      email: to
-    })
+  async scheduleAccountDeletionAlert(to: string, fullName: string, locale?: string) {
+    await this.addQueue(
+      'schedule_account_deletion_alert',
+      to,
+      {
+        fullName,
+        email: to
+      },
+      undefined,
+      locale
+    )
   }
 
-  async submissionNotification(to: string, options: SubmissionNotificationOptions) {
-    await this.addQueue('submission_notification', to, options)
+  async submissionNotification(
+    to: string,
+    options: SubmissionNotificationOptions,
+    locale?: string
+  ) {
+    await this.addQueue('submission_notification', to, options, undefined, locale)
   }
 
   async teamDataExportReady(to: string, link: string) {
@@ -118,19 +148,25 @@ export class MailService {
     })
   }
 
-  async teamDeletionAlert(to: string, options: TeamDeletionAlertOptions) {
-    await this.addQueue('team_deletion_alert', to, options)
+  async teamDeletionAlert(to: string, options: TeamDeletionAlertOptions, locale?: string) {
+    await this.addQueue('team_deletion_alert', to, options, undefined, locale)
   }
 
-  async teamDeletionRequest(to: string, options: TeamDeletionRequestOptions) {
-    await this.addQueue('team_deletion_request', to, options)
+  async teamDeletionRequest(to: string, options: TeamDeletionRequestOptions, locale?: string) {
+    await this.addQueue('team_deletion_request', to, options, undefined, locale)
   }
 
-  async teamInvitation(to: string, options: TeamInvitationOptions) {
-    await this.addQueue('team_invitation', to, {
-      ...options,
-      email: to
-    })
+  async teamInvitation(to: string, options: TeamInvitationOptions, locale?: string) {
+    await this.addQueue(
+      'team_invitation',
+      to,
+      {
+        ...options,
+        email: to
+      },
+      undefined,
+      locale
+    )
   }
 
   async userSecurityAlert(to: string, options: UserSecurityAlertOptions) {
@@ -138,10 +174,22 @@ export class MailService {
   }
 
   private init() {
-    const allFiles = readdirSync(EMAIL_TEMPLATES_DIR)
-    const filePaths = allFiles
-      .filter(file => extname(file) === HTML_EXT)
-      .map(file => join(EMAIL_TEMPLATES_DIR, file))
+    this.loadTemplates(DEFAULT_LOCALE, readdirSync(EMAIL_TEMPLATES_DIR, { withFileTypes: true }))
+
+    const localeDirs = readdirSync(EMAIL_TEMPLATES_DIR, { withFileTypes: true }).filter(entry =>
+      entry.isDirectory()
+    )
+
+    localeDirs.forEach(entry => {
+      const localePath = join(EMAIL_TEMPLATES_DIR, entry.name)
+      this.loadTemplates(entry.name, readdirSync(localePath, { withFileTypes: true }), localePath)
+    })
+  }
+
+  private loadTemplates(locale: string, entries: Dirent[], basePath = EMAIL_TEMPLATES_DIR) {
+    const filePaths = entries
+      .filter(file => file.isFile() && extname(file.name) === HTML_EXT)
+      .map(file => join(basePath, file.name))
 
     for (const filePath of filePaths) {
       const name = basename(filePath, HTML_EXT)
@@ -162,7 +210,8 @@ export class MailService {
           }
         })
 
-        this.emailTemplates[name] = {
+        this.emailTemplates[locale] ||= {}
+        this.emailTemplates[locale][name] = {
           subject: metaObject.title,
           html
         }
@@ -174,9 +223,12 @@ export class MailService {
     templateName: string,
     to: string,
     replacements?: Record<string, any>,
-    options?: JobOptions
+    options?: JobOptions,
+    locale = DEFAULT_LOCALE
   ) {
-    const result = this.emailTemplates[templateName]
+    const result =
+      this.emailTemplates[locale]?.[templateName] ||
+      this.emailTemplates[DEFAULT_LOCALE]?.[templateName]
 
     if (helper.isEmpty(result)) {
       return

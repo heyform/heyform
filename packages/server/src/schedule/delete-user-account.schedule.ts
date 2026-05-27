@@ -59,7 +59,7 @@ export class DeleteUserAccountSchedule extends BaseQueue {
             await this.teamService.deleteMember(teamId, userId)
           }
 
-          await this.mailService.accountDeletionAlert(user.email)
+          await this.mailService.accountDeletionAlert(user.email, user.lang)
         }
       }
     }

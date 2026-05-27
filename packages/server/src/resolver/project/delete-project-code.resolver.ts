@@ -29,11 +29,15 @@ export class DeleteProjectCodeResolver {
     const key = `verify_delete_project:${project.id}`
     const code = await this.authService.getVerificationCode(key)
 
-    this.mailService.projectDeletionRequest(user.email, {
-      teamName: team.name,
-      projectName: project.name,
-      code
-    })
+    this.mailService.projectDeletionRequest(
+      user.email,
+      {
+        teamName: team.name,
+        projectName: project.name,
+        code
+      },
+      user.lang
+    )
 
     return true
   }

@@ -36,7 +36,7 @@ export class SendResetPasswordEmailResolver {
     const key = `reset_password:${user.id}`
     const code = await this.authService.getVerificationCodeWithRateLimit(key)
 
-    this.mailService.emailVerificationRequest(input.email, code)
+    this.mailService.emailVerificationRequest(input.email, code, user.lang)
     return true
   }
 }

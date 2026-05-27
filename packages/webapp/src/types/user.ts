@@ -5,6 +5,7 @@ export interface UserType {
   phoneNumber: string
   avatar: string
   note: string
+  lang?: string
   lastSeenAt?: number
   isSocialAccount?: boolean
   isEmailVerified?: boolean

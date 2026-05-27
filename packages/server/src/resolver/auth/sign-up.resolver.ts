@@ -63,7 +63,7 @@ export class SignUpResolver {
     })
 
     const code = await this.authService.getVerificationCodeWithRateLimit(`verify_email:${userId}`)
-    this.mailService.emailVerificationRequest(input.email, code)
+    this.mailService.emailVerificationRequest(input.email, code, client.lang)
 
     return true
   }

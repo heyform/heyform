@@ -23,7 +23,7 @@ export const GqlClient = createParamDecorator((_: any, context: ExecutionContext
     deviceId: req.get('x-device-id'),
     userAgent: parseUserAgent(req.get('user-agent')),
     ip: cip,
-    lang: lang(req, 'user-lang', ['en', 'zh-cn'])
+    lang: lang(req, 'user-lang', ['en', 'pt-br', 'zh-cn'])
   }
 })
 
@@ -35,6 +35,6 @@ export const HttpClient = createParamDecorator((_: any, ctx: ExecutionContext): 
     deviceId: req.get('x-device-id'),
     userAgent: parseUserAgent(req.get('user-agent')),
     ip: cip,
-    lang: lang(req, 'user-lang', ['en', 'zh-cn'])
+    lang: lang(req, 'user-lang', ['en', 'pt-br', 'zh-cn'])
   }
 })

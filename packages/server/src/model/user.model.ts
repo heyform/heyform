@@ -3,6 +3,7 @@ import { Document } from 'mongoose'
 
 export enum UserLangEnum {
   EN = 'en',
+  PT_BR = 'pt-br',
   ZH_CN = 'zh-cn'
 }
 

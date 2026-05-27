@@ -16,7 +16,7 @@ import ApolloLinkTimeout from 'apollo-link-timeout'
 
 import { helper } from '@heyform-inc/utils'
 
-import { GRAPHQL_API_URL, IS_PROD } from '@/consts'
+import { GRAPHQL_API_URL, IS_PROD, LOCALE_COOKIE_NAME } from '@/consts'
 
 import { clearAuthState, getDeviceId } from './auth'
 
@@ -50,13 +50,21 @@ const retryLink: any = new RetryLink({
 
 const timeoutLink = new ApolloLinkTimeout(30_000)
 
+function getLocale() {
+  return document.cookie
+    .split('; ')
+    .find(row => row.startsWith(`${LOCALE_COOKIE_NAME}=`))
+    ?.split('=')[1]
+}
+
 const headerLink = setContext((_, { headers }) => {
   const deviceId = getDeviceId()
   return {
     headers: {
       ...headers,
       'X-Device-Id': deviceId,
-      'x-anonymous-id': deviceId
+      'x-anonymous-id': deviceId,
+      'user-lang': getLocale() || navigator.language
     }
   }
 })
