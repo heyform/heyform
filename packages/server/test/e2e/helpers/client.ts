@@ -1,4 +1,6 @@
 import { Buffer } from 'buffer'
+import { request as httpRequest } from 'http'
+import { request as httpsRequest } from 'https'
 
 import { deviceId as makeDeviceId } from './random'
 
@@ -133,12 +135,12 @@ export class E2EClient {
    * Upload a single file via multipart/form-data to a REST endpoint.
    * Mirrors what the upload controller expects via `multer.single('file')`.
    *
-   * Forces `Connection: close` because multer 1.x doesn't always drain the
-   * request body after a fileFilter rejection. When a previous upload
-   * succeeds on the same keep-alive socket, undici can reuse a connection
-   * whose state is half-consumed and the next upload hangs for ~5 minutes
-   * (the runner's idle-socket timeout) before fetch errors out. Closing the
-   * connection after each upload sidesteps that entirely.
+   * Uses a one-off HTTP(S) request instead of fetch/undici. The e2e suite
+   * makes hundreds of prior requests to the same origin, and undici may still
+   * place this multipart POST onto an existing pooled socket before honouring
+   * `Connection: close`. When multer then rejects the upload early, CI can end
+   * up hanging until the helper's abort timeout fires. A fresh socket per
+   * upload keeps this probe deterministic.
    */
   async uploadFile(
     path: string,
@@ -156,33 +158,64 @@ export class E2EClient {
       Buffer.from(`\r\n--${boundary}--\r\n`)
     ]
     const body = Buffer.concat(parts)
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 15_000)
-    let res: Response
-    try {
-      res = await fetch(`${this.baseUrl}${path}`, {
-        method: 'POST',
-        headers: this.buildHeaders({
-          'content-type': `multipart/form-data; boundary=${boundary}`,
-          'content-length': String(body.length),
-          connection: 'close'
-        }),
-        body,
-        redirect: 'manual',
-        signal: controller.signal
+    const url = new URL(`${this.baseUrl}${path}`)
+    const request = url.protocol === 'https:' ? httpsRequest : httpRequest
+
+    return await new Promise<RestResponse>((resolve, reject) => {
+      const req = request(
+        url,
+        {
+          method: 'POST',
+          agent: false,
+          headers: this.buildHeaders({
+            'content-type': `multipart/form-data; boundary=${boundary}`,
+            'content-length': String(body.length),
+            connection: 'close'
+          })
+        },
+        res => {
+          const chunks: Buffer[] = []
+          res.on('data', chunk => {
+            chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+          })
+          res.on('end', () => {
+            const headers = new Headers()
+            for (const [name, value] of Object.entries(res.headers)) {
+              if (Array.isArray(value)) {
+                for (const item of value) {
+                  headers.append(name, item)
+                }
+              } else if (value !== undefined) {
+                headers.set(name, String(value))
+              }
+            }
+
+            this.jar.ingestSetCookie(headers)
+
+            const text = Buffer.concat(chunks).toString('utf8')
+            let parsed: any = text
+            try {
+              parsed = text ? JSON.parse(text) : null
+            } catch {
+              /* keep raw */
+            }
+
+            resolve({
+              status: res.statusCode ?? 0,
+              headers,
+              body: parsed,
+              text
+            })
+          })
+        }
+      )
+
+      req.on('error', reject)
+      req.setTimeout(15_000, () => {
+        req.destroy(new Error('Upload request timed out after 15000ms'))
       })
-    } finally {
-      clearTimeout(timer)
-    }
-    this.jar.ingestSetCookie(res.headers)
-    const text = await res.text()
-    let parsed: any = text
-    try {
-      parsed = text ? JSON.parse(text) : null
-    } catch {
-      /* keep raw */
-    }
-    return { status: res.status, headers: res.headers, body: parsed, text }
+      req.end(body)
+    })
   }
 
   async gql<T = any>(
