@@ -504,24 +504,24 @@
   "oauth": {
     "title": "承認",
     "headline": "{{name}} を接続",
-    "subHeadline": "{{name}} を使用して HeyForm をお好みのアプリ（チャット、メール、SMS など）と統合します。",
+    "subHeadline": "{{name}} を使用して Logisaar Forms をお好みのアプリ（チャット、メール、SMS など）と統合します。",
     "would": "{{name}} は次のことを希望しています：",
     "scopes": [
       "ワークスペースの読み取り",
-      "HeyForm アカウント内のすべてのワークスペースデータを取得する",
+      "Logisaar Forms アカウント内のすべてのワークスペースデータを取得する",
       "プロジェクトの読み取り",
-      "HeyForm ワークスペース内のすべてのプロジェクトデータを取得する",
+      "Logisaar Forms ワークスペース内のすべてのプロジェクトデータを取得する",
       "フォームの読み取り",
-      "HeyForm プロジェクト内のすべてのフォームデータを取得する",
+      "Logisaar Forms プロジェクト内のすべてのフォームデータを取得する",
       "提出物の読み取り",
       "収集したフォーム提出データを取得する",
       "アカウントの読み取り",
-      "HeyForm アカウント情報を取得する"
+      "Logisaar Forms アカウント情報を取得する"
     ]
   },
   "workspace": {
     "notExist": "このワークスペースは存在しません。",
-    "backHome": "HeyForm に戻る",
+    "backHome": "Logisaar Forms に戻る",
     "appearance": {
       "title": "外観",
       "system": "システム設定",
@@ -622,15 +622,15 @@
       "required": "メールアドレスは必須です",
       "sentSuccess_one": "{{count}} 件の招待を送信しました",
       "sentSuccess_other": "{{count}} 件の招待を送信しました",
-      "sentSuccessMessage": "招待されたメンバーにはHeyFormにサインアップするためのメールが送信されました"
+      "sentSuccessMessage": "招待されたメンバーにはLogisaar Formsにサインアップするためのメールが送信されました"
     }
   },
   "settings": {
     "title": "ワークスペース設定",
     "branding": {
       "title": "ブランディング",
-      "removeBrandingHeadline": "HeyFormブランドを削除",
-      "removeBrandingSubHeadline": "HeyFormを完全にあなたのブランドにするために、フォームのフッターからHeyFormロゴを削除します。",
+      "removeBrandingHeadline": "Logisaar Formsブランドを削除",
+      "removeBrandingSubHeadline": "Logisaar Formsを完全にあなたのブランドにするために、フォームのフッターからLogisaar Formsロゴを削除します。",
       "viewBrandKit": "表示する",
       "logo": {
         "title": "ロゴ",
@@ -791,8 +791,8 @@
       "defaultName": "無題"
     },
     "chat": {
-      "title": "HeyForm AI アシスタント",
-      "welcome": "HeyFormのAIアシスタントへようこそ！これは最先端のAI技術によって支えられた革新的な機能で、フォームの質問やロジックを作成するのに役立ちます。",
+      "title": "Logisaar Forms AI アシスタント",
+      "welcome": "Logisaar FormsのAIアシスタントへようこそ！これは最先端のAI技術によって支えられた革新的な機能で、フォームの質問やロジックを作成するのに役立ちます。",
       "compose": "何でも聞いてください...",
       "fieldsUpdated": "フォームの質問が更新されました。",
       "logicUpdated": "フォームのロジックが更新されました。",
@@ -863,9 +863,9 @@
       "fileManagement": "ファイル管理",
       "mapFields": {
         "headline": "フィールドのマッピング",
-        "subHeadline": "HeyForm を {{name}} の列にマッピングします。{{name}} 上の列を変更した場合は、ここで更新してください。そうしないと統合が正常に機能しません。",
+        "subHeadline": "Logisaar Forms を {{name}} の列にマッピングします。{{name}} 上の列を変更した場合は、ここで更新してください。そうしないと統合が正常に機能しません。",
         "requried": "マッピングフィールドは空にできません",
-        "leftPlaceholder": "HeyForm の質問を選択",
+        "leftPlaceholder": "Logisaar Forms の質問を選択",
         "rightPlaceholder": "{{name}} 列",
         "requireLeft": "フィールド {{index}} の左側は空にできません",
         "requireRight": "フィールド {{index}} の右側は空にできません",
@@ -873,7 +873,7 @@
       },
       "authorization": {
         "headline": "認証",
-        "subHeadline": "まず、HeyForm にデータへのアクセス権を与えてください。",
+        "subHeadline": "まず、Logisaar Forms にデータへのアクセス権を与えてください。",
         "loginWith": "{{name}} でログインする"
       },
       "webhook": {
@@ -883,7 +883,7 @@
       "telegram": {
         "label": "チャットID",
         "required": "チャットIDは必須です",
-        "footer": "<a>@HeyForm_bot</a>をTelegramグループに追加し、グループ内で<code>/start@HeyForm_bot</code>と入力してください。その後、チャットIDが含まれたメッセージを受け取ります。"
+        "footer": "<a>@Logisaar Forms_bot</a>をTelegramグループに追加し、グループ内で<code>/start@Logisaar Forms_bot</code>と入力してください。その後、チャットIDが含まれたメッセージを受け取ります。"
       },
       "legacyslack": {
         "label": "Webhook URL",
@@ -924,7 +924,7 @@
         },
         "folder": {
           "headline": "フォルダを選択",
-          "footer": "HeyForm からアップロードされたファイルを保存するフォルダを選択できます。"
+          "footer": "Logisaar Forms からアップロードされたファイルを保存するフォルダを選択できます。"
         }
       },
       "googlesheets": {
@@ -1073,7 +1073,7 @@
         "description": "説明",
         "preview": {
           "headline": "プレビュー",
-          "subHeadline": "HeyFormは自動的に<a>Open Graph</a>画像を生成します。<button>独自の画像をアップロードする</button>こともできます。",
+          "subHeadline": "Logisaar Formsは自動的に<a>Open Graph</a>画像を生成します。<button>独自の画像をアップロードする</button>こともできます。",
           "uploadTitle": "独自のOpen Graph画像をアップロード",
           "uploadDescription": "推奨サイズ: 1200x630 | JPG, PNG."
         }
@@ -1112,7 +1112,7 @@
         "bottomRight": "右下隅",
         "transparentBackground": "透明な背景",
         "code": {
-          "headline": "HeyFormをあなたのウェブサイトに追加する",
+          "headline": "Logisaar Formsをあなたのウェブサイトに追加する",
           "subHeadline": "以下のコードスニペットをあなたのウェブサイトのbody部分に貼り付けてください。"
         }
       }
@@ -1123,7 +1123,7 @@
         "title": "一般設定",
         "archive": {
           "headline": "提出アーカイブ",
-          "subHeadline": "HeyFormがあなたの提出データを保存しないようにしたい場合は、提出アーカイブ機能をオフにしてください。"
+          "subHeadline": "Logisaar Formsがあなたの提出データを保存しないようにしたい場合は、提出アーカイブ機能をオフにしてください。"
         },
         "redirect": {
           "headline": "完了後リダイレクト",
@@ -1312,7 +1312,7 @@
         "payment": {
           "title": "支払い",
           "headline": "Stripe に接続する",
-          "subHeadline": "<div>Stripe を通じて直接銀行口座に入金されます。</div><div>無料の HeyForm ユーザーは収益時に<a>5% の HeyForm 手数料 + Stripe 取引手数料</a>がかかります。</div><div>5% の HeyForm 手数料を解除するには、<button>HeyForm Premium</button> にアップグレードしてください。</div>",
+          "subHeadline": "<div>Stripe を通じて直接銀行口座に入金されます。</div><div>無料の Logisaar Forms ユーザーは収益時に<a>5% の Logisaar Forms 手数料 + Stripe 取引手数料</a>がかかります。</div><div>5% の Logisaar Forms 手数料を解除するには、<button>Logisaar Forms Premium</button> にアップグレードしてください。</div>",
           "stripeAccount": "Stripe アカウント",
           "revoke": "取り消す",
           "price": "価格",
@@ -1518,7 +1518,7 @@
     "subHeadline": "アカウント設定の変更はすべてのワークスペースに適用されます。",
     "avatar": {
       "headline": "アバター",
-      "subHeadline": "デフォルトでは Gravatar が HeyForm のアバターとして使用されますが、ここでカスタムアバターをアップロードできます。"
+      "subHeadline": "デフォルトでは Gravatar が Logisaar Forms のアバターとして使用されますが、ここでカスタムアバターをアップロードできます。"
     },
     "name": "あなたの名前",
     "email": {

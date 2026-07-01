@@ -9,7 +9,7 @@ import { UserService, WorkspaceService } from '@/services'
 import { clearCookie, cn, getCookie, useParam, useRouter } from '@/utils'
 import { helper, timestamp } from '@heyform-inc/utils'
 
-import Logo from '@/assets/logo.svg?react'
+import LogoPng from '@/assets/logo.png'
 import { Button, useAlert } from '@/components'
 import { REDIRECT_COOKIE_NAME } from '@/consts'
 import { useAppStore, useUserStore, useWorkspaceStore } from '@/store'
@@ -52,10 +52,10 @@ export const LoginGuard: FC<LayoutProps> = ({ options, children }) => {
   useEffect(() => {
     if (user.isDeletionScheduled) {
       alert({
-        title: t('user.deletion.scheduled.title'),
+        title: t('user.deletion.scheduled.title') as any,
         description: t('user.deletion.scheduled.description', {
           remainingTime: Math.ceil(((user.deletionScheduledAt || 0) - timestamp()) / 3600)
-        }),
+        }) as any,
         cancelProps: {
           label: t('components.cancel')
         },
@@ -77,7 +77,7 @@ export const LoginGuard: FC<LayoutProps> = ({ options, children }) => {
 
   useEffect(() => {
     if (helper.isValid(options?.title)) {
-      document.title = `${t(options!.title)} - HeyForm`
+      document.title = `${t(options!.title)} - Logisaar Forms`
     }
   }, [options, t])
 
@@ -169,7 +169,7 @@ export const WorkspaceGuard: FC<LayoutProps> = ({ options, children }) => {
     selectWorkspace(workspaceId)
 
     if (workspaceId) {
-      let title = `${workspace?.name} - HeyForm`
+      let title = `${workspace?.name} - Logisaar Forms`
 
       if (helper.isValid(options?.title)) {
         title = `${t(options!.title)} · ` + title
@@ -183,7 +183,7 @@ export const WorkspaceGuard: FC<LayoutProps> = ({ options, children }) => {
     selectProject(projectId)
 
     if (projectId) {
-      let title = `${workspace?.name}/${project?.name} - HeyForm`
+      let title = `${workspace?.name}/${project?.name} - Logisaar Forms`
 
       if (helper.isValid(options?.title)) {
         title = `${t(options!.title)} · ` + title
@@ -210,7 +210,7 @@ export const BaseLayout: FC<LayoutProps> = ({ options, children }) => {
 
   useEffect(() => {
     if (helper.isValid(options?.title)) {
-      document.title = `${t(options!.title)} - HeyForm`
+      document.title = `${t(options!.title)} - Logisaar Forms`
     }
   }, [options, t])
 
@@ -218,9 +218,8 @@ export const BaseLayout: FC<LayoutProps> = ({ options, children }) => {
     <LoginGuard>
       <div className="bg-foreground flex min-h-screen flex-col">
         <div className="bg-foreground sticky top-0 flex items-center justify-between p-4">
-          <a href="/" className="flex items-center gap-2" title="HeyForm">
-            <Logo className="h-8 w-auto" />
-            <span className="text-xl font-medium">HeyForm</span>
+          <a href="/" className="glass-logo-pill" title="Logisaar Forms">
+            <img src={LogoPng} alt="Logisaar Forms" />
           </a>
 
           <WorkspaceAccount

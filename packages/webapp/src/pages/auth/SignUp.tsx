@@ -110,7 +110,7 @@ const SignUp = () => {
       <div className="text-secondary text-center text-sm">
         <p>
           <Trans
-            t={t}
+            t={t as any}
             i18nKey="signUp.haveAccount"
             components={{
               a: <Link className="hover:text-primary underline underline-offset-4" to="/login" />

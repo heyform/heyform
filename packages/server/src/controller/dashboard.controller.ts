@@ -61,9 +61,9 @@ export class DashboardController {
   @Header('X-Frame-Options', 'SAMEORIGIN')
   index(@Res() res: Response) {
     return res.render('index', {
-      title: 'HeyForm Dashboard - Create and Manage Custom Forms Effortlessly',
+      title: 'Logisaar Forms Dashboard - Create and Manage Custom Forms Effortlessly',
       description:
-        "Simplify your form creation process with HeyForm's intuitive dashboard. Design, customize, and manage forms all in one place, with no coding required.",
+        "Simplify your form creation process with Logisaar Forms's intuitive dashboard. Design, customize, and manage forms all in one place, with no coding required.",
       heyform: this.runtimeConfig()
     })
   }

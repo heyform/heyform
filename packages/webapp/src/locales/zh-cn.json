@@ -504,24 +504,24 @@
   "oauth": {
     "title": "授权",
     "headline": "连接 {{name}}",
-    "subHeadline": "使用 {{name}} 将 HeyForm 与您喜欢的应用集成，例如聊天、电子邮件或短信。",
+    "subHeadline": "使用 {{name}} 将 Logisaar Forms 与您喜欢的应用集成，例如聊天、电子邮件或短信。",
     "would": "{{name}} 希望能够：",
     "scopes": [
       "工作区读取",
-      "检索您 HeyForm 账户中所有工作区的数据",
+      "检索您 Logisaar Forms 账户中所有工作区的数据",
       "项目读取",
-      "检索您 HeyForm 工作区中所有项目的数据",
+      "检索您 Logisaar Forms 工作区中所有项目的数据",
       "表单读取",
-      "检索您 HeyForm 项目中所有表单的数据",
+      "检索您 Logisaar Forms 项目中所有表单的数据",
       "提交读取",
       "检索您收集的表单提交数据",
       "账户读取",
-      "检索您的 HeyForm 账户信息"
+      "检索您的 Logisaar Forms 账户信息"
     ]
   },
   "workspace": {
     "notExist": "该工作区不存在。",
-    "backHome": "返回 HeyForm",
+    "backHome": "返回 Logisaar Forms",
     "appearance": {
       "title": "外观",
       "system": "系统偏好",
@@ -622,15 +622,15 @@
       "required": "电子邮件地址不能为空",
       "sentSuccess_one": "{{count}} 封邀请已发送",
       "sentSuccess_other": "{{count}} 封邀请已发送",
-      "sentSuccessMessage": "已通知受邀成员通过电子邮件注册 HeyForm"
+      "sentSuccessMessage": "已通知受邀成员通过电子邮件注册 Logisaar Forms"
     }
   },
   "settings": {
     "title": "工作区设置",
     "branding": {
       "title": "品牌",
-      "removeBrandingHeadline": "移除 HeyForm 品牌",
-      "removeBrandingSubHeadline": "为了让 HeyForm 完全属于您的品牌，移除表单页脚中的 HeyForm 标志。",
+      "removeBrandingHeadline": "移除 Logisaar Forms 品牌",
+      "removeBrandingSubHeadline": "为了让 Logisaar Forms 完全属于您的品牌，移除表单页脚中的 Logisaar Forms 标志。",
       "viewBrandKit": "查看",
       "logo": {
         "title": "标志（Logo）",
@@ -791,8 +791,8 @@
       "defaultName": "未命名"
     },
     "chat": {
-      "title": "HeyForm AI 助手",
-      "welcome": "欢迎使用 HeyForm 的 AI 助手！这是一个由最先进的 AI 技术驱动的创新功能，旨在帮助您创建表单问题和逻辑。",
+      "title": "Logisaar Forms AI 助手",
+      "welcome": "欢迎使用 Logisaar Forms 的 AI 助手！这是一个由最先进的 AI 技术驱动的创新功能，旨在帮助您创建表单问题和逻辑。",
       "compose": "问我任何问题...",
       "fieldsUpdated": "您的表单问题已更新。",
       "logicUpdated": "您的表单逻辑已更新。",
@@ -863,9 +863,9 @@
       "fileManagement": "文件管理",
       "mapFields": {
         "headline": "映射字段",
-        "subHeadline": "将 HeyForm 映射到 {{name}} 列。如果您更改了 {{name}} 上的列，请在此处更新，否则集成将无法正常工作。",
+        "subHeadline": "将 Logisaar Forms 映射到 {{name}} 列。如果您更改了 {{name}} 上的列，请在此处更新，否则集成将无法正常工作。",
         "requried": "映射字段不能为空",
-        "leftPlaceholder": "选择一个 HeyForm 问题",
+        "leftPlaceholder": "选择一个 Logisaar Forms 问题",
         "rightPlaceholder": "{{name}} 列",
         "requireLeft": "字段 {{index}} 的左侧不能为空",
         "requireRight": "字段 {{index}} 的右侧不能为空",
@@ -873,7 +873,7 @@
       },
       "authorization": {
         "headline": "授权",
-        "subHeadline": "首先，请授权 HeyForm 访问您的数据。",
+        "subHeadline": "首先，请授权 Logisaar Forms 访问您的数据。",
         "loginWith": "使用 {{name}} 登录"
       },
       "webhook": {
@@ -883,7 +883,7 @@
       "telegram": {
         "label": "聊天 ID",
         "required": "聊天 ID 不能为空",
-        "footer": "将 <a>@HeyForm_bot</a> 添加到您的 Telegram 群组，并在群组中输入 <code>/start@HeyForm_bot</code>。然后您将收到一条包含聊天 ID 的消息。"
+        "footer": "将 <a>@Logisaar Forms_bot</a> 添加到您的 Telegram 群组，并在群组中输入 <code>/start@Logisaar Forms_bot</code>。然后您将收到一条包含聊天 ID 的消息。"
       },
       "legacyslack": {
         "label": "Webhook URL",
@@ -924,7 +924,7 @@
         },
         "folder": {
           "headline": "选择一个文件夹",
-          "footer": "您可以选择一个文件夹来存放从 HeyForm 上传的文件。"
+          "footer": "您可以选择一个文件夹来存放从 Logisaar Forms 上传的文件。"
         }
       },
       "googlesheets": {
@@ -1073,7 +1073,7 @@
         "description": "描述",
         "preview": {
           "headline": "预览",
-          "subHeadline": "HeyForm 自动为您生成一个<a>Open Graph</a> 图像，您也可以 <button>上传您自己的图像</button>。",
+          "subHeadline": "Logisaar Forms 自动为您生成一个<a>Open Graph</a> 图像，您也可以 <button>上传您自己的图像</button>。",
           "uploadTitle": "上传您自己的 Open Graph 图像",
           "uploadDescription": "推荐尺寸：1200x630 | JPG, PNG。"
         }
@@ -1112,7 +1112,7 @@
         "bottomRight": "右下角",
         "transparentBackground": "透明背景",
         "code": {
-          "headline": "将 HeyForm 添加到您的网站",
+          "headline": "将 Logisaar Forms 添加到您的网站",
           "subHeadline": "将以下代码片段粘贴到您网站的body部分。"
         }
       }
@@ -1123,7 +1123,7 @@
         "title": "常规",
         "archive": {
           "headline": "提交存档",
-          "subHeadline": "如果您不希望 HeyForm 保存您的提交数据，可以关闭提交存档功能。"
+          "subHeadline": "如果您不希望 Logisaar Forms 保存您的提交数据，可以关闭提交存档功能。"
         },
         "redirect": {
           "headline": "完成后重定向",
@@ -1312,7 +1312,7 @@
         "payment": {
           "title": "支付",
           "headline": "连接到 Stripe",
-          "subHeadline": "<div>通过 Stripe 直接在您的银行账户中收款。</div><div>免费HeyForm用户收款时需支付<a>5% HeyForm 佣金 + Stripe 交易费。</a></div><div>要取消5%的 HeyForm 佣金，请升级到<button>HeyForm Premium</button>。</div>",
+          "subHeadline": "<div>通过 Stripe 直接在您的银行账户中收款。</div><div>免费Logisaar Forms用户收款时需支付<a>5% Logisaar Forms 佣金 + Stripe 交易费。</a></div><div>要取消5%的 Logisaar Forms 佣金，请升级到<button>Logisaar Forms Premium</button>。</div>",
           "stripeAccount": "Stripe 账户",
           "revoke": "撤销",
           "price": "价格",
@@ -1518,7 +1518,7 @@
     "subHeadline": "账户设置的更改将应用于您所有的工作区。",
     "avatar": {
       "headline": "头像",
-      "subHeadline": "默认使用 Gravatar 作为您的 HeyForm 头像，您可以在这里上传自定义头像。"
+      "subHeadline": "默认使用 Gravatar 作为您的 Logisaar Forms 头像，您可以在这里上传自定义头像。"
     },
     "name": "您的姓名",
     "email": {

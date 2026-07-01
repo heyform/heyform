@@ -8,11 +8,13 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { extname } from 'path'
+import { memoryStorage } from 'multer'
+import { nanoid } from '@heyform-inc/utils'
 
-import { COOKIE_DEVICE_ID_NAME, getMulterStorage, removeUploadedFile } from '@config'
-import { APP_HOMEPAGE_URL, S3_PUBLIC_URL, UPLOAD_FILE_SIZE, UPLOAD_FILE_TYPES } from '@environments'
+import { COOKIE_DEVICE_ID_NAME } from '@config'
+import { UPLOAD_FILE_SIZE, UPLOAD_FILE_TYPES } from '@environments'
 import { helper } from '@heyform-inc/utils'
-import { AuthService, EndpointService, FormService } from '@service'
+import { AuthService, EndpointService, FormService, StorageService } from '@service'
 import { isAllowedUploadField } from '@utils'
 
 const BLOCKED_UPLOAD_EXTENSIONS = new Set(['.svg', '.svgz'])
@@ -32,7 +34,8 @@ export class UploadController {
   constructor(
     private readonly authService: AuthService,
     private readonly endpointService: EndpointService,
-    private readonly formService: FormService
+    private readonly formService: FormService,
+    private readonly storageService: StorageService
   ) {}
 
   @Post('/api/upload')
@@ -41,35 +44,44 @@ export class UploadController {
       limits: {
         fileSize: UPLOAD_FILE_SIZE
       },
-      storage: getMulterStorage()
+      storage: memoryStorage()
     })
   )
   async index(
     @Req() req: any,
     @UploadedFile() file: any
   ): Promise<{ filename: string; url: string; size: number }> {
-    try {
-      if (!file) {
-        throw new BadRequestException('No upload file provided')
-      }
-
-      this.assertFileTypeAllowed(file)
-      await this.assertUploadAllowed(req)
-    } catch (error) {
-      await removeUploadedFile(file)
-      throw error
+    if (!file) {
+      throw new BadRequestException('No upload file provided')
     }
 
-    let url: string =
-      APP_HOMEPAGE_URL.replace(/\/+$/, '') + `/static/upload/${encodeURIComponent(file.filename)}`
+    this.assertFileTypeAllowed(file)
+    await this.assertUploadAllowed(req)
 
-    if (file.location) {
-      if (helper.isValid(S3_PUBLIC_URL)) {
-        url = `${S3_PUBLIC_URL.replace(/\/+$/, '')}/${file.key}`
-      } else {
-        url = file.location
+    const formId = getUploadContextValue(req, 'formId')
+    let provider: 'vps' | 's3' = 'vps'
+    let maxUploadSizeMb = 5
+
+    if (helper.isValid(formId)) {
+      const form = await this.formService.findById(formId)
+      if (form) {
+        provider = (form.storageProvider || 'vps') as 'vps' | 's3'
+        maxUploadSizeMb = form.maxUploadSizeMb || 5
       }
     }
+
+    if (file.size > maxUploadSizeMb * 1024 * 1024) {
+      throw new BadRequestException(`File exceeds the ${maxUploadSizeMb}MB limit set for this form`)
+    }
+
+    const filename = `${nanoid(12)}${extname(file.originalname)}`
+    const url = await this.storageService.uploadFile(
+      file.buffer,
+      filename,
+      file.mimetype,
+      formId || 'global',
+      provider
+    )
 
     return {
       filename: file.originalname,

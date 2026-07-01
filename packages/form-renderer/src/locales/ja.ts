@@ -1,5 +1,5 @@
 export default {
-  'Made with HeyForm': '<icon></icon> <span>HeyForm</span> で作成',
+  'Made with Logisaar Forms': '<icon></icon> <span>Logisaar Forms</span> で作成',
   'This field is required': 'この項目は必須です',
   'File type is not supported': 'ファイルタイプはサポートされていません',
   "File size can't exceed {{size}}": 'ファイルサイズは{{size}}を超えてはいけません',
@@ -50,7 +50,7 @@ export default {
   'Thanks for completing this form. Now create your own form.':
     'このフォームに記入いただきありがとうございます。今度は自分のフォームを作成してください。',
   'Form unavailable': 'フォームは利用できません',
-  'Create a heyform': 'heyformを作成する',
+  'Create a heyform': 'Logisaar Formsを作成する',
   "The form can't receive new submissions now.":
     'このフォームは現在新しい送信を受け付けていません。',
   "This page doesn't exist": 'このページは存在しません',

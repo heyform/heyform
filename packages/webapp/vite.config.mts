@@ -83,6 +83,9 @@ export default ({ mode }: ConfigEnv) => {
     server: {
       host: '0.0.0.0',
       port: 3000,
+      watch: {
+        usePolling: true
+      },
       proxy: {
         '/graphql': {
           target: env.VITE_PROXY_TARGET,

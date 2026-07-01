@@ -1,14 +1,14 @@
 import { Answer, Choice, Column, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import { IconArrowUpRight, IconCheck, IconClock, IconFile } from '@tabler/icons-react'
 import Big from 'big.js'
-import { FC, Fragment } from 'react'
+import { FC, Fragment, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn, formatDay, unixDate } from '@/utils'
 import { CURRENCY_SYMBOLS, htmlUtils } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
-import { Badge, Checkbox, Image } from '@/components'
+import { Badge, Checkbox, Image, Lightbox } from '@/components'
 import { ALL_FIELD_CONFIGS, CUSTOM_FIELDS_CONFIGS } from '@/consts'
 import { FormFieldType, SubmissionType } from '@/types'
 
@@ -103,12 +103,51 @@ const FileUploadItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
 
   const filename = encodeURIComponent(answer.value.filename)
   const downloadUrl = `${answer.value.cdnUrlPrefix}/${answer.value.cdnKey}?attname=${filename}`
+  const fileUrl = `${answer.value.cdnUrlPrefix}/${answer.value.cdnKey}`
+  const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(answer.value.filename || '')
+
+  const [lightboxVisible, setLightboxVisible] = useState(false)
 
   if (isTableCell) {
     return (
       <div className="flex gap-1">
         <IconFile className="text-secondary h-5 w-5" />
         <div className="flex-1 truncate">{answer.value.filename}</div>
+      </div>
+    )
+  }
+
+  if (isImage) {
+    return (
+      <div className="space-y-2">
+        <img
+          src={fileUrl}
+          alt={answer.value.filename}
+          className="max-h-[90px] max-w-[120px] cursor-pointer rounded-lg object-cover shadow-sm hover:opacity-90 transition-opacity"
+          onClick={() => setLightboxVisible(true)}
+        />
+        <div className="flex gap-3 text-xs">
+          <a
+            href={fileUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-brand font-medium hover:underline"
+          >
+            View
+          </a>
+          <a
+            href={downloadUrl}
+            download={answer.value.filename}
+            className="text-secondary font-medium hover:text-primary hover:underline"
+          >
+            Download
+          </a>
+        </div>
+        <Lightbox
+          visible={lightboxVisible}
+          src={fileUrl}
+          onClose={() => setLightboxVisible(false)}
+        />
       </div>
     )
   }

@@ -431,6 +431,8 @@ export const FORMS_GQL = gql`
         closedFormTitle
         closedFormDescription
       }
+      storageProvider
+      maxUploadSizeMb
       version
       isDraft
       canPublish
@@ -517,6 +519,8 @@ export const FORM_SUMMARY_GQL = gql`
         closedFormTitle
         closedFormDescription
       }
+      storageProvider
+      maxUploadSizeMb
       retentionAt
       suspended
       submissionCount
@@ -573,6 +577,8 @@ export const FORM_DETAIL_GQL = gql`
         metaDescription
         metaOGImageUrl
       }
+      storageProvider
+      maxUploadSizeMb
       drafts {
         id
         title

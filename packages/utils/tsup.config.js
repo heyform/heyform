@@ -1,7 +1,12 @@
 /** @type {import('tsup').Options} */
 module.exports = {
   target: 'esnext',
-  dts: true,
+  dts: {
+    compilerOptions: {
+      skipLibCheck: true,
+      types: []
+    }
+  },
   sourcemap: true,
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],

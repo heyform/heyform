@@ -26,6 +26,8 @@ interface TempSettings extends FormSettings {
   _ipLimitTime?: TypeNumberValue
   captcha?: string
   enableRespondentNotification?: boolean
+  storageProvider?: string
+  maxUploadSizeMb?: number
 }
 
 type EmbedConfigs = typeof DEFAULT_EMBED_CONFIGS
@@ -120,6 +122,8 @@ export const useFormStore = create<FormStoreType>()(
             const tempSettings = form.settings as TempSettings
 
             tempSettings.closeForm = !tempSettings.active
+            tempSettings.storageProvider = form.storageProvider
+            tempSettings.maxUploadSizeMb = form.maxUploadSizeMb || 5
 
             if (!tempSettings.expirationTimeZone) {
               tempSettings.expirationTimeZone = getTimeZone()
@@ -166,6 +170,14 @@ export const useFormStore = create<FormStoreType>()(
           state.form = {
             ...state.form,
             ...(updates as FormType)
+          }
+          if (state.tempSettings) {
+            if (updates.storageProvider !== undefined) {
+              state.tempSettings.storageProvider = updates.storageProvider
+            }
+            if (updates.maxUploadSizeMb !== undefined) {
+              state.tempSettings.maxUploadSizeMb = updates.maxUploadSizeMb
+            }
           }
         })
       },

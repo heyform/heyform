@@ -272,7 +272,7 @@ export const CountrySelect: FC<CountrySelectProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('heyform-dropdown-open')
-      setTriggerStyle(ref?.getBoundingClientRect())
+      setTriggerStyle(ref?.getBoundingClientRect() as any)
     } else {
       document.body.classList.remove('heyform-dropdown-open')
     }

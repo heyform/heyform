@@ -59,6 +59,11 @@ export const FormShell: FC<ComponentProps> = ({ children }) => {
         to: `/workspace/${workspaceId}/project/${projectId}/form/${formId}/submissions`
       },
       {
+        value: 'photos',
+        label: 'Photos',
+        to: `/workspace/${workspaceId}/project/${projectId}/form/${formId}/photos`
+      },
+      {
         value: 'integrations',
         label: t('form.integrations.title'),
         to: `/workspace/${workspaceId}/project/${projectId}/form/${formId}/integrations`

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { AppService } from '@/services'
 import { useQuery } from '@/utils'
 
-import IconLogo from '@/assets/logo.svg?react'
+import IconLogoPng from '@/assets/logo.png'
 import { Async, Button, Image, Loader } from '@/components'
 import { AppType } from '@/types'
 
@@ -47,13 +47,13 @@ export default function OAuth() {
       <div className="flex flex-col justify-center">
         <div className="flex items-center justify-center gap-x-4">
           <div className="border-accent-light h-12 w-12 rounded-lg border p-1.5">
-            <IconLogo className="h-full w-full" />
+            <img src={IconLogoPng} className="h-full w-full" alt="Logisaar Forms" />
           </div>
 
           <IconDots className="text-input h-6 w-6" />
 
           <div className="after:border-accent-light relative h-12 w-12 p-1 after:absolute after:inset-0 after:rounded-lg after:border">
-            <Image className="h-full w-full rounded-lg object-cover" src={app?.avatar} />
+            <Image className="h-full w-full rounded-lg object-cover" src={(app as any)?.avatar || app?.icon} />
           </div>
         </div>
 

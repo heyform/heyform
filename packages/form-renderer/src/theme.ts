@@ -60,8 +60,8 @@ const FONT_FAMILY_ALIASES: Record<string, string> = {
 export const DEFAULT_THEME: FormTheme = {
   fontFamily: GOOGLE_FONTS[0],
   questionTextColor: '#000',
-  answerTextColor: '#0445AF',
-  buttonBackground: '#0445AF',
+  answerTextColor: '#0066FF',
+  buttonBackground: '#0066FF',
   buttonTextColor: '#fff',
   backgroundColor: '#fff'
 }

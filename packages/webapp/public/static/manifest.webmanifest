@@ -1,7 +1,7 @@
 {
-  "name": "HeyForm",
-  "short_name": "HeyForm",
-  "description": "Use HeyForm to create beautiful, interactive free online forms.",
+  "name": "Logisaar Forms",
+  "short_name": "Logisaar Forms",
+  "description": "Use Logisaar Forms to create beautiful, interactive free online forms.",
   "icons": [
     {
       "purpose": "maskable",

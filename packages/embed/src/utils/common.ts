@@ -78,7 +78,7 @@ export function colorIsDark(color: string) {
   return (alpha * (values[0] * 299 + values[1] * 587 + values[2] * 114)) / 1000 < 150
 }
 
-const LOGGER_CONTEXT = '[📄 HeyForm Embed process.env.npm_package_version]'
+const LOGGER_CONTEXT = '[📄 Logisaar Forms Embed process.env.npm_package_version]'
 
 export const logger = {
   info: (...args: any[]) => {

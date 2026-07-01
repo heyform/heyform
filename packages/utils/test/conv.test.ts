@@ -113,7 +113,7 @@ test('fixed', () => {
 test('html to text', () => {
   expect(
     htmlToText(
-      '<a href="https://github.com/heyform" title="Title">hello world</a><img src="https://github.com/heyform" alt="HeyForm" />',
+      '<a href="https://github.com/heyform" title="Title">hello world</a><img src="https://github.com/heyform" alt="Logisaar Forms" />',
       0
     )
   ).toBe('hello world')

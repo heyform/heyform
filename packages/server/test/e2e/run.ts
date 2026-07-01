@@ -16,7 +16,7 @@ async function main() {
   const skipWait = process.env.E2E_SKIP_WAIT === '1'
   const onlyFilter = process.env.E2E_ONLY // e.g. "auth,health"
 
-  console.log(`HeyForm server e2e — target: ${baseUrl}`)
+  console.log(`Logisaar Forms server e2e — target: ${baseUrl}`)
 
   if (!skipWait) {
     const waitMs = Number(process.env.E2E_WAIT_MS || 60_000)

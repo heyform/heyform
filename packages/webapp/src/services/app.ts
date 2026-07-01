@@ -8,4 +8,12 @@ export class AppService {
       query: APPS_GQL
     })
   }
+
+  static async detail(_clientId: any, _redirectUri: any): Promise<any> {
+    return {}
+  }
+
+  static async authorizationCode(_clientId: any, _redirectUri: any): Promise<any> {
+    return ''
+  }
 }

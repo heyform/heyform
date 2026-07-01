@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2020",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "noUnusedLocals": true,
@@ -16,7 +16,8 @@
     "importHelpers": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": []
   },
   "exclude": ["coverage", "lib", "node_modules"]
 }

@@ -1,5 +1,5 @@
 export default {
-  'Made with HeyForm': 'Hecho con <icon></icon> <span>HeyForm</span>',
+  'Made with Logisaar Forms': 'Hecho con <icon></icon> <span>Logisaar Forms</span>',
   'This field is required': 'Este campo es obligatorio',
   'File type is not supported': 'El tipo de archivo no está soportado',
   "File size can't exceed {{size}}": 'El tamaño del archivo no puede exceder {{size}}',
@@ -50,7 +50,7 @@ export default {
   'Thanks for completing this form. Now create your own form.':
     'Gracias por completar este formulario. Ahora crea uno propio.',
   'Form unavailable': 'Formulario no disponible',
-  'Create a heyform': 'Crea un heyform',
+  'Create a heyform': 'Crea un Logisaar Forms',
   "The form can't receive new submissions now.":
     'El formulario no puede recibir nuevos envíos ahora.',
   "This page doesn't exist": 'Esta página no existe',

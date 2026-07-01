@@ -85,7 +85,13 @@ export class ExportFileService {
 
     switch (answer?.kind) {
       case FieldKindEnum.FILE_UPLOAD:
-        result = helper.isObject(value) ? value.url : helper.isString(value) ? value : ''
+        if (helper.isObject(value)) {
+          result = (value.cdnUrlPrefix && value.cdnKey)
+            ? `${value.cdnUrlPrefix}/${value.cdnKey}`
+            : (value.url || '')
+        } else if (helper.isString(value)) {
+          result = value
+        }
         break
 
       default:

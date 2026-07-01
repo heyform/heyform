@@ -149,7 +149,7 @@ export interface Property {
   // Score
   score?: number
 
-  // HeyForm Form Builder v2.0
+  // Logisaar Forms Form Builder v2.0
   // Embed & Image
   sourceUrl?: string
 
@@ -184,7 +184,7 @@ export interface FormField {
 
   layout?: Layout
 
-  // HeyForm question number
+  // Logisaar Forms question number
   number?: number
 
   index?: number
@@ -235,6 +235,8 @@ export interface FormModel {
   projectId: string
   memberId: string
   name: string
+  storageProvider?: 'vps' | 's3'
+  maxUploadSizeMb?: number
   interactiveMode: InteractiveModeEnum
   kind: FormKindEnum
   settings?: FormSettings

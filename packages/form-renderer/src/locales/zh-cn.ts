@@ -1,5 +1,5 @@
 export default {
-  'Made with HeyForm': '使用 <icon></icon> <span>HeyForm</span> 创建表单',
+  'Made with Logisaar Forms': '使用 <icon></icon> <span>Logisaar Forms</span> 创建表单',
   'This field is required': '此字段是必需的',
   'File type is not supported': '不支持的文件类型',
   "File size can't exceed {{size}}": '文件大小不能超过{{size}}',
@@ -50,7 +50,7 @@ export default {
   'Thanks for completing this form. Now create your own form.':
     '感谢您完成此表单。现在创建您自己的表单。',
   'Form unavailable': '表单不可用',
-  'Create a heyform': '创建一个 heyform',
+  'Create a heyform': '创建一个 Logisaar Forms',
   "The form can't receive new submissions now.": '该表单现在无法接收新的提交。',
   "This page doesn't exist": '此页面不存在',
   'If you have any questions, please contact us.': '如果您有任何问题，请联系我们。',

@@ -17,8 +17,8 @@ export const Branding: FC = () => {
   return (
     <a className="heyform-branding" href="https://heyform.net/?ref=badge" target="_blank">
       <Trans
-        t={t}
-        i18nKey="Made with HeyForm"
+        t={t as any}
+        i18nKey="Made with Logisaar Forms"
         components={{
           icon: <LogoIcon className="inline h-4 w-4" />,
           span: <span className="font-medium" />

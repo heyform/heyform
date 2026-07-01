@@ -122,7 +122,7 @@ const ResetPassword = () => {
 
       <p className="text-secondary text-center text-sm">
         <Trans
-          t={t}
+          t={t as any}
           i18nKey="forgotPassword.toLogin"
           components={{
             a: <Link className="hover:text-primary underline underline-offset-4" to="/login" />

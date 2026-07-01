@@ -504,24 +504,24 @@
   "oauth": {
     "title": "Autorisieren",
     "headline": "Verbinden mit {{name}}",
-    "subHeadline": "Verwenden Sie {{name}}, um HeyForm mit Ihren Lieblings-Apps wie Chat, E-Mail oder SMS zu integrieren.",
+    "subHeadline": "Verwenden Sie {{name}}, um Logisaar Forms mit Ihren Lieblings-Apps wie Chat, E-Mail oder SMS zu integrieren.",
     "would": "{{name}} möchte:",
     "scopes": [
       "Arbeitsbereich lesen",
-      "Daten über alle Arbeitsbereiche in Ihrem HeyForm-Konto abrufen",
+      "Daten über alle Arbeitsbereiche in Ihrem Logisaar Forms-Konto abrufen",
       "Projekt lesen",
-      "Daten über alle Projekte in Ihrem HeyForm-Arbeitsbereich abrufen",
+      "Daten über alle Projekte in Ihrem Logisaar Forms-Arbeitsbereich abrufen",
       "Formular lesen",
-      "Daten über alle Formulare in Ihrem HeyForm-Projekt abrufen",
+      "Daten über alle Formulare in Ihrem Logisaar Forms-Projekt abrufen",
       "Eingaben lesen",
       "Gesammelte Formulareingaben abrufen",
       "Konten lesen",
-      "Abrufen Ihrer HeyForm-Kontoinformationen"
+      "Abrufen Ihrer Logisaar Forms-Kontoinformationen"
     ]
   },
   "workspace": {
     "notExist": "Dieser Arbeitsbereich existiert nicht.",
-    "backHome": "Zurück zu HeyForm",
+    "backHome": "Zurück zu Logisaar Forms",
     "appearance": {
       "title": "Erscheinungsbild",
       "system": "Systemeinstellung",
@@ -622,15 +622,15 @@
       "required": "Die E-Mail-Adresse darf nicht leer sein",
       "sentSuccess_one": "{{count}} Einladung gesendet",
       "sentSuccess_other": "{{count}} Einladungen gesendet",
-      "sentSuccessMessage": "Eingeladene Mitglieder wurden per E-Mail benachrichtigt, um sich bei HeyForm anzumelden"
+      "sentSuccessMessage": "Eingeladene Mitglieder wurden per E-Mail benachrichtigt, um sich bei Logisaar Forms anzumelden"
     }
   },
   "settings": {
     "title": "Arbeitsbereich-Einstellungen",
     "branding": {
       "title": "Branding",
-      "removeBrandingHeadline": "HeyForm-Branding entfernen",
-      "removeBrandingSubHeadline": "Um HeyForm vollständig an Ihre Marke anzupassen, entfernen Sie das HeyForm-Logo im Formularfuß.",
+      "removeBrandingHeadline": "Logisaar Forms-Branding entfernen",
+      "removeBrandingSubHeadline": "Um Logisaar Forms vollständig an Ihre Marke anzupassen, entfernen Sie das Logisaar Forms-Logo im Formularfuß.",
       "viewBrandKit": "Ansehen",
       "logo": {
         "title": "Logo",
@@ -791,8 +791,8 @@
       "defaultName": "Unbenannt"
     },
     "chat": {
-      "title": "HeyForm KI-Assistent",
-      "welcome": "Willkommen beim HeyForm KI-Assistenten! Dies ist eine innovative Funktion, die von modernster KI-Technologie unterstützt wird und Ihnen hilft, Formularfragen und -logiken zu erstellen.",
+      "title": "Logisaar Forms KI-Assistent",
+      "welcome": "Willkommen beim Logisaar Forms KI-Assistenten! Dies ist eine innovative Funktion, die von modernster KI-Technologie unterstützt wird und Ihnen hilft, Formularfragen und -logiken zu erstellen.",
       "compose": "Fragen Sie mich alles...",
       "fieldsUpdated": "Die Fragen Ihres Formulars wurden aktualisiert.",
       "logicUpdated": "Die Logik Ihres Formulars wurde aktualisiert.",
@@ -863,9 +863,9 @@
       "fileManagement": "Dateiverwaltung",
       "mapFields": {
         "headline": "Felder zuordnen",
-        "subHeadline": "Ordne HeyForm den {{name}}-Spalten zu. Wenn du eine Spalte in {{name}} änderst, aktualisiere sie bitte auch hier, sonst funktioniert die Integration nicht wie erwartet.",
+        "subHeadline": "Ordne Logisaar Forms den {{name}}-Spalten zu. Wenn du eine Spalte in {{name}} änderst, aktualisiere sie bitte auch hier, sonst funktioniert die Integration nicht wie erwartet.",
         "requried": "Die Zuordnungsfelder dürfen nicht leer sein",
-        "leftPlaceholder": "Wählen Sie eine HeyForm-Frage aus",
+        "leftPlaceholder": "Wählen Sie eine Logisaar Forms-Frage aus",
         "rightPlaceholder": "{{name}} Spalte",
         "requireLeft": "Die linke Seite des Feldes {{index}} darf nicht leer sein",
         "requireRight": "Die rechte Seite des Feldes {{index}} darf nicht leer sein",
@@ -873,7 +873,7 @@
       },
       "authorization": {
         "headline": "Autorisierung",
-        "subHeadline": "Bitte autorisieren Sie zunächst HeyForm, auf Ihre Daten zuzugreifen.",
+        "subHeadline": "Bitte autorisieren Sie zunächst Logisaar Forms, auf Ihre Daten zuzugreifen.",
         "loginWith": "Anmelden mit {{name}}"
       },
       "webhook": {
@@ -883,7 +883,7 @@
       "telegram": {
         "label": "Chat-ID",
         "required": "Die Chat-ID darf nicht leer sein",
-        "footer": "Fügen Sie <a>@HeyForm_bot</a> zu Ihrer Telegram-Gruppe hinzu und geben Sie <code>/start@HeyForm_bot</code> in der Gruppe ein. Sie erhalten dann eine Nachricht mit einer Chat-ID."
+        "footer": "Fügen Sie <a>@Logisaar Forms_bot</a> zu Ihrer Telegram-Gruppe hinzu und geben Sie <code>/start@Logisaar Forms_bot</code> in der Gruppe ein. Sie erhalten dann eine Nachricht mit einer Chat-ID."
       },
       "legacyslack": {
         "label": "Webhook-URL",
@@ -924,7 +924,7 @@
         },
         "folder": {
           "headline": "Wählen Sie einen Ordner aus",
-          "footer": "Sie können einen Ordner auswählen, um die von Ihrem HeyForm hochgeladenen Dateien abzulegen."
+          "footer": "Sie können einen Ordner auswählen, um die von Ihrem Logisaar Forms hochgeladenen Dateien abzulegen."
         }
       },
       "googlesheets": {
@@ -1073,7 +1073,7 @@
         "description": "Beschreibung",
         "preview": {
           "headline": "Vorschau",
-          "subHeadline": "HeyForm generiert automatisch ein <a>Open Graph</a>-Bild für Sie. Sie können auch <button>Ihr eigenes Bild hochladen</button>.",
+          "subHeadline": "Logisaar Forms generiert automatisch ein <a>Open Graph</a>-Bild für Sie. Sie können auch <button>Ihr eigenes Bild hochladen</button>.",
           "uploadTitle": "Laden Sie Ihr eigenes Open Graph-Bild hoch",
           "uploadDescription": "Empfohlene Größe: 1200x630 | JPG, PNG."
         }
@@ -1112,7 +1112,7 @@
         "bottomRight": "Untere rechte Ecke",
         "transparentBackground": "Transparenter Hintergrund",
         "code": {
-          "headline": "Fügen Sie HeyForm zu Ihrer Website hinzu",
+          "headline": "Fügen Sie Logisaar Forms zu Ihrer Website hinzu",
           "subHeadline": "Fügen Sie den folgenden Code-Schnipsel in den Body-Bereich Ihrer Website ein."
         }
       }
@@ -1123,7 +1123,7 @@
         "title": "Allgemein",
         "archive": {
           "headline": "Einreichungsarchiv",
-          "subHeadline": "Deaktivieren Sie das Einreichungsarchiv, wenn HeyForm Ihre Einreichungen nicht speichern soll."
+          "subHeadline": "Deaktivieren Sie das Einreichungsarchiv, wenn Logisaar Forms Ihre Einreichungen nicht speichern soll."
         },
         "redirect": {
           "headline": "Weiterleitung nach Abschluss",
@@ -1312,7 +1312,7 @@
         "payment": {
           "title": "Zahlung",
           "headline": "Mit Stripe verbinden",
-          "subHeadline": "<div>Zahlungen direkt auf Ihr Bankkonto erhalten, bereitgestellt von Stripe.</div><div>Kostenlose HeyForm-Nutzer sammeln Zahlungen zu einem Satz von <a>5% HeyForm-Provision + Stripe-Transaktionsgebühr.</a></div><div>Um die 5% HeyForm-Provision auf Zahlungen zu entfernen, upgraden Sie zu <button>HeyForm Premium</button>.</div>",
+          "subHeadline": "<div>Zahlungen direkt auf Ihr Bankkonto erhalten, bereitgestellt von Stripe.</div><div>Kostenlose Logisaar Forms-Nutzer sammeln Zahlungen zu einem Satz von <a>5% Logisaar Forms-Provision + Stripe-Transaktionsgebühr.</a></div><div>Um die 5% Logisaar Forms-Provision auf Zahlungen zu entfernen, upgraden Sie zu <button>Logisaar Forms Premium</button>.</div>",
           "stripeAccount": "Stripe-Konto",
           "revoke": "Widerrufen",
           "price": "Preis",
@@ -1518,7 +1518,7 @@
     "subHeadline": "Änderungen an den Kontoeinstellungen gelten für alle Ihre Arbeitsbereiche.",
     "avatar": {
       "headline": "Avatar",
-      "subHeadline": "Gravatar wird standardmäßig als Ihr HeyForm-Avatar verwendet. Hier können Sie Ihren benutzerdefinierten Avatar hochladen."
+      "subHeadline": "Gravatar wird standardmäßig als Ihr Logisaar Forms-Avatar verwendet. Hier können Sie Ihren benutzerdefinierten Avatar hochladen."
     },
     "name": "Ihr Name",
     "email": {

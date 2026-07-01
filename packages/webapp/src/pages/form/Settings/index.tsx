@@ -15,6 +15,7 @@ import FormSettingsEmailNotification from './EmailNotification'
 import FormSettingsGeneral from './General'
 import FormSettingsProtection from './Protection'
 import FormSettingsTranslations from './Translations'
+import FormSettingsStorage from './Storage'
 
 export default function FormSettings() {
   const { t } = useTranslation()
@@ -60,11 +61,26 @@ export default function FormSettings() {
       const normalizedLanguages = currentLanguages.filter((l: string) => l !== currentLocale)
       settings.languages = normalizedLanguages.length > 0 ? normalizedLanguages : null
 
-      await FormService.update(formId, settings)
+      const { storageProvider, maxUploadSizeMb, ...restSettings } = settings
+      const updates: AnyMap = {
+        ...restSettings
+      }
+
+      if (storageProvider !== undefined) {
+        updates.storageProvider = storageProvider
+      }
+
+      if (maxUploadSizeMb !== undefined) {
+        updates.maxUploadSizeMb = Number(maxUploadSizeMb)
+      }
+
+      await FormService.update(formId, updates)
 
       updateForm({
+        storageProvider,
+        maxUploadSizeMb,
         settings: {
-          ...settings,
+          ...restSettings,
           languages: normalizedLanguages
         }
       })
@@ -118,6 +134,10 @@ export default function FormSettings() {
               {
                 label: t('form.settings.protection.title'),
                 value: 'protection'
+              },
+              {
+                label: 'Storage & Uploads',
+                value: 'storage'
               }
             ]}
           />
@@ -136,6 +156,7 @@ export default function FormSettings() {
             <FormSettingsEmailNotification />
             <FormSettingsTranslations />
             <FormSettingsProtection />
+            <FormSettingsStorage />
 
             <div className="border-accent bg-foreground/80 sticky bottom-0 mt-10 flex items-center justify-end gap-x-4 border-t px-4 py-4">
               {error && !loading && <div className="text-error text-sm/6">{error.message}</div>}

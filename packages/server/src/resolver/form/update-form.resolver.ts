@@ -18,6 +18,8 @@ export class UpdateFormResolver {
   ): Promise<boolean> {
     let updates: Record<string, any> = pickValidValues(input as any, [
       'name',
+      'storageProvider',
+      'maxUploadSizeMb',
       ['active', 'settings.active'],
       ['enableExpirationDate', 'settings.enableExpirationDate'],
       ['expirationTimeZone', 'settings.expirationTimeZone'],

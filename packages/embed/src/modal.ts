@@ -11,7 +11,7 @@ const MODAL_TEMPLATE = `
       <iframe src="{src}" allow="microphone; camera"></iframe>
       <div class="heyform__loading-container">${IconLoading}</div>
     </div>
-    <button type="button" class="heyform__close-button" onclick="HeyForm.closeModal('{formId}')">
+    <button type="button" class="heyform__close-button" onclick="Logisaar Forms.closeModal('{formId}')">
       ${IconClose}
     </button>
   </div>

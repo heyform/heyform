@@ -16,6 +16,7 @@ import FormRender from '@/pages/form/Render'
 import FormSettings from '@/pages/form/Settings'
 import FormShare from '@/pages/form/Share'
 import FormSubmissions from '@/pages/form/Submissions'
+import FormPhotos from '@/pages/form/Photos'
 import ProjectForms from '@/pages/project/Forms'
 import ProjectTrash from '@/pages/project/Trash'
 import CreateWorkspace from '@/pages/workspace/Create'
@@ -170,6 +171,16 @@ const routes = [
       formShell: true,
       loginRequired: true,
       title: 'form.submissions.title'
+    }
+  },
+  {
+    path: '/workspace/:workspaceId/project/:projectId/form/:formId/photos',
+    layout: WorkspaceLayout,
+    component: FormPhotos,
+    options: {
+      formShell: true,
+      loginRequired: true,
+      title: 'Photos'
     }
   },
   {

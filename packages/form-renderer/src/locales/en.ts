@@ -1,5 +1,5 @@
 export default {
-  'Made with HeyForm': 'Powered by <icon></icon> <span>HeyForm</span>',
+  'Made with Logisaar Forms': 'Powered by <icon></icon> <span>Logisaar Forms</span>',
   'This field is required': 'This field is required',
   'File type is not supported': 'File type is not supported',
   "File size can't exceed {{size}}": "File size can't exceed {{size}}",
@@ -50,7 +50,7 @@ export default {
   'Thanks for completing this form. Now create your own form.':
     'Thanks for completing this form. Now create your own form.',
   'Form unavailable': 'Form unavailable',
-  'Create a heyform': 'Create a heyform',
+  'Create a heyform': 'Create a Logisaar Forms',
   "The form can't receive new submissions now.": "The form can't receive new submissions now.",
   "This page doesn't exist": "This page doesn't exist",
   'If you have any questions, please contact us.': 'If you have any questions, please contact us.',

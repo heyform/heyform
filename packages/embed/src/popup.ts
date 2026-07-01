@@ -8,7 +8,7 @@ import { AnyMap, PopupSettings } from './type'
 
 const POPUP_TEMPLATE = `
   <div id="{containerId}" class="heyform__popup heyform__popup-{position}">
-    <button class="heyform__popup-button {buttonClass}" style="{buttonStyle}" onclick="HeyForm.togglePopup('{formId}')">
+    <button class="heyform__popup-button {buttonClass}" style="{buttonStyle}" onclick="Logisaar Forms.togglePopup('{formId}')">
       {icon}
     </button>
   </div>

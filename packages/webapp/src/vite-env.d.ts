@@ -1,7 +1,35 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 /// <reference types="unplugin-fonts/client" />
+
+declare module '*.png' {
+  const src: string
+  export default src
+}
+
+declare module '*.jpg' {
+  const src: string
+  export default src
+}
+
+declare module '*.jpeg' {
+  const src: string
+  export default src
+}
+
+declare module '*.webp' {
+  const src: string
+  export default src
+}
 import { DOMAttributes, HTMLAttributes } from 'react'
+
+declare module 'react-i18next' {
+  export function useTranslation(ns?: string | string[], options?: any): {
+    t: (key: string, options?: any) => string
+    i18n: any
+    ready: boolean
+  }
+}
 
 declare global {
   type DOMProps<E = HTMLElement> = Pick<DOMAttributes<E>, 'children'>

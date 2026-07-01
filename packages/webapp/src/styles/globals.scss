@@ -16,7 +16,7 @@
     --hf-accent: 230, 230, 230;
     --hf-accent-light: 9, 9, 11, 5%;
     --hf-error: 220, 38, 38;
-    --hf-brand: 9, 9, 11;
+    --hf-brand: 0, 102, 255;
 
     --hf-dashboard-zone: 9, 9, 11, 5%;
     --hf-dashboard-border: 229, 231, 235;
@@ -36,7 +36,7 @@
     --hf-accent: 230, 230, 230;
     --hf-accent-light: 255, 255, 255, 5%;
     --hf-error: 220, 38, 38;
-    --hf-brand: 37, 99, 235;
+    --hf-brand: 0, 102, 255;
 
     --hf-dashboard-zone: 26, 36, 50;
     --hf-dashboard-border: 57, 57, 63;
@@ -337,3 +337,50 @@ body {
     animation-delay: 0.4s;
   }
 }
+
+.glass-logo-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04), 
+              inset 0 1px 2px 0 rgba(255, 255, 255, 0.3),
+              inset 0 -1px 2px 0 rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  
+  &:hover {
+    transform: translateY(-1px) scale(1.02);
+    background: rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 36px 0 rgba(0, 102, 255, 0.08), 
+                inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  .dark & {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 1px 0 rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 36px 0 rgba(0, 102, 255, 0.15), 
+                  inset 0 1px 2px 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  img {
+    height: 4.5rem; /* h-18 */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 102, 255, 0.1));
+  }
+}
+

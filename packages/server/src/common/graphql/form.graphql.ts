@@ -576,6 +576,16 @@ export class UpdateFormInput extends FormDetailInput {
   @Field({ nullable: true })
   @IsOptional()
   enableEmailNotification?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  storageProvider?: string
+
+  @Field(type => Number, { nullable: true })
+  @IsOptional()
+  @Min(1)
+  @Max(50)
+  maxUploadSizeMb?: number
 }
 
 @InputType()
@@ -1156,6 +1166,12 @@ export class FormType {
 
   @Field({ nullable: true })
   updatedAt?: number
+
+  @Field({ nullable: true })
+  storageProvider?: string
+
+  @Field(type => Number, { nullable: true })
+  maxUploadSizeMb?: number
 
   @Field({ nullable: true })
   isDraft: boolean

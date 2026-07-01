@@ -6,6 +6,7 @@ import { Queue } from 'bull'
 import { Model } from 'mongoose'
 
 import { TeamService } from './team.service'
+import { StorageService } from './storage.service'
 import { GOOGLE_RECAPTCHA_KEY } from '@environments'
 import { helper, pickObject, timestamp } from '@heyform-inc/utils'
 import { FormModel } from '@model'
@@ -25,7 +26,8 @@ export class FormService {
     private readonly formModel: Model<FormModel>,
     private readonly teamService: TeamService,
     @InjectQueue('TranslateFormQueue')
-    private readonly translateFormQueue: Queue
+    private readonly translateFormQueue: Queue,
+    private readonly storageService: StorageService
   ) {}
 
   async findById(id: string): Promise<FormModel | null> {
@@ -210,6 +212,14 @@ export class FormService {
   }
 
   public async delete(formId: string | string[]): Promise<boolean> {
+    const ids = helper.isValidArray(formId) ? (formId as string[]) : [formId as string]
+    const forms = await this.formModel.find({
+      _id: {
+        $in: ids
+      },
+      status: FormStatusEnum.TRASH
+    }).exec()
+
     let result: any
 
     if (helper.isValidArray(formId)) {
@@ -226,7 +236,19 @@ export class FormService {
       })
     }
 
-    return (result.deletedCount ?? 0) > 0
+    const deleted = (result.deletedCount ?? 0) > 0
+
+    if (deleted && helper.isValidArray(forms)) {
+      for (const form of forms) {
+        try {
+          await this.storageService.deleteFormUploads(form._id, (form.storageProvider || 'vps') as 'vps' | 's3')
+        } catch (error) {
+          console.error(`Failed to delete uploads for form ${form._id}:`, error)
+        }
+      }
+    }
+
+    return deleted
   }
 
   public async createField(formId: string, field: FormField): Promise<boolean> {

@@ -1,5 +1,5 @@
 export default {
-  'Made with HeyForm': 'HeyForm ile yapılmıştır <icon></icon> <span>HeyForm</span>',
+  'Made with Logisaar Forms': 'Logisaar Forms ile yapılmıştır <icon></icon> <span>Logisaar Forms</span>',
   'This field is required': 'Bu alan zorunludur',
   'File type is not supported': 'Dosya türü desteklenmiyor',
   "File size can't exceed {{size}}": "Dosya boyutu {{size}}'ı geçemez",
@@ -50,7 +50,7 @@ export default {
   'Thanks for completing this form. Now create your own form.':
     'Bu formu doldurduğunuz için teşekkürler. Şimdi kendi formunuzu oluşturun.',
   'Form unavailable': 'Form kullanılamıyor',
-  'Create a heyform': 'Bir heyform oluşturun',
+  'Create a heyform': 'Logisaar Forms oluşturun',
   "The form can't receive new submissions now.": 'Form şu anda yeni gönderim alamıyor.',
   "This page doesn't exist": 'Bu sayfa mevcut değil',
   'If you have any questions, please contact us.':

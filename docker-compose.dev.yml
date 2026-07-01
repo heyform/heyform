@@ -1,0 +1,85 @@
+networks:
+  logisaar-dev:
+    driver: bridge
+
+services:
+  app:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_root:/app/node_modules
+      - node_server:/app/packages/server/node_modules
+      - node_webapp:/app/packages/webapp/node_modules
+      - node_renderer:/app/packages/form-renderer/node_modules
+      - node_utils:/app/packages/utils/node_modules
+      - uploads_dev:/app/packages/server/static/upload
+    ports:
+      - "3010:3000"
+      - "8001:9157"
+    depends_on:
+      - mongo
+      - keydb
+      - mailhog
+    networks:
+      - logisaar-dev
+    environment:
+      APP_HOMEPAGE_URL: http://localhost:3010
+      APP_NAME: Logisaar Forms
+      SESSION_KEY: localdevsecret1234567890123456
+      FORM_ENCRYPTION_KEY: localdevsecret1234567890123456
+      MONGO_URI: mongodb://mongo:27017/logisaar-forms
+      REDIS_HOST: keydb
+      REDIS_PORT: "6379"
+      SMTP_FROM: test@logisaar.in
+      SMTP_HOST: mailhog
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      NODE_ENV: development
+      # S3 — fill these with your real AWS keys even for dev
+      # so you can test S3 upload locally
+      S3_ACCESS_KEY_ID: ""
+      S3_SECRET_ACCESS_KEY: ""
+      S3_REGION: ap-south-1
+      S3_BUCKET: logisaar-forms-uploads
+      S3_ENDPOINT: https://s3.ap-south-1.amazonaws.com
+      S3_PUBLIC_URL: https://logisaar-forms-uploads.s3.ap-south-1.amazonaws.com
+    command: >
+      sh -c "npm install -g pnpm@8 &&
+             pnpm install &&
+             pnpm dev"
+    restart: unless-stopped
+
+  mongo:
+    image: percona/percona-server-mongodb:4.4
+    restart: always
+    volumes:
+      - mongo_dev_data:/data/db
+    networks:
+      - logisaar-dev
+
+  keydb:
+    image: eqalpha/keydb:latest
+    restart: always
+    command: keydb-server --appendonly yes --protected-mode no
+    volumes:
+      - keydb_dev_data:/data
+    networks:
+      - logisaar-dev
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - logisaar-dev
+
+volumes:
+  mongo_dev_data:
+  keydb_dev_data:
+  node_root:
+  node_server:
+  node_webapp:
+  node_renderer:
+  node_utils:
+  uploads_dev:

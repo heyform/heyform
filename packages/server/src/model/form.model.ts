@@ -111,6 +111,12 @@ export class FormModel extends Document {
     default: FormStatusEnum.NORMAL
   })
   status: FormStatusEnum
+
+  @Prop({ type: String, enum: ['vps', 's3'], default: 'vps' })
+  storageProvider?: string
+
+  @Prop({ type: Number, default: 5, max: 50 })
+  maxUploadSizeMb?: number
 }
 
 export const FormSchema = SchemaFactory.createForClass(FormModel)

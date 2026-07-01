@@ -6,7 +6,7 @@ import { getIntegrationDescription, getIntegrationSetting } from './utils'
 import { IntegrationService } from '@/services'
 import { useParam } from '@/utils'
 
-import IconLogo from '@/assets/logo.svg?react'
+import IconLogoPng from '@/assets/logo.png'
 import { Form, Image, Modal } from '@/components'
 import { useAppStore, useFormStore, useModal } from '@/store'
 import { IntegratedAppType } from '@/types'
@@ -69,7 +69,7 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
       <div className="pt-6">
         <div className="flex items-center justify-center gap-x-4">
           <div className="border-accent-light h-12 w-12 rounded-lg border p-1.5">
-            <IconLogo className="h-full w-full" />
+            <img src={IconLogoPng} className="h-full w-full" alt="Logisaar Forms" />
           </div>
 
           <IconDots className="text-input h-6 w-6" />
@@ -90,7 +90,7 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
         </div>
 
         <h2 className="mt-6 text-center text-lg/6 font-semibold">
-          {t('form.integrations.connectWith', { name: app.name })}
+          {t('form.integrations.connectWith', { name: app.name }) as string}
         </h2>
         <p className="text-secondary mt-2 px-10 text-center text-sm">
           {getIntegrationDescription(t, app)}
