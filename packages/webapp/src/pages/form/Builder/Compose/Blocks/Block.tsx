@@ -208,7 +208,9 @@ export const Block: FC<BlockProps> = ({
       {parentField && (
         <div className="heyform-block-group rounded-t-lg">
           <div className="heyform-block-group-container">
-            <div className="heyform-block-title">{parentField.title}</div>
+            <div className="heyform-block-title">
+              {htmlUtils.plain(parentField.title as string)}
+            </div>
           </div>
         </div>
       )}
