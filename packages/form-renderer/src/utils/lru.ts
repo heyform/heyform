@@ -92,7 +92,7 @@ export class LRU {
 
     // Pop first item
     if (this.cache.keys.length >= this.capacity) {
-      const k = this.cache.keys.pop()!
+      const k = this.cache.keys.shift()!
       this.destroy(k)
     }
 
