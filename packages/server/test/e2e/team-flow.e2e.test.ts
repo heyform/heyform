@@ -24,7 +24,8 @@ import {
   TEAMS_GQL,
   TEAM_MEMBERS_GQL,
   UPDATE_FORM_SCHEMAS_GQL,
-  UPDATE_SUBMISSIONS_CATEGORY_GQL
+  UPDATE_SUBMISSIONS_CATEGORY_GQL,
+  UPDATE_TEAM_GQL
 } from './helpers/gql'
 import { randomString, strongPassword, uniqueEmail, uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
@@ -250,6 +251,20 @@ export function build(baseUrl: string) {
       input: { formId, drafts, version: updated.version }
     })
     assert.strictEqual(published, true)
+  })
+
+  test('anonymous respondent receives the workspace branding setting', async () => {
+    const { admin, formId, teamId } = need(state, ['admin', 'formId', 'teamId'])
+
+    await admin.client.gqlOk<boolean>('updateTeam', UPDATE_TEAM_GQL, {
+      input: { teamId, removeBranding: true }
+    })
+
+    const respondent = new E2EClient({ baseUrl })
+    const publicForm = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
+      input: { formId }
+    })
+    assert.strictEqual(publicForm.settings.removeBranding, true)
   })
 
   test('anonymous respondent submits to the form', async () => {

@@ -424,6 +424,7 @@ export const PUBLIC_FORM_GQL = /* GraphQL */ `
       name
       settings {
         active
+        removeBranding
       }
       fields {
         id

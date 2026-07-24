@@ -1423,6 +1423,7 @@ export const PUBLIC_FORM_GQL = gql`
         enableClosedMessage
         closedFormTitle
         closedFormDescription
+        removeBranding
       }
       drafts {
         id
