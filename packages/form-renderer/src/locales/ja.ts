@@ -46,6 +46,7 @@ export default {
   'Start date is not valid': '開始日が無効です',
   'End date is not valid': '終了日が無効です',
   'End date must be after start date': '終了日は開始日の後でなければなりません',
+  'Response ID': '回答ID',
   'Thank you!': 'ありがとうございます！',
   'Thanks for completing this form. Now create your own form.':
     'このフォームに記入いただきありがとうございます。今度は自分のフォームを作成してください。',

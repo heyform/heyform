@@ -51,6 +51,7 @@ async function testExportsRepeatedQuestionTitlesByFieldId() {
     [
       {
         id: 'submission-1',
+        pseudonymId: '7KQ2-9MX4',
         answers: formFields.map((field, index) => ({
           id: field.id,
           kind: field.kind,
@@ -66,11 +67,18 @@ async function testExportsRepeatedQuestionTitlesByFieldId() {
 
   assert.deepStrictEqual(parseCsvRow(header), [
     '#',
+    'Pseudonym ID',
     ...formFields.map(field => field.title),
     'Start Date (UTC)',
     'Submit Date (UTC)'
   ])
-  assert.deepStrictEqual(parseCsvRow(row), ['submission-1', ...expectedAnswers, '', ''])
+  assert.deepStrictEqual(parseCsvRow(row), [
+    'submission-1',
+    '7KQ2-9MX4',
+    ...expectedAnswers,
+    '',
+    ''
+  ])
 }
 
 async function testExportsMultipleChoiceOtherText() {

@@ -46,6 +46,7 @@ export default {
   'Start date is not valid': '開始日期無效',
   'End date is not valid': '結束日期無效',
   'End date must be after start date': '結束日期必須在開始日期之後',
+  'Response ID': '回答 ID',
   'Thank you!': '謝謝！',
   'Thanks for completing this form. Now create your own form.':
     '感謝您完成此表單。現在創建您自己的表單。',

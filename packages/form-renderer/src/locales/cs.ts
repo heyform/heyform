@@ -46,6 +46,7 @@ export default {
   'Start date is not valid': 'Datum začátku není platné',
   'End date is not valid': 'Datum konce není platné',
   'End date must be after start date': 'Datum konce musí být po datu začátku',
+  'Response ID': 'ID odpovědi',
   'Thank you!': 'Děkujeme!',
   'Thanks for completing this form. Now create your own form.':
     'Děkujeme za vyplnění formuláře. Nyní můžete vyplnit vlastní.',

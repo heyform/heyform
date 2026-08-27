@@ -152,6 +152,9 @@ export class SubmissionType {
   id: string
 
   @Field({ nullable: true })
+  pseudonymId?: string
+
+  @Field({ nullable: true })
   category: string
 
   @Field({ nullable: true })

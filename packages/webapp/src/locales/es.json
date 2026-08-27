@@ -1203,6 +1203,11 @@
           "placeholder": "Introduce aquí la URL de redirección, p. ej., https://example.com",
           "invalidUrl": "La URL de redirección no es válida"
         },
+        "pseudonymId": {
+          "headline": "ID seudónimos",
+          "subHeadline": "Genera un ID de respuesta único y muéstralo después del envío.",
+          "column": "ID de respuesta"
+        },
         "progressBar": {
           "headline": "Barra de progreso",
           "subHeadline": "Puedes indicar fácilmente a los encuestados cuánto les falta para completar tu formulario."

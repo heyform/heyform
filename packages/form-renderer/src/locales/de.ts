@@ -47,6 +47,7 @@ export default {
   'Start date is not valid': 'Startdatum ist nicht gültig',
   'End date is not valid': 'Enddatum ist nicht gültig',
   'End date must be after start date': 'Enddatum muss nach dem Startdatum liegen',
+  'Response ID': 'Antwort-ID',
   'Thank you!': 'Danke!',
   'Thanks for completing this form. Now create your own form.':
     'Danke, dass Sie dieses Formular ausgefüllt haben. Erstellen Sie jetzt Ihr eigenes Formular.',

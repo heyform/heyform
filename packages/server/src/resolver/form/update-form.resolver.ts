@@ -34,6 +34,7 @@ export class UpdateFormResolver {
       ['timeLimit', 'settings.timeLimit'],
       ['captchaKind', 'settings.captchaKind'],
       ['filterSpam', 'settings.filterSpam'],
+      ['generatePseudonymId', 'settings.generatePseudonymId'],
       ['enableQuotaLimit', 'settings.enableQuotaLimit'],
       ['quotaLimit', 'settings.quotaLimit'],
       ['enableIpLimit', 'settings.enableIpLimit'],

@@ -21,6 +21,7 @@ const UPLOAD_FILE_TOKEN_GQL = `mutation uploadFileToken($input: UploadFormFileIn
 const COMPLETE_SUBMISSION_GQL = `mutation completeSubmission($input: CompleteSubmissionInput!) {
 	completeSubmission(input: $input) {
 	  clientSecret
+	  pseudonymId
 	}
 }`
 
@@ -82,7 +83,7 @@ export class EndpointService {
     // Google reCAPTCHA token
     recaptchaToken?: string
     partialSubmission?: boolean
-  }): Promise<{ clientSecret?: string }> {
+  }): Promise<{ clientSecret?: string; pseudonymId?: string }> {
     const result = await axios({
       query: COMPLETE_SUBMISSION_GQL,
       variables: {

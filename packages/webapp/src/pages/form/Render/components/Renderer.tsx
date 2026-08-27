@@ -192,7 +192,7 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
         })
         .filter(Boolean) as HiddenFieldAnswer[]
 
-      const { clientSecret } = await EndpointService.completeSubmission({
+      const { clientSecret, pseudonymId } = await EndpointService.completeSubmission({
         formId: form.id,
         contactId,
         answers: {
@@ -228,6 +228,8 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
       if (!partialSubmission) {
         trackPageApps(form.integrations, 'FORM_SUBMITTED', pageAppContext)
       }
+
+      return { pseudonymId }
     } catch (err: Any) {
       /**
        * Throw error to let Renderer knows that there was an error.

@@ -501,6 +501,10 @@ export class UpdateFormInput extends FormDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
+  generatePseudonymId?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
   @MinLength(1)
   @MaxLength(128)
   password?: string
@@ -992,6 +996,9 @@ export class FormSettingType {
 
   @Field({ nullable: true })
   filterSpam?: boolean
+
+  @Field({ nullable: true })
+  generatePseudonymId?: boolean
 
   @Field({ nullable: true })
   allowArchive?: boolean

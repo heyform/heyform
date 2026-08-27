@@ -1,6 +1,14 @@
-import { FormField, FormModel, Logic, ThemeSettings } from '@heyform-inc/shared-types-enums'
+import {
+  FormField,
+  FormModel,
+  Logic,
+  SubmissionModel,
+  ThemeSettings
+} from '@heyform-inc/shared-types-enums'
 
-export type { SubmissionModel as SubmissionType } from '@heyform-inc/shared-types-enums'
+export interface SubmissionType extends SubmissionModel {
+  pseudonymId?: string
+}
 
 // Extend the published shared types until the next shared package release.
 export interface FormThemeSettings extends ThemeSettings {

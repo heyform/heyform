@@ -1144,6 +1144,11 @@
           "placeholder": "Entrez l'URL de redirection ici, par exemple, https://example.com",
           "invalidUrl": "L'URL de redirection n'est pas valide"
         },
+        "pseudonymId": {
+          "headline": "Identifiants pseudonymes",
+          "subHeadline": "Générez un identifiant de réponse unique et affichez-le après l'envoi.",
+          "column": "Identifiant de réponse"
+        },
         "progressBar": {
           "headline": "Barre de progression",
           "subHeadline": "Vous pouvez facilement informer les répondants de leur avancement dans le formulaire."

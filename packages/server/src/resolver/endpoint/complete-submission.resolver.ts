@@ -210,27 +210,39 @@ export class CompleteSubmissionResolver {
         ? form.settings.quotaLimit
         : undefined
     const choiceLimits = collectChoiceLimits(flattenFields(form.fields, true), answers)
+    const submission = {
+      teamId: form.teamId,
+      formId: form.id,
+      category,
+      title: form.name,
+      answers,
+      hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
+      variables,
+      startAt,
+      endAt,
+      ip: DISABLE_SUBMISSION_IP ? undefined : client.ip,
+      userAgent: client.userAgent,
+      status
+    }
     let submissionId: string
+    let pseudonymId: string | undefined
 
     try {
-      submissionId = await this.submissionService.createWithinQuota(
-        {
-          teamId: form.teamId,
-          formId: form.id,
-          category,
-          title: form.name,
-          answers,
-          hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
-          variables,
-          startAt,
-          endAt,
-          ip: DISABLE_SUBMISSION_IP ? undefined : client.ip,
-          userAgent: client.userAgent,
-          status
-        },
-        quotaLimit,
-        choiceLimits
-      )
+      if (form.settings?.generatePseudonymId === true) {
+        const created = await this.submissionService.createWithPseudonymWithinQuota(
+          submission,
+          quotaLimit,
+          choiceLimits
+        )
+        submissionId = created.id
+        pseudonymId = created.pseudonymId
+      } else {
+        submissionId = await this.submissionService.createWithinQuota(
+          submission,
+          quotaLimit,
+          choiceLimits
+        )
+      }
     } catch (err) {
       // Nothing was stored, so the attempt must not use up the IP limit: a respondent told
       // that an option is full can still pick another one
@@ -242,7 +254,7 @@ export class CompleteSubmissionResolver {
     }
 
     // Payment
-    const result: CompleteSubmissionType = {}
+    const result: CompleteSubmissionType = { pseudonymId }
 
     if (helper.isValid(paymentAnswer) && helper.isValid(form.stripeAccount)) {
       result.clientSecret = await this.paymentService.createPaymentIntent({

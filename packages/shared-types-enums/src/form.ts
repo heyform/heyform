@@ -23,6 +23,7 @@ export interface FormSettings {
   published?: boolean
   allowArchive?: boolean
   filterSpam?: boolean
+  generatePseudonymId?: boolean
   password?: string
   requirePassword?: boolean
   // Move to "Thank You" settings
