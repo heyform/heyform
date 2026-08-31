@@ -13,7 +13,7 @@ export const Header: FC = () => {
 
   async function handleCountdownEnd() {
     // Submit form
-    await state.onSubmit?.(state.values, true)
+    const submitResult = await state.onSubmit?.(state.values, true)
 
     if (helper.isTrue(state.query.hideAfterSubmit)) {
       sendMessageToParent('HIDE_EMBED_MODAL')
@@ -22,7 +22,8 @@ export const Header: FC = () => {
     dispatch({
       type: 'setIsSubmitted',
       payload: {
-        isSubmitted: true
+        isSubmitted: true,
+        pseudonymId: submitResult?.pseudonymId
       }
     })
   }

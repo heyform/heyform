@@ -1198,6 +1198,10 @@
           "placeholder": "Insira a URL de redirecionamento aqui, por exemplo, https://example.com",
           "invalidUrl": "A URL de redirecionamento não é válida"
         },
+        "pseudonymId": {
+          "headline": "IDs de pseudônimo",
+          "subHeadline": "Gere um ID de resposta exclusivo e exiba-o após o envio."
+        },
         "progressBar": {
           "headline": "Barra de progresso",
           "subHeadline": "Você pode facilmente informar aos participantes o quão perto eles estão de preencher o formulário."

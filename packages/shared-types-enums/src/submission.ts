@@ -22,6 +22,7 @@ export interface HiddenFieldAnswer extends HiddenField {
 export interface SubmissionModel {
   id: string
   formId: string
+  pseudonymId?: string
   category: SubmissionCategoryEnum
   title: string
   contact?: ContactModel

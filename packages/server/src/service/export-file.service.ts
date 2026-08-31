@@ -13,6 +13,7 @@ import { helper, unixDate } from '@heyform-inc/utils'
 import { SubmissionModel } from '@model'
 
 const FIELD_ID_KEY = '#'
+const PSEUDONYM_ID_KEY = 'Pseudonym ID'
 const START_DATE_KEY = 'Start Date (UTC)'
 const SUBMIT_DATE_KEY = 'Submit Date (UTC)'
 const SPREADSHEET_FORMULA_PREFIXES = new Set(['=', '+', '-', '@'])
@@ -59,6 +60,10 @@ export class ExportFileService {
       {
         label: FIELD_ID_KEY,
         value: submission => submission.id
+      },
+      {
+        label: PSEUDONYM_ID_KEY,
+        value: submission => submission.pseudonymId || ''
       },
       ...selectedFormFields.map(field => ({
         label: field.title,

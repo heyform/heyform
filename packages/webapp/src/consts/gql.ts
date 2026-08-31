@@ -145,6 +145,7 @@ export const WORKSPACE_RECENT_FORMS_GQL = gql`
         timeLimit
         filterSpam
         allowArchive
+        generatePseudonymId
         password
         requirePassword
         redirectOnCompletion
@@ -413,6 +414,7 @@ export const FORMS_GQL = gql`
         timeLimit
         filterSpam
         allowArchive
+        generatePseudonymId
         password
         requirePassword
         redirectOnCompletion
@@ -504,6 +506,7 @@ export const FORM_SUMMARY_GQL = gql`
         active
         filterSpam
         allowArchive
+        generatePseudonymId
         password
         requirePassword
         enableQuotaLimit
@@ -551,6 +554,7 @@ export const FORM_DETAIL_GQL = gql`
         timeLimit
         filterSpam
         allowArchive
+        generatePseudonymId
         password
         requirePassword
         enableQuotaLimit
@@ -622,6 +626,7 @@ export const COMPLETE_SUBMISSION_GQL = gql`
   mutation completeSubmission($input: CompleteSubmissionInput!) {
     completeSubmission(input: $input) {
       clientSecret
+      pseudonymId
     }
   }
 `
@@ -827,6 +832,7 @@ export const SUBMISSIONS_GQL = gql`
       total
       submissions {
         id
+        pseudonymId
         category
         title
         answers
@@ -1408,6 +1414,7 @@ export const PUBLIC_FORM_GQL = gql`
         timeLimit
         filterSpam
         allowArchive
+        generatePseudonymId
         password
         requirePassword
         enableQuotaLimit

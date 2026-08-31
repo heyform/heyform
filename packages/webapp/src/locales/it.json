@@ -1198,6 +1198,10 @@
           "placeholder": "Inserisci l'URL di reindirizzamento qui, es. https://esempio.com",
           "invalidUrl": "L'URL di reindirizzamento non è valido"
         },
+        "pseudonymId": {
+          "headline": "ID pseudonimi",
+          "subHeadline": "Genera un ID di risposta univoco e mostralo dopo l'invio."
+        },
         "progressBar": {
           "headline": "Barra di avanzamento",
           "subHeadline": "Fai sapere ai rispondenti quanto manca al completamento del modulo."

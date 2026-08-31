@@ -157,7 +157,7 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
         })
         .filter(Boolean) as HiddenFieldAnswer[]
 
-      const { clientSecret } = await EndpointService.completeSubmission({
+      const { clientSecret, pseudonymId } = await EndpointService.completeSubmission({
         formId: form.id,
         contactId,
         answers: {
@@ -189,6 +189,8 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
       }
 
       sendMessageToParent('FORM_SUBMITTED')
+
+      return { pseudonymId }
     } catch (err: Any) {
       /**
        * Throw error to let Renderer knows that there was an error.

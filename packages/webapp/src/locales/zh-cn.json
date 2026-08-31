@@ -1136,6 +1136,10 @@
           "placeholder": "在此处输入重定向 URL，例如：https://example.com",
           "invalidUrl": "重定向 URL 无效"
         },
+        "pseudonymId": {
+          "headline": "化名 ID",
+          "subHeadline": "生成唯一的回答 ID，并在提交后显示。"
+        },
         "progressBar": {
           "headline": "进度条",
           "subHeadline": "您可以轻松地让受访者了解他们离完成表单还有多远。"

@@ -35,7 +35,15 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
         field={field}
         isScrollable={false}
         {...restProps}
-      />
+      >
+        {state.pseudonymId && (
+          <div className="heyform-pseudonym-id">
+            <span>Response ID:</span>
+            <strong>{state.pseudonymId}</strong>
+          </div>
+        )}
+        {children}
+      </Block>
       <WelcomeBranding />
     </>
   )

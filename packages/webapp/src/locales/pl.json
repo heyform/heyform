@@ -1136,6 +1136,10 @@
           "placeholder": "Wprowadź tutaj URL przekierowania, np. https://example.com",
           "invalidUrl": "URL przekierowania jest nieprawidłowy"
         },
+        "pseudonymId": {
+          "headline": "Identyfikatory pseudonimowe",
+          "subHeadline": "Generuj unikalny identyfikator odpowiedzi i wyświetlaj go po przesłaniu."
+        },
         "progressBar": {
           "headline": "Pasek postępu",
           "subHeadline": "Możesz łatwo poinformować respondentów, jak blisko są ukończenia formularza."

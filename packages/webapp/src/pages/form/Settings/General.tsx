@@ -22,6 +22,16 @@ export default function FormSettingsGeneral() {
 
         <Form.Item
           className="[&_[data-slot=content]]:pt-1.5"
+          name="generatePseudonymId"
+          label={t('form.settings.general.pseudonymId.headline')}
+          description={t('form.settings.general.pseudonymId.subHeadline')}
+          isInline
+        >
+          <Switch />
+        </Form.Item>
+
+        <Form.Item
+          className="[&_[data-slot=content]]:pt-1.5"
           name="enableProgress"
           label={t('form.settings.general.progressBar.headline')}
           description={t('form.settings.general.progressBar.subHeadline')}

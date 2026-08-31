@@ -51,6 +51,7 @@ async function testExportsRepeatedQuestionTitlesByFieldId() {
     [
       {
         id: 'submission-1',
+        pseudonymId: '7KQ2-9MX4',
         answers: formFields.map((field, index) => ({
           id: field.id,
           kind: field.kind,
@@ -66,11 +67,18 @@ async function testExportsRepeatedQuestionTitlesByFieldId() {
 
   assert.deepStrictEqual(parseCsvRow(header), [
     '#',
+    'Pseudonym ID',
     ...formFields.map(field => field.title),
     'Start Date (UTC)',
     'Submit Date (UTC)'
   ])
-  assert.deepStrictEqual(parseCsvRow(row), ['submission-1', ...expectedAnswers, '', ''])
+  assert.deepStrictEqual(parseCsvRow(row), [
+    'submission-1',
+    '7KQ2-9MX4',
+    ...expectedAnswers,
+    '',
+    ''
+  ])
 }
 
 async function testExportsMultipleChoiceOtherText() {
@@ -148,6 +156,7 @@ async function testExportsLegacyFileUploadUrls() {
 
   assert.deepStrictEqual(parseCsvRow(row), [
     'submission-1',
+    '',
     'https://cdn.example.com/uploads/file-id',
     '',
     ''
@@ -217,6 +226,7 @@ async function testNeutralizesSpreadsheetFormulas() {
 
   assert.deepStrictEqual(parseCsvRow(header), [
     '#',
+    'Pseudonym ID',
     `'=1+1`,
     'Safe title',
     'Control-prefix formula',
@@ -226,6 +236,7 @@ async function testNeutralizesSpreadsheetFormulas() {
   ])
   assert.deepStrictEqual(parseCsvRow(row), [
     'submission-1',
+    '',
     `'=WEBSERVICE("https://attacker.test")`,
     `'  -1+1`,
     `'\u0000\u0007=1+1`,
@@ -264,7 +275,7 @@ async function testMalformedLegacyInputTableDoesNotBreakExport() {
   )
 
   const [, row] = csv.split(/\r?\n/)
-  assert.deepStrictEqual(parseCsvRow(row), ['submission-1', '', '', ''])
+  assert.deepStrictEqual(parseCsvRow(row), ['submission-1', '', '', '', ''])
 }
 
 async function run() {

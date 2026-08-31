@@ -144,7 +144,7 @@ export const Form: FC<FormProps> = ({
         }
 
         // Submit form
-        await state.onSubmit?.(values, isPartialSubmission, state.stripe)
+        const submitResult = await state.onSubmit?.(values, isPartialSubmission, state.stripe)
 
         if (helper.isTrue(state.query.hideAfterSubmit)) {
           sendMessageToParent('HIDE_EMBED_MODAL')
@@ -172,7 +172,8 @@ export const Form: FC<FormProps> = ({
           type: 'setIsSubmitted',
           payload: {
             isSubmitted: true,
-            thankYouFieldId: thankYouFieldId || state.thankYouFields[0]?.id
+            thankYouFieldId: thankYouFieldId || state.thankYouFields[0]?.id,
+            pseudonymId: submitResult?.pseudonymId
           }
         })
 

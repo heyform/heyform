@@ -1136,6 +1136,10 @@
           "placeholder": "ここにリダイレクトURLを入力してください。例：https://example.com",
           "invalidUrl": "無効なリダイレクトURL"
         },
+        "pseudonymId": {
+          "headline": "仮名ID",
+          "subHeadline": "一意の回答IDを生成し、送信後に表示します。"
+        },
         "progressBar": {
           "headline": "進捗バー",
           "subHeadline": "回答者がフォームの完了までどれくらいかを簡単に把握できるようにします。"

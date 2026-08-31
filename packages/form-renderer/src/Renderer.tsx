@@ -16,7 +16,7 @@ import { helper, nanoid } from '@heyform-inc/utils'
 
 import { ClosedMessage } from './blocks/ClosedMessage'
 import { SuspendedMessage } from './blocks/SuspendedMessage'
-import type { IState, IStripe } from './store'
+import type { IState, IStripe, ISubmitResult } from './store'
 import { StoreContext, StoreReducer, getStorage } from './store'
 import { getTheme } from './theme'
 import type { IFormModel } from './typings'
@@ -37,7 +37,11 @@ export interface FormRendererProps {
   enableQuestionList?: boolean
   enableNavigationArrows?: boolean
   ssr?: boolean
-  onSubmit?: (values: Record<string, any>, isPartial?: boolean, stripe?: IStripe) => Promise<void>
+  onSubmit?: (
+    values: Record<string, any>,
+    isPartial?: boolean,
+    stripe?: IStripe
+  ) => Promise<ISubmitResult | void>
 }
 
 function initStore(

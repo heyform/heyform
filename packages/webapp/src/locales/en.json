@@ -1198,6 +1198,10 @@
           "placeholder": "Enter the redirect URL here, e.g., https://example.com",
           "invalidUrl": "The redirect URL is not valid"
         },
+        "pseudonymId": {
+          "headline": "Pseudonym IDs",
+          "subHeadline": "Generate a unique response ID and show it after submission."
+        },
         "progressBar": {
           "headline": "Progress bar",
           "subHeadline": "You can easily let respondents know how close they are to completing your form."

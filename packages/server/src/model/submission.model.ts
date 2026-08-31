@@ -22,6 +22,9 @@ export class SubmissionModel extends Document {
   @Prop({ required: true, index: true })
   formId: string
 
+  @Prop()
+  pseudonymId?: string
+
   @Prop({
     type: String,
     required: true,
@@ -62,3 +65,13 @@ export class SubmissionModel extends Document {
 }
 
 export const SubmissionSchema = SchemaFactory.createForClass(SubmissionModel)
+
+SubmissionSchema.index(
+  { formId: 1, pseudonymId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      pseudonymId: { $type: 'string' }
+    }
+  }
+)

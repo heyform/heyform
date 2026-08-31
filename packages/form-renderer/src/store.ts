@@ -115,6 +115,10 @@ export interface IStripe {
   accountId: string
 }
 
+export interface ISubmitResult {
+  pseudonymId?: string
+}
+
 export interface IState {
   formId: string
   instanceId: string
@@ -142,6 +146,7 @@ export interface IState {
   isSubmitTouched?: boolean
   isStarted?: boolean
   isSubmitted?: boolean
+  pseudonymId?: string
   isSidebarOpen?: boolean
   reportAbuseURL?: string
   locale: string
@@ -152,7 +157,11 @@ export interface IState {
   logo?: string
   theme: FormTheme
   stripe?: IStripe
-  onSubmit?: (values: Record<string, any>, isPartial?: boolean, stripe?: IStripe) => Promise<void>
+  onSubmit?: (
+    values: Record<string, any>,
+    isPartial?: boolean,
+    stripe?: IStripe
+  ) => Promise<ISubmitResult | void>
 }
 
 const actions: any = {
@@ -216,11 +225,12 @@ const actions: any = {
 
   setIsSubmitTouched: (state: IState, { isSubmitTouched }: any) => ({ ...state, isSubmitTouched }),
 
-  setIsSubmitted: (state: IState, { isSubmitted, thankYouFieldId }: any) => ({
+  setIsSubmitted: (state: IState, { isSubmitted, thankYouFieldId, pseudonymId }: any) => ({
     ...state,
     isSubmitted,
     isSidebarOpen: false,
-    thankYouFieldId
+    thankYouFieldId,
+    pseudonymId
   }),
 
   setIsSidebarOpen: (state: IState, { isSidebarOpen }: any) => ({ ...state, isSidebarOpen }),

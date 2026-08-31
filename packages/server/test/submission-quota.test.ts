@@ -1,6 +1,57 @@
 import * as assert from 'assert'
 
-import { SubmissionService } from '../src/service/submission.service'
+import { SubmissionSchema } from '../src/model/submission.model'
+import { SubmissionService, generatePseudonymId } from '../src/service/submission.service'
+
+function testPseudonymIdFormat() {
+  for (let index = 0; index < 100; index += 1) {
+    assert.match(generatePseudonymId(), /^[2-9A-HJ-NP-Z]{4}-[2-9A-HJ-NP-Z]{4}$/)
+  }
+}
+
+function testPseudonymIdUniqueIndex() {
+  const index = SubmissionSchema.indexes().find(
+    ([fields]) => fields.formId === 1 && fields.pseudonymId === 1
+  )
+
+  assert.ok(index)
+  assert.strictEqual(index?.[1]?.unique, true)
+  assert.deepStrictEqual(index?.[1]?.partialFilterExpression, {
+    pseudonymId: { $type: 'string' }
+  })
+}
+
+async function testPseudonymIdCollisionIsRetried() {
+  const attemptedIds: string[] = []
+  const generatedIds = ['7KQ2-9MX4', 'ABCD-EFGH']
+  const model = {
+    create: async (submission: Record<string, any>) => {
+      attemptedIds.push(submission.pseudonymId)
+
+      if (attemptedIds.length === 1) {
+        throw {
+          code: 11000,
+          keyPattern: { formId: 1, pseudonymId: 1 },
+          keyValue: { formId: submission.formId, pseudonymId: submission.pseudonymId }
+        }
+      }
+
+      return { id: 'submission_1' }
+    }
+  }
+  const service = new SubmissionService(model as any, {} as any, {} as any)
+  const result = await service.createWithPseudonymWithinQuota(
+    { formId: 'form_1' },
+    undefined,
+    () => generatedIds.shift()!
+  )
+
+  assert.deepStrictEqual(attemptedIds, ['7KQ2-9MX4', 'ABCD-EFGH'])
+  assert.deepStrictEqual(result, {
+    id: 'submission_1',
+    pseudonymId: 'ABCD-EFGH'
+  })
+}
 
 async function testConcurrentCreatesCannotExceedQuota() {
   const submissions: Array<Record<string, any>> = []
@@ -44,6 +95,9 @@ async function testConcurrentCreatesCannotExceedQuota() {
 }
 
 async function run() {
+  testPseudonymIdFormat()
+  testPseudonymIdUniqueIndex()
+  await testPseudonymIdCollisionIsRetried()
   await testConcurrentCreatesCannotExceedQuota()
 }
 

@@ -1136,6 +1136,10 @@
           "placeholder": "Geben Sie hier die Weiterleitungs-URL ein, z.B. https://example.com",
           "invalidUrl": "Die Weiterleitungs-URL ist ungültig"
         },
+        "pseudonymId": {
+          "headline": "Pseudonym-IDs",
+          "subHeadline": "Generieren Sie eine eindeutige Antwort-ID und zeigen Sie sie nach dem Absenden an."
+        },
         "progressBar": {
           "headline": "Fortschrittsbalken",
           "subHeadline": "Sie können den Befragten leicht mitteilen, wie nah sie daran sind, Ihr Formular abzuschließen."

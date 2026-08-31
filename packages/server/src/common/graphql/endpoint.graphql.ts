@@ -80,6 +80,9 @@ export class CompleteSubmissionInput {
 export class CompleteSubmissionType {
   @Field({ nullable: true })
   clientSecret?: string
+
+  @Field({ nullable: true })
+  pseudonymId?: string
 }
 
 @ObjectType()

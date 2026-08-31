@@ -184,26 +184,38 @@ export class CompleteSubmissionResolver {
       form.settings.quotaLimit! > 0
         ? form.settings.quotaLimit
         : undefined
-    const submissionId = await this.submissionService.createWithinQuota(
-      {
-        teamId: form.teamId,
-        formId: form.id,
-        category,
-        title: form.name,
-        answers,
-        hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
-        variables,
-        startAt,
-        endAt,
-        ip: client.ip,
-        userAgent: client.userAgent,
-        status
-      },
-      quotaLimit
-    )
+    const submission = {
+      teamId: form.teamId,
+      formId: form.id,
+      category,
+      title: form.name,
+      answers,
+      hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
+      variables,
+      startAt,
+      endAt,
+      ip: client.ip,
+      userAgent: client.userAgent,
+      status
+    }
+    let submissionId: string
+    let pseudonymId: string | undefined
+
+    const settings = form.settings as typeof form.settings & { generatePseudonymId?: boolean }
+
+    if (settings.generatePseudonymId === true) {
+      const created = await this.submissionService.createWithPseudonymWithinQuota(
+        submission,
+        quotaLimit
+      )
+      submissionId = created.id
+      pseudonymId = created.pseudonymId
+    } else {
+      submissionId = await this.submissionService.createWithinQuota(submission, quotaLimit)
+    }
 
     // Payment
-    const result: CompleteSubmissionType = {}
+    const result: CompleteSubmissionType = { pseudonymId }
 
     if (helper.isValid(paymentAnswer) && helper.isValid(form.stripeAccount)) {
       result.clientSecret = await this.paymentService.createPaymentIntent({

@@ -108,6 +108,8 @@ async function testPaymentUsesPublishedFormConfiguration() {
   )
 
   assert.strictEqual(result.clientSecret, 'client_secret_1')
+  assert.strictEqual(result.pseudonymId, undefined)
+  assert.strictEqual(storedSubmission?.pseudonymId, undefined)
   assert.strictEqual(paymentIntent?.amount, 4999)
   assert.strictEqual(paymentIntent?.currency, 'usd')
   assert.strictEqual(storedSubmission?.answers[0].value.amount, 4999)
@@ -170,9 +172,75 @@ async function testPaymentWebhookDoesNotRequireOrPersistClientSecret() {
   assert.strictEqual(updatedAnswer?.value.billingDetails.name, 'Respondent')
 }
 
+async function testPseudonymIdIsStoredAndReturned() {
+  let storedSubmission: Record<string, any> | undefined
+  const now = Math.floor(Date.now() / 1_000)
+  const form = {
+    id: 'form_1',
+    teamId: 'team_1',
+    name: 'Pseudonymized form',
+    suspended: false,
+    fields: [
+      {
+        id: 'question_1',
+        title: 'Answer',
+        kind: FieldKindEnum.SHORT_TEXT,
+        validations: { required: true }
+      }
+    ],
+    hiddenFields: [],
+    logics: [],
+    variables: [],
+    settings: {
+      active: true,
+      allowArchive: true,
+      captchaKind: CaptchaKindEnum.NONE,
+      generatePseudonymId: true
+    }
+  }
+  const resolver = new CompleteSubmissionResolver(
+    {
+      decryptToken: () => ({ formId: 'form_1', timestamp: now }),
+      assertOpenToken: () => now
+    } as any,
+    { findById: async () => form } as any,
+    {
+      createWithPseudonymWithinQuota: async (submission: Record<string, any>) => {
+        storedSubmission = submission
+        return { id: 'submission_1', pseudonymId: '7KQ2-9MX4' }
+      }
+    } as any,
+    {} as any,
+    { addQueue: () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    {} as any
+  )
+
+  const result = await resolver.completeSubmission(
+    {
+      ip: '203.0.113.10',
+      deviceId: 'device_1',
+      lang: 'en',
+      userAgent: { browser: { name: 'Browser' } } as any
+    },
+    'anonymous_1',
+    {
+      formId: 'form_1',
+      answers: { question_1: 'Response' },
+      hiddenFields: [],
+      openToken: 'encrypted-token'
+    }
+  )
+
+  assert.strictEqual(result.pseudonymId, '7KQ2-9MX4')
+  assert.strictEqual(storedSubmission?.ip, '203.0.113.10')
+  assert.deepStrictEqual(storedSubmission?.userAgent, { browser: { name: 'Browser' } })
+}
+
 async function run() {
   await testPaymentUsesPublishedFormConfiguration()
   await testPaymentWebhookDoesNotRequireOrPersistClientSecret()
+  await testPseudonymIdIsStoredAndReturned()
 }
 
 if (require.main === module) {

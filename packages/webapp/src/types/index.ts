@@ -1,6 +1,8 @@
-import { FormField, FormModel } from '@heyform-inc/shared-types-enums'
+import { FormField, FormModel, SubmissionModel } from '@heyform-inc/shared-types-enums'
 
-export type { SubmissionModel as SubmissionType } from '@heyform-inc/shared-types-enums'
+export interface SubmissionType extends SubmissionModel {
+  pseudonymId?: string
+}
 
 export interface FormType extends Omit<FormModel, 'fields'> {
   drafts?: FormField[]

@@ -3,17 +3,45 @@ import {
   SubmissionCategoryEnum,
   SubmissionStatusEnum
 } from '@heyform-inc/shared-types-enums'
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
 import { FormService } from './form.service'
 import { RedisService } from './redis.service'
-import { date, helper } from '@heyform-inc/utils'
+import { date, helper, nanoidCustomAlphabet } from '@heyform-inc/utils'
 import { SubmissionModel } from '@model'
 import { getUpdateQuery } from '@utils'
 
 const { isValid } = helper
+const PSEUDONYM_ID_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
+const PSEUDONYM_ID_LENGTH = 8
+const PSEUDONYM_ID_MAX_ATTEMPTS = 5
+
+export function generatePseudonymId(): string {
+  const value = nanoidCustomAlphabet(PSEUDONYM_ID_ALPHABET, PSEUDONYM_ID_LENGTH)
+  return `${value.slice(0, 4)}-${value.slice(4)}`
+}
+
+interface MongoDuplicateError {
+  code?: number
+  keyPattern?: Record<string, unknown>
+  keyValue?: Record<string, unknown>
+}
+
+function isPseudonymIdCollision(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false
+  }
+
+  const { code, keyPattern, keyValue } = error as MongoDuplicateError
+
+  return (
+    code === 11000 &&
+    (keyPattern?.pseudonymId === 1 ||
+      Object.prototype.hasOwnProperty.call(keyValue || {}, 'pseudonymId'))
+  )
+}
 
 interface FindSubmissionOptions {
   formId: string
@@ -280,6 +308,34 @@ export class SubmissionService {
 
       return this.create(submission)
     })
+  }
+
+  public async createWithPseudonymWithinQuota(
+    submission: SubmissionModel | Record<string, unknown>,
+    quotaLimit?: number,
+    generateId: () => string = generatePseudonymId
+  ): Promise<{ id: string; pseudonymId: string }> {
+    for (let attempt = 0; attempt < PSEUDONYM_ID_MAX_ATTEMPTS; attempt += 1) {
+      const pseudonymId = generateId()
+
+      try {
+        const id = await this.createWithinQuota(
+          {
+            ...submission,
+            pseudonymId
+          },
+          quotaLimit
+        )
+
+        return { id, pseudonymId }
+      } catch (error) {
+        if (!isPseudonymIdCollision(error)) {
+          throw error
+        }
+      }
+    }
+
+    throw new InternalServerErrorException('Failed to generate a unique pseudonym ID')
   }
 
   public async maskAsPrivate(formId: string, submissionIds?: string[]): Promise<boolean> {
