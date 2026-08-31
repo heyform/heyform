@@ -11,7 +11,7 @@ import { helper, timestamp } from '@heyform-inc/utils'
 
 import Logo from '@/assets/logo.svg?react'
 import { Button, useAlert } from '@/components'
-import { REDIRECT_COOKIE_NAME } from '@/consts'
+import { REDIRECT_COOKIE_NAME, VERIFY_USER_EMAIL } from '@/consts'
 import { useAppStore, useUserStore, useWorkspaceStore } from '@/store'
 
 import { FormShell } from '../Form/FormShell'
@@ -41,7 +41,11 @@ export const LoginGuard: FC<LayoutProps> = ({ options, children }) => {
       const user = await UserService.userDetail()
       setUser(user)
 
-      if (!user.isEmailVerified && window.location.pathname !== '/verify-email') {
+      if (
+        VERIFY_USER_EMAIL &&
+        !user.isEmailVerified &&
+        window.location.pathname !== '/verify-email'
+      ) {
         return router.replace('/verify-email')
       }
     } finally {
