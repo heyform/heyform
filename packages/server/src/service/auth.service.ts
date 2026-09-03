@@ -21,6 +21,7 @@ import {
 import {
   helper,
   hs,
+  ms,
   isDateExpired,
   nanoid,
   parseNumber,
@@ -56,7 +57,7 @@ const DEFAULT_ATTEMPTS_OPTIONS = {
 }
 const NUMERIC_ALPHABET = '0123456789'
 const OAUTH_STATE_COOKIE_NAME = 'HEYFORM_OAUTH_STATE'
-const OAUTH_STATE_MAX_AGE = hs('10m')
+const OAUTH_STATE_MAX_AGE = ms('10m')
 const OAUTH_TRANSACTION_TTL = '10m'
 
 export interface OAuthTransaction {
