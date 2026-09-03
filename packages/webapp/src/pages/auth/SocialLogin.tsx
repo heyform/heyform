@@ -10,6 +10,7 @@ import {
   DISABLE_LOGIN_WITH_APPLE,
   DISABLE_LOGIN_WITH_GOOGLE,
   DISABLE_LOGIN_WITH_OIDC,
+  DISABLE_LOGIN_WITH_PASSWORD,
   OIDC_DISPLAY_NAME,
   isRegistrationDisabled
 } from '@/consts'
@@ -101,7 +102,7 @@ const SocialLogin: FC<SocialLoginProps> = ({ isSignUp }) => {
         ))}
       </div>
 
-      <Divider>{t('login.continueWith')}</Divider>
+      {!DISABLE_LOGIN_WITH_PASSWORD && <Divider>{t('login.continueWith')}</Divider>}
     </>
   )
 }
