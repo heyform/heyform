@@ -6,6 +6,8 @@ import {
   APP_DISABLE_REGISTRATION,
   APP_HOMEPAGE_URL,
   COOKIE_DOMAIN,
+  DISABLE_LOGIN_WITH_GOOGLE,
+  DISABLE_LOGIN_WITH_APPLE,
   DISABLE_LOGIN_WITH_OIDC,
   ENABLE_GOOGLE_FONTS,
   GOOGLE_RECAPTCHA_KEY,
@@ -29,6 +31,8 @@ export class DashboardController {
       googleRecaptchaKey: GOOGLE_RECAPTCHA_KEY,
       uploadOrigins: TRUSTED_UPLOAD_ORIGINS,
       verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000),
+      disableLoginWithGoogle: DISABLE_LOGIN_WITH_GOOGLE,
+      disableLoginWithApple: DISABLE_LOGIN_WITH_APPLE,
       disableLoginWithOidc: DISABLE_LOGIN_WITH_OIDC,
       oidcDisplayName: OIDC_DISPLAY_NAME
     }
