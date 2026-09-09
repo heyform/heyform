@@ -1,7 +1,8 @@
-import { BadRequestException, UseGuards } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, UseGuards } from '@nestjs/common'
 import { createHash } from 'crypto'
 
 import { GraphqlRequest, GraphqlResponse } from '@decorator'
+import { DISABLE_LOGIN_WITH_PASSWORD } from '@environments'
 import { LoginInput } from '@graphql'
 import { DeviceIdGuard } from '@guard'
 import { date, helper } from '@heyform-inc/utils'
@@ -36,6 +37,10 @@ export class LoginResolver {
     @GraphqlResponse() res: any,
     @Args('input') input: LoginInput
   ): Promise<boolean> {
+    if (DISABLE_LOGIN_WITH_PASSWORD) {
+      throw new ForbiddenException('Password login is disabled.')
+    }
+
     const user = await this.userService.findByEmail(input.email)
 
     if (helper.isEmpty(user)) {

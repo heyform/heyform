@@ -1,8 +1,8 @@
-import { BadRequestException, UseGuards } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, UseGuards } from '@nestjs/common'
 
 import { COOKIE_INVITATION_NAME, CookieOptionsFactory } from '@config'
 import { GraphqlResponse } from '@decorator'
-import { APP_DISABLE_REGISTRATION, BCRYPT_SALT } from '@environments'
+import { APP_DISABLE_REGISTRATION, BCRYPT_SALT, DISABLE_LOGIN_WITH_PASSWORD } from '@environments'
 import { SignUpInput } from '@graphql'
 import { DeviceIdGuard } from '@guard'
 import { helper } from '@heyform-inc/utils'
@@ -28,6 +28,10 @@ export class SignUpResolver {
     @GraphqlResponse() res: any,
     @Args('input') input: SignUpInput
   ): Promise<boolean> {
+    if (DISABLE_LOGIN_WITH_PASSWORD) {
+      throw new ForbiddenException('Password registration is disabled.')
+    }
+
     const invitation = await this.findInvitation(input)
 
     if (APP_DISABLE_REGISTRATION && !invitation) {

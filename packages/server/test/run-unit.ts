@@ -2,6 +2,7 @@ import { spawnSync } from 'child_process'
 import * as path from 'path'
 
 const tests = [
+  'password-login.test.ts',
   'redis-config.test.ts',
   'oauth-state.test.ts',
   'oidc-security.test.ts',

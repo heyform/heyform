@@ -7,7 +7,7 @@ import { clearCookie, clearInvitationCookie, getInvitationCookie, useRouter } fr
 import { helper } from '@heyform-inc/utils'
 
 import { Form, Input, PasswordStrength } from '@/components'
-import { REDIRECT_COOKIE_NAME } from '@/consts'
+import { DISABLE_LOGIN_WITH_PASSWORD, REDIRECT_COOKIE_NAME } from '@/consts'
 import { useUserStore } from '@/store'
 
 import SocialLogin from './SocialLogin'
@@ -46,72 +46,74 @@ const SignUp = () => {
 
       <SocialLogin isSignUp />
 
-      <Form.Simple
-        className="space-y-4"
-        fetch={fetch}
-        submitProps={{
-          label: t('signUp.title'),
-          className: 'w-full'
-        }}
-        onValuesChange={handleValuesChange}
-      >
-        <Form.Item
-          name="name"
-          label={t('signUp.name.label')}
-          rules={[
-            {
-              required: true,
-              message: t('signUp.name.required')
-            }
-          ]}
+      {!DISABLE_LOGIN_WITH_PASSWORD && (
+        <Form.Simple
+          className="space-y-4"
+          fetch={fetch}
+          submitProps={{
+            label: t('signUp.title'),
+            className: 'w-full'
+          }}
+          onValuesChange={handleValuesChange}
         >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            name="name"
+            label={t('signUp.name.label')}
+            rules={[
+              {
+                required: true,
+                message: t('signUp.name.required')
+              }
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          name="email"
-          label={t('login.email.label')}
-          rules={[
-            {
-              required: true,
-              message: t('login.email.required')
-            },
-            {
-              type: 'email',
-              message: t('login.email.invalid')
-            }
-          ]}
-        >
-          <Input type="email" />
-        </Form.Item>
+          <Form.Item
+            name="email"
+            label={t('login.email.label')}
+            rules={[
+              {
+                required: true,
+                message: t('login.email.required')
+              },
+              {
+                type: 'email',
+                message: t('login.email.invalid')
+              }
+            ]}
+          >
+            <Input type="email" />
+          </Form.Item>
 
-        <Form.Item
-          name="password"
-          label={
-            <div className="flex items-center justify-between">
-              <span>{t('login.password.label')}</span>
-              <PasswordStrength
-                className={isFocused || !helper.isNil(password) ? 'opacity-100' : 'opacity-0'}
-                password={password}
-              />
-            </div>
-          }
-          rules={[
-            {
-              required: true,
-              pattern:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[!#$%&()*+\-,./\\:<=>?@[\]^_{|}~0-9a-zA-Z]{8,}$/,
-              message: t('components.password.invalid')
-            },
-            {
-              max: 100,
-              message: t('login.password.maxLength')
+          <Form.Item
+            name="password"
+            label={
+              <div className="flex items-center justify-between">
+                <span>{t('login.password.label')}</span>
+                <PasswordStrength
+                  className={isFocused || !helper.isNil(password) ? 'opacity-100' : 'opacity-0'}
+                  password={password}
+                />
+              </div>
             }
-          ]}
-        >
-          <Input.Password onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} />
-        </Form.Item>
-      </Form.Simple>
+            rules={[
+              {
+                required: true,
+                pattern:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[!#$%&()*+\-,./\\:<=>?@[\]^_{|}~0-9a-zA-Z]{8,}$/,
+                message: t('components.password.invalid')
+              },
+              {
+                max: 100,
+                message: t('login.password.maxLength')
+              }
+            ]}
+          >
+            <Input.Password onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)} />
+          </Form.Item>
+        </Form.Simple>
+      )}
 
       <div className="text-secondary text-center text-sm">
         <p>
