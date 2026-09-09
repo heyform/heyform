@@ -313,6 +313,8 @@ export const TEMPLATE_DETAILS_GQL = gql`
         properties
       }
       themeSettings {
+        logo
+        favicon
         theme
       }
     }
@@ -591,6 +593,7 @@ export const FORM_DETAIL_GQL = gql`
       variables
       themeSettings {
         logo
+        favicon
         theme
       }
       retentionAt
@@ -1454,6 +1457,8 @@ export const PUBLIC_FORM_GQL = gql`
       variables
       fieldsUpdatedAt
       themeSettings {
+        logo
+        favicon
         theme
       }
       retentionAt

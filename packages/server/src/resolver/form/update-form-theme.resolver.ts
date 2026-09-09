@@ -35,10 +35,9 @@ export class UpdateFormThemeResolver {
     }
 
     return await this.formService.update(input.formId, {
-      themeSettings: {
-        logo: input.logo,
-        theme: input.theme
-      }
+      'themeSettings.logo': input.logo ?? null,
+      'themeSettings.theme': input.theme,
+      ...(input.favicon !== undefined ? { 'themeSettings.favicon': input.favicon } : {})
     })
   }
 }

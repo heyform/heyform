@@ -43,18 +43,20 @@ export default function Customize() {
   const { formId } = useParam()
   const toast = useToast()
   const [rcForm] = useRCForm()
-  const { themeSettings, updateThemeSettings, revertThemeSettings } = useFormStore()
+  const { themeSettings, updateThemeSettings, revertThemeSettings, updateForm } = useFormStore()
 
   const { loading, run } = useRequest(
     async (theme: any) => {
       await FormService.updateTheme({
         formId,
         theme,
-        logo: themeSettings?.logo
+        logo: themeSettings?.logo,
+        favicon: themeSettings?.favicon
       })
+      updateForm({ themeSettings: { ...themeSettings, theme } })
     },
     {
-      refreshDeps: [formId, themeSettings?.logo],
+      refreshDeps: [formId, themeSettings?.logo, themeSettings?.favicon],
       manual: true,
       onSuccess: () => {
         toast({
@@ -138,6 +140,26 @@ export default function Customize() {
         onValuesChange={handleValuesChange}
         onFinish={run}
       >
+        <div className="flex items-center justify-between">
+          <span>
+            {String(t('form.builder.design.customize.favicon', { defaultValue: 'Favicon' }))}
+          </span>
+          <div className="flex items-center gap-2">
+            {themeSettings?.favicon && (
+              <img src={themeSettings.favicon} alt="" className="h-6 w-6 object-contain" />
+            )}
+            <ImagePicker tabs={['image']} onChange={favicon => updateThemeSettings({ favicon })}>
+              <Button.Ghost size="sm">
+                {String(t(themeSettings?.favicon ? 'components.change' : 'components.add'))}
+              </Button.Ghost>
+            </ImagePicker>
+            {themeSettings?.favicon && (
+              <Button.Ghost size="sm" onClick={() => updateThemeSettings({ favicon: null })}>
+                {String(t('components.remove'))}
+              </Button.Ghost>
+            )}
+          </div>
+        </div>
         <Form.Item name="fontFamily">
           <Select
             className="w-full"

@@ -220,6 +220,7 @@ export interface FormTheme {
 }
 
 export interface ThemeSettings {
+  favicon?: string | null
   logo?: string
   theme?: FormTheme
 }

@@ -17,7 +17,7 @@ const ThemeItem: FC<{ theme: FormTheme; logo?: string }> = ({ theme, logo }) => 
 
   const { formId } = useParam()
   const toast = useToast()
-  const { updateThemeSettings } = useFormStore()
+  const { updateThemeSettings, updateForm, themeSettings } = useFormStore()
 
   const [loading, { setTrue, setFalse }] = useBoolean(false)
 
@@ -34,9 +34,11 @@ const ThemeItem: FC<{ theme: FormTheme; logo?: string }> = ({ theme, logo }) => 
       await FormService.updateTheme({
         formId,
         theme: newTheme,
+        favicon: themeSettings?.favicon,
         logo
       })
 
+      updateForm({ themeSettings: { ...themeSettings, logo, theme: newTheme } })
       updateThemeSettings({
         logo,
         theme: newTheme

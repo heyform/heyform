@@ -791,6 +791,11 @@ export class FormThemeInput {
 @InputType()
 export class UpdateFormThemeInput extends FormDetailInput {
   @Field({ nullable: true })
+  @IsUrl({ protocols: ['http', 'https'], require_protocol: true })
+  @IsOptional()
+  favicon?: string
+
+  @Field({ nullable: true })
   @IsUrl()
   @IsOptional()
   logo?: string
@@ -1014,6 +1019,9 @@ export class FormSettingType {
 
 @ObjectType()
 export class ThemeSettingsType {
+  @Field({ nullable: true })
+  favicon?: string
+
   @Field({ nullable: true })
   logo?: string
 

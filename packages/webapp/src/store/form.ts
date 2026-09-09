@@ -1,9 +1,5 @@
 import { getTheme } from '@heyform-inc/form-renderer'
-import {
-  FormSettings,
-  ThemeSettings,
-  UNSELECTABLE_FIELD_KINDS
-} from '@heyform-inc/shared-types-enums'
+import { FormSettings, UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { type Dayjs } from 'dayjs'
 import { create } from 'zustand'
 import computed from 'zustand-computed'
@@ -16,7 +12,13 @@ import { immer } from 'zustand/middleware/immer'
 import { TypeNumberValue } from '@/components'
 import { APP_STATUS_ENUM, DEFAULT_EMBED_CONFIGS } from '@/consts'
 import { DEFAULT_LNG } from '@/i18n'
-import { AppType, FormType, IntegratedAppType, IntegrationType } from '@/types'
+import {
+  AppType,
+  FormType,
+  IntegratedAppType,
+  IntegrationType,
+  FormThemeSettings as ThemeSettings
+} from '@/types'
 
 interface TempSettings extends FormSettings {
   closeForm?: boolean
@@ -208,7 +210,7 @@ export const useFormStore = create<FormStoreType>()(
           state.themeSettings = {
             ...state.themeSettings,
             ...updates,
-            theme: getTheme(updates.theme)
+            theme: getTheme(updates.theme ?? state.themeSettings?.theme)
           }
         })
       },
@@ -216,7 +218,7 @@ export const useFormStore = create<FormStoreType>()(
       revertThemeSettings: () => {
         set(state => {
           state.themeSettings = {
-            ...state.themeSettings,
+            ...state.form?.themeSettings,
             theme: getTheme(state.form?.themeSettings?.theme)
           }
         })

@@ -296,7 +296,12 @@ export class FormService {
     })
   }
 
-  static updateTheme(input: { formId: string; theme: FormTheme; logo?: string }) {
+  static updateTheme(input: {
+    formId: string
+    theme: FormTheme
+    logo?: string
+    favicon?: string | null
+  }) {
     return apollo.mutate({
       mutation: UPDATE_FORM_THEME_GQL,
       variables: {

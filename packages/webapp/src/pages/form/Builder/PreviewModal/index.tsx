@@ -14,19 +14,20 @@ interface PreviewComponentProps {
 const PreviewComponent: FC<PreviewComponentProps> = () => {
   const { t } = useTranslation()
 
-  const { form: rawForm } = useFormStore()
+  const { form: rawForm, themeSettings } = useFormStore()
   const [platform, setPlatform] = useState('mobile')
 
   const form: any = useMemo(
     () => ({
       ...rawForm,
+      themeSettings,
       fields: rawForm?.drafts || [],
       settings: {
         ...rawForm?.settings,
         whitelabelBranding: true
       }
     }),
-    [rawForm]
+    [rawForm, themeSettings]
   )
 
   const tabs = useMemo(

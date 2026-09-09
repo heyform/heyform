@@ -33,7 +33,7 @@ export const Header: FC = () => {
     <div className="heyform-header">
       <div className="heyform-header-wrapper">
         <div className="heyform-header-left">
-          {(state.settings as any)?.whitelabelBranding && state.logo && (
+          {state.logo && (
             <div className="heyform-logo">
               <img src={state.logo} alt="" />
             </div>
