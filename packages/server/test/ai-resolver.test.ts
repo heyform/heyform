@@ -3,7 +3,7 @@ import 'reflect-metadata'
 
 import { AIResolver } from '../src/resolver/form/ai.resolver'
 
-async function testEveryAIMutationConsumesUserAndTeamQuota() {
+async function testEveryAIMutationConsumesUserAndTeamQuota(selfHosted = false) {
   const throttleCalls: unknown[][] = []
   const completions = [
     JSON.stringify({ name: 'Generated form', fields: [{ id: 'field-1' }] }),
@@ -38,6 +38,7 @@ async function testEveryAIMutationConsumesUserAndTeamQuota() {
       themeCustomization: true
     }
   } as any
+  if (selfHosted) delete team.plan
   const user = { id: 'user-1' } as any
   const form = {
     id: 'form-1',
@@ -99,7 +100,29 @@ async function testQuotaFailurePreventsOpenAIRequest() {
   assert.strictEqual(openAIRequests, 0)
 }
 
+async function testExplicitPlanRestrictions() {
+  const resolver = new AIResolver({} as any, {} as any, {} as any)
+  for (const plan of [{}, { aiForm: false }, { aiForm: true, themeCustomization: false }]) {
+    const team = { id: 'team-1', plan } as any
+    const user = { id: 'user-1' } as any
+    if (!plan.aiForm) {
+      await assert.rejects(() => resolver.createFormWithAI(team, user, {} as any), /Upgrade/)
+      await assert.rejects(
+        () => resolver.createFieldsWithAI(team, user, {} as any, {} as any),
+        /Upgrade/
+      )
+      await assert.rejects(
+        () => resolver.createFormLogicsWithAI(team, user, {} as any, {} as any),
+        /Upgrade/
+      )
+    }
+    await assert.rejects(() => resolver.createFormThemeWithAI(team, user, {} as any), /Upgrade/)
+  }
+}
+
 async function run() {
+  await testExplicitPlanRestrictions()
+  await testEveryAIMutationConsumesUserAndTeamQuota(true)
   await testEveryAIMutationConsumesUserAndTeamQuota()
   await testQuotaFailurePreventsOpenAIRequest()
 }

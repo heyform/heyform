@@ -196,7 +196,7 @@ export class AIResolver {
   }
 
   private getPlan(team: TeamModel): TeamPlan {
-    return (team as TeamWithPlan).plan || {}
+    return (team as TeamWithPlan).plan ?? { aiForm: true, themeCustomization: true }
   }
 
   private async enforceAIUsageLimits(teamId: string, userId: string): Promise<void> {
