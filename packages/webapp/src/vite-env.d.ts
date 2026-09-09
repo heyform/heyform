@@ -38,6 +38,7 @@ declare global {
       verifyEmailResendCooldownSeconds?: number | string
       appDisableRegistration?: boolean | string
       enableGoogleFonts?: boolean | string
+      disableLoginWithPassword?: boolean | string
       disableLoginWithApple?: boolean | string
       disableLoginWithGoogle?: boolean | string
       disableLoginWithOidc?: boolean | string
