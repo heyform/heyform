@@ -7,6 +7,7 @@ import {
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common'
 import { Throttle } from '@nestjs/throttler'
 
+import { normalizeAIFields } from '../../utils/ai-fields'
 import {
   createFieldsPrompt,
   createFormPrompt,
@@ -89,9 +90,11 @@ export class AIResolver {
       teamId: team.id,
       projectId: input.projectId,
       memberId: user.id,
-      name: helper.isValid(json.name?.trim()) ? json.name.trim() : input.topic,
+      name: typeof json.name === 'string' && json.name.trim() ? json.name.trim() : input.topic,
       fields: [],
-      _drafts: JSON.stringify(json.fields),
+      _drafts: JSON.stringify(
+        this.normalizeFields(json.fields, 'Failed to generate question object')
+      ),
       fieldsUpdatedAt: 0,
       settings: {
         active: false,
@@ -135,7 +138,7 @@ export class AIResolver {
       throw new InternalServerErrorException('Failed to create fields')
     }
 
-    return fields
+    return this.normalizeFields(fields, 'Failed to create fields')
   }
 
   @Mutation(returns => [GraphQLJSONObject])
@@ -197,6 +200,15 @@ export class AIResolver {
 
   private getPlan(team: TeamModel): TeamPlan {
     return (team as TeamWithPlan).plan ?? { aiForm: true, themeCustomization: true }
+  }
+
+  private normalizeFields(fields: unknown, errorMessage: string): Record<string, unknown>[] {
+    try {
+      return normalizeAIFields(fields)
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(errorMessage)
+    }
   }
 
   private async enforceAIUsageLimits(teamId: string, userId: string): Promise<void> {

@@ -2,12 +2,16 @@ import * as assert from 'assert'
 import 'reflect-metadata'
 
 import { AIResolver } from '../src/resolver/form/ai.resolver'
+import { normalizeAIFields } from '../src/utils/ai-fields'
 
 async function testEveryAIMutationConsumesUserAndTeamQuota(selfHosted = false) {
   const throttleCalls: unknown[][] = []
   const completions = [
-    JSON.stringify({ name: 'Generated form', fields: [{ id: 'field-1' }] }),
-    JSON.stringify([{ id: 'field-2' }]),
+    JSON.stringify({
+      name: 'Generated form',
+      fields: [{ id: 'field-1', kind: 'short_text', placeholder: 'invalid' }]
+    }),
+    JSON.stringify([{ id: 'field-2', kind: 'short_text', properties: { html: 'invalid' } }]),
     JSON.stringify([{ id: 'logic-1' }]),
     JSON.stringify({ fontFamily: 'Inter' })
   ]
@@ -23,7 +27,13 @@ async function testEveryAIMutationConsumesUserAndTeamQuota(selfHosted = false) {
     })
   }
   const formService = {
-    create: async () => 'generated-form-id'
+    create: async (value: any) => {
+      assert.deepStrictEqual(
+        JSON.parse(value._drafts),
+        normalizeAIFields([{ id: 'field-1', kind: 'short_text' }])
+      )
+      return 'generated-form-id'
+    }
   }
   const redisService = {
     throttler: async (...args: unknown[]) => {
@@ -51,7 +61,10 @@ async function testEveryAIMutationConsumesUserAndTeamQuota(selfHosted = false) {
     projectId: 'project-1',
     topic: 'Security survey'
   } as any)
-  await resolver.createFieldsWithAI(team, user, form, { prompt: 'Add a question' } as any)
+  assert.deepStrictEqual(
+    await resolver.createFieldsWithAI(team, user, form, { prompt: 'Add a question' } as any),
+    normalizeAIFields([{ id: 'field-2', kind: 'short_text' }])
+  )
   await resolver.createFormLogicsWithAI(team, user, form, { prompt: 'Add logic' } as any)
   await resolver.createFormThemeWithAI(team, user, {
     prompt: 'Use blue',
@@ -120,8 +133,45 @@ async function testExplicitPlanRestrictions() {
   }
 }
 
+async function testInvalidAIFieldsAreRejected() {
+  let created = false
+  const resolver = new AIResolver(
+    {
+      chatCompletion: async () => ({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                name: 42,
+                fields: [{ kind: 'invented' }]
+              })
+            }
+          }
+        ]
+      })
+    } as any,
+    {
+      create: async () => {
+        created = true
+      }
+    } as any,
+    { throttler: async () => undefined } as any
+  )
+  await assert.rejects(
+    () =>
+      resolver.createFormWithAI(
+        { id: 'team-1' } as any,
+        { id: 'user-1' } as any,
+        { projectId: 'project-1', topic: 'Survey' } as any
+      ),
+    /Failed to generate question object/
+  )
+  assert.strictEqual(created, false)
+}
+
 async function run() {
   await testExplicitPlanRestrictions()
+  await testInvalidAIFieldsAreRejected()
   await testEveryAIMutationConsumesUserAndTeamQuota(true)
   await testEveryAIMutationConsumesUserAndTeamQuota()
   await testQuotaFailurePreventsOpenAIRequest()

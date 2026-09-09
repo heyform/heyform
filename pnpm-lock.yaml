@@ -339,6 +339,9 @@ importers:
       which-browser:
         specifier: 0.5.1
         version: 0.5.1
+      zod:
+        specifier: 4.5.4
+        version: 4.5.4
     devDependencies:
       '@nestjs/cli':
         specifier: 10.4.9
@@ -7806,6 +7809,9 @@ packages:
 
   zen-observable@0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
+
+  zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
   zustand-computed@1.4.2:
     resolution: {integrity: sha512-bQ+PmAgrgPLsAI7xubCTC8bTtO5kE4yi/Qn3eldqUt5I43av3HAUX8pEXC2IRlB7wrWrytYgKXCklYijzFEmPg==}
@@ -16142,6 +16148,8 @@ snapshots:
       zen-observable: 0.8.15
 
   zen-observable@0.8.15: {}
+
+  zod@4.5.4: {}
 
   zustand-computed@1.4.2(react@19.2.4)(zustand@4.5.7(@types/react@19.2.14)(immer@10.2.0)(react@19.2.4)):
     dependencies:

@@ -3,6 +3,11 @@ import * as path from 'path'
 
 const tests = [
   'password-login.test.ts',
+  'ai-json.test.ts',
+  'ai-fields.test.ts',
+  'ai-rich-text.test.ts',
+  'ai-form-flow.test.ts',
+  'form-schema.test.ts',
   'ai-resolver.test.ts',
   'redis-config.test.ts',
   'oauth-state.test.ts',

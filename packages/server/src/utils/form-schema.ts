@@ -49,8 +49,9 @@ function escapeText(value: unknown): string {
 }
 
 function escapeAttribute(value: unknown): string {
+  // Drafts pass through this sanitizer again on save and publish.
   return String(value)
-    .replace(/&/g, '&amp;')
+    .replace(/&(?!(?:amp|quot|lt|gt);)/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -114,7 +115,7 @@ function sanitizeRichTextNodes(nodes: unknown[]): any[] {
   return nodes.map(sanitizeRichTextNode).filter(Boolean)
 }
 
-function sanitizeRichTextSchema(value: unknown): any[] {
+export function sanitizeRichTextSchema(value: unknown): any[] {
   if (Array.isArray(value)) {
     return sanitizeRichTextNodes(value)
   }

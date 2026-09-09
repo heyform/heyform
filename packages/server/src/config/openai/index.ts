@@ -1,6 +1,6 @@
 const FORM_INTERFACES = `
 Field kind values:
-- welcome, thank_you, statement
+- group, welcome, thank_you, statement
 - short_text, long_text, number, yes_no
 - multiple_choice, picture_choice, file_upload
 - opinion_scale, rating, date, date_range, time
@@ -17,6 +17,28 @@ Field JSON shape:
   "properties": {},
   "layout": null
 }
+Use only the keys shown above for fields. Use unique, nonempty IDs for fields and choices.
+Title and description must be rich-text arrays, e.g. ["Plain text"].
+Formatted nodes use ["tag", ["text or nested nodes"], {"attribute": "value"}],
+e.g. [["a", ["Website"], {"href": "https://example.com"}]]. Attributes must be objects,
+never a URL string; prefer plain text when formatting is unnecessary.
+Put legal terms text in description. Never use properties.html, placeholder, or helpText.
+Validations may only contain required (boolean), min/max (number), matchExpected (boolean).
+Properties may contain only these keys, when relevant to the field kind:
+- showButton, hideMarks, allowOther, allowMultiple, verticalAlignment, randomize,
+  allowTime, use12Hours, redirectOnCompletion: booleans
+- buttonText, badge, choiceStyle, other, shape, leftLabel, centerLabel, rightLabel,
+  defaultCountryCode, currency, format, sourceUrl, buttonLinkUrl, redirectUrl: strings
+- numberPreRow, total, start, score, redirectDelay: numbers
+- choices: [{"id":"unique id","label":"Choice text"}], optionally image/color (string),
+  score (number), isExpected (boolean)
+- tableColumns: [{"id":"unique id","label":"Column text","type":"text","required":false}]
+- price: {"type":"number","value":10} or {"type":"variable","ref":"variable id"}
+- fields: an array of child fields using the same field shape (for groups)
+Layout must be null or an object with mediaType (image/video), mediaUrl,
+backgroundColor, brightness (number between -100 and 100), align
+(inline/float_left/float_right/split_left/split_right/cover).
+Do not invent properties or put field content in unknown keys.
 `
 
 const LOGIC_INTERFACES = `
