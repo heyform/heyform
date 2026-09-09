@@ -1,7 +1,7 @@
 {
   "name": "heyform-webapp",
   "private": true,
-  "version": "3.0.2",
+  "version": "3.0.3",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
