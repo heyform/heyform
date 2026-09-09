@@ -119,6 +119,7 @@ export const OIDC_CLIENT_ID: string = process.env.OIDC_CLIENT_ID
 export const OIDC_CLIENT_SECRET: string = process.env.OIDC_CLIENT_SECRET
 export const OIDC_ISSUER: string = process.env.OIDC_ISSUER
 export const OIDC_DISPLAY_NAME: string = process.env.OIDC_DISPLAY_NAME || 'SSO'
+export const OIDC_DISPLAY_ICON_URL: string = process.env.OIDC_DISPLAY_ICON_URL || ''
 export const OIDC_CLIENT_AUTH_METHOD = (process.env.OIDC_CLIENT_AUTH_METHOD ||
   'client_secret_basic') as 'client_secret_basic' | 'client_secret_post'
 export const OIDC_ALLOW_PROVISIONING: boolean = helper.isTrue(process.env.OIDC_ALLOW_PROVISIONING)
