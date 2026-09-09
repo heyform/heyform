@@ -1,7 +1,8 @@
+import { locales } from '@heyform-inc/form-renderer/src'
 import { FormModel } from '@heyform-inc/shared-types-enums'
 import { useState } from 'react'
 
-import { getPreferredLanguage } from './utils/brower-language'
+import { getFormLanguage } from './utils/brower-language'
 import { FormService } from '@/services'
 import { useParam, useQuery } from '@/utils'
 
@@ -10,7 +11,7 @@ import '@/styles/render.scss'
 
 import { Renderer } from './components/Renderer'
 
-const LANGUAGES = ['en', 'de', 'fr', 'pl', 'pt-br', 'ja', 'zh-cn', 'zh-tw']
+const LANGUAGES = Object.keys(locales)
 
 export default function FormRender() {
   const { formId } = useParam()
@@ -23,7 +24,7 @@ export default function FormRender() {
     const result = await FormService.publicForm(formId)
 
     setForm(result)
-    setLocale(getPreferredLanguage(LANGUAGES, result.form.settings.locale || LANGUAGES[0]))
+    setLocale(getFormLanguage(LANGUAGES, result.settings?.locale))
 
     return true
   }

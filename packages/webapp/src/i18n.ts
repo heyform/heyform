@@ -15,6 +15,7 @@ import zhCN from '@/locales/zh-cn.json'
 import zhTW from '@/locales/zh-tw.json'
 
 const resources = {
+  ...locales,
   de: {
     translation: {
       ...de,

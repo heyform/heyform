@@ -3,7 +3,7 @@ function normalizeCode(code?: string) {
 }
 
 export function getPreferredLanguage(languages: string[], fallback: string) {
-  const browserLanguage = window.navigator.language
+  const browserLanguage = normalizeCode(window.navigator.language)
 
   if (!browserLanguage) {
     return fallback
@@ -20,4 +20,9 @@ export function getPreferredLanguage(languages: string[], fallback: string) {
   })
 
   return lang || fallback
+}
+
+export function getFormLanguage(languages: string[], formLocale?: string) {
+  const locale = normalizeCode(formLocale)
+  return locale && languages.includes(locale) ? locale : getPreferredLanguage(languages, 'en')
 }
