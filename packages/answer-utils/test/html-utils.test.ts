@@ -117,6 +117,54 @@ test('plain html with limit', () => {
   ).toBe("Programmer's guide a...")
 })
 
+test('serialize opens links in a new tab when enabled', () => {
+  expect(
+    htmlUtils.serialize(
+      [
+        [
+          'a',
+          ['click me'],
+          {
+            href: 'https://example.com'
+          }
+        ]
+      ],
+      { openLinksInNewTab: true }
+    )
+  ).toBe('<a href="https://example.com" target="_blank" rel="noopener noreferrer">click me</a>')
+})
+
+test('serialize keeps links same tab by default', () => {
+  expect(
+    htmlUtils.serialize([
+      [
+        'a',
+        ['click me'],
+        {
+          href: 'https://example.com'
+        }
+      ]
+    ])
+  ).toBe('<a href="https://example.com">click me</a>')
+})
+
+test('serialize does not add target to unsafe hrefs even when opening in a new tab', () => {
+  expect(
+    htmlUtils.serialize(
+      [
+        [
+          'a',
+          ['click me'],
+          {
+            href: 'javascript:alert(1)'
+          }
+        ]
+      ],
+      { openLinksInNewTab: true }
+    )
+  ).toBe('<a>click me</a>')
+})
+
 test('plain html with large limit', () => {
   expect(
     htmlUtils.plain(

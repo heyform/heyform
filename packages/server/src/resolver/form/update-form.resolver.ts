@@ -38,6 +38,7 @@ export class UpdateFormResolver {
       ['enableProgress', 'settings.enableProgress'],
       ['enableQuestionList', 'settings.enableQuestionList'],
       ['enableNavigationArrows', 'settings.enableNavigationArrows'],
+      ['openLinksInNewTab', 'settings.openLinksInNewTab'],
       ['locale', 'settings.locale'],
       ['languages', 'settings.languages'],
       ['enableClosedMessage', 'settings.enableClosedMessage'],

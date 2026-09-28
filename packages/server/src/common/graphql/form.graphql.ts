@@ -552,6 +552,10 @@ export class UpdateFormInput extends FormDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
+  openLinksInNewTab?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
   emailNotification?: string
 
   @Field({ nullable: true })
@@ -985,6 +989,9 @@ export class FormSettingType {
 
   @Field({ nullable: true })
   enableNavigationArrows?: boolean
+
+  @Field({ nullable: true })
+  openLinksInNewTab?: boolean
 
   @Field({ nullable: true })
   locale?: string
