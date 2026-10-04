@@ -39,15 +39,24 @@ const LogicComponent = () => {
     rcForm.submit()
   }
 
-  function handleFinish({ payloads }: AnyMap) {
+  function handleFinish({ payloads, nextFieldId }: AnyMap) {
     handleClose()
     dispatch({
-      type: 'setLogic',
+      type: 'setNextField',
       payload: {
         fieldId: state.currentField!.id,
-        payloads
+        nextFieldId: nextFieldId || undefined
       }
     })
+    if (payloads !== undefined) {
+      dispatch({
+        type: 'setLogic',
+        payload: {
+          fieldId: state.currentField!.id,
+          payloads
+        }
+      })
+    }
   }
 
   return (

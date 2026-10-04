@@ -8,6 +8,7 @@ import {
   LogicPayload,
   Variable
 } from '@heyform-inc/shared-types-enums'
+import { UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import { type FC, type ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +21,7 @@ import { FormFieldType } from '@/types'
 
 import Action from './Action'
 import Condition from './Condition'
+import { NextQuestionSelect } from './NextQuestionSelect'
 
 interface PayloadFormProps {
   form: any
@@ -238,26 +240,38 @@ export const PayloadForm: FC<PayloadFormProps> = ({
   payloads,
   onFinish
 }) => {
+  const { t } = useTranslation()
+
   useEffect(() => {
     form.setFieldsValue({
-      payloads
+      payloads,
+      nextFieldId: currentField.nextFieldId || ''
     })
   }, [currentField, payloads])
 
   return (
     <Form
       initialValues={{
-        payloads
+        payloads,
+        nextFieldId: currentField.nextFieldId || ''
       }}
       form={form}
       onFinish={onFinish}
     >
-      <PayloadList
-        name="payloads"
-        fields={fields}
-        currentField={currentField}
-        variables={variables}
-      />
+      <Form.Item name="nextFieldId" label={String(t('form.builder.logic.nextQuestion.label'))}>
+        <NextQuestionSelect fields={fields} currentField={currentField} />
+      </Form.Item>
+      <p className="text-secondary mb-6 text-sm">
+        {String(t('form.builder.logic.nextQuestion.description'))}
+      </p>
+      {!UNSELECTABLE_FIELD_KINDS.includes(currentField.kind) && (
+        <PayloadList
+          name="payloads"
+          fields={fields}
+          currentField={currentField}
+          variables={variables}
+        />
+      )}
     </Form>
   )
 }

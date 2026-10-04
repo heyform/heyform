@@ -26,6 +26,16 @@ test('serialize html', () => {
   expect(htmlUtils.serialize(schema, { allowedBlockTags: [] })).toMatchSnapshot()
 })
 
+test('preserves escaped attributes across repeated builder round trips', () => {
+  const html = '<a href="https://example.com/?a=1&amp;b=2">Link</a>'
+  let result = html
+
+  for (let i = 0; i < 3; i++) {
+    result = htmlUtils.serialize(htmlUtils.parse(result))
+    expect(result).toBe(html)
+  }
+})
+
 test('serialize html with block tags', () => {
   expect(
     htmlUtils.serialize(schema, {

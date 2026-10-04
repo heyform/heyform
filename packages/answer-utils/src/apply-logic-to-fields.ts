@@ -14,6 +14,7 @@ import {
 import { helper } from '@heyform-inc/utils'
 
 import { calculateAction } from './calculate-action'
+import { getNextFieldId } from './navigation'
 import { validateRequiredField } from './validate'
 import { validateCondition } from './validate-condition'
 
@@ -72,7 +73,10 @@ export function applyLogicToFields(
     }
   }
 
-  if (helper.isEmpty(logics) || helper.isEmpty(values)) {
+  if (
+    (helper.isEmpty(logics) || helper.isEmpty(values)) &&
+    !fields!.some(field => field.nextFieldId)
+  ) {
     // Add indexes to every field
     indexFields(fields!)
 
@@ -92,14 +96,14 @@ export function applyLogicToFields(
     }
 
     let isNavigateValidated = false
-    const logic = logics!.find(l => l.fieldId === field.id)
+    const logic = logics?.find(l => l.fieldId === field.id)
 
     // Add parent field if needed to present SubGroup fields
     if (field.parent && result.fields.findIndex(f => f.id === field.parent!.id) < 0) {
       result.fields.push(field.parent)
     }
 
-    if (logic) {
+    if (logic && helper.isValid(values)) {
       const { payloads } = logic
       const calculates = payloads.filter(p => p.action.kind === ActionEnum.CALCULATE)
 
@@ -146,7 +150,8 @@ export function applyLogicToFields(
     }
 
     if (!isNavigateValidated) {
-      index += 1
+      const nextFieldId = getNextFieldId(fields!, field.id)
+      index = nextFieldId ? fields!.findIndex(f => f.id === nextFieldId) : fields!.length
       result.fields.push(field)
     }
   }

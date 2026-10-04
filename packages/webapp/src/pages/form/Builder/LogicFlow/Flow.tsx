@@ -1,6 +1,8 @@
-import { UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import { flattenFieldsWithGroups } from '@heyform-inc/form-renderer'
+import { FieldKindEnum, UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { useEffect } from 'react'
 import ReactFlow, {
+  Connection,
   ConnectionLineType,
   Controls,
   Node,
@@ -8,8 +10,10 @@ import ReactFlow, {
   useNodesState,
   useReactFlow
 } from 'react-flow-renderer'
+import { useTranslation } from 'react-i18next'
 
 import { fieldLogicToNodesEdges } from '../utils'
+import { isValidNextFieldId } from '@heyform-inc/answer-utils'
 
 import { useAppStore } from '@/store'
 
@@ -21,11 +25,8 @@ const snapGrid: [number, number] = [16, 16]
 const nodeTypes = {
   customNode: CustomNode
 }
-const edgeTypes = {
-  customEdge: null
-}
-
 export const Flow = () => {
+  const { t } = useTranslation()
   const { openModal } = useAppStore()
   const { state, dispatch } = useStoreContext()
   const flow = useReactFlow()
@@ -43,7 +44,7 @@ export const Flow = () => {
   function handleNodeClick(_: unknown, node: Node) {
     const { field } = node.data
 
-    if (!UNSELECTABLE_FIELD_KINDS.includes(field.kind)) {
+    if (field.kind === FieldKindEnum.STATEMENT || !UNSELECTABLE_FIELD_KINDS.includes(field.kind)) {
       openModal('LogicModal')
       dispatch({
         type: 'selectField',
@@ -51,6 +52,27 @@ export const Flow = () => {
           id: field.id,
           parentId: field.parent?.id
         }
+      })
+    }
+  }
+
+  function isValidConnection(connection: Connection) {
+    return !!(
+      connection.source &&
+      connection.target &&
+      isValidNextFieldId(
+        flattenFieldsWithGroups(state.fields),
+        connection.source,
+        connection.target
+      )
+    )
+  }
+
+  function handleConnect(connection: Connection) {
+    if (isValidConnection(connection)) {
+      dispatch({
+        type: 'setNextField',
+        payload: { fieldId: connection.source!, nextFieldId: connection.target! }
       })
     }
   }
@@ -67,7 +89,6 @@ export const Flow = () => {
   return (
     <ReactFlow
       nodeTypes={nodeTypes as Any}
-      edgeTypes={edgeTypes as Any}
       nodes={nodes}
       edges={edges}
       connectionLineType={ConnectionLineType.SimpleBezier}
@@ -84,8 +105,13 @@ export const Flow = () => {
       onEdgesChange={onEdgesChange}
       onInit={handleInit}
       onNodeClick={handleNodeClick}
+      onConnect={handleConnect}
+      deleteKeyCode={null}
     >
       <Controls showInteractive={false} />
+      <div className="text-secondary bg-foreground border-accent-light absolute left-4 top-4 z-10 max-w-sm rounded-lg border p-3 text-xs shadow-sm">
+        {String(t('form.builder.logic.nextQuestion.help'))}
+      </div>
     </ReactFlow>
   )
 }

@@ -306,6 +306,7 @@ export const TEMPLATE_DETAILS_GQL = gql`
       id
       fields {
         id
+        nextFieldId
         title
         description
         kind
@@ -577,6 +578,7 @@ export const FORM_DETAIL_GQL = gql`
       }
       drafts {
         id
+        nextFieldId
         title
         description
         kind
@@ -659,6 +661,7 @@ export const UPDATE_FORM_SCHEMAS_GQL = gql`
       version
       drafts {
         id
+        nextFieldId
         title
         description
         kind
@@ -1430,6 +1433,7 @@ export const PUBLIC_FORM_GQL = gql`
       }
       drafts {
         id
+        nextFieldId
         title
         titleSchema
         description
@@ -1440,6 +1444,7 @@ export const PUBLIC_FORM_GQL = gql`
       }
       fields {
         id
+        nextFieldId
         title
         titleSchema
         description

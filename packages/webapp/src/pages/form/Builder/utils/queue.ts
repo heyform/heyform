@@ -77,7 +77,7 @@ export class Queue {
     this.tasks = []
     this.callback = null as unknown as Callback
 
-    if (!this.timer) {
+    if (this.timer) {
       clearInterval(this.timer as number)
       this.timer = null
     }

@@ -173,6 +173,8 @@ export interface Validation {
 
 export interface FormField {
   id: string
+  // Unconditional destination, used when no conditional navigation rule matches.
+  nextFieldId?: string
   title?: string | any[]
   description?: string | any[]
   kind: FieldKindEnum

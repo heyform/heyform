@@ -243,6 +243,11 @@ class LayoutInput {
 
 @InputType()
 class SharedFormFieldInput {
+  @Field(type => String, { nullable: true })
+  @IsOptional()
+  @IsString()
+  nextFieldId?: string
+
   @Field(type => GraphQLJSON, { nullable: true })
   title?: any[]
 
@@ -1033,6 +1038,9 @@ export class ThemeSettingsType {
 export class FormFieldType {
   @Field()
   id: string
+
+  @Field(type => String, { nullable: true })
+  nextFieldId?: string
 
   @Field(type => GraphQLJSON, { nullable: true })
   title?: any[]

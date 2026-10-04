@@ -268,6 +268,7 @@ export const FORM_DETAIL_GQL = /* GraphQL */ `
       }
       drafts {
         id
+        nextFieldId
         kind
         title
       }
@@ -281,6 +282,7 @@ export const UPDATE_FORM_SCHEMAS_GQL = /* GraphQL */ `
       version
       drafts {
         id
+        nextFieldId
         kind
         title
       }
@@ -428,6 +430,7 @@ export const PUBLIC_FORM_GQL = /* GraphQL */ `
       }
       fields {
         id
+        nextFieldId
         kind
         title
       }

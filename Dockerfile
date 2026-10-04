@@ -31,6 +31,9 @@ ARG APP_PATH=/app
 COPY packages/server/package.json $APP_PATH/packages/server/package.json
 COPY packages/webapp/package.json $APP_PATH/packages/webapp/package.json
 COPY packages/form-renderer/package.json $APP_PATH/packages/form-renderer/package.json
+COPY packages/shared-types-enums $APP_PATH/packages/shared-types-enums
+COPY packages/answer-utils $APP_PATH/packages/answer-utils
+COPY scripts/build-shared.js $APP_PATH/scripts/build-shared.js
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --offline --frozen-lockfile --store-dir=/pnpm/store
 
@@ -52,9 +55,12 @@ ARG APP_PATH=/app
 ENV NODE_ENV=production
 
 COPY packages/server/package.json $APP_PATH/packages/server/package.json
+COPY packages/shared-types-enums/package.json $APP_PATH/packages/shared-types-enums/package.json
+COPY packages/answer-utils/package.json $APP_PATH/packages/answer-utils/package.json
+COPY scripts/build-shared.js $APP_PATH/scripts/build-shared.js
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --prod --offline --frozen-lockfile --force \
-      --filter ./packages/server... --store-dir=/pnpm/store
+      --filter server... --store-dir=/pnpm/store
 
 FROM ${NODE_IMAGE} AS runner
 
@@ -67,6 +73,11 @@ WORKDIR $APP_PATH
 COPY --from=prod-deps $APP_PATH/node_modules $APP_PATH/node_modules
 COPY --from=prod-deps $APP_PATH/packages/server/package.json $APP_PATH/packages/server/package.json
 COPY --from=prod-deps $APP_PATH/packages/server/node_modules $APP_PATH/packages/server/node_modules
+COPY --from=prod-deps $APP_PATH/packages/answer-utils/node_modules $APP_PATH/packages/answer-utils/node_modules
+COPY --from=build $APP_PATH/packages/answer-utils/package.json $APP_PATH/packages/answer-utils/package.json
+COPY --from=build $APP_PATH/packages/answer-utils/dist $APP_PATH/packages/answer-utils/dist
+COPY --from=build $APP_PATH/packages/shared-types-enums/package.json $APP_PATH/packages/shared-types-enums/package.json
+COPY --from=build $APP_PATH/packages/shared-types-enums/dist $APP_PATH/packages/shared-types-enums/dist
 
 COPY --from=build $APP_PATH/packages/server/dist $APP_PATH/packages/server/dist
 COPY --from=build $APP_PATH/packages/server/resources $APP_PATH/packages/server/resources

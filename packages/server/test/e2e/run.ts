@@ -6,6 +6,7 @@ import { build as buildHealth } from './health.e2e.test'
 import { runSuites } from './helpers/runner'
 import { waitForReady } from './helpers/wait'
 import { build as buildInputValidation } from './input-validation.e2e.test'
+import { build as buildNavigation } from './navigation.e2e.test'
 import { build as buildPermissionMatrix } from './permission-matrix.e2e.test'
 import { build as buildRateLimit } from './rate-limit.e2e.test'
 import { build as buildStatefulEdges } from './stateful-edges.e2e.test'
@@ -41,6 +42,7 @@ async function main() {
     buildAuth(baseUrl),
     buildCatalog(baseUrl),
     buildInputValidation(baseUrl),
+    buildNavigation(baseUrl),
     buildAuthFlows(baseUrl),
     buildStatefulEdges(baseUrl),
     buildTeamFlow(baseUrl),

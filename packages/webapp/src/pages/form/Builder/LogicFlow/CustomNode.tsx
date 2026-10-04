@@ -1,13 +1,16 @@
+import { flattenFieldsWithGroups } from '@heyform-inc/form-renderer'
 import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
-import { Handle, Node, Position } from 'react-flow-renderer'
+import { Connection, Handle, Node, Position } from 'react-flow-renderer'
 
+import { isValidNextFieldId } from '@heyform-inc/answer-utils'
 import { htmlUtils } from '@heyform-inc/answer-utils'
 
 import { FormFieldType } from '@/types'
 
 import { QuestionIcon } from '../LeftSidebar/QuestionList'
+import { useStoreContext } from '../store'
 
 interface CustomNodeProps extends Node {
   data: {
@@ -17,9 +20,21 @@ interface CustomNodeProps extends Node {
   }
 }
 
-const CustomNodeComponent: FC<CustomNodeProps> = ({
-  data: { field, isFirstField, isLastField }
-}) => {
+const CustomNodeComponent: FC<CustomNodeProps> = ({ data: { field, isFirstField } }) => {
+  const { state } = useStoreContext()
+
+  function isValidConnection(connection: Connection) {
+    return !!(
+      connection.source &&
+      connection.target &&
+      isValidNextFieldId(
+        flattenFieldsWithGroups(state.fields),
+        connection.source,
+        connection.target
+      )
+    )
+  }
+
   const TargetHandle = useMemo(() => {
     if (isFirstField || field.kind === FieldKindEnum.WELCOME) {
       return null
@@ -29,14 +44,14 @@ const CustomNodeComponent: FC<CustomNodeProps> = ({
       <Handle
         type="target"
         position={Position.Left}
-        onConnect={params => console.log('handle onConnect', params)}
         isConnectable={true}
+        isValidConnection={isValidConnection}
       />
     )
-  }, [field.kind])
+  }, [field.kind, isFirstField, state.fields])
 
   const SourceHandle = useMemo(() => {
-    if (isLastField || field.kind === FieldKindEnum.THANK_YOU) {
+    if (field.kind === FieldKindEnum.THANK_YOU) {
       return null
     }
 
@@ -44,11 +59,11 @@ const CustomNodeComponent: FC<CustomNodeProps> = ({
       <Handle
         type="source"
         position={Position.Right}
-        onConnect={params => console.log('handle onConnect', params)}
-        isConnectable={true}
+        isConnectable={![FieldKindEnum.WELCOME, FieldKindEnum.GROUP].includes(field.kind)}
+        isValidConnection={isValidConnection}
       />
     )
-  }, [field.kind])
+  }, [field.kind, state.fields])
 
   return (
     <div className="flow-custom-node">

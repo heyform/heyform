@@ -1500,6 +1500,13 @@
           "assignment": "Assign (=)",
           "navigate": "Jump to",
           "calculate": "Calculate"
+        },
+        "nextQuestion": {
+          "label": "Next question",
+          "formOrder": "Next in form order",
+          "untitled": "Untitled question",
+          "description": "Used when no conditional jump matches. Choose “Next in form order” to restore the normal sequence.",
+          "help": "Drag between question handles to set the next question. Solid lines show default connections; dashed lines show conditional jumps."
         }
       },
       "preview": {

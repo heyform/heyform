@@ -22,6 +22,7 @@ import PreviewModal from './PreviewModal'
 import BuilderRightSidebar from './RightSidebar'
 import VariableModal from './VariableModal'
 import { IState, StoreContext, storeReducer } from './store'
+import BuilderSync from './Sync'
 
 interface IBuilderProps {
   form: FormType
@@ -50,6 +51,7 @@ const Builder: FC<IBuilderProps> = ({ form }) => {
 
   return (
     <StoreContext.Provider value={store}>
+      <BuilderSync />
       <div className="bg-background flex h-screen flex-col">
         <BuilderNavBar />
 

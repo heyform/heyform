@@ -1,4 +1,7 @@
-import { htmlUtils } from '@heyform-inc/answer-utils'
+import { FormField } from '@heyform-inc/shared-types-enums'
+import { BadRequestException } from '@nestjs/common'
+
+import { flattenFields, htmlUtils, isValidNextFieldId } from '@heyform-inc/answer-utils'
 
 const ALLOWED_BLOCK_TAGS = ['div', 'h1', 'h2', 'h3', 'p', 'br']
 const ALLOWED_TAGS = [
@@ -150,6 +153,22 @@ function sanitizeField(field: Record<string, any>): Record<string, any> {
 
 export function sanitizeFormDrafts(drafts: any[]): any[] {
   return drafts.map(sanitizeField)
+}
+
+export function assertValidFormNavigation(drafts: FormField[]): void {
+  const fields = flattenFields(drafts, true)
+
+  for (const field of fields) {
+    if (
+      field.nextFieldId != null &&
+      (typeof field.nextFieldId !== 'string' ||
+        !isValidNextFieldId(fields, field.id, field.nextFieldId))
+    ) {
+      throw new BadRequestException(
+        'The next question must be a later question or ending in this form'
+      )
+    }
+  }
 }
 
 export function isSafeCustomCSS(value?: string): boolean {

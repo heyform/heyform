@@ -83,6 +83,9 @@ jobs:
       - name: Run server unit tests
         run: pnpm --filter ./packages/server test:unit
 
+      - name: Run shared answer and navigation tests
+        run: pnpm --filter ./packages/answer-utils exec vitest run
+
       - name: Build server
         run: pnpm --filter ./packages/server build
 
