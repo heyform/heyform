@@ -20,9 +20,9 @@ import LogicModal from './LogicModal'
 import BuilderNavBar from './NavBar'
 import PreviewModal from './PreviewModal'
 import BuilderRightSidebar from './RightSidebar'
+import BuilderSync from './Sync'
 import VariableModal from './VariableModal'
 import { IState, StoreContext, storeReducer } from './store'
-import BuilderSync from './Sync'
 
 interface IBuilderProps {
   form: FormType
