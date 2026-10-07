@@ -1148,7 +1148,7 @@
     @apply pointer-events-none #{!important};
 
     &.connectable {
-      @apply cursor-default;
+      @apply cursor-crosshair pointer-events-auto #{!important};
     }
   }
 }

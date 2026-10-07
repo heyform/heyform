@@ -5,7 +5,7 @@ import { FormSchemasType, UpdateFormSchemasInput } from '@graphql'
 import { timestamp } from '@heyform-inc/utils'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
-import { sanitizeFormDrafts } from '@utils'
+import { assertValidFormNavigation, sanitizeFormDrafts } from '@utils'
 
 @Resolver()
 @Auth()
@@ -26,6 +26,7 @@ export class UpdateFormSchemasResolver {
     }
 
     const drafts = sanitizeFormDrafts(input.drafts)
+    assertValidFormNavigation(drafts)
 
     const updates = {
       _drafts: JSON.stringify(drafts),

@@ -1,6 +1,97 @@
+import { FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
 import * as assert from 'assert'
 
-import { isSafeCSSValue, isSafeCustomCSS, sanitizeFormDrafts } from '../src/utils/form-schema'
+import {
+  assertValidFormNavigation,
+  isSafeCSSValue,
+  isSafeCustomCSS,
+  sanitizeFormDrafts
+} from '../src/utils/form-schema'
+
+function testDefaultNavigationValidation() {
+  const fields: FormField[] = [
+    { id: 'q1', kind: FieldKindEnum.SHORT_TEXT, nextFieldId: 'q3' },
+    { id: 'q2', kind: FieldKindEnum.SHORT_TEXT },
+    { id: 'q3', kind: FieldKindEnum.SHORT_TEXT, nextFieldId: 'end' },
+    { id: 'end', kind: FieldKindEnum.THANK_YOU }
+  ]
+
+  assert.doesNotThrow(() => assertValidFormNavigation(fields))
+  assert.strictEqual(sanitizeFormDrafts(fields)[0].nextFieldId, 'q3')
+
+  assert.throws(() => assertValidFormNavigation([...fields, fields[0]]), /IDs must be unique/)
+  assert.throws(
+    () =>
+      assertValidFormNavigation([
+        ...fields,
+        { id: 'group', kind: FieldKindEnum.GROUP, properties: { fields: [fields[0]] } }
+      ]),
+    /IDs must be unique/
+  )
+  assert.throws(
+    () =>
+      assertValidFormNavigation([
+        {
+          id: 'outer',
+          kind: FieldKindEnum.GROUP,
+          properties: {
+            fields: [
+              {
+                id: 'inner',
+                kind: FieldKindEnum.GROUP,
+                properties: {
+                  fields: [{ id: 'child', kind: FieldKindEnum.SHORT_TEXT, nextFieldId: 'missing' }]
+                }
+              }
+            ]
+          }
+        }
+      ]),
+    /Nested question groups/
+  )
+
+  for (const nextFieldId of ['missing', 'q1', '']) {
+    assert.throws(() =>
+      assertValidFormNavigation([{ ...fields[0], nextFieldId }, ...fields.slice(1)])
+    )
+  }
+
+  assert.throws(() =>
+    assertValidFormNavigation([
+      ...fields.slice(0, 2),
+      { ...fields[2], nextFieldId: 'q1' },
+      fields[3]
+    ])
+  )
+
+  assert.doesNotThrow(() =>
+    assertValidFormNavigation([
+      { id: 'group', kind: FieldKindEnum.GROUP, properties: { fields: [fields[0]] } },
+      ...fields.slice(1)
+    ])
+  )
+
+  // Forms without explicit destinations keep saving as they did before.
+  const linear = fields.map(field => ({ ...field, nextFieldId: undefined }))
+  assert.doesNotThrow(() => assertValidFormNavigation([...linear, linear[0]]))
+  assert.doesNotThrow(() =>
+    assertValidFormNavigation([
+      {
+        id: 'outer',
+        kind: FieldKindEnum.GROUP,
+        properties: {
+          fields: [
+            {
+              id: 'inner',
+              kind: FieldKindEnum.GROUP,
+              properties: { fields: [{ id: 'child', kind: FieldKindEnum.SHORT_TEXT }] }
+            }
+          ]
+        }
+      }
+    ])
+  )
+}
 
 function testSanitizesDraftRichText() {
   const drafts = sanitizeFormDrafts([
@@ -149,6 +240,7 @@ function testCssValueRejectsRuleBreakingCharacters() {
 }
 
 function run() {
+  testDefaultNavigationValidation()
   testSanitizesDraftRichText()
   testSanitizesNestedGroupDrafts()
   testDropsUnsafeHrefProtocols()

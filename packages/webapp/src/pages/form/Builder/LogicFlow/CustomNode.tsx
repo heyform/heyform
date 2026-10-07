@@ -1,7 +1,7 @@
 import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import type { FC } from 'react'
 import { memo, useMemo } from 'react'
-import { Handle, Node, Position } from 'react-flow-renderer'
+import { Connection, Handle, Node, Position } from 'react-flow-renderer'
 
 import { htmlUtils } from '@heyform-inc/answer-utils'
 
@@ -14,11 +14,12 @@ interface CustomNodeProps extends Node {
     field: FormFieldType
     isFirstField: boolean
     isLastField: boolean
+    isValidConnection: (connection: Connection) => boolean
   }
 }
 
 const CustomNodeComponent: FC<CustomNodeProps> = ({
-  data: { field, isFirstField, isLastField }
+  data: { field, isFirstField, isValidConnection }
 }) => {
   const TargetHandle = useMemo(() => {
     if (isFirstField || field.kind === FieldKindEnum.WELCOME) {
@@ -29,14 +30,14 @@ const CustomNodeComponent: FC<CustomNodeProps> = ({
       <Handle
         type="target"
         position={Position.Left}
-        onConnect={params => console.log('handle onConnect', params)}
         isConnectable={true}
+        isValidConnection={isValidConnection}
       />
     )
-  }, [field.kind])
+  }, [field.kind, isFirstField, isValidConnection])
 
   const SourceHandle = useMemo(() => {
-    if (isLastField || field.kind === FieldKindEnum.THANK_YOU) {
+    if (field.kind === FieldKindEnum.THANK_YOU) {
       return null
     }
 
@@ -44,11 +45,11 @@ const CustomNodeComponent: FC<CustomNodeProps> = ({
       <Handle
         type="source"
         position={Position.Right}
-        onConnect={params => console.log('handle onConnect', params)}
-        isConnectable={true}
+        isConnectable={![FieldKindEnum.WELCOME, FieldKindEnum.GROUP].includes(field.kind)}
+        isValidConnection={isValidConnection}
       />
     )
-  }, [field.kind])
+  }, [field.kind, isValidConnection])
 
   return (
     <div className="flow-custom-node">

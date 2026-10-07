@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:form": "vite build --config vite.form.config.mts",
+    "test:unit": "vitest run --config vitest.config.mts",
     "type-check": "tsc --noEmit"
   },
   "engines": {
@@ -97,6 +98,7 @@
     "vite": "^5.4.21",
     "vite-bundle-analyzer": "^0.12.1",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-plugin-webfont-dl": "^3.9.4"
+    "vite-plugin-webfont-dl": "^3.9.4",
+    "vitest": "^1.6.0"
   }
 }

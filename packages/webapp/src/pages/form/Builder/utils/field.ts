@@ -7,12 +7,32 @@ import {
   QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 
-import { htmlUtils } from '@heyform-inc/answer-utils'
+import { createFieldNavigation, flattenFields, htmlUtils } from '@heyform-inc/answer-utils'
 import { clone, helper, nanoid } from '@heyform-inc/utils'
 
 import { FormFieldType } from '@/types'
 
 import { getValidLogics } from './logic'
+
+export function removeInvalidNextFieldIds(rawFields: FormFieldType[]): FormFieldType[] {
+  const fields = clone(rawFields)
+  const navigation = createFieldNavigation(flattenFields(fields, true))
+
+  function clean(list: FormFieldType[]) {
+    list.forEach(field => {
+      if (field.nextFieldId && !navigation.isValidNextFieldId(field.id, field.nextFieldId)) {
+        delete field.nextFieldId
+      }
+
+      if (field.properties?.fields) {
+        clean(field.properties.fields)
+      }
+    })
+  }
+
+  clean(fields)
+  return fields
+}
 
 export function serializeFields(rawFields: FormFieldType[]) {
   let questions: Partial<FormFieldType>[] = []
@@ -282,6 +302,7 @@ export function getFilteredFields(fields?: FormFieldType[]) {
     for (const row of fields!) {
       const field: FormFieldType = {
         id: row.id,
+        nextFieldId: row.nextFieldId,
         kind: row.kind,
         title: htmlUtils.parse(row.title! as string),
         description: htmlUtils.parse(row.description! as string),

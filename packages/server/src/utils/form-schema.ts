@@ -1,4 +1,7 @@
-import { htmlUtils } from '@heyform-inc/answer-utils'
+import { FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
+import { BadRequestException } from '@nestjs/common'
+
+import { createFieldNavigation, flattenFields, htmlUtils } from '@heyform-inc/answer-utils'
 
 const ALLOWED_BLOCK_TAGS = ['div', 'h1', 'h2', 'h3', 'p', 'br']
 const ALLOWED_TAGS = [
@@ -150,6 +153,47 @@ function sanitizeField(field: Record<string, any>): Record<string, any> {
 
 export function sanitizeFormDrafts(drafts: any[]): any[] {
   return drafts.map(sanitizeField)
+}
+
+function hasNextFieldIds(fields: FormField[] = []): boolean {
+  return fields.some(
+    field => field.nextFieldId != null || hasNextFieldIds(field.properties?.fields)
+  )
+}
+
+export function assertValidFormNavigation(drafts: FormField[]): void {
+  // Forms without explicit destinations navigate in form order as before, so
+  // leave their existing structure alone.
+  if (!hasNextFieldIds(drafts)) {
+    return
+  }
+
+  // The renderer supports one group level. Reject unsupported nesting instead
+  // of accepting destinations that neither renderer nor submission can traverse.
+  for (const field of drafts) {
+    if (field.properties?.fields?.some(child => child.kind === FieldKindEnum.GROUP)) {
+      throw new BadRequestException('Nested question groups are not supported')
+    }
+  }
+  const fields = flattenFields(drafts, true)
+  const navigation = createFieldNavigation(fields)
+  const ids = new Set<string>()
+
+  for (const field of fields) {
+    if (ids.has(field.id)) {
+      throw new BadRequestException('Field IDs must be unique')
+    }
+    ids.add(field.id)
+    if (
+      field.nextFieldId != null &&
+      (typeof field.nextFieldId !== 'string' ||
+        !navigation.isValidNextFieldId(field.id, field.nextFieldId))
+    ) {
+      throw new BadRequestException(
+        'The next question must be a later question or ending in this form'
+      )
+    }
+  }
 }
 
 export function isSafeCustomCSS(value?: string): boolean {

@@ -1,3 +1,4 @@
+import { flattenFieldsWithGroups } from '@heyform-inc/form-renderer'
 import {
   FieldKindEnum,
   HiddenField,
@@ -6,8 +7,9 @@ import {
   type Variable
 } from '@heyform-inc/shared-types-enums'
 
-import { getValidLogics, serializeFields } from '../utils'
+import { getValidLogics, removeInvalidNextFieldIds, serializeFields } from '../utils'
 import { FormService } from '@/services'
+import { isValidNextFieldId } from '@heyform-inc/answer-utils'
 import { htmlUtils } from '@heyform-inc/answer-utils'
 import { clone, helper, nanoid } from '@heyform-inc/utils'
 
@@ -27,6 +29,7 @@ import {
   SetActiveDesignTabNameAction,
   SetActiveTabNameAction,
   SetFieldsAction,
+  SetNextFieldAction,
   SetSyncingAction,
   UpdateFieldAction,
   UpdateNestFieldsAction,
@@ -59,7 +62,7 @@ export function setFields(
   state: IState,
   { fields: rawFields }: SetFieldsAction['payload']
 ): IState {
-  const { fields, questions } = serializeFields(rawFields)
+  const { fields, questions } = serializeFields(removeInvalidNextFieldIds(rawFields))
 
   return {
     ...state,
@@ -182,11 +185,17 @@ export function duplicateField(
   field = clone(field)
 
   if (field.kind === FieldKindEnum.GROUP) {
+    const nestedFields = field.properties?.fields || []
+    const copiedIds = new Map(nestedFields.map(f => [f.id, nanoid(12)]))
+
     field.properties = {
       ...field.properties,
-      fields: (field.properties?.fields || []).map(f => ({
+      fields: nestedFields.map(f => ({
         ...f,
-        id: nanoid(12)
+        id: copiedIds.get(f.id)!,
+        ...(f.nextFieldId && {
+          nextFieldId: copiedIds.get(f.nextFieldId) || f.nextFieldId
+        })
       }))
     }
   }
@@ -301,6 +310,29 @@ export function updateField(state: IState, { id, updates }: UpdateFieldAction['p
     id,
     parentId
   })
+}
+
+export function setNextField(
+  state: IState,
+  { fieldId, nextFieldId }: SetNextFieldAction['payload']
+): IState {
+  const fields = flattenFieldsWithGroups(state.fields)
+  const field = fields.find(f => f.id === fieldId)
+
+  if (!field || (nextFieldId && !isValidNextFieldId(fields, fieldId, nextFieldId))) {
+    return state
+  }
+
+  if ((field.nextFieldId || undefined) === (nextFieldId || undefined)) {
+    return state
+  }
+
+  const newState = updateField(
+    { ...state, parentId: field.parent?.id },
+    { id: fieldId, updates: { nextFieldId } }
+  )
+
+  return selectField(newState, { id: state.currentId, parentId: state.parentId })
 }
 
 export function deleteField(state: IState, { id, parentId }: DeleteFieldAction['payload']): IState {

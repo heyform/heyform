@@ -8,15 +8,16 @@ import {
 import * as dagre from 'dagre'
 import { Edge, Node } from 'react-flow-renderer'
 
-import { FormFieldType } from '@/types'
+import { createFieldNavigation } from '@heyform-inc/answer-utils'
 
-const dagreGraph = new dagre.graphlib.Graph()
-dagreGraph.setDefaultEdgeLabel(() => ({}))
+import { FormFieldType } from '@/types'
 
 const nodeWidth = 224
 const nodeHeight = 112
 
 export function getLayoutedElements(nodes: Node[], edges: Edge[], direction = 'LR') {
+  const dagreGraph = new dagre.graphlib.Graph()
+  dagreGraph.setDefaultEdgeLabel(() => ({}))
   dagreGraph.setGraph({
     rankdir: direction
   })
@@ -70,6 +71,7 @@ export function fieldLogicToNodesEdges(
   const nodes: Node[] = []
   const edges: Edge[] = []
   const fields = flattenFieldsWithGroups(rawFields)
+  const navigation = createFieldNavigation(fields)
 
   fields.forEach((field, index) => {
     nodes.push({
@@ -85,18 +87,20 @@ export function fieldLogicToNodesEdges(
         y: 0
       },
       connectable: true,
-      selectable: !UNSELECTABLE_FIELD_KINDS.includes(field.kind)
+      selectable:
+        field.kind === FieldKindEnum.STATEMENT || !UNSELECTABLE_FIELD_KINDS.includes(field.kind)
     })
 
-    if (index < fields.length - 1) {
-      const nextField = fields[index + 1]
+    const targetId = navigation.getNextFieldId(field.id)
+
+    if (targetId) {
       const fieldId = field.id
-      const targetId = nextField.id
 
       edges.push({
-        id: `${fieldId}-${targetId}`,
+        id: `next-${fieldId}`,
         source: fieldId,
         target: targetId,
+        data: { kind: 'next' },
         style: {
           stroke: '#1f2937'
         },
@@ -112,13 +116,18 @@ export function fieldLogicToNodesEdges(
       if (payload.action.kind === ActionEnum.NAVIGATE) {
         const targetId = payload.action.fieldId
 
+        if (!fields.some(f => f.id === fieldId) || !fields.some(f => f.id === targetId)) {
+          return
+        }
+
         edges.push({
-          type: 'customEdge',
           id: payload.id,
           source: fieldId,
           target: targetId,
+          data: { kind: 'conditional' },
           style: {
-            stroke: '#1f2937'
+            stroke: '#1f2937',
+            strokeDasharray: '4 4'
           },
           markerEnd: 'edge-marker-arrow'
         })
