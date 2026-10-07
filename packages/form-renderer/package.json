@@ -48,8 +48,8 @@
     "store2": "^2.13.2"
   },
   "dependencies": {
-    "@heyform-inc/answer-utils": "^1.2.0",
-    "@heyform-inc/shared-types-enums": "^1.3.0",
+    "@heyform-inc/answer-utils": "workspace:*",
+    "@heyform-inc/shared-types-enums": "workspace:*",
     "@heyform-inc/utils": "^1.2.2",
     "@popperjs/core": "^2.11.8",
     "@radix-ui/react-tooltip": "^1.1.3",

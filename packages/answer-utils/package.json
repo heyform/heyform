@@ -29,7 +29,7 @@
     "validator": "^13.7.0"
   },
   "dependencies": {
-    "@heyform-inc/shared-types-enums": "^1.1.8",
+    "@heyform-inc/shared-types-enums": "workspace:*",
     "@heyform-inc/utils": "^1.2.0",
     "big.js": "^6.2.1",
     "dayjs": "^1.11.3",

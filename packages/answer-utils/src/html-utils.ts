@@ -59,7 +59,7 @@ function escapeText(value: unknown): string {
 
 function escapeAttribute(value: unknown): string {
   return String(value)
-    .replace(/&/g, '&amp;')
+    .replace(/&(?!(?:amp|quot|lt|gt);)/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')

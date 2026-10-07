@@ -14,9 +14,9 @@
   "dependencies": {
     "@apollo/client": "^3.11.8",
     "@fortaine/fetch-event-source": "^3.0.6",
-    "@heyform-inc/answer-utils": "^1.2.0",
+    "@heyform-inc/answer-utils": "workspace:*",
     "@heyform-inc/form-renderer": "workspace:*",
-    "@heyform-inc/shared-types-enums": "^1.3.0",
+    "@heyform-inc/shared-types-enums": "workspace:*",
     "@heyform-inc/utils": "^1.2.2",
     "@heyooo-inc/react-router": "^0.0.5",
     "@popperjs/core": "^2.11.8",
