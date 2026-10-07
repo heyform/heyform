@@ -45,7 +45,7 @@ export const ConnectionLine: FC<ConnectionLineComponentProps> = ({
       <path
         className="animated"
         fill="none"
-        stroke="#222"
+        stroke="rgb(var(--hf-secondary))"
         strokeWidth={2}
         d={path}
         markerEnd="url(#edge-marker-arrow)"

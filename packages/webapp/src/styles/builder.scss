@@ -1225,7 +1225,7 @@
 }
 
 .flow-custom-node {
-  @apply h-28 w-56 rounded-lg border border-accent-light bg-foreground p-4 text-sm text-primary transition-all;
+  @apply h-28 w-56 rounded-lg border border-accent-light bg-foreground p-4 text-sm text-primary transition-all dark:border-white/10 dark:bg-zinc-800;
   box-shadow: rgba(0, 0, 0, 0.08) 0 0.125rem 0.25rem,
   rgba(0, 0, 0, 0.06) 0 0.125rem 0.75rem;
 }
@@ -1239,7 +1239,7 @@
   }
 
   &.selected {
-    @apply ring-2 ring-gray-700;
+    @apply ring-2 ring-gray-700 dark:ring-zinc-400;
   }
 }
 

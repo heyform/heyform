@@ -98,7 +98,7 @@ export function fieldLogicToNodesEdges(
         source: fieldId,
         target: targetId,
         style: {
-          stroke: '#1f2937'
+          stroke: 'rgb(var(--hf-secondary))'
         },
         markerEnd: 'edge-marker-arrow'
       })
@@ -118,7 +118,7 @@ export function fieldLogicToNodesEdges(
           source: fieldId,
           target: targetId,
           style: {
-            stroke: '#1f2937'
+            stroke: 'rgb(var(--hf-secondary))'
           },
           markerEnd: 'edge-marker-arrow'
         })
