@@ -446,4 +446,6 @@ export interface LogicPayload {
 export interface Logic {
   fieldId: string
   payloads: LogicPayload[]
+  // Choice questions only: send every answer to its own question via one "is" jump each.
+  branchByAnswer?: boolean
 }

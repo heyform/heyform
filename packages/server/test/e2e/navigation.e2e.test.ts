@@ -173,5 +173,48 @@ export function build(baseUrl: string) {
     assert.ok(after.drafts.every((field: any) => field.nextFieldId == null))
   })
 
+  test('a branching choice question cannot be published until every option has a destination', async () => {
+    const detail = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    const choiceDrafts = drafts.map(field =>
+      field.id === 'q1'
+        ? {
+            ...field,
+            kind: 'multiple_choice',
+            nextFieldId: undefined,
+            properties: {
+              choices: [
+                { id: 'motion', label: 'Motion Designer' },
+                { id: 'producer', label: 'Producer' }
+              ]
+            }
+          }
+        : field
+    )
+    const jump = (choiceId: string, fieldId: string) => ({
+      id: choiceId,
+      condition: { comparison: 'is', expected: choiceId },
+      action: { kind: 'navigate', fieldId }
+    })
+    const publish = async (payloads: any[], branchByAnswer?: boolean) => {
+      await owner.gqlOk('updateFormLogics', UPDATE_FORM_LOGICS_GQL, {
+        input: { formId, logics: [{ fieldId: 'q1', payloads, branchByAnswer }] }
+      })
+      return owner.gql('publishForm', PUBLISH_FORM_GQL, {
+        input: { formId, version: detail.version, drafts: choiceDrafts }
+      })
+    }
+
+    // An ordinary jump rule doesn't opt the question into branching.
+    const ordinary = await publish([jump('motion', 'q2')])
+    assert.ok(!ordinary.errors?.length, JSON.stringify(ordinary.errors))
+
+    const partial = await publish([jump('motion', 'q2')], true)
+    assert.ok(partial.errors.length > 0)
+    assert.match(partial.errors[0].message, /every option needs a destination/i)
+
+    const complete = await publish([jump('motion', 'q2'), jump('producer', 'q4')], true)
+    assert.ok(!complete.errors?.length, JSON.stringify(complete.errors))
+  })
+
   return suite
 }

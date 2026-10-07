@@ -52,9 +52,12 @@ function LogicBulkEditComponent() {
       const payloads = values[fieldId]
 
       if (helper.isValidArray(payloads)) {
+        const branchByAnswer = state.logics?.find(l => l.fieldId === fieldId)?.branchByAnswer
+
         logics.push({
           fieldId,
-          payloads
+          payloads,
+          ...(branchByAnswer && { branchByAnswer })
         })
       }
     })

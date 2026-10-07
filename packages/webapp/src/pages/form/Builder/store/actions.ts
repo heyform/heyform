@@ -9,8 +9,7 @@ import {
 
 import { getValidLogics, removeInvalidNextFieldIds, serializeFields } from '../utils'
 import { FormService } from '@/services'
-import { isValidNextFieldId } from '@heyform-inc/answer-utils'
-import { htmlUtils } from '@heyform-inc/answer-utils'
+import { htmlUtils, isValidNextFieldId } from '@heyform-inc/answer-utils'
 import { clone, helper, nanoid } from '@heyform-inc/utils'
 
 import { FormFieldType } from '@/types'

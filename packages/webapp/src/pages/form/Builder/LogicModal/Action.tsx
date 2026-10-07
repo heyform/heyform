@@ -25,6 +25,7 @@ interface ActionProps {
   fields: FormFieldType[]
   currentField: FormFieldType
   variables?: Variable[]
+  actionKinds?: ActionEnum[]
   value?: LogicAction
   onChange?: (value: LogicAction) => void
 }
@@ -53,6 +54,7 @@ export default function Action({
   fields: rawFields,
   currentField,
   variables = [],
+  actionKinds,
   value: rawValue,
   onChange
 }: ActionProps) {
@@ -69,6 +71,12 @@ export default function Action({
 
     return tmpFields.slice(index + 1)
   }, [rawFields, currentField])
+
+  const actions = useMemo(
+    () =>
+      actionKinds ? ACTIONS.filter(a => actionKinds.includes(a.value as ActionEnum)) : ACTIONS,
+    [actionKinds]
+  )
 
   function handleKindChange(kind: any) {
     if (kind === ActionEnum.CALCULATE) {
@@ -140,7 +148,7 @@ export default function Action({
 
       <Select
         className="w-auto flex-1"
-        options={ACTIONS}
+        options={actions}
         value={value.kind}
         multiLanguage
         onChange={handleKindChange}

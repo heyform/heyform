@@ -10,7 +10,8 @@ export default defineConfig({
     }
   },
   test: {
-    include: ['test/duplicate-field.test.ts'],
+    // The other files in test/ are standalone assert scripts, not Vitest suites.
+    include: ['test/duplicate-field.test.ts', 'test/choice-branching.test.ts'],
     poolOptions: {
       threads: {
         singleThread: true

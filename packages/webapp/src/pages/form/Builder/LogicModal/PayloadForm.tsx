@@ -3,20 +3,28 @@ import {
   Choice,
   ComparisonEnum,
   FieldKindEnum,
+  Logic,
   LogicAction,
   LogicCondition,
   LogicPayload,
+  UNSELECTABLE_FIELD_KINDS,
   Variable
 } from '@heyform-inc/shared-types-enums'
-import { UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
-import { type FC, type ReactNode, useEffect } from 'react'
+import { useWatch } from 'rc-field-form'
+import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { validatePayload } from '@heyform-inc/answer-utils'
+import {
+  canBranchByAnswer,
+  countUnmappedJumps,
+  getChoiceDestinations,
+  getPayloadFormValues
+} from '../utils'
+import { htmlUtils, validatePayload } from '@heyform-inc/answer-utils'
 import { nanoid } from '@heyform-inc/utils'
 
-import { Button, Form, Tooltip } from '@/components'
+import { Button, Form, Switch, Tooltip } from '@/components'
 import { FormFieldType } from '@/types'
 
 import Action from './Action'
@@ -28,7 +36,7 @@ interface PayloadFormProps {
   fields: FormFieldType[]
   currentField: FormFieldType
   variables?: Variable[]
-  payloads: LogicPayload[]
+  logic?: Logic
   onFinish?: (values: any) => void
 }
 
@@ -36,6 +44,7 @@ interface PayloadItemProps {
   fields: FormFieldType[]
   variables?: Variable[]
   currentField?: FormFieldType
+  actionKinds?: ActionEnum[]
   value?: LogicPayload
   onDelete?: () => void
   onChange?: (value: LogicPayload) => void
@@ -47,16 +56,24 @@ const validator = async (rule: any, value: any) => {
   }
 }
 
+// Branching questions jump via per-answer destinations, so their rule list only holds calculations.
+const BRANCHING_ACTION_KINDS = [ActionEnum.CALCULATE]
+
+function isNavigatePayload(payload: LogicPayload): boolean {
+  return payload.action?.kind === ActionEnum.NAVIGATE
+}
+
 function getPayload(
   kind?: FieldKindEnum,
   choices: Choice[] = [],
-  allowMultiple = false
+  allowMultiple = false,
+  actionKind = ActionEnum.NAVIGATE
 ): LogicPayload {
   const payload: any = {
     id: nanoid(12),
     condition: {},
     action: {
-      kind: ActionEnum.NAVIGATE
+      kind: actionKind
     }
   }
 
@@ -100,6 +117,7 @@ export const PayloadItem: FC<PayloadItemProps> = ({
   fields,
   variables = [],
   currentField,
+  actionKinds,
   value,
   onDelete,
   onChange
@@ -131,6 +149,7 @@ export const PayloadItem: FC<PayloadItemProps> = ({
             fields={fields}
             currentField={currentField!}
             variables={variables}
+            actionKinds={actionKinds}
             value={value?.action}
             onChange={handleActionChange}
           />
@@ -163,6 +182,7 @@ export const PayloadList: FC<PayloadListProps> = ({
   fields,
   variables = [],
   currentField,
+  actionKinds,
   children
 }) => {
   const { t } = useTranslation()
@@ -175,7 +195,8 @@ export const PayloadList: FC<PayloadListProps> = ({
             getPayload(
               currentField?.kind,
               currentField?.properties?.choices,
-              currentField?.properties?.allowMultiple
+              currentField?.properties?.allowMultiple,
+              actionKinds?.[0]
             )
           )
         }
@@ -210,6 +231,7 @@ export const PayloadList: FC<PayloadListProps> = ({
                             fields={fields}
                             currentField={currentField}
                             variables={variables}
+                            actionKinds={actionKinds}
                             onDelete={handleDelete}
                             onChange={onChange}
                           />
@@ -232,44 +254,181 @@ export const PayloadList: FC<PayloadListProps> = ({
   )
 }
 
-export const PayloadForm: FC<PayloadFormProps> = ({
-  form,
+interface ChoiceBranchingProps {
+  fields: FormFieldType[]
+  currentField: FormFieldType
+  isBranching: boolean
+  droppedRuleCount: number
+  onBranchingChange: (branching: boolean) => void
+}
+
+const ChoiceBranching: FC<ChoiceBranchingProps> = ({
   fields,
   currentField,
-  variables = [],
-  payloads,
-  onFinish
+  isBranching,
+  droppedRuleCount,
+  onBranchingChange
+}) => {
+  const { t } = useTranslation()
+  const isIncompatible = !!(
+    currentField.properties?.allowMultiple || currentField.properties?.allowOther
+  )
+
+  return (
+    <div className="mb-6 space-y-4">
+      <Form.Item
+        name="branching"
+        rules={[
+          {
+            validator: async (_, branching) => {
+              if (branching && isIncompatible) {
+                throw new Error(t('form.builder.logic.branching.incompatible'))
+              }
+            }
+          }
+        ]}
+      >
+        {({ value, onChange }) => (
+          <div className="flex items-start justify-between gap-x-4">
+            <div>
+              <div className="text-sm/6 font-medium">
+                {String(t('form.builder.logic.branching.label'))}
+              </div>
+              <p className="text-secondary text-sm">
+                {String(
+                  isIncompatible
+                    ? t('form.builder.logic.branching.incompatible')
+                    : t('form.builder.logic.branching.description')
+                )}
+              </p>
+            </div>
+            {/* An already-branching question can always be switched off. */}
+            <Switch
+              value={value}
+              disabled={isIncompatible && !value}
+              onChange={(checked: boolean) => {
+                onChange(checked)
+                onBranchingChange(checked)
+              }}
+            />
+          </div>
+        )}
+      </Form.Item>
+
+      {isBranching ? (
+        <div className="space-y-3">
+          {droppedRuleCount > 0 && (
+            <p className="text-error text-sm">
+              {String(t('form.builder.logic.branching.droppedRules', { count: droppedRuleCount }))}
+            </p>
+          )}
+          {(currentField.properties?.choices || []).map((choice, index) => (
+            <div key={choice.id} className="flex items-start gap-x-4">
+              <div className="w-1/3 truncate text-sm leading-9">
+                {htmlUtils.plain(choice.label) ||
+                  String(t('form.builder.logic.branching.untitledOption', { index: index + 1 }))}
+              </div>
+              <Form.Item
+                className="flex-1"
+                name={['destinations', choice.id]}
+                rules={[
+                  {
+                    required: true,
+                    message: t('form.builder.logic.branching.destinationRequired')
+                  }
+                ]}
+              >
+                <NextQuestionSelect
+                  fields={fields}
+                  currentField={currentField}
+                  emptyLabel={t('form.builder.logic.branching.destinationPlaceholder')}
+                />
+              </Form.Item>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <NextQuestionItem fields={fields} currentField={currentField} />
+      )}
+    </div>
+  )
+}
+
+const NextQuestionItem: FC<Pick<ChoiceBranchingProps, 'fields' | 'currentField'>> = ({
+  fields,
+  currentField
 }) => {
   const { t } = useTranslation()
 
-  useEffect(() => {
-    form.setFieldsValue({
-      payloads,
-      nextFieldId: currentField.nextFieldId || ''
-    })
-  }, [currentField, payloads])
-
   return (
-    <Form
-      initialValues={{
-        payloads,
-        nextFieldId: currentField.nextFieldId || ''
-      }}
-      form={form}
-      onFinish={onFinish}
-    >
+    <>
       <Form.Item name="nextFieldId" label={String(t('form.builder.logic.nextQuestion.label'))}>
         <NextQuestionSelect fields={fields} currentField={currentField} />
       </Form.Item>
       <p className="text-secondary mb-6 text-sm">
         {String(t('form.builder.logic.nextQuestion.description'))}
       </p>
+    </>
+  )
+}
+
+export const PayloadForm: FC<PayloadFormProps> = ({
+  form,
+  fields,
+  currentField,
+  variables = [],
+  logic,
+  onFinish
+}) => {
+  const initialValues = useMemo(
+    () => getPayloadFormValues(currentField, logic),
+    [currentField, logic]
+  )
+  const isChoiceField = canBranchByAnswer(currentField)
+  const isBranching = !!useWatch('branching', form)
+  // Jump rules taken out of the rule list while branching is on, restored if it's switched off.
+  const [jumps, setJumps] = useState<LogicPayload[]>([])
+
+  function handleBranchingChange(branching: boolean) {
+    const payloads: LogicPayload[] = form.getFieldValue('payloads') || []
+    const others = payloads.filter(p => !isNavigatePayload(p))
+
+    if (branching) {
+      const navigates = payloads.filter(isNavigatePayload)
+
+      setJumps(navigates)
+      form.setFieldsValue({ payloads: others })
+      form.setFields([{ name: 'destinations', value: getChoiceDestinations(navigates) }])
+    } else {
+      form.setFieldsValue({ payloads: [...jumps, ...others] })
+    }
+  }
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues)
+    setJumps(initialValues.branching ? (logic?.payloads || []).filter(isNavigatePayload) : [])
+  }, [initialValues])
+
+  return (
+    <Form initialValues={initialValues} form={form} onFinish={onFinish}>
+      {isChoiceField ? (
+        <ChoiceBranching
+          fields={fields}
+          currentField={currentField}
+          isBranching={isBranching}
+          droppedRuleCount={isBranching ? countUnmappedJumps(currentField, jumps) : 0}
+          onBranchingChange={handleBranchingChange}
+        />
+      ) : (
+        <NextQuestionItem fields={fields} currentField={currentField} />
+      )}
       {!UNSELECTABLE_FIELD_KINDS.includes(currentField.kind) && (
         <PayloadList
           name="payloads"
           fields={fields}
           currentField={currentField}
           variables={variables}
+          actionKinds={isBranching ? BRANCHING_ACTION_KINDS : undefined}
         />
       )}
     </Form>

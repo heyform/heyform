@@ -1,7 +1,14 @@
-import { FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
+import {
+  ActionEnum,
+  ComparisonEnum,
+  FieldKindEnum,
+  FormField,
+  Logic
+} from '@heyform-inc/shared-types-enums'
 import * as assert from 'assert'
 
 import {
+  assertValidChoiceBranching,
   assertValidFormNavigation,
   isSafeCSSValue,
   isSafeCustomCSS,
@@ -239,8 +246,80 @@ function testCssValueRejectsRuleBreakingCharacters() {
   }
 }
 
+function testChoiceBranchingValidation() {
+  const role: FormField = {
+    id: 'role',
+    title: 'Role',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    validations: { required: true },
+    properties: {
+      choices: [
+        { id: 'motion', label: 'Motion' },
+        { id: 'director', label: 'Director' }
+      ]
+    }
+  }
+  const fields: FormField[] = [
+    { id: 'group', kind: FieldKindEnum.GROUP, properties: { fields: [role] } },
+    { id: 'motion-q', kind: FieldKindEnum.SHORT_TEXT },
+    { id: 'director-q', kind: FieldKindEnum.SHORT_TEXT },
+    { id: 'end', kind: FieldKindEnum.THANK_YOU }
+  ]
+  const jump = (expected: string, fieldId: string) => ({
+    id: expected,
+    condition: { comparison: ComparisonEnum.IS, expected },
+    action: { kind: ActionEnum.NAVIGATE, fieldId }
+  })
+  const logics = [
+    {
+      fieldId: 'role',
+      branchByAnswer: true,
+      payloads: [jump('motion', 'motion-q'), jump('director', 'director-q')]
+    }
+  ] as Logic[]
+
+  assert.doesNotThrow(() => assertValidChoiceBranching(fields, logics))
+  assert.doesNotThrow(() => assertValidChoiceBranching(fields))
+  // Ordinary jump rules on a choice question don't opt it into branching.
+  assert.doesNotThrow(() =>
+    assertValidChoiceBranching(fields, [
+      { fieldId: 'role', payloads: [jump('motion', 'motion-q')] }
+    ] as Logic[])
+  )
+  assert.throws(
+    () =>
+      assertValidChoiceBranching(fields, [
+        { fieldId: 'role', branchByAnswer: true, payloads: [jump('motion', 'motion-q')] }
+      ] as Logic[]),
+    (error: any) =>
+      error.response?.error === 'invalid_choice_branching' &&
+      error.response?.fieldId === 'role' &&
+      /"Role" branches by answer/.test(error.message)
+  )
+  // Publish validates sanitized drafts, whose titles are rich-text schemas.
+  assert.throws(
+    () =>
+      assertValidChoiceBranching(sanitizeFormDrafts(fields), [
+        { fieldId: 'role', branchByAnswer: true, payloads: [jump('motion', 'motion-q')] }
+      ] as Logic[]),
+    (error: any) => /"Role" branches by answer/.test(error.message)
+  )
+  assert.throws(
+    () =>
+      assertValidChoiceBranching(
+        [
+          { ...fields[0], properties: { fields: [{ ...role, validations: {} }] } },
+          ...fields.slice(1)
+        ],
+        logics
+      ),
+    (error: any) => error.response?.code === 'not_required'
+  )
+}
+
 function run() {
   testDefaultNavigationValidation()
+  testChoiceBranchingValidation()
   testSanitizesDraftRichText()
   testSanitizesNestedGroupDrafts()
   testDropsUnsafeHrefProtocols()

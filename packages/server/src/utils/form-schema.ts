@@ -1,7 +1,12 @@
-import { FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
-import { BadRequestException } from '@nestjs/common'
+import { FieldKindEnum, FormField, Logic } from '@heyform-inc/shared-types-enums'
+import { BadRequestException, HttpStatus } from '@nestjs/common'
 
-import { createFieldNavigation, flattenFields, htmlUtils } from '@heyform-inc/answer-utils'
+import {
+  createFieldNavigation,
+  flattenFields,
+  getChoiceBranchingErrors,
+  htmlUtils
+} from '@heyform-inc/answer-utils'
 
 const ALLOWED_BLOCK_TAGS = ['div', 'h1', 'h2', 'h3', 'p', 'br']
 const ALLOWED_TAGS = [
@@ -193,6 +198,29 @@ export function assertValidFormNavigation(drafts: FormField[]): void {
         'The next question must be a later question or ending in this form'
       )
     }
+  }
+}
+
+// Drafts may be mid-edit, so this only runs when publishing.
+export function assertValidChoiceBranching(drafts: FormField[], logics?: Logic[]): void {
+  const fields = flattenFields(drafts, true)
+  const [error] = getChoiceBranchingErrors(fields, logics)
+
+  if (error) {
+    const field = fields.find(f => f.id === error.fieldId)
+    // Sanitized drafts store titles as rich-text schemas rather than HTML.
+    const html = Array.isArray(field?.title)
+      ? htmlUtils.serialize(field!.title)
+      : String(field?.title || '')
+    const title = htmlUtils.plain(html).trim() || error.fieldId
+
+    throw new BadRequestException({
+      statusCode: HttpStatus.BAD_REQUEST,
+      error: 'invalid_choice_branching',
+      message: `"${title}" branches by answer, so it must be required, single-select without "Other", and every option needs a destination`,
+      fieldId: error.fieldId,
+      code: error.code
+    })
   }
 }
 

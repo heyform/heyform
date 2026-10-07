@@ -662,6 +662,11 @@ class LogicInput {
 
   @Field(type => [LogicPayloadInput])
   payloads: LogicPayload[]
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  branchByAnswer?: boolean
 }
 
 @InputType()

@@ -10,10 +10,9 @@ import ReactFlow, {
   useNodesState,
   useReactFlow
 } from 'react-flow-renderer'
-import { useTranslation } from 'react-i18next'
 
 import { fieldLogicToNodesEdges } from '../utils'
-import { createFieldNavigation } from '@heyform-inc/answer-utils'
+import { createFieldNavigation, isChoiceBranchingField } from '@heyform-inc/answer-utils'
 
 import { useAppStore } from '@/store'
 
@@ -26,7 +25,6 @@ const nodeTypes = {
   customNode: CustomNode
 }
 export const Flow = () => {
-  const { t } = useTranslation()
   const { openModal } = useAppStore()
   const { state, dispatch } = useStoreContext()
   const flow = useReactFlow()
@@ -56,18 +54,32 @@ export const Flow = () => {
     }
   }
 
-  const navigation = useMemo(
-    () => createFieldNavigation(flattenFieldsWithGroups(state.fields)),
-    [state.fields]
+  const flattenedFields = useMemo(() => flattenFieldsWithGroups(state.fields), [state.fields])
+  const navigation = useMemo(() => createFieldNavigation(flattenedFields), [flattenedFields])
+  // Branching choice questions route every answer through the logic modal, so they have no default.
+  const branchingIds = useMemo(
+    () =>
+      new Set(
+        flattenedFields
+          .filter(f =>
+            isChoiceBranchingField(
+              f,
+              state.logics?.find(l => l.fieldId === f.id)
+            )
+          )
+          .map(f => f.id)
+      ),
+    [flattenedFields, state.logics]
   )
   const isValidConnection = useCallback(
     (connection: Connection) =>
       !!(
         connection.source &&
         connection.target &&
+        !branchingIds.has(connection.source) &&
         navigation.isValidNextFieldId(connection.source, connection.target)
       ),
-    [navigation]
+    [branchingIds, navigation]
   )
 
   function handleConnect(connection: Connection) {
@@ -111,9 +123,6 @@ export const Flow = () => {
       deleteKeyCode={null}
     >
       <Controls showInteractive={false} />
-      <div className="text-secondary bg-foreground border-accent-light absolute left-4 top-4 z-10 max-w-sm rounded-lg border p-3 text-xs shadow-sm">
-        {String(t('form.builder.logic.nextQuestion.help'))}
-      </div>
     </ReactFlow>
   )
 }

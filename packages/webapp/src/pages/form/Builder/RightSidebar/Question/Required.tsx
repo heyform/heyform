@@ -2,10 +2,22 @@ import { FieldKindEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-e
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Switch } from '@/components'
+import { isChoiceBranchingField } from '@heyform-inc/answer-utils'
+
+import { Switch, Tooltip } from '@/components'
 import { FormFieldType } from '@/types'
 
 import { useStoreContext } from '../../store'
+
+// Branching choice questions must stay required, single-select and without "Other".
+export function useIsChoiceBranching(field: FormFieldType) {
+  const { state } = useStoreContext()
+
+  return isChoiceBranchingField(
+    field,
+    state.logics?.find(l => l.fieldId === field.id)
+  )
+}
 
 export interface RequiredSettingsProps {
   field: FormFieldType
@@ -14,6 +26,7 @@ export interface RequiredSettingsProps {
 export default function RequiredSettings({ field }: RequiredSettingsProps) {
   const { t } = useTranslation()
   const { dispatch } = useStoreContext()
+  const isBranching = useIsChoiceBranching(field)
 
   const handleChange = useCallback(
     (required: boolean) => {
@@ -42,7 +55,16 @@ export default function RequiredSettings({ field }: RequiredSettingsProps) {
       <label className="text-sm/6" htmlFor="#">
         {t('form.builder.settings.required')}
       </label>
-      <Switch value={field.validations?.required} onChange={handleChange} />
+      {/* Only block switching it off, so older branching questions can still be fixed. */}
+      {isBranching && field.validations?.required ? (
+        <Tooltip label={String(t('form.builder.logic.branching.requiredLocked'))}>
+          <span>
+            <Switch value disabled />
+          </span>
+        </Tooltip>
+      ) : (
+        <Switch value={field.validations?.required} onChange={handleChange} />
+      )}
     </div>
   )
 }

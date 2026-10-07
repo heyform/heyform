@@ -1,3 +1,4 @@
+import { flattenFieldsWithGroups } from '@heyform-inc/form-renderer'
 import {
   IconBolt,
   IconChevronLeft,
@@ -16,6 +17,7 @@ import { Link } from 'react-router-dom'
 import { getFilteredFields } from './utils'
 import { FormService } from '@/services'
 import { useParam, useRouter } from '@/utils'
+import { getChoiceBranchingErrors, htmlUtils } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
 import { Button, Loader, Tooltip, usePrompt, useToast } from '@/components'
@@ -43,6 +45,21 @@ export default function BuilderNavBar() {
         (helper.isValid(form?.version) && form!.version > 0) ||
         (form!.version === 0 && !form?.fieldsUpdatedAt)
       ) {
+        const flattened = flattenFieldsWithGroups(state.fields!)
+        const [branchingError] = getChoiceBranchingErrors(flattened, state.logics)
+
+        if (branchingError) {
+          const field = flattened.find(f => f.id === branchingError.fieldId)
+
+          throw new Error(
+            t('form.builder.logic.branching.publishError', {
+              title:
+                htmlUtils.plain(field?.title as string) ||
+                t('form.builder.logic.nextQuestion.untitled')
+            })
+          )
+        }
+
         const { fields } = getFilteredFields(state.fields!)
 
         await FormService.publishForm({
@@ -60,7 +77,7 @@ export default function BuilderNavBar() {
     },
     {
       manual: true,
-      refreshDeps: [formId, state.fields, form?.version],
+      refreshDeps: [formId, state.fields, state.logics, form?.version],
       onError: (err: any) => {
         toast({
           title: t('components.error.title'),
