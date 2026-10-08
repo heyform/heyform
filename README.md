@@ -80,6 +80,10 @@ To connect a self-hosted identity provider such as Authelia, Authentik, or Keycl
 	<img src="https://service-info-public.oss-cn-hangzhou.aliyuncs.com/computenest-en.svg" alt="Deploy on Alibaba Cloud" height="36" />
 </a>
 
+<a href="https://zop.dev/zopday/app/deploy?image=heyform/community-edition&port=9157" style="margin-left:24px">
+	<img src="https://zop.dev/deploytozopday-inkhard.svg" alt="Deploy on ZopDay" height="36" />
+</a>
+
 ## Local development
 
 Follow the [local installation instructions](https://docs.heyform.net/open-source/local-development) to run the project locally.
