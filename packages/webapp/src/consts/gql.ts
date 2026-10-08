@@ -157,6 +157,7 @@ export const WORKSPACE_RECENT_FORMS_GQL = gql`
         enableProgress
         enableQuestionList
         enableNavigationArrows
+        openLinksInNewTab
         locale
         languages
         enableClosedMessage
@@ -427,6 +428,7 @@ export const FORMS_GQL = gql`
         enableProgress
         enableQuestionList
         enableNavigationArrows
+        openLinksInNewTab
         locale
         languages
         enableClosedMessage
@@ -563,6 +565,7 @@ export const FORM_DETAIL_GQL = gql`
         enableProgress
         enableQuestionList
         enableNavigationArrows
+        openLinksInNewTab
         enableEmailNotification
         locale
         languages
@@ -1421,6 +1424,7 @@ export const PUBLIC_FORM_GQL = gql`
         enableProgress
         enableQuestionList
         enableNavigationArrows
+        openLinksInNewTab
         locale
         languages
         enableClosedMessage

@@ -137,13 +137,15 @@ function sanitizeRichTextNodes(nodes: unknown[]): any[] {
   return nodes.map(sanitizeRichTextNode).filter(Boolean)
 }
 
-function sanitizeRichTextHTML(value: unknown): string {
+function sanitizeRichTextHTML(value: unknown, openLinksInNewTab?: boolean): string {
   if (Array.isArray(value)) {
-    return htmlUtils.serialize(sanitizeRichTextNodes(value))
+    return htmlUtils.serialize(sanitizeRichTextNodes(value), { openLinksInNewTab })
   }
 
   if (typeof value === 'string') {
-    return htmlUtils.serialize(sanitizeRichTextNodes(htmlUtils.parse(value)))
+    return htmlUtils.serialize(sanitizeRichTextNodes(htmlUtils.parse(value)), {
+      openLinksInNewTab
+    })
   }
 
   return ''
@@ -162,17 +164,21 @@ export const Block: FC<BlockProps> = ({
   const { values, fields, query, variables } = state
   const bodyRef = useRef<HTMLDivElement>(null)
 
+  const openLinksInNewTab = state.settings?.openLinksInNewTab
+
   const field: IFormField = useMemo(
     () => ({
       ...rawField,
       title: sanitizeRichTextHTML(
-        replaceHTML(rawField.title as string, values, fields, query, variables)
+        replaceHTML(rawField.title as string, values, fields, query, variables),
+        openLinksInNewTab
       ),
       description: sanitizeRichTextHTML(
-        replaceHTML(rawField.description as string, values, fields, query, variables)
+        replaceHTML(rawField.description as string, values, fields, query, variables),
+        openLinksInNewTab
       )
     }),
-    [fields, query, rawField, values, variables]
+    [fields, openLinksInNewTab, query, rawField, values, variables]
   )
 
   const isInlineLayout = field.layout?.align === FieldLayoutAlignEnum.INLINE

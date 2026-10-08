@@ -384,6 +384,7 @@ export class FormService {
       'enableProgress',
       'enableQuestionList',
       'enableNavigationArrows',
+      'openLinksInNewTab',
       'locale',
       'languages',
       'enableClosedMessage',

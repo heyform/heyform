@@ -49,6 +49,16 @@ export default function FormSettingsGeneral() {
         >
           <Switch />
         </Form.Item>
+
+        <Form.Item
+          className="[&_[data-slot=content]]:pt-1.5"
+          name="openLinksInNewTab"
+          label={t('form.settings.general.openLinksInNewTab.headline')}
+          description={t('form.settings.general.openLinksInNewTab.subHeadline')}
+          isInline
+        >
+          <Switch />
+        </Form.Item>
       </div>
     </section>
   )

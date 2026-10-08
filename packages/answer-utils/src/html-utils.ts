@@ -9,6 +9,7 @@ interface HTMLWalkOptions {
   allowedAttributes?: string[]
   plain?: boolean
   livePreview?: boolean
+  openLinksInNewTab?: boolean
 }
 
 const ALLOWED_BLOCK_TAGS = ['div', 'h1', 'h2', 'h3', 'p', 'br']
@@ -214,13 +215,24 @@ function serialize(schemas?: any[], option?: HTMLWalkOptions): string {
             contenteditable: 'false',
             'data-variable': attributes.id
           }
-        } else if (tag === 'a') {
-          attributes.target = '_blank'
-          attributes.rel = 'noreferrer'
+        } else if (
+          tag === 'a' &&
+          customOption.openLinksInNewTab &&
+          helper.isValid(attributes.href) &&
+          !isUnsafeUrlProtocol(attributes.href)
+        ) {
+          attributes = {
+            ...attributes,
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          }
         }
 
         property = Object.keys(attributes!)
-          .filter(key => customOption.allowedAttributes!.includes(key))
+          .filter(
+            key =>
+              key === 'target' || key === 'rel' || customOption.allowedAttributes!.includes(key)
+          )
           .filter(key => key !== 'href' || !isUnsafeUrlProtocol(attributes![key]))
           .map(key => ` ${key}="${escapeAttribute(attributes![key])}"`)
           .join('')

@@ -1147,6 +1147,10 @@
         "navigationArrows": {
           "headline": "Navigationspfeile",
           "subHeadline": "Sie können es aktivieren, um den Befragten die Navigation zwischen den Fragen zu ermöglichen."
+        },
+        "openLinksInNewTab": {
+          "headline": "Externe Links in neuem Tab öffnen",
+          "subHeadline": "Wenn aktiviert, öffnen Links in Ihren Fragen einen neuen Browser-Tab, anstatt innerhalb des eingebetteten Formulars zu laden. So vermeiden Sie blockierte oder fehlerhafte Seiten, wenn das Formular auf einer anderen Website eingebettet ist."
         }
       },
       "access": {

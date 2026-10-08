@@ -1209,6 +1209,10 @@
         "navigationArrows": {
           "headline": "Navigation arrows",
           "subHeadline": "You can enable it to let respondents navigate between questions."
+        },
+        "openLinksInNewTab": {
+          "headline": "Open external links in a new tab",
+          "subHeadline": "When enabled, links in your questions open in a new browser tab instead of inside the embedded form, avoiding blocked or broken pages when the form is embedded on another site."
         }
       },
       "access": {

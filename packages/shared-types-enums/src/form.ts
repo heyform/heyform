@@ -45,6 +45,9 @@ export interface FormSettings {
   enableQuestionList?: boolean
   enableNavigationArrows?: boolean
 
+  // Links
+  openLinksInNewTab?: boolean
+
   // Metadata
   metaTitle?: string
   metaDescription?: string
