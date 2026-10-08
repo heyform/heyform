@@ -308,3 +308,25 @@ test.each([1, 3])(
     )
   }
 )
+
+test('attempts the latest pending edit once if the active save fails after leaving', async () => {
+  let failFirstSave!: (reason: Error) => void
+  vi.mocked(FormService.updateFormSchemas)
+    .mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          failFirstSave = reject
+        })
+    )
+    .mockRejectedValueOnce(new Error('Still offline'))
+  await mount()
+  await click('Connect Motion to ending')
+  await click('Restore Motion form order')
+  await act(async () => root.render(null))
+  await act(async () => failFirstSave(new Error('Offline')))
+
+  expect(FormService.updateFormSchemas).toHaveBeenCalledTimes(2)
+  const latest = vi.mocked(FormService.updateFormSchemas).mock.calls[1][0]
+  expect(latest.version).toBe(1)
+  expect(latest.drafts.find(f => f.id === 'motion-q')!.nextFieldId).toBeUndefined()
+})

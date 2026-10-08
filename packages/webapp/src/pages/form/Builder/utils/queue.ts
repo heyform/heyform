@@ -53,7 +53,9 @@ export class Queue {
       this.callback?.('failed')
     } finally {
       this.saving = false
-      if (this.disposed && succeeded) void this.flush()
+      // After disposal, attempt a newer pending edit even if this save failed.
+      // A failure of that latest revision stops here instead of retrying forever.
+      if (this.disposed && (succeeded || this.revision > revision)) void this.flush()
     }
   }
 }
