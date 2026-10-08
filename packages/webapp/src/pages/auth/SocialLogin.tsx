@@ -12,6 +12,7 @@ import {
   DISABLE_LOGIN_WITH_OIDC,
   DISABLE_LOGIN_WITH_PASSWORD,
   OIDC_DISPLAY_NAME,
+  OIDC_DISPLAY_ICON_URL,
   isRegistrationDisabled
 } from '@/consts'
 
@@ -60,11 +61,13 @@ const SocialLogin: FC<SocialLoginProps> = ({ isSignUp }) => {
       ? {
           id: 'oidc',
           label: OIDC_DISPLAY_NAME,
-          icon: (
-            <SocialIcon>
-              <IconLock size={18} aria-hidden="true" className="shrink-0" color="currentColor" />
-            </SocialIcon>
-          )
+          icon: OIDC_DISPLAY_ICON_URL
+            ? <img src={OIDC_DISPLAY_ICON_URL} className="h-[18px] w-auto" alt="" />
+            : (
+              <SocialIcon>
+                <IconLock size={18} aria-hidden="true" className="shrink-0" color="currentColor" />
+              </SocialIcon>
+            )
         }
       : null
   ].filter(Boolean) as Array<{ id: string; label: string; icon: ReactNode }>

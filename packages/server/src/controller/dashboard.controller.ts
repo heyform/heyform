@@ -13,6 +13,7 @@ import {
   ENABLE_GOOGLE_FONTS,
   GOOGLE_RECAPTCHA_KEY,
   OIDC_DISPLAY_NAME,
+  OIDC_DISPLAY_ICON_URL,
   STRIPE_PUBLISHABLE_KEY,
   VERIFY_EMAIL_RESEND_COOLDOWN
 } from '@environments'
@@ -36,7 +37,8 @@ export class DashboardController {
       disableLoginWithGoogle: DISABLE_LOGIN_WITH_GOOGLE,
       disableLoginWithApple: DISABLE_LOGIN_WITH_APPLE,
       disableLoginWithOidc: DISABLE_LOGIN_WITH_OIDC,
-      oidcDisplayName: OIDC_DISPLAY_NAME
+      oidcDisplayName: OIDC_DISPLAY_NAME,
+      oidcDisplayIconUrl: OIDC_DISPLAY_ICON_URL
     }
   }
 
