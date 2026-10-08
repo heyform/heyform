@@ -69,6 +69,10 @@ export class FormModel extends Document {
   @Prop({ type: [Object], default: [] })
   logics?: Logic[]
 
+  // Undefined on existing forms: their current logic is also the initial draft.
+  @Prop({ type: [Object], default: undefined })
+  draftLogics?: Logic[]
+
   @Prop({ type: [Object], default: [] })
   variables?: Variable[]
 
@@ -135,7 +139,10 @@ FormSchema.virtual('isDraft').get(function () {
 })
 
 FormSchema.virtual('canPublish').get(function () {
-  return helper.isValid(this._drafts) && this._drafts !== JSON.stringify(this.fields)
+  return (
+    (helper.isValid(this._drafts) && this._drafts !== JSON.stringify(this.fields)) ||
+    (this.draftLogics != null && JSON.stringify(this.draftLogics) !== JSON.stringify(this.logics))
+  )
 })
 
 FormSchema.index({ teamId: 1, projectId: 1 }, { unique: false })

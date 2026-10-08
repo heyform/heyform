@@ -368,8 +368,6 @@ export function deleteField(state: IState, { id, parentId }: DeleteFieldAction['
 }
 
 export function setLogics(state: IState, logics: Logic[] = []): IState {
-  FormService.updateLogics(state.formId, logics)
-
   return {
     ...state,
     logics

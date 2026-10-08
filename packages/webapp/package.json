@@ -88,6 +88,7 @@
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react-swc": "^3.7.1",
     "autoprefixer": "^10.4.20",
+    "jsdom": "^16.7.0",
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
     "sass": "^1.80.4",

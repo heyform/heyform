@@ -35,10 +35,13 @@ export class PublishFormResolver {
 
     const drafts = sanitizeFormDrafts(input.drafts)
     assertValidFormNavigation(drafts)
-    assertValidChoiceBranching(drafts, form.logics)
+    const logics = input.logics ?? form.draftLogics ?? form.logics ?? []
+    assertValidChoiceBranching(drafts, logics)
 
     const updates: Record<string, any> = {
       fields: drafts,
+      logics,
+      draftLogics: logics,
       _drafts: JSON.stringify(drafts),
       fieldsUpdatedAt: timestamp(),
       version: input.version,

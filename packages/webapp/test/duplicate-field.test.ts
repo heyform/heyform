@@ -42,7 +42,7 @@ function stateFor(fields: FormFieldType[], currentId: string): IState {
   }
 }
 
-describe('duplicateField', () => {
+describe('setNextField', () => {
   it('does not autosave when a destination is already absent', () => {
     const state = stateFor([question('a'), question('b')], 'a')
     delete state.fields[0].nextFieldId
@@ -57,6 +57,9 @@ describe('duplicateField', () => {
     expect(cleared.fields[0].nextFieldId).toBeUndefined()
     expect(cleared.version).toBe(connected.version + 1)
   })
+})
+
+describe('duplicateField', () => {
   it('keeps internal branches inside the copied group and preserves external destinations', () => {
     const original = stateFor(
       [

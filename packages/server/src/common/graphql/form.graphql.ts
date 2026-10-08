@@ -711,11 +711,10 @@ export class UpdateFormVariablesInput extends FormDetailInput {
 
 @InputType()
 export class UpdateFormSchemasInput extends FormDetailInput {
-  //
-
-  //
-
-  //
+  @Field(type => [LogicInput], { nullable: true })
+  @IsOptional()
+  @IsArray()
+  logics?: Logic[]
 
   @Field(type => [FormFieldInput])
   @IsArray()
@@ -1176,6 +1175,9 @@ export class FormType {
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   logics?: Logic[]
+
+  @Field(type => [GraphQLJSONObject], { nullable: true })
+  draftLogics?: Logic[]
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   variables?: Variable[]

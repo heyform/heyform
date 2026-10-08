@@ -35,7 +35,7 @@ const Skeleton = () => (
   </div>
 )
 
-const Builder: FC<IBuilderProps> = ({ form }) => {
+export const Builder: FC<IBuilderProps> = ({ form }) => {
   const initialState: IState = {
     formId: form.id,
     version: 0,
@@ -44,7 +44,7 @@ const Builder: FC<IBuilderProps> = ({ form }) => {
     variables: form.variables,
     locale: form.settings?.locale || 'en',
     hiddenFields: form.hiddenFields || [],
-    ...initFields(form.drafts, form.logics)
+    ...initFields(form.drafts, form.draftLogics ?? form.logics)
   }
   const [state, dispatch] = useReducer(storeReducer, initialState)
   const store = useMemo(() => ({ state, dispatch }), [state])

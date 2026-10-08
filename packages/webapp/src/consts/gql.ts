@@ -595,6 +595,7 @@ export const FORM_DETAIL_GQL = gql`
       }
       translations
       logics
+      draftLogics
       variables
       themeSettings {
         logo

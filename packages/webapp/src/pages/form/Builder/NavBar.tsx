@@ -18,7 +18,6 @@ import { getFilteredFields } from './utils'
 import { FormService } from '@/services'
 import { useParam, useRouter } from '@/utils'
 import { getChoiceBranchingErrors, htmlUtils } from '@heyform-inc/answer-utils'
-import { helper } from '@heyform-inc/utils'
 
 import { Button, Loader, Tooltip, usePrompt, useToast } from '@/components'
 import { useAppStore, useFormStore, useWorkspaceStore } from '@/store'
@@ -41,10 +40,7 @@ export default function BuilderNavBar() {
 
   const { loading, run } = useRequest(
     async () => {
-      if (
-        (helper.isValid(form?.version) && form!.version > 0) ||
-        (form!.version === 0 && !form?.fieldsUpdatedAt)
-      ) {
+      if (form) {
         const flattened = flattenFieldsWithGroups(state.fields!)
         const [branchingError] = getChoiceBranchingErrors(flattened, state.logics)
 
@@ -65,7 +61,8 @@ export default function BuilderNavBar() {
         await FormService.publishForm({
           formId,
           version: form!.version as number,
-          drafts: fields
+          drafts: fields,
+          logics: state.logics || []
         })
 
         updateForm({

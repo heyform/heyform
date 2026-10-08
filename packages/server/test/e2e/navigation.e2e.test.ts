@@ -214,6 +214,94 @@ export function build(baseUrl: string) {
 
     const complete = await publish([jump('motion', 'q2'), jump('producer', 'q4')], true)
     assert.ok(!complete.errors?.length, JSON.stringify(complete.errors))
+
+    const respondent = new E2EClient({ baseUrl })
+    const published = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
+      input: { formId }
+    })
+    const invalidEdit = await publish([jump('motion', 'q2')], true)
+    assert.match(invalidEdit.errors[0].message, /every option needs a destination/i)
+    const afterRejection = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
+      input: { formId }
+    })
+    assert.deepStrictEqual(afterRejection.logics, published.logics)
+
+    const pending = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    assert.strictEqual(pending.canPublish, true)
+    assert.strictEqual(pending.draftLogics[0].payloads.length, 1)
+    assert.deepStrictEqual(pending.logics, published.logics)
+
+    // A rejected draft must not send Producer through the Motion-only required questions.
+    const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+      input: { formId }
+    })
+    await respondent.gqlOk('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+      input: {
+        formId,
+        openToken,
+        hiddenFields: [],
+        answers: { q1: { value: ['producer'] }, q4: 'a', q5: 'b', q6: 'c' }
+      }
+    })
+  })
+
+  test('saves and publishes fields and routing together, including clearing all rules', async () => {
+    const detail = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    const respondent = new E2EClient({ baseUrl })
+    const before = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, { input: { formId } })
+    const newDrafts = [
+      { id: 'new-start', kind: 'short_text', title: ['New question'] },
+      { id: 'new-end', kind: 'thank_you', title: ['New ending'] }
+    ]
+    const logics = [
+      {
+        fieldId: 'new-start',
+        payloads: [
+          {
+            id: 'new-rule',
+            condition: { comparison: 'is', expected: 'done' },
+            action: { kind: 'navigate', fieldId: 'new-end' }
+          }
+        ]
+      }
+    ]
+    const saved = await owner.gqlOk<any>('updateFormSchemas', UPDATE_FORM_SCHEMAS_GQL, {
+      input: { formId, version: detail.version, drafts: newDrafts, logics }
+    })
+    const draft = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    assert.deepStrictEqual(draft.draftLogics, logics)
+    assert.strictEqual(draft.canPublish, true)
+    const unchanged = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
+      input: { formId }
+    })
+    assert.deepStrictEqual(unchanged.fields, before.fields)
+    assert.deepStrictEqual(unchanged.logics, before.logics)
+
+    await owner.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId, version: saved.version, drafts: newDrafts }
+    })
+    const published = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
+      input: { formId }
+    })
+    assert.deepStrictEqual(
+      published.fields.map((f: any) => f.id),
+      ['new-start', 'new-end']
+    )
+    assert.deepStrictEqual(published.logics, logics)
+
+    // Empty draft rules mean removal, not fallback to the published rules.
+    const cleared = await owner.gqlOk<any>('updateFormSchemas', UPDATE_FORM_SCHEMAS_GQL, {
+      input: { formId, version: saved.version, drafts: newDrafts, logics: [] }
+    })
+    assert.strictEqual(cleared.canPublish, true)
+    await owner.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId, version: cleared.version, drafts: newDrafts }
+    })
+    const after = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, { input: { formId } })
+    assert.deepStrictEqual(after.logics, [])
+    const reloaded = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    assert.deepStrictEqual(reloaded.draftLogics, [])
+    assert.strictEqual(reloaded.canPublish, false)
   })
 
   return suite

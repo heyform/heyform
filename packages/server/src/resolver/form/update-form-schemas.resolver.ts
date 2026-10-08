@@ -30,6 +30,7 @@ export class UpdateFormSchemasResolver {
 
     const updates = {
       _drafts: JSON.stringify(drafts),
+      ...(input.logics != null && { draftLogics: input.logics }),
       fieldsUpdatedAt: timestamp(),
       version: input.version + 1
     }
@@ -39,7 +40,10 @@ export class UpdateFormSchemasResolver {
     return {
       drafts,
       version: updates.version,
-      canPublish: JSON.stringify(form) !== updates._drafts
+      canPublish:
+        JSON.stringify(form.fields) !== updates._drafts ||
+        JSON.stringify(input.logics ?? form.draftLogics ?? form.logics) !==
+          JSON.stringify(form.logics)
     }
   }
 }

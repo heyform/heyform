@@ -1,8 +1,10 @@
 import { resolve } from 'node:path'
+import svgr from 'vite-plugin-svgr'
 
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
+  plugins: [svgr()],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -10,8 +12,12 @@ export default defineConfig({
     }
   },
   test: {
-    // The other files in test/ are standalone assert scripts, not Vitest suites.
-    include: ['test/duplicate-field.test.ts', 'test/choice-branching.test.ts'],
+    // These legacy files run as standalone assert scripts, not Vitest suites.
+    exclude: [
+      ...configDefaults.exclude,
+      'test/form-presentation.test.ts',
+      'test/file-upload.test.ts'
+    ],
     poolOptions: {
       threads: {
         singleThread: true

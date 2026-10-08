@@ -234,7 +234,11 @@ const SYNC_ACTIONS = [
   'setNextField',
   'updateNestFields',
   'duplicateField',
-  'deleteField'
+  'deleteField',
+  'setLogic',
+  'setLogics',
+  'deleteLogic',
+  'cleanLogics'
 ]
 
 function handleAction(state: IState, action: IAction): IState {

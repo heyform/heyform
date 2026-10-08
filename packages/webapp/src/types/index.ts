@@ -1,4 +1,4 @@
-import { FormField, FormModel, ThemeSettings } from '@heyform-inc/shared-types-enums'
+import { FormField, FormModel, Logic, ThemeSettings } from '@heyform-inc/shared-types-enums'
 
 export type { SubmissionModel as SubmissionType } from '@heyform-inc/shared-types-enums'
 
@@ -10,6 +10,7 @@ export interface FormThemeSettings extends ThemeSettings {
 export interface FormType extends Omit<FormModel, 'fields'> {
   themeSettings?: FormThemeSettings
   drafts?: FormField[]
+  draftLogics?: Logic[]
   version: number
   fieldsUpdatedAt: number
   isDraft: boolean

@@ -60,9 +60,14 @@ export function getChoiceBranchingErrors(
 ): ChoiceBranchingError[] {
   const navigation = createFieldNavigation(fields)
   const errors: ChoiceBranchingError[] = []
+  const logicsByFieldId = new Map<string, Logic>()
+  for (const logic of logics || []) {
+    // Preserve the first matching rule set on legacy forms with duplicate entries.
+    if (!logicsByFieldId.has(logic.fieldId)) logicsByFieldId.set(logic.fieldId, logic)
+  }
 
   for (const field of fields) {
-    const logic = logics?.find(l => l.fieldId === field.id)
+    const logic = logicsByFieldId.get(field.id)
 
     if (!isChoiceBranchingField(field, logic)) {
       continue

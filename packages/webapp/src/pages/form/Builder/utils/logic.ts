@@ -145,14 +145,16 @@ export function fieldLogicToNodesEdges(
   const edges: Edge[] = []
   const fields = flattenFieldsWithGroups(rawFields)
   const navigation = createFieldNavigation(fields)
+  const logicsByFieldId = new Map<string, Logic>()
+  for (const logic of logics || []) {
+    // Preserve the first matching rule set on legacy forms with duplicate entries.
+    if (!logicsByFieldId.has(logic.fieldId)) logicsByFieldId.set(logic.fieldId, logic)
+  }
   const invalidBranchingIds = new Set(getChoiceBranchingErrors(fields, logics).map(e => e.fieldId))
 
   fields.forEach((field, index) => {
     const hasBranchingError = invalidBranchingIds.has(field.id)
-    const isBranching = isChoiceBranchingField(
-      field,
-      logics?.find(l => l.fieldId === field.id)
-    )
+    const isBranching = isChoiceBranchingField(field, logicsByFieldId.get(field.id))
 
     nodes.push({
       id: field.id,
@@ -199,7 +201,7 @@ export function fieldLogicToNodesEdges(
       if (payload.action.kind === ActionEnum.NAVIGATE) {
         const targetId = payload.action.fieldId
 
-        if (!fields.some(f => f.id === fieldId) || !fields.some(f => f.id === targetId)) {
+        if (navigation.indexOf(fieldId) < 0 || navigation.indexOf(targetId) < 0) {
           return
         }
 

@@ -16,22 +16,33 @@ export default function BuilderSync() {
   const { state, dispatch } = useStoreContext()
   const { form, updateForm } = useFormStore()
   const queueRef = useRef<Queue | null>(null)
+  const versionRef = useRef(form?.version ?? 0)
 
   const sync = useCallback(async () => {
     try {
+      const currentForm = useFormStore.getState().form
+      if (currentForm?.id === state.formId) {
+        versionRef.current = Math.max(versionRef.current, currentForm.version ?? 0)
+      }
       const { fields } = getFilteredFields(state.fields)
       const result = await FormService.updateFormSchemas({
         formId: state.formId,
-        version: form?.version as number,
-        drafts: fields
+        version: versionRef.current,
+        drafts: fields,
+        logics: state.logics || []
       })
 
-      updateForm(result)
+      versionRef.current = result.version
+      // A final save may finish after another form or a newer version has been opened.
+      const latestForm = useFormStore.getState().form
+      if (latestForm?.id === state.formId && result.version >= (latestForm.version ?? 0)) {
+        updateForm(result)
+      }
     } catch (err: any) {
       toast({ title: t('components.error.title'), message: err.message })
       throw err
     }
-  }, [state.formId, state.fields, form?.version, updateForm, toast, t])
+  }, [state.formId, state.fields, state.logics, updateForm, toast, t])
 
   useEffect(() => {
     const queue = new Queue()
@@ -41,7 +52,7 @@ export default function BuilderSync() {
     })
 
     return () => {
-      queue.clear()
+      queue.dispose()
       queueRef.current = null
     }
   }, [dispatch])
