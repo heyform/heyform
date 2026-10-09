@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:form": "vite build --config vite.form.config.mts",
+    "test:unit": "vitest run --config vitest.config.mts",
     "type-check": "tsc --noEmit"
   },
   "engines": {
@@ -14,9 +15,9 @@
   "dependencies": {
     "@apollo/client": "^3.11.8",
     "@fortaine/fetch-event-source": "^3.0.6",
-    "@heyform-inc/answer-utils": "^1.2.0",
+    "@heyform-inc/answer-utils": "workspace:*",
     "@heyform-inc/form-renderer": "workspace:*",
-    "@heyform-inc/shared-types-enums": "^1.3.0",
+    "@heyform-inc/shared-types-enums": "workspace:*",
     "@heyform-inc/utils": "^1.2.2",
     "@heyooo-inc/react-router": "^0.0.5",
     "@popperjs/core": "^2.11.8",
@@ -87,6 +88,7 @@
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react-swc": "^3.7.1",
     "autoprefixer": "^10.4.20",
+    "jsdom": "^16.7.0",
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.47",
     "sass": "^1.80.4",
@@ -97,6 +99,7 @@
     "vite": "^5.4.21",
     "vite-bundle-analyzer": "^0.12.1",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-plugin-webfont-dl": "^3.9.4"
+    "vite-plugin-webfont-dl": "^3.9.4",
+    "vitest": "^1.6.0"
   }
 }

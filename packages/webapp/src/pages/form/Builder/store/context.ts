@@ -68,6 +68,14 @@ export interface UpdateFieldAction {
   }
 }
 
+export interface SetNextFieldAction {
+  type: 'setNextField'
+  payload: {
+    fieldId: string
+    nextFieldId?: string
+  }
+}
+
 export interface UpdateNestFieldsAction {
   type: 'updateNestFields'
   payload: {
@@ -199,6 +207,7 @@ export type IAction =
   | SelectFieldAction
   | AddFieldAction
   | UpdateFieldAction
+  | SetNextFieldAction
   | UpdateNestFieldsAction
   | DuplicateFieldAction
   | DeleteFieldAction
@@ -222,9 +231,14 @@ const SYNC_ACTIONS = [
   'setFields',
   'addField',
   'updateField',
+  'setNextField',
   'updateNestFields',
   'duplicateField',
-  'deleteField'
+  'deleteField',
+  'setLogic',
+  'setLogics',
+  'deleteLogic',
+  'cleanLogics'
 ]
 
 function handleAction(state: IState, action: IAction): IState {
@@ -247,6 +261,7 @@ export const storeReducer = (state: IState, action: IAction) => {
     case 'selectField':
     case 'addField':
     case 'updateField':
+    case 'setNextField':
     case 'updateNestFields':
     case 'duplicateField':
     case 'deleteField':

@@ -2,10 +2,13 @@ import { FormRenderer } from '@heyform-inc/form-renderer'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getFilteredFields } from '../utils'
 import { cn } from '@/utils'
 
 import { Modal, Tabs } from '@/components'
 import { useFormStore, useModal } from '@/store'
+
+import { useStoreContext } from '../store'
 
 interface PreviewComponentProps {
   onClose: () => void
@@ -15,19 +18,22 @@ const PreviewComponent: FC<PreviewComponentProps> = () => {
   const { t } = useTranslation()
 
   const { form: rawForm, themeSettings } = useFormStore()
+  const { state } = useStoreContext()
   const [platform, setPlatform] = useState('mobile')
 
   const form: any = useMemo(
     () => ({
       ...rawForm,
       themeSettings,
-      fields: rawForm?.drafts || [],
+      fields: getFilteredFields(state.fields).fields,
+      logics: state.logics,
+      variables: state.variables,
       settings: {
         ...rawForm?.settings,
         whitelabelBranding: true
       }
     }),
-    [rawForm, themeSettings]
+    [rawForm, themeSettings, state.fields, state.logics, state.variables]
   )
 
   const tabs = useMemo(

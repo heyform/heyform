@@ -9,14 +9,15 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "run-p dev:webapp dev:server",
+    "dev": "pnpm build:shared && run-p dev:webapp dev:server",
     "dev:webapp": "pnpm --filter ./packages/webapp dev",
     "dev:server": "pnpm --filter ./packages/server dev",
-    "build:server": "pnpm --filter ./packages/server build",
-    "build:webapp": "pnpm --filter ./packages/webapp build",
+    "build:server": "pnpm build:shared && pnpm --filter ./packages/server build",
+    "build:webapp": "pnpm build:shared && pnpm --filter ./packages/webapp build",
     "format": "prettier --write \"packages/**/*.{js,ts,tsx,css}\"",
     "lint": "node scripts/run-oxlint.js packages",
-    "postinstall": "simple-git-hooks"
+    "postinstall": "node scripts/build-shared.js && simple-git-hooks",
+    "build:shared": "pnpm --filter ./packages/shared-types-enums build && pnpm --filter ./packages/answer-utils build"
   },
   "simple-git-hooks": {
     "pre-commit": "if ! command -v node >/dev/null 2>&1; then for d in \"$HOME\"/.nvm/versions/node/*/bin; do [ -d \"$d\" ] && PATH=\"$d:$PATH\"; done; export PATH; fi; ./node_modules/.bin/lint-staged --concurrent false"

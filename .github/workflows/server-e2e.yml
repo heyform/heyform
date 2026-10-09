@@ -8,6 +8,11 @@ on:
       - 'packages/shared-types-enums/**'
       - 'packages/utils/**'
       - 'packages/answer-utils/**'
+      - 'packages/form-renderer/**'
+      - 'packages/webapp/**'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'scripts/build-shared.js'
       - 'pnpm-lock.yaml'
       - '.github/workflows/server-e2e.yml'
   pull_request:
@@ -17,6 +22,11 @@ on:
       - 'packages/shared-types-enums/**'
       - 'packages/utils/**'
       - 'packages/answer-utils/**'
+      - 'packages/form-renderer/**'
+      - 'packages/webapp/**'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
+      - 'scripts/build-shared.js'
       - 'pnpm-lock.yaml'
       - '.github/workflows/server-e2e.yml'
   workflow_dispatch:
@@ -76,6 +86,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Run shared and frontend regression tests
+        run: |
+          pnpm --filter ./packages/answer-utils exec vitest run
+          pnpm --filter ./packages/form-renderer test:unit
+          pnpm --filter ./packages/webapp test:unit
 
       - name: Type-check server
         run: pnpm --filter ./packages/server type-check

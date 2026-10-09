@@ -1,6 +1,8 @@
-import { UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
-import { useEffect } from 'react'
+import { flattenFieldsWithGroups } from '@heyform-inc/form-renderer'
+import { FieldKindEnum, UNSELECTABLE_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
+import { useCallback, useEffect, useMemo } from 'react'
 import ReactFlow, {
+  Connection,
   ConnectionLineType,
   Controls,
   Node,
@@ -10,6 +12,7 @@ import ReactFlow, {
 } from 'react-flow-renderer'
 
 import { fieldLogicToNodesEdges } from '../utils'
+import { createFieldNavigation, isChoiceBranchingField } from '@heyform-inc/answer-utils'
 
 import { useAppStore } from '@/store'
 
@@ -21,10 +24,6 @@ const snapGrid: [number, number] = [16, 16]
 const nodeTypes = {
   customNode: CustomNode
 }
-const edgeTypes = {
-  customEdge: null
-}
-
 export const Flow = () => {
   const { openModal } = useAppStore()
   const { state, dispatch } = useStoreContext()
@@ -43,7 +42,7 @@ export const Flow = () => {
   function handleNodeClick(_: unknown, node: Node) {
     const { field } = node.data
 
-    if (!UNSELECTABLE_FIELD_KINDS.includes(field.kind)) {
+    if (field.kind === FieldKindEnum.STATEMENT || !UNSELECTABLE_FIELD_KINDS.includes(field.kind)) {
       openModal('LogicModal')
       dispatch({
         type: 'selectField',
@@ -55,19 +54,55 @@ export const Flow = () => {
     }
   }
 
+  const flattenedFields = useMemo(() => flattenFieldsWithGroups(state.fields), [state.fields])
+  const navigation = useMemo(() => createFieldNavigation(flattenedFields), [flattenedFields])
+  // Branching choice questions route every answer through the logic modal, so they have no default.
+  const branchingIds = useMemo(
+    () =>
+      new Set(
+        flattenedFields
+          .filter(f =>
+            isChoiceBranchingField(
+              f,
+              state.logics?.find(l => l.fieldId === f.id)
+            )
+          )
+          .map(f => f.id)
+      ),
+    [flattenedFields, state.logics]
+  )
+  const isValidConnection = useCallback(
+    (connection: Connection) =>
+      !!(
+        connection.source &&
+        connection.target &&
+        !branchingIds.has(connection.source) &&
+        navigation.isValidNextFieldId(connection.source, connection.target)
+      ),
+    [branchingIds, navigation]
+  )
+
+  function handleConnect(connection: Connection) {
+    if (isValidConnection(connection)) {
+      dispatch({
+        type: 'setNextField',
+        payload: { fieldId: connection.source!, nextFieldId: connection.target! }
+      })
+    }
+  }
+
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = fieldLogicToNodesEdges(
       state.fields,
       state.logics
     )
-    setNodes(layoutedNodes)
+    setNodes(layoutedNodes.map(node => ({ ...node, data: { ...node.data, isValidConnection } })))
     setEdges(layoutedEdges)
-  }, [setEdges, setNodes, state.fields, state.logics])
+  }, [setEdges, setNodes, state.fields, state.logics, isValidConnection])
 
   return (
     <ReactFlow
       nodeTypes={nodeTypes as Any}
-      edgeTypes={edgeTypes as Any}
       nodes={nodes}
       edges={edges}
       connectionLineType={ConnectionLineType.SimpleBezier}
@@ -84,6 +119,8 @@ export const Flow = () => {
       onEdgesChange={onEdgesChange}
       onInit={handleInit}
       onNodeClick={handleNodeClick}
+      onConnect={handleConnect}
+      deleteKeyCode={null}
     >
       <Controls showInteractive={false} />
     </ReactFlow>

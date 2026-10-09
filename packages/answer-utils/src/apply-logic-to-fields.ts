@@ -14,6 +14,7 @@ import {
 import { helper } from '@heyform-inc/utils'
 
 import { calculateAction } from './calculate-action'
+import { createFieldNavigation } from './navigation'
 import { validateRequiredField } from './validate'
 import { validateCondition } from './validate-condition'
 
@@ -72,7 +73,10 @@ export function applyLogicToFields(
     }
   }
 
-  if (helper.isEmpty(logics) || helper.isEmpty(values)) {
+  if (
+    (helper.isEmpty(logics) || helper.isEmpty(values)) &&
+    !fields!.some(field => field.nextFieldId)
+  ) {
     // Add indexes to every field
     indexFields(fields!)
 
@@ -82,6 +86,7 @@ export function applyLogicToFields(
     }
   }
 
+  const navigation = createFieldNavigation(fields!)
   let index = 0
 
   while (index < fields!.length) {
@@ -92,14 +97,14 @@ export function applyLogicToFields(
     }
 
     let isNavigateValidated = false
-    const logic = logics!.find(l => l.fieldId === field.id)
+    const logic = logics?.find(l => l.fieldId === field.id)
 
     // Add parent field if needed to present SubGroup fields
     if (field.parent && result.fields.findIndex(f => f.id === field.parent!.id) < 0) {
       result.fields.push(field.parent)
     }
 
-    if (logic) {
+    if (logic && helper.isValid(values)) {
       const { payloads } = logic
       const calculates = payloads.filter(p => p.action.kind === ActionEnum.CALCULATE)
 
@@ -128,7 +133,7 @@ export function applyLogicToFields(
 
         if (field.isTouched) {
           const jumpFieldId = (action as NavigateAction).fieldId
-          const jumpIndex = fields!.findIndex(f => f.id === jumpFieldId)
+          const jumpIndex = navigation.indexOf(jumpFieldId)
           const isExists = !!result.fields.find(f => f.id === jumpFieldId)
 
           // Logic jump only works when sending the respondent forward in the form
@@ -146,7 +151,7 @@ export function applyLogicToFields(
     }
 
     if (!isNavigateValidated) {
-      index += 1
+      index = navigation.getNextIndex(index)
       result.fields.push(field)
     }
   }

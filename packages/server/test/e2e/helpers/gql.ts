@@ -257,6 +257,8 @@ export const FORMS_GQL = /* GraphQL */ `
 export const FORM_DETAIL_GQL = /* GraphQL */ `
   query formDetail($input: FormDetailInput!) {
     formDetail(input: $input) {
+      logics
+      draftLogics
       id
       name
       teamId
@@ -268,6 +270,7 @@ export const FORM_DETAIL_GQL = /* GraphQL */ `
       }
       drafts {
         id
+        nextFieldId
         kind
         title
       }
@@ -281,6 +284,7 @@ export const UPDATE_FORM_SCHEMAS_GQL = /* GraphQL */ `
       version
       drafts {
         id
+        nextFieldId
         kind
         title
       }
@@ -420,6 +424,7 @@ export const UPDATE_SUBMISSION_ANSWER_GQL = /* GraphQL */ `
 export const PUBLIC_FORM_GQL = /* GraphQL */ `
   query publicForm($input: FormDetailInput!) {
     publicForm(input: $input) {
+      logics
       id
       name
       settings {
@@ -428,6 +433,7 @@ export const PUBLIC_FORM_GQL = /* GraphQL */ `
       }
       fields {
         id
+        nextFieldId
         kind
         title
       }

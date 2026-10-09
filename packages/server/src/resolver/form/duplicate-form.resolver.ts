@@ -20,6 +20,7 @@ export class DuplicateFormResolver {
     const fields = [
       'variables',
       'logics',
+      'draftLogics',
       'translations',
       'hiddenFields',
       '_drafts',
