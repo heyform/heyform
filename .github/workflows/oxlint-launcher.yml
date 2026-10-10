@@ -1,0 +1,40 @@
+name: Oxlint launcher
+
+on:
+  push:
+    branches: [next, main]
+    paths:
+      - 'scripts/run-oxlint.js'
+      - 'scripts/run-oxlint.test.js'
+      - '.github/workflows/oxlint-launcher.yml'
+  pull_request:
+    branches: [next, main]
+    paths:
+      - 'scripts/run-oxlint.js'
+      - 'scripts/run-oxlint.test.js'
+      - '.github/workflows/oxlint-launcher.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oxlint-launcher-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Launcher tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --test scripts/run-oxlint.test.js
