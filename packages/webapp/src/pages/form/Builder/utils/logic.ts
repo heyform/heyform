@@ -187,7 +187,7 @@ export function fieldLogicToNodesEdges(
         target: targetId,
         data: { kind: 'next' },
         style: {
-          stroke: '#1f2937'
+          stroke: 'rgb(var(--hf-secondary))'
         },
         markerEnd: 'edge-marker-arrow'
       })
@@ -211,7 +211,7 @@ export function fieldLogicToNodesEdges(
           target: targetId,
           data: { kind: 'conditional' },
           style: {
-            stroke: '#1f2937',
+            stroke: 'rgb(var(--hf-secondary))',
             strokeDasharray: '4 4'
           },
           markerEnd: 'edge-marker-arrow'

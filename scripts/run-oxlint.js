@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require('child_process')
+const path = require('path')
 
 const args = process.argv.slice(2)
-const result = spawnSync('pnpm', ['exec', 'oxlint', ...args], {
+// Use Node directly so package-manager shims and shell parsing are unnecessary.
+const localOxlint = path.join(__dirname, '..', 'node_modules', 'oxlint', 'bin', 'oxlint')
+const result = spawnSync(process.execPath, [localOxlint, ...args], {
   encoding: 'utf8'
 })
 
