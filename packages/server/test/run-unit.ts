@@ -13,7 +13,8 @@ const tests = [
   'redis-config.test.ts',
   'oauth-state.test.ts',
   'oidc-security.test.ts',
-  'oidc-provisioning.test.ts'
+  'oidc-provisioning.test.ts',
+  'notification-recipients.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')
 

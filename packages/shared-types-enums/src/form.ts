@@ -37,6 +37,10 @@ export interface FormSettings {
   ipLimitTime?: number
   enableProgress?: boolean
 
+  // Email notification
+  enableEmailNotification?: boolean
+  notificationRecipients?: string[]
+
   // Translation
   locale?: string
   languages?: string[]
