@@ -1212,6 +1212,13 @@
         "respondent": {
           "headline": "E-Mail-Benachrichtigungen für Teilnehmer",
           "subHeadline": "Senden Sie nach dem Ausfüllen des Formulars eine angepasste Text-E-Mail an die Teilnehmer."
+        },
+        "recipients": {
+          "headline": "Weitere Empfänger",
+          "subHeadline": "Sende Einsendungen zusätzlich an diese Adressen, auch ohne HeyForm-Konto. Eine Adresse pro Zeile, maximal {{max}}.",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} ist keine gültige E-Mail-Adresse",
+          "tooMany": "Füge höchstens {{max}} Empfänger hinzu"
         }
       },
       "protection": {

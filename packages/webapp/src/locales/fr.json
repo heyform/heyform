@@ -1212,6 +1212,13 @@
         "respondent": {
           "headline": "Notifications par email aux répondants",
           "subHeadline": "Envoyez un email personnalisé aux répondants après la soumission du formulaire."
+        },
+        "recipients": {
+          "headline": "Destinataires supplémentaires",
+          "subHeadline": "Envoyez aussi les réponses à ces adresses, même sans compte HeyForm. Une adresse par ligne, {{max}} au maximum.",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} n'est pas une adresse e-mail valide",
+          "tooMany": "Ajoutez {{max}} destinataires au maximum"
         }
       },
       "protection": {

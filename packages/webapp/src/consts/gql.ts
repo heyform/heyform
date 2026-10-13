@@ -567,6 +567,7 @@ export const FORM_DETAIL_GQL = gql`
         enableNavigationArrows
         openLinksInNewTab
         enableEmailNotification
+        notificationRecipients
         locale
         languages
         enableClosedMessage

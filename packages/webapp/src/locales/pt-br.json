@@ -1270,6 +1270,13 @@
         "respondent": {
           "headline": "Notificações por e-mail do respondente",
           "subHeadline": "Envie um e-mail de texto personalizado aos respondentes após o envio do formulário."
+        },
+        "recipients": {
+          "headline": "Destinatários adicionais",
+          "subHeadline": "Envie as respostas também para estes endereços, mesmo sem conta no HeyForm. Um endereço por linha, até {{max}}.",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} não é um endereço de e-mail válido",
+          "tooMany": "Adicione no máximo {{max}} destinatários"
         }
       },
       "protection": {
