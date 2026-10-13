@@ -14,7 +14,8 @@ import {
   GOOGLE_RECAPTCHA_KEY,
   OIDC_DISPLAY_NAME,
   STRIPE_PUBLISHABLE_KEY,
-  VERIFY_EMAIL_RESEND_COOLDOWN
+  VERIFY_EMAIL_RESEND_COOLDOWN,
+  VERIFY_USER_EMAIL
 } from '@environments'
 import { hs } from '@heyform-inc/utils'
 import { TRUSTED_UPLOAD_ORIGINS } from '@utils'
@@ -32,6 +33,7 @@ export class DashboardController {
       googleRecaptchaKey: GOOGLE_RECAPTCHA_KEY,
       uploadOrigins: TRUSTED_UPLOAD_ORIGINS,
       verifyEmailResendCooldownSeconds: Math.ceil(hs(VERIFY_EMAIL_RESEND_COOLDOWN) / 1000),
+      verifyUserEmail: VERIFY_USER_EMAIL,
       disableLoginWithPassword: DISABLE_LOGIN_WITH_PASSWORD,
       disableLoginWithGoogle: DISABLE_LOGIN_WITH_GOOGLE,
       disableLoginWithApple: DISABLE_LOGIN_WITH_APPLE,
