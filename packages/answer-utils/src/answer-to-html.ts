@@ -2,6 +2,7 @@ import { Answer, FieldKindEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared
 
 import parser from './answer-parser'
 import { escapeHtmlText } from './escape-html'
+import { htmlToText } from './helper'
 
 export function answersToHtml(answers: Answer[]): string {
   const html = answers
@@ -10,7 +11,7 @@ export function answersToHtml(answers: Answer[]): string {
 
       return `
 <li>
-  <h3>${escapeHtmlText(answer.title)}</h3>
+  <h3>${escapeHtmlText(htmlToText(answer.title, 0))}</h3>
   <p>${escapeHtmlText(value)}</p>
 </li>
 `

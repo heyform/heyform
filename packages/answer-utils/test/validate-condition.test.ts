@@ -123,6 +123,38 @@ test('validate single choice condition', () => {
   }
 })
 
+test.each([FieldKindEnum.MULTIPLE_CHOICE, FieldKindEnum.PICTURE_CHOICE])(
+  'preserves contains rules on single-select %s questions',
+  kind => {
+    const field: FormField = {
+      id: 'choice',
+      title: 'Choice',
+      kind,
+      properties: { allowMultiple: false }
+    }
+    const values = { choice: { value: ['a'] } }
+
+    for (const expected of ['a', ['a']]) {
+      expect(
+        validateCondition(field, { comparison: ComparisonEnum.CONTAINS, expected }, values)
+      ).toBe(true)
+      expect(
+        validateCondition(field, { comparison: ComparisonEnum.DOES_NOT_CONTAIN, expected }, values)
+      ).toBe(false)
+    }
+    expect(
+      validateCondition(field, { comparison: ComparisonEnum.CONTAINS, expected: 'b' }, values)
+    ).toBe(false)
+    expect(
+      validateCondition(
+        field,
+        { comparison: ComparisonEnum.DOES_NOT_CONTAIN, expected: 'b' },
+        values
+      )
+    ).toBe(true)
+  }
+)
+
 test('validate single choice with other condition', () => {
   const field: FormField = {
     id: 'id_single_choice',

@@ -41,17 +41,17 @@ Jack Smith, 24",
 exports[`should convert value to html 1`] = `
 "<ol>
 <li>
-  <h3>Group Multiple Choose </h3>
+  <h3>Group Multiple Choose</h3>
   <p>Group Choice 1, Group Choice 2</p>
 </li>
 
 <li>
-  <h3>☎️  Your MobilePhone </h3>
+  <h3>☎️ Your MobilePhone</h3>
   <p>+12015551023</p>
 </li>
 
 <li>
-  <h3>🧱 Multiple Choose </h3>
+  <h3>🧱 Multiple Choose</h3>
   <p>Choice 2</p>
 </li>
 
@@ -61,17 +61,17 @@ exports[`should convert value to html 1`] = `
 </li>
 
 <li>
-  <h3>👍 Do you agree with us </h3>
+  <h3>👍 Do you agree with us</h3>
   <p>No</p>
 </li>
 
 <li>
-  <h3>🐶 Choose the dog </h3>
+  <h3>🐶 Choose the dog</h3>
   <p>Choice 3</p>
 </li>
 
 <li>
-  <h3>🈴️ Upload you avatar </h3>
+  <h3>🈴️ Upload you avatar</h3>
   <p>avatar.jpg (https://heyformhq.com/qCpteNRi2SiO_avatar.jpg)</p>
 </li>
 
@@ -81,7 +81,7 @@ exports[`should convert value to html 1`] = `
 </li>
 
 <li>
-  <h3>🪐 Rate here </h3>
+  <h3>🪐 Rate here</h3>
   <p>5</p>
 </li>
 

@@ -15,10 +15,23 @@ test('escapes untrusted answer titles and values', () => {
 
   expect(html).not.toContain('<img')
   expect(html).not.toContain('<a href=')
-  expect(html).toContain('&lt;img src=x onerror=alert(1)&gt; &amp; &quot;title&quot;')
+  expect(html).toContain('<h3>&amp; &quot;title&quot;</h3>')
   expect(html).toContain(
     '&lt;/p&gt;&lt;a href=&quot;https://attacker.test&quot;&gt;click me&lt;/a&gt;'
   )
+})
+
+test('does not double-escape entities in serialized titles', () => {
+  const html = answersToHtml([
+    {
+      id: 'answer-1',
+      kind: FieldKindEnum.SHORT_TEXT,
+      title: 'Terms &amp; Conditions &lt;v2&gt;',
+      value: 'Yes'
+    }
+  ])
+
+  expect(html).toContain('<h3>Terms &amp; Conditions &lt;v2&gt;</h3>')
 })
 
 test('escapes untrusted hidden field names and values', () => {

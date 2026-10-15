@@ -99,8 +99,6 @@ function validateChoice(
 ) {
   const rawValue = values?.[field.id] as ChoiceValue
   const { expected: rawExpected } = condition as TextCondition
-  const allowMultiple = helper.isTrue(field.properties?.allowMultiple)
-
   const expected = helper.isArray(rawExpected) ? rawExpected : [rawExpected]
   const value = [...(rawValue?.value || []), rawValue?.other].filter(helper.isValid)
 
@@ -112,10 +110,10 @@ function validateChoice(
       return !isEqual(value, expected)
 
     case ComparisonEnum.CONTAINS:
-      return allowMultiple && isContains(value, expected)
+      return isContains(value, expected)
 
     case ComparisonEnum.DOES_NOT_CONTAIN:
-      return allowMultiple && !isContains(value, expected)
+      return !isContains(value, expected)
   }
 
   return false
