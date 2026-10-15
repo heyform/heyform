@@ -1208,6 +1208,13 @@
         "respondent": {
           "headline": "受访者邮件通知",
           "subHeadline": "表单提交后向受访者发送自定义文本邮件。"
+        },
+        "recipients": {
+          "headline": "其他收件人",
+          "subHeadline": "即使没有 HeyForm 账户，也会将提交内容通过邮件发送到这些地址。每行一个地址，最多 {{max}} 个。",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} 不是有效的电子邮件地址",
+          "tooMany": "最多可添加 {{max}} 个收件人"
         }
       },
       "protection": {

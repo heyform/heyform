@@ -599,6 +599,11 @@ export class UpdateFormInput extends FormDetailInput {
   @Field({ nullable: true })
   @IsOptional()
   enableEmailNotification?: boolean
+
+  // Validated and normalized in UpdateFormResolver (see normalizeNotificationRecipients)
+  @Field(type => [String], { nullable: true })
+  @IsOptional()
+  notificationRecipients?: string[]
 }
 
 @InputType()
@@ -1028,6 +1033,9 @@ export class FormSettingType {
 
   @Field({ nullable: true })
   enableEmailNotification?: boolean
+
+  @Field(type => [String], { nullable: true })
+  notificationRecipients?: string[]
 
   @Field({ nullable: true })
   removeBranding?: boolean

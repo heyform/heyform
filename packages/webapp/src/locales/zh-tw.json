@@ -1208,6 +1208,13 @@
         "respondent": {
           "headline": "受訪者郵件通知",
           "subHeadline": "表單提交後向受訪者發送自訂文本郵件。"
+        },
+        "recipients": {
+          "headline": "其他收件者",
+          "subHeadline": "即使沒有 HeyForm 帳號，也會將提交內容以電子郵件寄送到這些地址。每行一個地址，最多 {{max}} 個。",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} 不是有效的電子郵件地址",
+          "tooMany": "最多可新增 {{max}} 位收件者"
         }
       },
       "protection": {
