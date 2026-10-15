@@ -38,7 +38,7 @@ export const DISABLE_LOGIN_WITH_OIDC = helper.isTrue(
 export const OIDC_DISPLAY_NAME =
   window.heyform?.oidcDisplayName || (import.meta.env.VITE_OIDC_DISPLAY_NAME as string) || 'SSO'
 export const VERIFY_USER_EMAIL = helper.isTrue(
-  window.heyform?.verifyUserEmail || import.meta.env.VITE_VERIFY_USER_EMAIL
+  window.heyform?.verifyUserEmail ?? import.meta.env.VITE_VERIFY_USER_EMAIL ?? 'true'
 )
 export const ENABLE_GOOGLE_FONTS = helper.isTrue(
   window.heyform?.enableGoogleFonts ?? import.meta.env.VITE_ENABLE_GOOGLE_FONTS ?? 'true'

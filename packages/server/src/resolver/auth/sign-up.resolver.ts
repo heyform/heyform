@@ -2,7 +2,12 @@ import { BadRequestException, ForbiddenException, UseGuards } from '@nestjs/comm
 
 import { COOKIE_INVITATION_NAME, CookieOptionsFactory } from '@config'
 import { GraphqlResponse } from '@decorator'
-import { APP_DISABLE_REGISTRATION, BCRYPT_SALT, DISABLE_LOGIN_WITH_PASSWORD } from '@environments'
+import {
+  APP_DISABLE_REGISTRATION,
+  BCRYPT_SALT,
+  DISABLE_LOGIN_WITH_PASSWORD,
+  VERIFY_USER_EMAIL
+} from '@environments'
 import { SignUpInput } from '@graphql'
 import { DeviceIdGuard } from '@guard'
 import { helper } from '@heyform-inc/utils'
@@ -55,7 +60,8 @@ export class SignUpResolver {
       email: input.email,
       password: await passwordHash(input.password, BCRYPT_SALT),
       avatar: gravatar(input.email),
-      lang: client.lang
+      lang: client.lang,
+      isEmailVerified: !VERIFY_USER_EMAIL
     })
 
     if (invitation) {
@@ -92,8 +98,10 @@ export class SignUpResolver {
       deviceId: client.deviceId
     })
 
-    const code = await this.authService.getVerificationCodeWithRateLimit(`verify_email:${userId}`)
-    this.mailService.emailVerificationRequest(input.email, code, client.lang)
+    if (VERIFY_USER_EMAIL) {
+      const code = await this.authService.getVerificationCodeWithRateLimit(`verify_email:${userId}`)
+      this.mailService.emailVerificationRequest(input.email, code, client.lang)
+    }
 
     res.clearCookie(
       COOKIE_INVITATION_NAME,

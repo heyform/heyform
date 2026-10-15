@@ -7,7 +7,7 @@ import { clearCookie, clearInvitationCookie, getInvitationCookie, useRouter } fr
 import { helper } from '@heyform-inc/utils'
 
 import { Form, Input, PasswordStrength } from '@/components'
-import { DISABLE_LOGIN_WITH_PASSWORD, REDIRECT_COOKIE_NAME } from '@/consts'
+import { DISABLE_LOGIN_WITH_PASSWORD, REDIRECT_COOKIE_NAME, VERIFY_USER_EMAIL } from '@/consts'
 import { useUserStore } from '@/store'
 
 import SocialLogin from './SocialLogin'
@@ -33,6 +33,11 @@ const SignUp = () => {
 
     clearInvitationCookie()
     clearCookie(REDIRECT_COOKIE_NAME)
+
+    if (!VERIFY_USER_EMAIL) {
+      return router.replace('/')
+    }
+
     setTemporaryEmail(values.email)
     setVerifyEmailSentAt(Date.now())
     router.replace('/verify-email')
