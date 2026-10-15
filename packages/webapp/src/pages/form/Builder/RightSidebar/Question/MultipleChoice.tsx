@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next'
 
 import { helper } from '@heyform-inc/utils'
 
-import { Input, Select, Switch } from '@/components'
+import { Input, Select, Switch, Tooltip } from '@/components'
 
 import { useStoreContext } from '../../store'
-import { RequiredSettingsProps } from './Required'
+import { RequiredSettingsProps, useIsChoiceBranching } from './Required'
 
 interface RangeProps {
   min: number
@@ -178,9 +178,31 @@ const Range: FC<RangeProps> = ({ value, min, max, onChange }) => {
   )
 }
 
+const BranchingLockedSwitch: FC<{
+  isLocked: boolean
+  value?: boolean
+  onChange: (value: boolean) => void
+}> = ({ isLocked, value, onChange }) => {
+  const { t } = useTranslation()
+
+  // Allow turning a setting off so questions saved before branching was enforced can be fixed.
+  if (isLocked && !value) {
+    return (
+      <Tooltip label={String(t('form.builder.logic.branching.settingLocked'))}>
+        <span>
+          <Switch value={false} disabled />
+        </span>
+      </Tooltip>
+    )
+  }
+
+  return <Switch value={value} onChange={onChange} />
+}
+
 export default function MultipleChoiceSettings({ field }: RequiredSettingsProps) {
   const { t } = useTranslation()
   const { dispatch } = useStoreContext()
+  const isBranching = useIsChoiceBranching(field)
 
   const handleChange = useCallback(
     (key: string, value: any) => {
@@ -225,7 +247,8 @@ export default function MultipleChoiceSettings({ field }: RequiredSettingsProps)
           <label className="text-sm/6" htmlFor="#">
             {t('form.builder.settings.multipleSelection')}
           </label>
-          <Switch
+          <BranchingLockedSwitch
+            isLocked={isBranching}
             value={field.properties?.allowMultiple}
             onChange={value => handleChange('allowMultiple', value)}
           />
@@ -255,7 +278,8 @@ export default function MultipleChoiceSettings({ field }: RequiredSettingsProps)
         <label className="text-sm/6" htmlFor="#">
           {t('form.builder.settings.allowOther')}
         </label>
-        <Switch
+        <BranchingLockedSwitch
+          isLocked={isBranching}
           value={field.properties?.allowOther}
           onChange={value => handleChange('allowOther', value)}
         />

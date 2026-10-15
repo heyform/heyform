@@ -243,6 +243,11 @@ class LayoutInput {
 
 @InputType()
 class SharedFormFieldInput {
+  @Field(type => String, { nullable: true })
+  @IsOptional()
+  @IsString()
+  nextFieldId?: string
+
   @Field(type => GraphQLJSON, { nullable: true })
   title?: any[]
 
@@ -657,6 +662,11 @@ class LogicInput {
 
   @Field(type => [LogicPayloadInput])
   payloads: LogicPayload[]
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  branchByAnswer?: boolean
 }
 
 @InputType()
@@ -701,11 +711,10 @@ export class UpdateFormVariablesInput extends FormDetailInput {
 
 @InputType()
 export class UpdateFormSchemasInput extends FormDetailInput {
-  //
-
-  //
-
-  //
+  @Field(type => [LogicInput], { nullable: true })
+  @IsOptional()
+  @IsArray()
+  logics?: Logic[]
 
   @Field(type => [FormFieldInput])
   @IsArray()
@@ -1041,6 +1050,9 @@ export class FormFieldType {
   @Field()
   id: string
 
+  @Field(type => String, { nullable: true })
+  nextFieldId?: string
+
   @Field(type => GraphQLJSON, { nullable: true })
   title?: any[]
 
@@ -1163,6 +1175,9 @@ export class FormType {
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   logics?: Logic[]
+
+  @Field(type => [GraphQLJSONObject], { nullable: true })
+  draftLogics?: Logic[]
 
   @Field(type => [GraphQLJSONObject], { nullable: true })
   variables?: Variable[]

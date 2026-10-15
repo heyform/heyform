@@ -303,6 +303,10 @@ export function getNavigateFieldId(
       }
     }
   }
+
+  if (field.nextFieldId && thankYouFields.some(f => f.id === field.nextFieldId)) {
+    return field.nextFieldId
+  }
 }
 
 export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {

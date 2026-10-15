@@ -1,14 +1,10 @@
 import { insertWebFont } from '@heyform-inc/form-renderer'
 import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
-import { FC, useCallback, useEffect, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+import { FC, useEffect } from 'react'
 
-import { getFilteredFields, insertThemeStyle } from '../utils'
-import { Queue } from '../utils/queue'
-import { FormService } from '@/services'
-import { cn, useParam } from '@/utils'
+import { insertThemeStyle } from '../utils'
+import { cn } from '@/utils'
 
-import { useToast } from '@/components'
 import { useFormStore } from '@/store'
 
 import { useStoreContext } from '../store'
@@ -178,74 +174,12 @@ const Fields: FC = () => {
 }
 
 export default function BuilderCompose() {
-  const { t } = useTranslation()
-
-  const { formId } = useParam()
-  const toast = useToast()
-  const { state, dispatch } = useStoreContext()
-  const { form, themeSettings, updateForm } = useFormStore()
-
-  const queue = useRef(new Queue()).current
-
-  const sync = useCallback(async () => {
-    try {
-      const { fields } = getFilteredFields(state.fields!)
-
-      const result = await FormService.updateFormSchemas({
-        formId,
-        version: form?.version as number,
-        drafts: fields
-      })
-
-      updateForm(result)
-    } catch (err: any) {
-      toast({
-        title: t('components.error.title'),
-        message: err.message
-      })
-    }
-  }, [formId, state.fields, form?.version])
-
-  queue.on(event => {
-    switch (event) {
-      case 'start':
-        dispatch({
-          type: 'setSyncing',
-          payload: {
-            isSyncing: true
-          }
-        })
-        queue.sync(sync)
-        break
-
-      case 'complete':
-      case 'failed':
-        dispatch({
-          type: 'setSyncing',
-          payload: {
-            isSyncing: false
-          }
-        })
-        break
-    }
-  })
+  const { themeSettings } = useFormStore()
 
   useEffect(() => {
     insertWebFont(themeSettings?.theme?.fontFamily)
     insertThemeStyle(themeSettings?.theme)
   }, [themeSettings?.theme])
-
-  useEffect(() => {
-    if (state.version > 0) {
-      queue.add()
-    }
-  }, [state.version])
-
-  useEffect(() => {
-    return () => {
-      queue.clear()
-    }
-  }, [])
 
   return (
     <div

@@ -1504,6 +1504,26 @@
           "assignment": "Assign (=)",
           "navigate": "Jump to",
           "calculate": "Calculate"
+        },
+        "nextQuestion": {
+          "label": "Next question",
+          "formOrder": "Next in form order",
+          "untitled": "Untitled question",
+          "description": "Used when no conditional jump matches. Choose “Next in form order” to restore the normal sequence."
+        },
+        "branching": {
+          "label": "Branch by answer",
+          "description": "Send each answer to its own question. Every option needs a destination, and the question will be made required.",
+          "incompatible": "Turn off multiple selection and “Other” to branch by answer.",
+          "destinationPlaceholder": "Choose a destination",
+          "destinationRequired": "Choose where this answer goes",
+          "untitledOption": "Option {{index}}",
+          "droppedRules_one": "1 existing jump rule can’t be matched to a single option and will be removed when you save.",
+          "droppedRules_other": "{{count}} existing jump rules can’t be matched to a single option and will be removed when you save.",
+          "incomplete": "Some answers don’t have a destination",
+          "requiredLocked": "Required while this question branches by answer",
+          "settingLocked": "Unavailable while this question branches by answer",
+          "publishError": "“{{title}}” branches by answer, so it must be required, single-select without “Other”, and every option needs a destination. Open its logic to finish setting it up."
         }
       },
       "preview": {

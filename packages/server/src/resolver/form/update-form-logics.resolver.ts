@@ -12,7 +12,7 @@ export class UpdateFormLogicsResolver {
   @FormGuard()
   async updateFormLogics(@Args('input') input: UpdateFormLogicsInput): Promise<boolean> {
     return this.formService.update(input.formId, {
-      logics: input.logics
+      draftLogics: input.logics
     })
   }
 }

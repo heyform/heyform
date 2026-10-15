@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { toChoiceBranchPayloads } from '../utils'
 import { htmlUtils } from '@heyform-inc/answer-utils'
 
 import { Button, Form, Modal } from '@/components'
@@ -18,8 +19,8 @@ const LogicComponent = () => {
   const { state, dispatch } = useStoreContext()
   const { fields, currentField, logics } = state
 
-  const payloads = useMemo(() => {
-    return logics?.find(l => l.fieldId === currentField?.id)?.payloads || []
+  const currentLogic = useMemo(() => {
+    return logics?.find(l => l.fieldId === currentField?.id)
   }, [currentField, logics])
 
   function handleClose() {
@@ -39,15 +40,47 @@ const LogicComponent = () => {
     rcForm.submit()
   }
 
-  function handleFinish({ payloads }: AnyMap) {
+  function handleFinish({ payloads, nextFieldId, branching, destinations }: AnyMap) {
+    const field = state.currentField!
+
     handleClose()
+
+    // Every answer of a branching question has a destination, so it has no default and can't be skipped.
+    if (branching) {
+      payloads = [
+        ...toChoiceBranchPayloads(field, destinations || {}, currentLogic?.payloads),
+        ...(payloads || [])
+      ]
+      nextFieldId = undefined
+
+      if (!field.validations?.required) {
+        dispatch({
+          type: 'updateField',
+          payload: {
+            id: field.id,
+            updates: { validations: { ...field.validations, required: true } }
+          }
+        })
+      }
+    }
+
     dispatch({
-      type: 'setLogic',
+      type: 'setNextField',
       payload: {
-        fieldId: state.currentField!.id,
-        payloads
+        fieldId: field.id,
+        nextFieldId: nextFieldId || undefined
       }
     })
+    if (payloads !== undefined) {
+      dispatch({
+        type: 'setLogic',
+        payload: {
+          fieldId: field.id,
+          payloads,
+          ...(branching && { branchByAnswer: true })
+        }
+      })
+    }
   }
 
   return (
@@ -74,7 +107,7 @@ const LogicComponent = () => {
           form={rcForm}
           fields={fields}
           currentField={currentField!}
-          payloads={payloads}
+          logic={currentLogic}
           variables={state.variables}
           onFinish={handleFinish}
         />

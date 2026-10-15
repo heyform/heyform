@@ -20,6 +20,7 @@ import LogicModal from './LogicModal'
 import BuilderNavBar from './NavBar'
 import PreviewModal from './PreviewModal'
 import BuilderRightSidebar from './RightSidebar'
+import BuilderSync from './Sync'
 import VariableModal from './VariableModal'
 import { IState, StoreContext, storeReducer } from './store'
 
@@ -34,7 +35,7 @@ const Skeleton = () => (
   </div>
 )
 
-const Builder: FC<IBuilderProps> = ({ form }) => {
+export const Builder: FC<IBuilderProps> = ({ form }) => {
   const initialState: IState = {
     formId: form.id,
     version: 0,
@@ -43,13 +44,14 @@ const Builder: FC<IBuilderProps> = ({ form }) => {
     variables: form.variables,
     locale: form.settings?.locale || 'en',
     hiddenFields: form.hiddenFields || [],
-    ...initFields(form.drafts, form.logics)
+    ...initFields(form.drafts, form.draftLogics ?? form.logics)
   }
   const [state, dispatch] = useReducer(storeReducer, initialState)
   const store = useMemo(() => ({ state, dispatch }), [state])
 
   return (
     <StoreContext.Provider value={store}>
+      <BuilderSync />
       <div className="bg-background flex h-screen flex-col">
         <BuilderNavBar />
 

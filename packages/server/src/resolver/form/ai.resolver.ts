@@ -156,7 +156,7 @@ export class AIResolver {
     await this.enforceAIUsageLimits(team.id, user.id)
 
     const logics = await this.createAIJson<Record<string, unknown>[]>(
-      createLogicsPrompt(parseJson(form._drafts), form.logics, input.prompt),
+      createLogicsPrompt(parseJson(form._drafts), form.draftLogics ?? form.logics, input.prompt),
       'Failed to generate logics'
     )
 

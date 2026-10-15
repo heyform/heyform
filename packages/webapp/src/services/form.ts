@@ -218,7 +218,12 @@ export class FormService {
     })
   }
 
-  static updateFormSchemas(input: { formId: string; drafts: AnyMap[]; version: number }) {
+  static updateFormSchemas(input: {
+    formId: string
+    drafts: AnyMap[]
+    logics?: Logic[]
+    version: number
+  }) {
     return apollo.mutate({
       mutation: UPDATE_FORM_SCHEMAS_GQL,
       variables: {
@@ -227,7 +232,12 @@ export class FormService {
     })
   }
 
-  static publishForm(input: { formId: string; drafts: AnyMap[]; version: number }) {
+  static publishForm(input: {
+    formId: string
+    drafts: AnyMap[]
+    logics?: Logic[]
+    version: number
+  }) {
     return apollo.mutate({
       mutation: PUBLISH_FORM_SQL,
       variables: {

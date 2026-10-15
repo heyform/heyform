@@ -176,6 +176,8 @@ export interface Validation {
 
 export interface FormField {
   id: string
+  // Unconditional destination, used when no conditional navigation rule matches.
+  nextFieldId?: string
   title?: string | any[]
   description?: string | any[]
   kind: FieldKindEnum
@@ -444,4 +446,6 @@ export interface LogicPayload {
 export interface Logic {
   fieldId: string
   payloads: LogicPayload[]
+  // Choice questions only: send every answer to its own question via one "is" jump each.
+  branchByAnswer?: boolean
 }

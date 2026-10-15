@@ -78,8 +78,19 @@ export const Form: FC<FormProps> = ({
 
   async function handleFinish(formValue: any) {
     const value = getValues ? getValues(formValue) : formValue
+    const values = { ...state.values, [field.id]: value }
+    // Dispatch updates the store on the next render. Resolve the route from this
+    // answer now so opening or closing a branch cannot use the previous route.
+    const { fields: routeFields } = applyLogicToFields(
+      clone([...state.allFields, ...state.thankYouFields].filter(Boolean) as FormField[]),
+      state.logics,
+      state.parameters,
+      values
+    )
+    const routeIndex = routeFields.findIndex(f => f.id === field.id)
+    const isLastField = routeIndex >= routeFields.length - 1
 
-    if (helper.isValid(value)) {
+    if (helper.isValid(value) || Object.prototype.hasOwnProperty.call(state.values, field.id)) {
       dispatch({
         type: 'setValues',
         payload: {
@@ -90,16 +101,15 @@ export const Form: FC<FormProps> = ({
       })
     }
 
-    const values = { ...state.values, [field.id]: value }
-    const isTouched = validateLogicField(field, state.jumpFieldIds, values)
+    const isTouched = validateLogicField(routeFields[routeIndex], state.jumpFieldIds, values)
     const isPartialSubmission = state.isScrollNextDisabled && !isTouched
 
-    if (isLastBlock || isPartialSubmission) {
+    if (isLastField || isPartialSubmission) {
       if (loading) {
         return
       }
 
-      if (isLastBlock) {
+      if (isLastField) {
         dispatch({
           type: 'setIsSubmitTouched',
           payload: {
@@ -111,15 +121,15 @@ export const Form: FC<FormProps> = ({
       setSubmitError(undefined)
 
       const fields = isPartialSubmission
-        ? sliceFieldsByLogics(state.fields, state.jumpFieldIds)
-        : state.fields
+        ? sliceFieldsByLogics(routeFields, state.jumpFieldIds)
+        : routeFields
 
       try {
         validateFields(fields, values)
         setLoading(true)
 
         if (state.stripe) {
-          const paymentField = state.fields.find(f => f.kind === FieldKindEnum.PAYMENT)
+          const paymentField = routeFields.find(f => f.kind === FieldKindEnum.PAYMENT)
 
           if (paymentField) {
             const value = values[paymentField.id]
@@ -200,7 +210,7 @@ export const Form: FC<FormProps> = ({
 
     if (state.isSubmitTouched) {
       try {
-        validateFields(state.fields, values)
+        validateFields(routeFields, values)
       } catch (err: any) {
         console.error(err, err?.response)
         dispatch({
