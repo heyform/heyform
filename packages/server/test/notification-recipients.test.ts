@@ -158,13 +158,20 @@ function createQueue(
   )
   queue.logger = { error: (message: string) => logs.push(message) } as any
 
+  // Mirrors Bull: `update` replaces the job data and persists it for later attempts
   const job = {
     id: 'job_1',
     queue: { name: 'SubmissionNotificationQueue' },
-    data: { formId: 'form_1', submissionId: 'submission_1', integrationId: '' }
+    data: { formId: 'form_1', submissionId: 'submission_1', integrationId: '' } as Record<
+      string,
+      any
+    >,
+    update: async (data: Record<string, any>) => {
+      job.data = data
+    }
   }
 
-  return { run: () => queue.process(job as any), sent, attempted, logs }
+  return { run: () => queue.process(job as any), sent, attempted, logs, job }
 }
 
 async function testQueueWithoutRecipientsOnlyNotifiesOwner() {
@@ -235,6 +242,52 @@ async function testQueueOwnerFailureDoesNotBlockRecipients() {
   )
 }
 
+async function testQueueRetryOnlyResendsFailedRecipients() {
+  const failFor = ['bad@client.com']
+  const { run, sent, attempted } = createQueue(
+    { notificationRecipients: ['bad@client.com', 'good@client.com'] },
+    { failFor }
+  )
+
+  await assert.rejects(run(), /1 of 3/)
+
+  // Bull retries the same job once the transient failure is gone
+  failFor.length = 0
+  attempted.length = 0
+  await run()
+
+  assert.deepStrictEqual(attempted, ['bad@client.com'])
+  assert.deepStrictEqual(
+    sent.map(mail => mail.to),
+    ['Owner@Agency.com', 'good@client.com', 'bad@client.com']
+  )
+}
+
+async function testQueueRecordsNotifiedRecipientsOnJob() {
+  const { run, job } = createQueue(
+    { notificationRecipients: ['bad@client.com', 'good@client.com'] },
+    { failFor: ['bad@client.com'] }
+  )
+
+  await assert.rejects(run(), /1 of 3/)
+  assert.deepStrictEqual(job.data.notified, ['Owner@Agency.com', 'good@client.com'])
+  assert.strictEqual(job.data.formId, 'form_1')
+}
+
+async function testQueueKeepsSendingWhenRecordingProgressFails() {
+  const { run, sent, job, logs } = createQueue({ notificationRecipients: ['info@client.com'] })
+  job.update = async () => {
+    throw new Error('redis down')
+  }
+
+  await run()
+  assert.deepStrictEqual(
+    sent.map(mail => mail.to),
+    ['Owner@Agency.com', 'info@client.com']
+  )
+  assert.ok(logs.some(message => message.includes('failed to record')))
+}
+
 async function run() {
   testNormalizeTrimsLowercasesAndDedupes()
   testNormalizeTreatsNullAndUndefinedAsEmpty()
@@ -252,6 +305,9 @@ async function run() {
   await testQueueSkipsRecipientEqualToOwner()
   await testQueueIsolatesPerRecipientFailures()
   await testQueueOwnerFailureDoesNotBlockRecipients()
+  await testQueueRetryOnlyResendsFailedRecipients()
+  await testQueueRecordsNotifiedRecipientsOnJob()
+  await testQueueKeepsSendingWhenRecordingProgressFails()
 }
 
 if (require.main === module) {

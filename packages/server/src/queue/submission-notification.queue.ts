@@ -8,6 +8,11 @@ import { readNotificationRecipients } from '@utils'
 
 import { BaseQueue, IntegrationQueueJob } from './base.queue'
 
+interface SubmissionNotificationJob extends IntegrationQueueJob {
+  // Addresses already handed to the mail queue by a previous attempt of this job
+  notified?: string[]
+}
+
 @Processor('SubmissionNotificationQueue')
 export class SubmissionNotificationQueue extends BaseQueue {
   constructor(
@@ -20,7 +25,7 @@ export class SubmissionNotificationQueue extends BaseQueue {
   }
 
   @Process()
-  async process(job: Job<IntegrationQueueJob>): Promise<any> {
+  async process(job: Job<SubmissionNotificationJob>): Promise<any> {
     const [submission, form] = await Promise.all([
       this.submissionService.findById(job.data.submissionId),
       this.formService.findById(job.data.formId)
@@ -50,15 +55,34 @@ export class SubmissionNotificationQueue extends BaseQueue {
 
     // Attempt every address even if one fails, so a bad recipient never blocks the
     // others (or the owner). Failures are reported together once everyone was tried.
+    // Successful addresses are persisted on the job so a Bull retry only resends
+    // to the ones that failed instead of mailing everybody again.
+    const notified = new Set(job.data.notified ?? [])
     const failed: string[] = []
 
     for (const target of targets) {
+      if (notified.has(target.to)) {
+        continue
+      }
+
       try {
         await this.mailService.submissionNotification(target.to, options, target.locale)
       } catch (error) {
         failed.push(target.to)
         this.logger.error(
           `${job.queue.name}#${job.id} failed to notify ${target.to}: ${(error as Error)?.message}`
+        )
+        continue
+      }
+
+      notified.add(target.to)
+
+      try {
+        await job.update({ ...job.data, notified: Array.from(notified) })
+      } catch (error) {
+        // Not fatal: the mail is queued, a retry may just resend to this address
+        this.logger.error(
+          `${job.queue.name}#${job.id} failed to record ${target.to} as notified: ${(error as Error)?.message}`
         )
       }
     }
