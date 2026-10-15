@@ -3,6 +3,39 @@ import { helper } from '@heyform-inc/utils'
 // Keep in sync with MAX_NOTIFICATION_RECIPIENTS in packages/server/src/utils/notification-recipients.ts
 export const MAX_NOTIFICATION_RECIPIENTS = 10
 
+const SEPARATOR = /[\s,;]/
+
+/**
+ * Splits on whitespace, commas and semicolons, except inside a quoted local
+ * part (`"john doe"@example.com`), where separators and backslash-escaped
+ * quotes belong to the address.
+ */
+function splitRecipients(value: string): string[] {
+  const items: string[] = []
+  let current = ''
+  let quoted = false
+
+  for (let i = 0; i < value.length; i++) {
+    const char = value[i]
+
+    if (quoted && char === '\\' && i + 1 < value.length) {
+      current += char + value[++i]
+    } else if (char === '"') {
+      quoted = !quoted
+      current += char
+    } else if (!quoted && SEPARATOR.test(char)) {
+      items.push(current)
+      current = ''
+    } else {
+      current += char
+    }
+  }
+
+  items.push(current)
+
+  return items
+}
+
 /**
  * Splits free text (one address per line, or separated by commas, semicolons
  * or spaces) into trimmed, lowercased, de-duplicated entries.
@@ -10,8 +43,7 @@ export const MAX_NOTIFICATION_RECIPIENTS = 10
 export function parseNotificationRecipients(value?: string): string[] {
   return Array.from(
     new Set(
-      (value ?? '')
-        .split(/[\s,;]+/)
+      splitRecipients(value ?? '')
         .map(item => item.trim().toLowerCase())
         .filter(Boolean)
     )
