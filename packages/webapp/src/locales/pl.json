@@ -35,6 +35,10 @@
     "pt-br": {
       "original": "Português (Brasil)",
       "translated": "portugalski (Brazylia)"
+    },
+    "es": {
+      "original": "Español",
+      "translated": "Hiszpański"
     }
   },
   "timezones": {
