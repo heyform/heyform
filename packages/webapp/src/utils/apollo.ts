@@ -14,8 +14,6 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import { RetryLink } from 'apollo-link-retry'
 import ApolloLinkTimeout from 'apollo-link-timeout'
 
-import { helper } from '@heyform-inc/utils'
-
 import { GRAPHQL_API_URL, IS_PROD, LOCALE_COOKIE_NAME } from '@/consts'
 
 import { clearAuthState, getDeviceId } from './auth'
@@ -70,14 +68,15 @@ const headerLink = setContext((_, { headers }) => {
 })
 
 const errorLink = onError(({ response }) => {
-  if (helper.isValid(response?.errors)) {
-    const error: any = response!.errors![0]
+  const unauthorized = response?.errors?.some(
+    error =>
+      ('code' in error && error.code === 'UNAUTHORIZED') ||
+      ('status' in error && error.status === 401)
+  )
 
-    if (helper.isValid(error) && error.status === 401) {
-      clearAuthState()
-      window.location.href = '/logout'
-      return
-    }
+  if (unauthorized) {
+    clearAuthState()
+    window.location.href = '/logout'
   }
 })
 
