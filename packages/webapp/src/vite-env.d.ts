@@ -43,6 +43,7 @@ declare global {
       disableLoginWithGoogle?: boolean | string
       disableLoginWithOidc?: boolean | string
       oidcDisplayName?: string
+      oidcDisplayIconUrl?: string
       verifyUserEmail?: boolean | string
       templatesURL?: string
       helpCenterURL?: string
