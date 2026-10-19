@@ -1212,6 +1212,13 @@
         "respondent": {
           "headline": "回答者へのメール通知",
           "subHeadline": "フォーム送信後、カスタムテキストのメールを回答者に送信します。"
+        },
+        "recipients": {
+          "headline": "追加の受信者",
+          "subHeadline": "HeyForm アカウントがなくても、回答をこれらのアドレスにもメールで送信します。1 行に 1 アドレス、最大 {{max}} 件。",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} は有効なメールアドレスではありません",
+          "tooMany": "受信者は最大 {{max}} 件まで追加できます"
         }
       },
       "protection": {

@@ -1278,6 +1278,13 @@
         "respondent": {
           "headline": "Respondent email notifications",
           "subHeadline": "Send a customized text email to respondents after form submission."
+        },
+        "recipients": {
+          "headline": "Additional recipients",
+          "subHeadline": "Also email submissions to these addresses, even if they have no HeyForm account. One address per line, up to {{max}}.",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} is not a valid email address",
+          "tooMany": "Add at most {{max}} recipients"
         }
       },
       "protection": {

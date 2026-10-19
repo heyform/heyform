@@ -26,6 +26,9 @@ interface TempSettings extends FormSettings {
   endDate?: Dayjs
   _timeLimit?: TypeNumberValue
   _ipLimitTime?: TypeNumberValue
+  enableEmailNotification?: boolean
+  notificationRecipients?: string[]
+  _notificationRecipients?: string
   captcha?: string
   enableRespondentNotification?: boolean
 }
@@ -151,6 +154,10 @@ export const useFormStore = create<FormStoreType>()(
 
             if (tempSettings.ipLimitTime) {
               tempSettings._ipLimitTime = parseDuration(tempSettings.ipLimitTime)
+            }
+
+            if (helper.isValidArray(tempSettings.notificationRecipients)) {
+              tempSettings._notificationRecipients = tempSettings.notificationRecipients!.join('\n')
             }
 
             state.tempSettings = tempSettings

@@ -5,7 +5,11 @@ import { helper, pickValidValues } from '@heyform-inc/utils'
 import { FormModel, UserModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService } from '@service'
-import { normalizeTranslationLanguages, passwordHash } from '@utils'
+import {
+  normalizeNotificationRecipients,
+  normalizeTranslationLanguages,
+  passwordHash
+} from '@utils'
 
 @Resolver()
 @Auth()
@@ -51,6 +55,13 @@ export class UpdateFormResolver {
 
     if (helper.isValid(input.password)) {
       updates['settings.password'] = await passwordHash(input.password!, BCRYPT_SALT)
+    }
+
+    // `pickValidValues` drops empty arrays, but an empty list must clear the recipients.
+    if (input.notificationRecipients !== undefined) {
+      updates['settings.notificationRecipients'] = normalizeNotificationRecipients(
+        input.notificationRecipients
+      )
     }
 
     if (helper.isTrue(input.redirectOnCompletion)) {

@@ -1212,6 +1212,13 @@
         "respondent": {
           "headline": "Powiadomienia e-mail dla respondentów",
           "subHeadline": "Wyślij spersonalizowaną wiadomość tekstową do respondentów po przesłaniu formularza."
+        },
+        "recipients": {
+          "headline": "Dodatkowi odbiorcy",
+          "subHeadline": "Wysyłaj odpowiedzi także na te adresy, nawet jeśli nie mają konta HeyForm. Jeden adres w wierszu, maksymalnie {{max}}.",
+          "placeholder": "name@example.com",
+          "invalid": "{{email}} nie jest prawidłowym adresem e-mail",
+          "tooMany": "Dodaj maksymalnie {{max}} odbiorców"
         }
       },
       "protection": {

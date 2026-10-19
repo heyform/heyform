@@ -15,6 +15,7 @@ import FormSettingsEmailNotification from './EmailNotification'
 import FormSettingsGeneral from './General'
 import FormSettingsProtection from './Protection'
 import FormSettingsTranslations from './Translations'
+import { parseNotificationRecipients } from './notificationRecipients'
 
 export default function FormSettings() {
   const { t } = useTranslation()
@@ -48,6 +49,14 @@ export default function FormSettings() {
           [settings._ipLimitTime.value, settings._ipLimitTime.type].join('')
         )
         delete settings._ipLimitTime
+      }
+
+      // The recipients field is only mounted while notifications are enabled
+      if (settings._notificationRecipients !== undefined) {
+        settings.notificationRecipients = parseNotificationRecipients(
+          settings._notificationRecipients
+        )
+        delete settings._notificationRecipients
       }
 
       settings.active = !settings.closeForm
