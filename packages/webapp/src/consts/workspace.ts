@@ -6,6 +6,7 @@ export const CHANGELOG_STORAGE_KEY = 'HEYFORM_CHANGELOG'
 export const DEFAULT_PROJECT_NAMES: AnyMap = {
   de: "{name}'s Projekt",
   en: "{name}'s project",
+  es: 'Proyecto de {name}',
   fr: 'Projet de {name}',
   ja: '{name}のプロジェクト',
   pl: 'Projekt {name}',

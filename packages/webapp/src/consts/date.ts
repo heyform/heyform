@@ -1716,6 +1716,13 @@ export const DATE_FORMATS = {
     time: 'hh:mm A',
     date: 'MMM DD, YYYY hh:mm A'
   },
+  es: {
+    year: 'YYYY',
+    month: 'MMMM',
+    day: 'DD/MM/YYYY',
+    time: 'HH:mm',
+    date: 'DD/MM/YYYY HH:mm'
+  },
   fr: {
     year: 'YYYY',
     month: 'MMMM',
