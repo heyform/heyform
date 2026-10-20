@@ -399,12 +399,13 @@
     "duplicate": "创建副本",
     "expand": "展开",
     "edit": "编辑",
+    "moveto": "移动到",
     "next": "下一步",
     "optional": "可选",
     "permanentlyDelete": "永久删除",
     "previous": "上一步",
-    "publish": "Publish",
-    "print": "Print",
+    "publish": "发布",
+    "print": "打印",
     "revert": "还原",
     "refresh": "刷新数据",
     "rename": "重命名",
@@ -448,8 +449,7 @@
       "title": "发生错误",
       "message": "请稍候再试。如果错误仍然存在，请联系我们。",
       "retry": "重试"
-    },
-    "moveto": "移动到"
+    }
   },
   "login": {
     "title": "登录",
@@ -525,7 +525,7 @@
   },
   "workspace": {
     "notExist": "该工作区不存在。",
-    "backHome": "返回 HeyForm",
+    "noAccess": "你没有访问此工作区的权限。",
     "appearance": {
       "title": "外观",
       "system": "系统偏好",
@@ -631,6 +631,12 @@
   },
   "settings": {
     "title": "工作区设置",
+    "general": {
+      "title": "通用",
+      "name": "名称",
+      "logo": "标志（Logo）",
+      "pickLogo": "为您的工作区选择一个标志。"
+    },
     "branding": {
       "title": "品牌",
       "removeBrandingHeadline": "移除 HeyForm 品牌",
@@ -673,12 +679,6 @@
         "label": "输入发送到 <strong>{{email}}</strong> 的删除验证码。",
         "required": "验证码不能为空"
       }
-    },
-    "general": {
-      "title": "通用",
-      "name": "名称",
-      "logo": "标志（Logo）",
-      "pickLogo": "为您的工作区选择一个标志。"
     },
     "form": {
       "exportImport": "导出/导入",
@@ -736,6 +736,12 @@
         "required": "名称不能为空"
       }
     },
+    "moveto": {
+      "headline": "将 '{{name}}' 移动到",
+      "project": {
+        "required": "项目不能为空"
+      }
+    },
     "delete": {
       "headline": "确认项目删除请求",
       "sentSuccess": "删除验证码已发送",
@@ -753,19 +759,19 @@
         "invalid": "请准确输入 {{name}} 以确认。"
       },
       "confirm": "删除项目"
-    },
-    "moveto": {
-      "headline": "将 '{{name}}' 移动到",
-      "project": {
-        "required": "项目不能为空"
-      }
     }
   },
   "form": {
     "menuTip": "重命名、创建副本等...",
+    "metadata_zero": "尚无提交 · 编辑于 {{date}}",
+    "metadata_one": "{{count}} 次提交 · 编辑于 {{date}}",
+    "metadata_other": "{{count}} 次提交 · 编辑于 {{date}}",
     "metadata2_zero": "暂无提交 · 剩余 {{date}}",
     "metadata2_one": "{{count}} 条提交 · 剩余 {{date}}",
     "metadata2_other": "{{count}} 条提交 · 剩余 {{date}}",
+    "metadata3_zero": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_one": "<span>{{status}}</span> · $t(form.metadata)",
+    "metadata3_other": "<span>{{status}}</span> · $t(form.metadata)",
     "editForm": "编辑表单",
     "active": "活跃",
     "draft": "草稿",
@@ -777,14 +783,7 @@
     "creation": {
       "title": "创建表单",
       "headline": "创建一个新表单",
-      "project": {
-        "label": "项目",
-        "required": "项目不能为空"
-      },
-      "name": {
-        "label": "表单名称",
-        "required": "表单名称不能为空"
-      },
+      "defaultName": "未命名",
       "scratch": {
         "headline": "从头开始",
         "subHeadline": "从可用的问题类型中获取一个空白画布进行构建"
@@ -797,7 +796,55 @@
         "headline": "使用 AI 创建",
         "subHeadline": "在几秒钟内生成自定义问题"
       },
-      "defaultName": "未命名"
+      "project": {
+        "label": "项目",
+        "required": "项目不能为空"
+      }
+    },
+    "template": {
+      "headline": "模板",
+      "categories": [
+        "调查问卷",
+        "潜在客户生成",
+        "客户支持",
+        "反馈意见",
+        "员工/工作相关",
+        "预订与订单",
+        "市场营销",
+        "注册",
+        "教育",
+        "活动",
+        "医疗保健",
+        "申请",
+        "问卷与测验",
+        "远程工作",
+        "联系",
+        "商业",
+        "新冠疫情 (COVID-19) ",
+        "投票",
+        "请求",
+        "银行与金融",
+        "捐赠与慈善"
+      ],
+      "use": "使用此模板"
+    },
+    "ai": {
+      "topic": {
+        "label": "你想创建什么？",
+        "description": "请尽可能详细地提供您想要创建的表单信息。",
+        "ideasForYou": "为你推荐的创意",
+        "examples": [
+          "创建一个求职申请表，以收集候选人的详细信息和简历。",
+          "客户满意度调查，用于评估产品质量和客户服务。",
+          "给我一个活动注册表，以收集参与者的信息。"
+        ],
+        "required": "此字段不能为空"
+      },
+      "reference": {
+        "label": "参考（可选）",
+        "description": "提供参考后，AI 将严格在参考范围内生成问题和选项。"
+      },
+      "submit": "生成问题"
     },
     "chat": {
       "title": "HeyForm AI 助手",
@@ -839,6 +886,21 @@
         "submission2_one": "{{count}} 次提交 · 平均 {{average}}",
         "submission2_other": "{{count}} 次提交 · 平均 {{average}}"
       }
+    },
+    "customReport": {
+      "title": "自定义报告",
+      "metadata_zero": "尚无提交",
+      "metadata_one": "{{count}} 次提交",
+      "metadata_other": "{{count}} 次提交",
+      "enablePublicAccess": "启用公共访问权限",
+      "copyLink": "复制报告链接",
+      "theme": "主题",
+      "heading": "标题",
+      "question": "问题",
+      "showQuestion": "显示问题",
+      "hideQuestion": "隐藏问题",
+      "chart": "图表",
+      "background": "背景"
     },
     "submissions": {
       "title": "提交列表",
@@ -901,7 +963,7 @@
       },
       "slack": {
         "channel": {
-          "headline": "Channel"
+          "headline": "频道"
         }
       },
       "lark": {
@@ -1151,6 +1213,10 @@
         "navigationArrows": {
           "headline": "导航箭头",
           "subHeadline": "您可以启用此功能，让受访者在问题之间导航。"
+        },
+        "openLinksInNewTab": {
+          "headline": "在新标签页中打开外部链接",
+          "subHeadline": "启用后，问题中的链接将在新的浏览器标签页中打开，而不是在嵌入的表单内打开，从而避免表单嵌入其他网站时出现页面被拦截或无法访问的问题。"
         }
       },
       "access": {
@@ -1239,11 +1305,16 @@
     },
     "builder": {
       "title": "构建器",
+      "navbar": {
+        "syncing": "正在保存问题..."
+      },
       "question": {
         "menuTip": "创建副本、删除等...",
         "title": "问题",
         "answer": "答案",
         "recommended": "推荐",
+        "welcome": "欢迎屏幕",
+        "thankYou": "结束屏幕",
         "multipleChoice": "多项选择",
         "phoneNumber": "电话号码",
         "shortText": "简短文本",
@@ -1276,9 +1347,13 @@
         "legalConsent": "法律同意",
         "date": "日期",
         "payment": "支付",
-        "string": "字符串",
-        "welcome": "欢迎屏幕",
-        "thankYou": "结束屏幕"
+        "string": "字符串"
+      },
+      "mention": {
+        "mention": "提及一个问题",
+        "hiddenfield": "提及一个隐藏字段",
+        "variable": "提及一个变量",
+        "emptyState": "未找到结果。"
       },
       "sidebar": {
         "questions": "问题",
@@ -1382,22 +1457,22 @@
         "title": "逻辑",
         "hiddenFields": {
           "menuTip": "编辑、删除等...",
+          "headline": "隐藏字段",
           "subHeadline": "隐藏字段使您能够跟踪调查对象。它们对填写表单的人是不可见的，但可以高效地收集和利用数据。",
           "addHiddenField": "添加隐藏字段",
           "updateHiddenField": "更新隐藏字段",
-          "name": "名称",
-          "headline": "隐藏字段",
-          "emptyState": "隐藏字段允许进行不可见的高效数据收集。 <a>了解更多 <icon /></a>"
+          "emptyState": "隐藏字段允许进行不可见的高效数据收集。 <a>了解更多 <icon /></a>",
+          "name": "名称"
         },
         "variable": {
           "headline": "变量",
           "subHeadline": "表单变量表示基于受访者响应的隐藏计算值。例如，它可以用于计算测验的分数。",
           "addVariable": "添加变量",
           "updateVariable": "更新变量",
+          "emptyState": "变量从响应中计算隐藏值。 <a>了解更多 <icon /></a>",
           "type": "类型",
           "name": "名称",
-          "defaultValue": "默认值",
-          "emptyState": "变量从响应中计算隐藏值。 <a>了解更多 <icon /></a>"
+          "defaultValue": "默认值"
         },
         "rule": {
           "headline": "规则",
@@ -1409,6 +1484,7 @@
           "when": "当",
           "then": "则",
           "deleteRule": "删除规则",
+          "emptyState": "逻辑使表单能够对响应做出反应。 <a>了解更多 <icon /></a>",
           "singleRule": "已设置1条规则",
           "multipleRules": "已设置{{count}}条规则",
           "redirect": "完成后重定向",
@@ -1438,95 +1514,49 @@
           "division": "除 (÷)",
           "assignment": "赋值 (=)",
           "navigate": "跳转到",
-          "calculate": "计算",
-          "emptyState": "逻辑使表单能够对响应做出反应。 <a>了解更多 <icon /></a>"
+          "calculate": "计算"
+        },
+        "nextQuestion": {
+          "label": "下一问题",
+          "formOrder": "按表单顺序的下一项",
+          "untitled": "未命名问题",
+          "description": "当没有匹配的条件跳转时使用。选择“按表单顺序的下一项”可恢复默认顺序。"
+        },
+        "branching": {
+          "label": "按答案分支",
+          "description": "将每个答案分别导向对应的问题。每个选项都需要指定目标，且该问题将被设为必答。",
+          "incompatible": "请关闭多选和“其他”选项，才能按答案分支。",
+          "destinationPlaceholder": "选择目标",
+          "destinationRequired": "请选择此答案的去向",
+          "untitledOption": "选项 {{index}}",
+          "droppedRules_one": "有 1 条现有跳转规则无法匹配到单个选项，保存时将被移除。",
+          "droppedRules_other": "有 {{count}} 条现有跳转规则无法匹配到单个选项，保存时将被移除。",
+          "incomplete": "部分答案尚未指定目标",
+          "requiredLocked": "此问题按答案分支时，该问题为必答",
+          "settingLocked": "此问题按答案分支时，该设置不可用",
+          "publishError": "“{{title}}”按答案分支，因此必须设为必答、单选且不含“其他”选项，并且每个选项都需要指定目标。请打开其逻辑设置完成配置。"
         }
       },
       "preview": {
         "title": "预览",
         "desktop": "桌面版",
         "mobile": "手机版"
-      },
-      "mention": {
-        "mention": "提及一个问题",
-        "hiddenfield": "提及一个隐藏字段",
-        "variable": "提及一个变量",
-        "emptyState": "未找到结果。"
-      },
-      "navbar": {
-        "syncing": "正在保存问题..."
       }
     },
     "suspend": {
       "headline": "表单已被暂停",
       "subHeadline": "如果您对暂停有任何疑问，请点击下方按钮联系我们。",
       "contactUs": "联系我们"
-    },
-    "metadata_zero": "尚无提交 · 编辑于 {{date}}",
-    "metadata_one": "{{count}} 次提交 · 编辑于 {{date}}",
-    "metadata_other": "{{count}} 次提交 · 编辑于 {{date}}",
-    "metadata3_zero": "<span>{{status}}</span> · $t(form.metadata)",
-    "metadata3_one": "<span>{{status}}</span> · $t(form.metadata)",
-    "metadata3_other": "<span>{{status}}</span> · $t(form.metadata)",
-    "template": {
-      "headline": "模板",
-      "categories": [
-        "调查问卷",
-        "潜在客户生成",
-        "客户支持",
-        "反馈意见",
-        "员工/工作相关",
-        "预订与订单",
-        "市场营销",
-        "注册",
-        "教育",
-        "活动",
-        "医疗保健",
-        "申请",
-        "问卷与测验",
-        "远程工作",
-        "联系",
-        "商业",
-        "新冠疫情 (COVID-19) ",
-        "投票",
-        "请求",
-        "银行与金融",
-        "捐赠与慈善"
-      ],
-      "use": "使用此模板"
-    },
-    "ai": {
-      "topic": {
-        "label": "你想创建什么？",
-        "description": "请尽可能详细地提供您想要创建的表单信息。",
-        "ideasForYou": "为你推荐的创意",
-        "examples": [
-          "创建一个求职申请表，以收集候选人的详细信息和简历。",
-          "客户满意度调查，用于评估产品质量和客户服务。",
-          "给我一个活动注册表，以收集参与者的信息。"
-        ],
-        "required": "此字段不能为空"
-      },
-      "reference": {
-        "label": "参考（可选）",
-        "description": "提供参考后，AI 将严格在参考范围内生成问题和选项。"
-      },
-      "submit": "生成问题"
-    },
-    "customReport": {
-      "title": "自定义报告",
-      "metadata_zero": "尚无提交",
-      "metadata_one": "{{count}} 次提交",
-      "metadata_other": "{{count}} 次提交",
-      "enablePublicAccess": "启用公共访问权限",
-      "copyLink": "复制报告链接",
-      "theme": "主题",
-      "heading": "标题",
-      "question": "问题",
-      "chart": "图表",
-      "background": "背景",
-      "showQuestion": "显示问题",
-      "hideQuestion": "隐藏问题"
+    }
+  },
+  "template": {
+    "use": {
+      "title": "模板",
+      "workspace": "工作区",
+      "createWorkspace": "创建一个工作区",
+      "project": "项目",
+      "createProject": "创建一个项目",
+      "submit": "从这个模板开始"
     }
   },
   "user": {
@@ -1569,16 +1599,6 @@
         "description": "您的所有账户数据，包括但不限于工作区、项目、表单和提交内容，将在删除请求后的{{remainingTime}}小时内被永久删除。\n如果这是一个错误操作，您可以在下方取消账户删除。",
         "cancel": "取消安排删除"
       }
-    }
-  },
-  "template": {
-    "use": {
-      "title": "模板",
-      "workspace": "工作区",
-      "createWorkspace": "创建一个工作区",
-      "project": "项目",
-      "createProject": "创建一个项目",
-      "submit": "从这个模板开始"
     }
   }
 }
