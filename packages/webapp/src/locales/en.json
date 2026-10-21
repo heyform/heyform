@@ -884,7 +884,8 @@
         "submission_other": "{{count}} submissions",
         "submission2_zero": "No submissions yet · {{average}} average",
         "submission2_one": "{{count}} submission · {{average}} average",
-        "submission2_other": "{{count}} submissions · {{average}} average"
+        "submission2_other": "{{count}} submissions · {{average}} average",
+        "noOtherText": "Everyone who chose “Other” left it blank."
       }
     },
     "customReport": {

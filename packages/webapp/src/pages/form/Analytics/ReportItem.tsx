@@ -1,12 +1,13 @@
 import { CHOICE_FIELD_KINDS, RATING_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
-import { FC, useMemo } from 'react'
+import { IconChevronDown, IconChevronRight } from '@tabler/icons-react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { helper, toFixed } from '@heyform-inc/utils'
 
 import { useFormStore } from '@/store'
 
-import FormReportSubmissions from './Submissions'
+import FormReportSubmissions, { FormReportOtherAnswers } from './Submissions'
 
 interface FormReportItemProps {
   index: number
@@ -15,6 +16,8 @@ interface FormReportItemProps {
 }
 
 interface ChoicesProps {
+  // The question the choices belong to; its typed "Other" entries load on demand.
+  fieldId?: string
   chooses: any[]
 }
 
@@ -22,17 +25,23 @@ interface RatingsProps extends ChoicesProps {
   length: number
 }
 
-const Choices: FC<ChoicesProps> = ({ chooses }) => {
+const Choices: FC<ChoicesProps> = ({ fieldId, chooses }) => {
   const { t } = useTranslation()
-  const total = useMemo(() => chooses.reduce((prev, next) => prev + next.count, 0) || 1, [chooses])
+  const total = useMemo(
+    () => chooses.reduce((prev, next) => prev + (next.count || 0), 0) || 1,
+    [chooses]
+  )
+  const [isOtherOpen, setIsOtherOpen] = useState(false)
 
   return (
     <div className="heyform-report-chart">
       {chooses.map((row, index) => {
-        const percent = `${toFixed((row.count * 100) / total)}%`
+        const percent = `${toFixed(((row.count || 0) * 100) / total)}%`
+        const canExpand = row.isOther && row.count > 0 && fieldId
+        const ChevronIcon = isOtherOpen ? IconChevronDown : IconChevronRight
 
-        return (
-          <div key={index} className="heyform-report-chart-item">
+        const bar = (
+          <>
             <div
               className="heyform-report-chart-background"
               style={{
@@ -40,13 +49,36 @@ const Choices: FC<ChoicesProps> = ({ chooses }) => {
               }}
             />
             <div className="heyform-report-chart-content">
-              <span className="heyform-report-chart-percent">
+              <span className="heyform-report-chart-percent flex items-center gap-1">
+                {canExpand && <ChevronIcon className="h-4 w-4" />}
                 {row.label} · {percent}
               </span>
               <span className="heyform-report-chart-count">
-                {t('form.analytics.report.submission', { count: row.count })}
+                {t('form.analytics.report.submission', { count: row.count || 0 })}
               </span>
             </div>
+          </>
+        )
+
+        if (!canExpand) {
+          return (
+            <div key={index} className="heyform-report-chart-item">
+              {bar}
+            </div>
+          )
+        }
+
+        return (
+          <div key={index}>
+            <button
+              type="button"
+              className="heyform-report-chart-item block w-full text-left"
+              aria-expanded={isOtherOpen}
+              onClick={() => setIsOtherOpen(open => !open)}
+            >
+              {bar}
+            </button>
+            {isOtherOpen && <FormReportOtherAnswers fieldId={fieldId} />}
           </div>
         )
       })}
@@ -103,7 +135,7 @@ const FormReportItem: FC<FormReportItemProps> = ({ index, response, isHideFieldE
 
   const children = useMemo(() => {
     if (isChoices) {
-      return <Choices chooses={response.chooses} />
+      return <Choices fieldId={response.id} chooses={response.chooses} />
     } else if (isRating) {
       return <Ratings length={response.properties?.total} chooses={response.chooses} />
     } else {

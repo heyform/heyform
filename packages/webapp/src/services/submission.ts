@@ -71,7 +71,7 @@ export class SubmissionService {
     })
   }
 
-  static answers(input: { formId: string; fieldId: string; page: number }) {
+  static answers(input: { formId: string; fieldId: string; page: number; otherOnly?: boolean }) {
     return apollo.query({
       query: SUBMISSION_ANSWERS_GQL,
       variables: {

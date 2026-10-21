@@ -884,7 +884,8 @@
         "submission_other": "{{count}} respuestas",
         "submission2_zero": "Aún no hay respuestas · {{average}} de media",
         "submission2_one": "{{count}} respuesta · {{average}} de media",
-        "submission2_other": "{{count}} respuestas · {{average}} de media"
+        "submission2_other": "{{count}} respuestas · {{average}} de media",
+        "noOtherText": "Todos los que eligieron “Otro” lo dejaron en blanco."
       }
     },
     "customReport": {
