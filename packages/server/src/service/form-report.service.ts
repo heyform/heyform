@@ -12,6 +12,7 @@ import { FORM_REPORT_RATE } from '@environments'
 import { OTHER_CHOICE_ID, flattenFields } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 import { FormReportModel, FormReportResponse } from '@model'
+import { OTHER_REPORT_FIELD_KINDS } from '@utils'
 
 @Injectable()
 export class FormReportService {
@@ -126,10 +127,8 @@ export class FormReportService {
         }
       }
 
-      if (
-        [FieldKindEnum.MULTIPLE_CHOICE, FieldKindEnum.PICTURE_CHOICE].includes(field.kind) &&
-        (field.properties?.allowOther || otherCount > 0)
-      ) {
+      // Always written, even at zero, so a report without it is one built before "Other" was counted.
+      if (OTHER_REPORT_FIELD_KINDS.includes(field.kind)) {
         response.chooses.push({ id: OTHER_CHOICE_ID, count: otherCount } as any)
       }
 

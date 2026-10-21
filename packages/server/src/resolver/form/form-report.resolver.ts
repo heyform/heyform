@@ -6,6 +6,7 @@ import { OTHER_CHOICE_ID, flattenFields } from '@heyform-inc/answer-utils'
 import { FormModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { FormReportService, SubmissionService } from '@service'
+import { OTHER_REPORT_FIELD_KINDS } from '@utils'
 
 const EXCLUDE_KINDS = [
   FieldKindEnum.GROUP,
@@ -49,9 +50,10 @@ export class FormReportResolver {
     ])
 
     // Reports saved before "Other" was counted have no Other row; rebuild them in the background.
+    // Check every choice question, since answers given before "Other" was turned off still count.
     const isMissingOther = fields.some(
       field =>
-        field.properties?.allowOther &&
+        OTHER_REPORT_FIELD_KINDS.includes(field.kind) &&
         result?.responses?.some(
           row => row.id === field.id && !row.chooses?.some(choose => choose.id === OTHER_CHOICE_ID)
         )

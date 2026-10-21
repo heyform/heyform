@@ -57,7 +57,8 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
             })
 
             // "Other" answers sit beside the options, so they share the same percentage basis.
-            if (other || field.properties?.allowOther) {
+            // Reports store a zero Other count on every choice question; show it where it means something.
+            if (other?.count > 0 || field.properties?.allowOther) {
               row.chooses = [
                 ...(row.chooses || []),
                 {

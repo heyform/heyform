@@ -1,6 +1,7 @@
 import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import * as assert from 'assert'
 
+import { FormReportResolver } from '../src/resolver/form/form-report.resolver'
 import { FormReportService } from '../src/service/form-report.service'
 import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
 
@@ -81,10 +82,11 @@ async function testCountsOtherAnswersBesideOptions() {
     { id: 'producer', count: 0 },
     { id: OTHER_CHOICE_ID, count: 1 }
   ])
-  // No "Other" option and no Other answers: no Other row.
+  // Every choice question stores an Other count, so a report without one is from before they were counted.
   assert.deepStrictEqual(chooses.plain, [
     { id: 'motion', count: 1 },
-    { id: 'producer', count: 0 }
+    { id: 'producer', count: 0 },
+    { id: OTHER_CHOICE_ID, count: 0 }
   ])
   assert.deepStrictEqual(chooses['yes-no'], [
     { id: 'yes', count: 1 },
@@ -92,8 +94,37 @@ async function testCountsOtherAnswersBesideOptions() {
   ])
 }
 
+async function rebuildsReport(fields: any[], responses: any[]) {
+  let queued = false
+  const resolver = new FormReportResolver(
+    {
+      findById: async () => ({ responses }),
+      addQueue: async () => {
+        queued = true
+      }
+    } as any,
+    { findAllGroupInFieldIds: async () => [] } as any
+  )
+
+  await resolver.formReport({ fields } as any, { formId: 'form' } as any)
+  return queued
+}
+
+async function testRebuildsReportsSavedBeforeOtherWasCounted() {
+  // "Other" has since been turned off, but answers given before that still need counting.
+  const fields = [{ id: 'role', kind: FieldKindEnum.MULTIPLE_CHOICE, properties: { choices } }]
+  const legacy = [{ id: 'role', chooses: [{ id: 'motion', count: 1 }] }]
+  const current = [
+    { id: 'role', chooses: [...legacy[0].chooses, { id: OTHER_CHOICE_ID, count: 0 }] }
+  ]
+
+  assert.strictEqual(await rebuildsReport(fields, legacy), true)
+  assert.strictEqual(await rebuildsReport(fields, current), false)
+}
+
 async function run() {
   await testCountsOtherAnswersBesideOptions()
+  await testRebuildsReportsSavedBeforeOtherWasCounted()
 }
 
 run().catch(error => {
