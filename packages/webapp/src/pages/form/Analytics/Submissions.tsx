@@ -1,5 +1,5 @@
 import { Column, FieldKindEnum } from '@heyform-inc/shared-types-enums'
-import { useBoolean } from 'ahooks'
+import { useBoolean, useMemoizedFn } from 'ahooks'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -134,36 +134,34 @@ export function FormReportOtherAnswers({ fieldId }: { fieldId: string }) {
   const [answers, setAnswers] = useState<AnyMap[]>([])
   const [total, setTotal] = useState(0)
 
-  const fetch = useCallback(
-    async (newPage: number) => {
-      setTrue()
+  // A stable function, so a failed fetch's toast doesn't re-run the effect and fetch again.
+  const fetch = useMemoizedFn(async (newPage: number) => {
+    setTrue()
 
-      try {
-        const result = await SubmissionService.answers({
-          formId,
-          fieldId,
-          page: newPage,
-          otherOnly: true
-        })
+    try {
+      const result = await SubmissionService.answers({
+        formId,
+        fieldId,
+        page: newPage,
+        otherOnly: true
+      })
 
-        setAnswers(result.answers)
-        setTotal(result.total)
-        setPage(newPage)
-      } catch (err: any) {
-        toast({
-          title: String(t('components.error.title')),
-          message: err.message
-        })
-      }
+      setAnswers(result.answers)
+      setTotal(result.total)
+      setPage(newPage)
+    } catch (err: any) {
+      toast({
+        title: String(t('components.error.title')),
+        message: err.message
+      })
+    }
 
-      setFalse()
-    },
-    [fieldId, formId, setFalse, setTrue, t, toast]
-  )
+    setFalse()
+  })
 
   useEffect(() => {
     fetch(1)
-  }, [fetch])
+  }, [fetch, fieldId, formId])
 
   if (!loading && total < 1) {
     return (
