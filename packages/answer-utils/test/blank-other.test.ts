@@ -74,19 +74,36 @@ describe('blank "Other"', () => {
   test('reads as "Other" wherever answers are rendered', () => {
     const [answer] = fieldValuesToAnswers([choice({ allowBlankOther: true })], blank as any)
 
-    expect(otherChoiceText('')).toBe('Other')
-    expect(otherChoiceText('Producer')).toBe('Producer')
-    expect(otherChoiceText(undefined)).toBeUndefined()
-    expect(otherChoiceText(null)).toBeUndefined()
+    const allowed = { allowOther: true, allowBlankOther: true }
+    expect(otherChoiceText('', allowed)).toBe('Other')
+    expect(otherChoiceText('Producer', allowed)).toBe('Producer')
+    expect(otherChoiceText(undefined, allowed)).toBeUndefined()
+    expect(otherChoiceText(null, allowed)).toBeUndefined()
 
     expect(answersToPlain([answer])).toContain('Other')
     expect(answersToHtml([answer])).toContain('Other')
     expect(Object.values(answersToApiObject([answer]))).toEqual(['Other'])
-    expect(JSON.stringify(answersToJson([answer], []))).toContain('"Other"')
+    expect(JSON.stringify(answersToJson([answer]))).toContain('"Other"')
 
     const [typed] = fieldValuesToAnswers([choice({ allowMultiple: true })], {
       role: { value: ['motion'], other: 'Producer' }
     } as any)
     expect(Object.values(answersToApiObject([typed]))).toEqual(['Motion, Producer'])
+  })
+
+  test('only reads a blank "Other" as an answer where the question allows it', () => {
+    expect(otherChoiceText('')).toBeUndefined()
+    expect(otherChoiceText('', { allowOther: true })).toBeUndefined()
+    expect(otherChoiceText('', { allowBlankOther: true })).toBeUndefined()
+    expect(otherChoiceText('Producer')).toBe('Producer')
+  })
+
+  test('drops a blank "Other" sent to a question without "Other"', () => {
+    const [answer] = fieldValuesToAnswers([choice({ allowOther: false })], {
+      role: { value: ['motion'], other: '' }
+    } as any)
+
+    expect(answer.value).toEqual({ value: ['motion'] })
+    expect(answersToPlain([answer])).not.toContain('Other')
   })
 })

@@ -2,8 +2,22 @@ import { Answer, CHOICES_FIELD_KINDS, FormField } from '@heyform-inc/shared-type
 
 import { helper } from '@heyform-inc/utils'
 
-import { fieldsToValidateRules } from './fields-to-validate-rules'
+import { FieldsToValidateRules, fieldsToValidateRules } from './fields-to-validate-rules'
 import { validate } from './validate'
+
+// Validation accepts a blank "Other" on questions without "Other", so drop it before storing.
+// Otherwise it would show up as "Other" or match an "Other" jump rule.
+function dropBlankOther(rule: FieldsToValidateRules, value: any) {
+  if (
+    CHOICES_FIELD_KINDS.includes(rule.kind) &&
+    value?.other === '' &&
+    !(rule.allowOther && rule.allowBlankOther)
+  ) {
+    return { value: value.value }
+  }
+
+  return value
+}
 
 export function fieldValuesToAnswers(
   fields: FormField[],
@@ -26,7 +40,7 @@ export function fieldValuesToAnswers(
           title: rule.title,
           kind: rule.kind,
           properties: rule.properties || {},
-          value
+          value: dropBlankOther(rule, value)
         } as any)
       } catch (_) {}
 
@@ -52,7 +66,7 @@ export function fieldValuesToAnswers(
       title: rule.title,
       kind: rule.kind,
       properties: rule.properties || {},
-      value
+      value: dropBlankOther(rule, value)
     } as any)
   }
 

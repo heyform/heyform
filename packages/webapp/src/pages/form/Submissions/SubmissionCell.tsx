@@ -12,7 +12,12 @@ import {
   isTrustedStripeReceiptUrl,
   unixDate
 } from '@/utils'
-import { CURRENCY_SYMBOLS, OTHER_CHOICE_ID, htmlUtils } from '@heyform-inc/answer-utils'
+import {
+  CURRENCY_SYMBOLS,
+  OTHER_CHOICE_ID,
+  htmlUtils,
+  otherChoiceText
+} from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
 import { Badge, Checkbox, Image } from '@/components'
@@ -217,8 +222,10 @@ const InputTableItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
 const MultipleChoiceItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
   const { t } = useTranslation()
   const choices = field.properties?.choices as Choice[]
-  // A blank "Other" is stored as an empty string and still counts as an answer.
-  const hasOther = helper.isObject(answer.value) && helper.isString(answer.value.other)
+  // A blank "Other" is stored as an empty string and counts as an answer where the question allows it.
+  const hasOther =
+    helper.isObject(answer.value) &&
+    helper.isValid(otherChoiceText(answer.value.other, answer.properties || field.properties))
 
   if (
     answer.kind !== field.kind ||

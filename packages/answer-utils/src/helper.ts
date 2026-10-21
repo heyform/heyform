@@ -1,3 +1,4 @@
+import { Property } from '@heyform-inc/shared-types-enums'
 import dayjs from 'dayjs'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
@@ -140,11 +141,14 @@ export function isAfterDate(
   return dayjs(value, valueFormat).isAfter(dayjs(expected, expectedFormat))
 }
 
-// The respondent's "Other" text, or "Other" itself when they chose it without typing.
-export function otherChoiceText(other?: string | null): string | undefined {
-  if (helper.isNil(other)) {
-    return
+// The respondent's "Other" text, or "Other" itself when they chose it without typing on a
+// question that allows that. Pass the properties saved with the answer.
+export function otherChoiceText(other?: string | null, properties?: Property): string | undefined {
+  if (helper.isValid(other)) {
+    return other!
   }
 
-  return helper.isValid(other) ? other! : OTHER_CHOICE_LABEL
+  if (other === '' && properties?.allowOther && properties?.allowBlankOther) {
+    return OTHER_CHOICE_LABEL
+  }
 }
