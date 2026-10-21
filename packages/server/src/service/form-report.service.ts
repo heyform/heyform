@@ -9,7 +9,7 @@ import { FormService } from './form.service'
 import { RedisService } from './redis.service'
 import { SubmissionService } from './submission.service'
 import { FORM_REPORT_RATE } from '@environments'
-import { flattenFields } from '@heyform-inc/answer-utils'
+import { OTHER_CHOICE_ID, flattenFields } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 import { FormReportModel, FormReportResponse } from '@model'
 
@@ -78,6 +78,8 @@ export class FormReportService {
         average: 0,
         chooses: []
       }
+      // "Other" answers, typed or left blank, are counted beside the options.
+      let otherCount = 0
 
       for (const answer of answers) {
         if (helper.isNil(answer.value)) {
@@ -93,10 +95,12 @@ export class FormReportService {
             const choices = field.properties.choices
 
             if (helper.isValidArray(choices)) {
-              let values = answer.value.value
+              let values = answer.value.value || []
 
               if (answer.kind === FieldKindEnum.YES_NO) {
                 values = [answer.value]
+              } else if (helper.isString(answer.value.other)) {
+                otherCount += 1
               }
 
               response.chooses = choices!.map(choice => {
@@ -120,6 +124,13 @@ export class FormReportService {
             response.chooses[value] = (response.chooses[value] || 0) + 1
             break
         }
+      }
+
+      if (
+        [FieldKindEnum.MULTIPLE_CHOICE, FieldKindEnum.PICTURE_CHOICE].includes(field.kind) &&
+        (field.properties?.allowOther || otherCount > 0)
+      ) {
+        response.chooses.push({ id: OTHER_CHOICE_ID, count: otherCount } as any)
       }
 
       response.average = parseFloat((response.average / response.count).toFixed(1))

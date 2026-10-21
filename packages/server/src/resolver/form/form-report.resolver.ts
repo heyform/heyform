@@ -2,7 +2,7 @@ import { FieldKindEnum, STATEMENT_FIELD_KINDS } from '@heyform-inc/shared-types-
 
 import { Auth, Form, FormGuard } from '@decorator'
 import { FormDetailInput, FormReportType } from '@graphql'
-import { flattenFields } from '@heyform-inc/answer-utils'
+import { OTHER_CHOICE_ID, flattenFields } from '@heyform-inc/answer-utils'
 import { FormModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { FormReportService, SubmissionService } from '@service'
@@ -38,7 +38,8 @@ export class FormReportResolver {
     @Form() form: FormModel,
     @Args('input') input: FormDetailInput
   ): Promise<FormReportType> {
-    const fieldIds = flattenFields(form.fields)
+    const fields = flattenFields(form.fields)
+    const fieldIds = fields
       .filter(field => !EXCLUDE_KINDS.includes(field.kind))
       .map(field => field.id)
 
@@ -46,6 +47,19 @@ export class FormReportResolver {
       this.formReportService.findById(input.formId),
       this.submissionService.findAllGroupInFieldIds(input.formId, fieldIds)
     ])
+
+    // Reports saved before "Other" was counted have no Other row; rebuild them in the background.
+    const isMissingOther = fields.some(
+      field =>
+        field.properties?.allowOther &&
+        result?.responses?.some(
+          row => row.id === field.id && !row.chooses?.some(choose => choose.id === OTHER_CHOICE_ID)
+        )
+    )
+
+    if (isMissingOther) {
+      await this.formReportService.addQueue(input.formId)
+    }
 
     return {
       responses: result?.responses || [],
