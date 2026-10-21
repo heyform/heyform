@@ -20,6 +20,17 @@ import {
 import { uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
 
+const SUBMISSION_ANSWERS_GQL = /* GraphQL */ `
+  query submissions($input: SubmissionsInput!) {
+    submissions(input: $input) {
+      submissions {
+        id
+        answers
+      }
+    }
+  }
+`
+
 export function build(baseUrl: string) {
   const { suite, test } = defineSuite('navigation')
   let owner: E2EClient
@@ -287,18 +298,47 @@ export function build(baseUrl: string) {
     assert.ok(!complete.errors?.length, JSON.stringify(complete.errors))
 
     // Only q5 -> q6 is on the Other route, so the required q2-q4 must not be demanded.
-    const respondent = new E2EClient({ baseUrl })
-    const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
-      input: { formId }
+    const submit = async (other: string) => {
+      const respondent = new E2EClient({ baseUrl })
+      const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+        input: { formId }
+      })
+      return respondent.gql('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+        input: {
+          formId,
+          openToken,
+          hiddenFields: [],
+          answers: { q1: { value: [], other }, q5: 'b', q6: 'c' }
+        }
+      })
+    }
+    const typed = await submit('Editor')
+    assert.ok(!typed.errors?.length, JSON.stringify(typed.errors))
+
+    // A blank "Other" is refused until the question allows it, then stored as an empty string.
+    const refused = await submit('')
+    assert.ok(refused.errors?.length > 0)
+
+    const blankDrafts = choiceDrafts.map((field: any) =>
+      field.id === 'q1'
+        ? { ...field, properties: { ...field.properties, allowBlankOther: true } }
+        : field
+    )
+    const latest = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    await owner.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId, version: latest.version, drafts: blankDrafts }
     })
-    await respondent.gqlOk('completeSubmission', COMPLETE_SUBMISSION_GQL, {
-      input: {
-        formId,
-        openToken,
-        hiddenFields: [],
-        answers: { q1: { value: [], other: 'Editor' }, q5: 'b', q6: 'c' }
-      }
+    const blank = await submit('')
+    assert.ok(!blank.errors?.length, JSON.stringify(blank.errors))
+
+    const stored = await owner.gqlOk<any>('submissions', SUBMISSION_ANSWERS_GQL, {
+      input: { formId, category: 'inbox', page: 1, limit: 30 }
     })
+    const others = stored.submissions
+      .map((submission: any) => submission.answers.find((answer: any) => answer.id === 'q1'))
+      .filter((answer: any) => answer?.value?.other !== undefined)
+      .map((answer: any) => answer.value.other)
+    assert.deepStrictEqual(others.sort(), ['', 'Editor'])
   })
 
   test('saves and publishes fields and routing together, including clearing all rules', async () => {

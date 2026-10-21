@@ -114,6 +114,45 @@ async function testExportsMultipleChoiceOtherText() {
   assert.deepStrictEqual(parseCsvRow(row), ['submission-1', 'Red, Chartreuse', '', ''])
 }
 
+async function testExportsBlankOtherAsOther() {
+  const formField: FormField = {
+    id: 'favorite-colors',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    title: 'Favorite colors',
+    properties: {
+      allowMultiple: true,
+      allowOther: true,
+      allowBlankOther: true,
+      choices: [
+        { id: 'red', label: 'Red' },
+        { id: 'blue', label: 'Blue' }
+      ]
+    }
+  }
+  const csv = await new ExportFileService().csv(
+    [formField],
+    [],
+    [
+      {
+        id: 'submission-1',
+        answers: [
+          {
+            id: formField.id,
+            kind: formField.kind,
+            title: formField.title,
+            properties: formField.properties,
+            value: { value: ['red'], other: '' }
+          }
+        ],
+        hiddenFields: []
+      } as any
+    ]
+  )
+
+  const [, row] = csv.split(/\r?\n/)
+  assert.deepStrictEqual(parseCsvRow(row), ['submission-1', 'Red, Other', '', ''])
+}
+
 async function testExportsLegacyFileUploadUrls() {
   const csv = await new ExportFileService().csv(
     [
@@ -270,6 +309,7 @@ async function testMalformedLegacyInputTableDoesNotBreakExport() {
 async function run() {
   await testExportsRepeatedQuestionTitlesByFieldId()
   await testExportsMultipleChoiceOtherText()
+  await testExportsBlankOtherAsOther()
   await testExportsLegacyFileUploadUrls()
   await testNeutralizesSpreadsheetFormulas()
   await testMalformedLegacyInputTableDoesNotBreakExport()

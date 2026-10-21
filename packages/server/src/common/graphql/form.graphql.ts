@@ -109,6 +109,9 @@ class SharedPropertyInput {
   allowOther?: boolean
 
   @Field({ nullable: true })
+  allowBlankOther?: boolean
+
+  @Field({ nullable: true })
   allowMultiple?: boolean
 
   @Field({ nullable: true })
@@ -864,6 +867,9 @@ export class PropertyType {
 
   @Field({ nullable: true })
   allowOther?: boolean
+
+  @Field({ nullable: true })
+  allowBlankOther?: boolean
 
   @Field({ nullable: true })
   allowMultiple?: boolean
