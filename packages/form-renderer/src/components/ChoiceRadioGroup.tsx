@@ -13,6 +13,8 @@ interface ChoiceRadioGroupProps extends Omit<IComponentProps, 'onChange'> {
   options: ChoiceRadioOption[]
   allowMultiple?: boolean
   allowOther?: boolean
+  // "Other" can be chosen without typing; it's then answered as an empty string.
+  allowBlankOther?: boolean
   badge?: ChoiceBadgeEnum
   verticalAlignment?: boolean
   isOtherFilled?: boolean
@@ -32,6 +34,7 @@ export const ChoiceRadioGroup: FC<ChoiceRadioGroupProps> = ({
   options,
   allowMultiple = false,
   allowOther = false,
+  allowBlankOther = false,
   badge = ChoiceBadgeEnum.LETTER,
   verticalAlignment = true,
   isOtherFilled = false,
@@ -60,6 +63,10 @@ export const ChoiceRadioGroup: FC<ChoiceRadioGroupProps> = ({
       if (!allowMultiple) {
         newValues = [value]
         setIsOtherSelected(false)
+
+        // Choosing an option replaces "Other" on a single-select question.
+        onChange?.({ value: newValues })
+        return
       } else {
         if (values.includes(value)) {
           newValues = values.filter((v: any) => v !== value)
@@ -81,8 +88,13 @@ export const ChoiceRadioGroup: FC<ChoiceRadioGroupProps> = ({
       let other: string | undefined = newOtherValue
 
       if (helper.isEmpty(other)) {
-        other = undefined
-        setIsOtherSelected(false)
+        if (allowBlankOther) {
+          // Clearing the text keeps "Other" chosen.
+          other = ''
+        } else {
+          other = undefined
+          setIsOtherSelected(false)
+        }
       }
 
       onChange?.({
@@ -90,16 +102,40 @@ export const ChoiceRadioGroup: FC<ChoiceRadioGroupProps> = ({
         other
       })
     },
-    [onChange, values]
+    [allowBlankOther, onChange, values]
   )
 
   const handleOtherBlur = useCallback(() => {
-    if (helper.isEmpty(otherValue)) {
+    if (!allowBlankOther && helper.isEmpty(otherValue)) {
       setIsOtherSelected(false)
     }
-  }, [otherValue])
+  }, [allowBlankOther, otherValue])
 
   const handleOtherClick = useCallback(() => {
+    if (allowBlankOther) {
+      if (isOtherSelected) {
+        // A checked, empty "Other" on a multi-select question toggles off like an option.
+        if (allowMultiple && helper.isEmpty(otherValue)) {
+          setIsOtherSelected(false)
+          onChange?.({ value: values, other: undefined })
+        }
+
+        return
+      }
+
+      if (isDisabled) {
+        return
+      }
+
+      setIsOtherSelected(true)
+      onChange?.({
+        value: allowMultiple ? values : [],
+        other: otherValue ?? ''
+      })
+
+      return
+    }
+
     if (isDisabled) {
       return
     }
@@ -112,11 +148,11 @@ export const ChoiceRadioGroup: FC<ChoiceRadioGroupProps> = ({
         other: otherValue
       })
     }
-  }, [isDisabled, isOtherSelected, allowMultiple, otherValue])
+  }, [allowBlankOther, isDisabled, isOtherSelected, allowMultiple, onChange, otherValue, values])
 
   useEffect(() => {
     if (allowOther) {
-      setIsOtherSelected(helper.isValid(otherValue))
+      setIsOtherSelected(helper.isValid(otherValue) || (allowBlankOther && otherValue === ''))
     }
   }, [])
 

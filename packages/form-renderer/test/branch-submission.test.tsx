@@ -267,50 +267,55 @@ test.each(['no', ''])(
   }
 )
 
-test('an "Other" answer follows the "Other" branch of a branching choice question', async () => {
-  const role: FormField = {
-    id: 'role',
-    kind: FieldKindEnum.MULTIPLE_CHOICE,
-    title: 'role',
-    validations: { required: true },
-    properties: {
-      allowOther: true,
-      choices: [
-        { id: 'motion', label: 'Motion' },
-        { id: 'director', label: 'Director' }
-      ]
+test.each(['Producer', ''])(
+  'an "Other" answer ("%s") follows the "Other" branch of a branching choice question',
+  async other => {
+    const role: FormField = {
+      id: 'role',
+      kind: FieldKindEnum.MULTIPLE_CHOICE,
+      title: 'role',
+      validations: { required: true },
+      properties: {
+        allowOther: true,
+        // A blank "Other" is only an answer when the question allows it.
+        allowBlankOther: true,
+        choices: [
+          { id: 'motion', label: 'Motion' },
+          { id: 'director', label: 'Director' }
+        ]
+      }
     }
+    const logic: Logic = {
+      fieldId: 'role',
+      branchByAnswer: true,
+      payloads: [
+        ['motion', 'motion-q'],
+        ['director', 'end'],
+        [OTHER_CHOICE_ID, 'other-q']
+      ].map(([expected, fieldId]) => ({
+        id: expected,
+        condition: { comparison: ComparisonEnum.IS, expected },
+        action: { kind: ActionEnum.NAVIGATE, fieldId }
+      }))
+    }
+    const onSubmit = await mount(
+      [role, question('motion-q', true), question('other-q', true), ending('end')],
+      [logic]
+    )
+
+    await answer(JSON.stringify({ value: [], other }))
+    await submit()
+
+    expect(onSubmit).not.toHaveBeenCalled()
+    expect(currentQuestion()).toBe('other-q')
+
+    await answer('Runs the budget')
+    await submit()
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      { role: { value: [], other }, 'other-q': 'Runs the budget' },
+      false,
+      undefined
+    )
   }
-  const logic: Logic = {
-    fieldId: 'role',
-    branchByAnswer: true,
-    payloads: [
-      ['motion', 'motion-q'],
-      ['director', 'end'],
-      [OTHER_CHOICE_ID, 'other-q']
-    ].map(([expected, fieldId]) => ({
-      id: expected,
-      condition: { comparison: ComparisonEnum.IS, expected },
-      action: { kind: ActionEnum.NAVIGATE, fieldId }
-    }))
-  }
-  const onSubmit = await mount(
-    [role, question('motion-q', true), question('other-q', true), ending('end')],
-    [logic]
-  )
-
-  await answer(JSON.stringify({ value: [], other: 'Producer' }))
-  await submit()
-
-  expect(onSubmit).not.toHaveBeenCalled()
-  expect(currentQuestion()).toBe('other-q')
-
-  await answer('Runs the budget')
-  await submit()
-
-  expect(onSubmit).toHaveBeenCalledWith(
-    { role: { value: [], other: 'Producer' }, 'other-q': 'Runs the budget' },
-    false,
-    undefined
-  )
-})
+)
