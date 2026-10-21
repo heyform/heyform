@@ -12,9 +12,7 @@ import { helper } from '@heyform-inc/utils'
 import { getDateFormat } from './helper'
 
 export interface FieldsToValidateRules
-  extends FormField,
-    Validation,
-    Partial<Omit<Property, 'choices' | 'tableColumns'>> {
+  extends FormField, Validation, Partial<Omit<Property, 'choices' | 'tableColumns'>> {
   title: string
   description: string
   choices?: string[]
@@ -89,6 +87,10 @@ function convert(field: FormField): FieldsToValidateRules {
 
   if (helper.isBool(field.properties?.allowOther)) {
     rule.allowOther = field.properties!.allowOther
+  }
+
+  if (helper.isBool(field.properties?.allowBlankOther)) {
+    rule.allowBlankOther = field.properties!.allowBlankOther
   }
 
   if (helper.isValidArray(field.properties?.choices)) {

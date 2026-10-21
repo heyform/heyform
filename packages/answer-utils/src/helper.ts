@@ -3,6 +3,8 @@ import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { helper } from '@heyform-inc/utils'
 
+import { OTHER_CHOICE_LABEL } from './consts'
+
 export { htmlToText } from '@heyform-inc/utils'
 
 export function isNumber(arg: any): boolean {
@@ -136,4 +138,13 @@ export function isAfterDate(
   const expectedFormat = getDateFormat(DEFAULT_DATE_FORMAT, allowTime)
 
   return dayjs(value, valueFormat).isAfter(dayjs(expected, expectedFormat))
+}
+
+// The respondent's "Other" text, or "Other" itself when they chose it without typing.
+export function otherChoiceText(other?: string | null): string | undefined {
+  if (helper.isNil(other)) {
+    return
+  }
+
+  return helper.isValid(other) ? other! : OTHER_CHOICE_LABEL
 }
