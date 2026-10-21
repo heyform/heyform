@@ -13,6 +13,7 @@ import { Edge, Node } from 'react-flow-renderer'
 
 import {
   BRANCHING_CHOICE_FIELD_KINDS,
+  OTHER_CHOICE_ID,
   createFieldNavigation,
   getChoiceBranchingErrors,
   getPayloadChoiceId,
@@ -93,9 +94,15 @@ export function canBranchByAnswer(field: FormFieldType): boolean {
   return BRANCHING_CHOICE_FIELD_KINDS.includes(field.kind)
 }
 
+// Every answer a branching question can receive: its options, then "Other" if it's allowed.
+export function getBranchChoiceIds(field: FormFieldType): string[] {
+  const choiceIds = (field.properties?.choices || []).map(c => c.id)
+  return field.properties?.allowOther ? [...choiceIds, OTHER_CHOICE_ID] : choiceIds
+}
+
 // Jumps that aren't a single-option "is" rule can't be shown per answer, so branching drops them.
 export function countUnmappedJumps(field: FormFieldType, payloads: LogicPayload[] = []): number {
-  const choiceIds = (field.properties?.choices || []).map(c => c.id)
+  const choiceIds = getBranchChoiceIds(field)
 
   return payloads.filter(p => {
     const choiceId = getPayloadChoiceId(p)
@@ -126,14 +133,14 @@ export function toChoiceBranchPayloads(
   destinations: Record<string, string>,
   previous: LogicPayload[] = []
 ): LogicPayload[] {
-  return (field.properties?.choices || []).map(choice => ({
+  return getBranchChoiceIds(field).map(choiceId => ({
     // Keep payload IDs stable so flow edges don't churn between saves.
     id:
       previous.find(
-        p => p.action.kind === ActionEnum.NAVIGATE && getPayloadChoiceId(p) === choice.id
+        p => p.action.kind === ActionEnum.NAVIGATE && getPayloadChoiceId(p) === choiceId
       )?.id || nanoid(12),
-    condition: { comparison: ComparisonEnum.IS, expected: choice.id },
-    action: { kind: ActionEnum.NAVIGATE, fieldId: destinations[choice.id] }
+    condition: { comparison: ComparisonEnum.IS, expected: choiceId },
+    action: { kind: ActionEnum.NAVIGATE, fieldId: destinations[choiceId] }
   })) as LogicPayload[]
 }
 

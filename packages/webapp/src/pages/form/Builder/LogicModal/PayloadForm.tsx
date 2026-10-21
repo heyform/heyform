@@ -21,7 +21,7 @@ import {
   getChoiceDestinations,
   getPayloadFormValues
 } from '../utils'
-import { htmlUtils, validatePayload } from '@heyform-inc/answer-utils'
+import { OTHER_CHOICE_ID, htmlUtils, validatePayload } from '@heyform-inc/answer-utils'
 import { nanoid } from '@heyform-inc/utils'
 
 import { Button, Form, Switch, Tooltip } from '@/components'
@@ -270,9 +270,18 @@ const ChoiceBranching: FC<ChoiceBranchingProps> = ({
   onBranchingChange
 }) => {
   const { t } = useTranslation()
-  const isIncompatible = !!(
-    currentField.properties?.allowMultiple || currentField.properties?.allowOther
-  )
+  const isIncompatible = !!currentField.properties?.allowMultiple
+  const answers = [
+    ...(currentField.properties?.choices || []).map((choice, index) => ({
+      id: choice.id,
+      label:
+        htmlUtils.plain(choice.label) ||
+        String(t('form.builder.logic.branching.untitledOption', { index: index + 1 }))
+    })),
+    ...(currentField.properties?.allowOther
+      ? [{ id: OTHER_CHOICE_ID, label: String(t('form.builder.compose.otherChoice')) }]
+      : [])
+  ]
 
   return (
     <div className="mb-6 space-y-4">
@@ -322,15 +331,12 @@ const ChoiceBranching: FC<ChoiceBranchingProps> = ({
               {String(t('form.builder.logic.branching.droppedRules', { count: droppedRuleCount }))}
             </p>
           )}
-          {(currentField.properties?.choices || []).map((choice, index) => (
-            <div key={choice.id} className="flex items-start gap-x-4">
-              <div className="w-1/3 truncate text-sm leading-9">
-                {htmlUtils.plain(choice.label) ||
-                  String(t('form.builder.logic.branching.untitledOption', { index: index + 1 }))}
-              </div>
+          {answers.map(answer => (
+            <div key={answer.id} className="flex items-start gap-x-4">
+              <div className="w-1/3 truncate text-sm leading-9">{answer.label}</div>
               <Form.Item
                 className="flex-1"
-                name={['destinations', choice.id]}
+                name={['destinations', answer.id]}
                 rules={[
                   {
                     required: true,

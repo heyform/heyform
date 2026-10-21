@@ -11,6 +11,7 @@ import {
 
 import { helper } from '@heyform-inc/utils'
 
+import { OTHER_CHOICE_ID } from './consts'
 import {
   isAfterDate,
   isBeforeDate,
@@ -100,7 +101,14 @@ function validateChoice(
   const rawValue = values?.[field.id] as ChoiceValue
   const { expected: rawExpected } = condition as TextCondition
   const expected = helper.isArray(rawExpected) ? rawExpected : [rawExpected]
-  const value = [...(rawValue?.value || []), rawValue?.other].filter(helper.isValid)
+  // Rules that name "Other" match whenever it's chosen, whatever the respondent typed.
+  // Rules written against the typed text keep comparing that text.
+  const other = expected.includes(OTHER_CHOICE_ID)
+    ? helper.isNil(rawValue?.other)
+      ? undefined
+      : OTHER_CHOICE_ID
+    : rawValue?.other
+  const value = [...(rawValue?.value || []), other].filter(helper.isValid)
 
   switch (condition.comparison) {
     case ComparisonEnum.IS:

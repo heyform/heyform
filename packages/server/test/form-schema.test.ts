@@ -14,6 +14,7 @@ import {
   isSafeCustomCSS,
   sanitizeFormDrafts
 } from '../src/utils/form-schema'
+import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
 
 function testDefaultNavigationValidation() {
   const fields: FormField[] = [
@@ -314,6 +315,26 @@ function testChoiceBranchingValidation() {
         logics
       ),
     (error: any) => error.response?.code === 'not_required'
+  )
+
+  // "Other" is one more answer, so it needs a destination of its own.
+  const withOther = [
+    {
+      ...fields[0],
+      properties: { fields: [{ ...role, properties: { ...role.properties, allowOther: true } }] }
+    },
+    ...fields.slice(1)
+  ]
+  assert.throws(
+    () => assertValidChoiceBranching(withOther, logics),
+    (error: any) =>
+      error.response?.code === 'missing_destination' &&
+      /every answer needs a destination/.test(error.message)
+  )
+  assert.doesNotThrow(() =>
+    assertValidChoiceBranching(withOther, [
+      { ...logics[0], payloads: [...logics[0].payloads, jump(OTHER_CHOICE_ID, 'end')] }
+    ] as Logic[])
   )
 }
 

@@ -12,6 +12,7 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
 import { initFields } from '../src/pages/form/Builder/utils'
 import { FormService } from '../src/services'
+import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
 
 import i18n from '../src/i18n'
 import { Builder as FormBuilder } from '../src/pages/form/Builder'
@@ -56,7 +57,7 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
-async function mount() {
+async function mount({ allowOther = false } = {}) {
   const initial: IState = {
     formId: 'form',
     locale: 'en',
@@ -72,6 +73,7 @@ async function mount() {
           title: 'Role',
           kind: FieldKindEnum.MULTIPLE_CHOICE,
           properties: {
+            allowOther,
             choices: [
               { id: 'motion', label: 'Motion' },
               { id: 'producer', label: 'Producer' }
@@ -194,6 +196,42 @@ test('enables, saves, reopens and disables answer branching without losing calcu
   const disabled = vi.mocked(FormService.updateFormSchemas).mock.calls.at(-1)![0]
   expect(disabled.logics![0].branchByAnswer).toBeUndefined()
   expect(disabled.logics![0].payloads).toEqual(saved.logics![0].payloads)
+})
+
+test('gives "Other" its own required destination when branching', async () => {
+  await mount({ allowOther: true })
+  await click('Edit routing')
+  await toggleBranching()
+  expect(document.body.textContent).not.toContain('Turn off multiple selection')
+  await choose('motion', 'motion-q')
+  await choose('producer', 'producer-q')
+  await click('Save changes')
+  await flushSave()
+
+  // Without a destination for "Other" the dialog stays open and nothing is saved.
+  expect(FormService.updateFormSchemas).not.toHaveBeenCalled()
+  expect(document.body.textContent).toContain('Choose where this answer goes')
+
+  await choose(OTHER_CHOICE_ID, 'end')
+  await click('Save changes')
+  await flushSave()
+
+  const saved = vi.mocked(FormService.updateFormSchemas).mock.calls.at(-1)![0]
+  expect(saved.logics![0].payloads.map(p => [p.condition, p.action])).toEqual([
+    [
+      { comparison: 'is', expected: 'motion' },
+      { kind: 'navigate', fieldId: 'motion-q' }
+    ],
+    [
+      { comparison: 'is', expected: 'producer' },
+      { kind: 'navigate', fieldId: 'producer-q' }
+    ],
+    [
+      { comparison: 'is', expected: OTHER_CHOICE_ID },
+      { kind: 'navigate', fieldId: 'end' }
+    ],
+    [calculation.condition, calculation.action]
+  ])
 })
 
 test('keeps autosave active in the production Logic Flow tab and persists its connection', async () => {

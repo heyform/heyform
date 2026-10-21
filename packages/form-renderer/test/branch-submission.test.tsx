@@ -12,7 +12,7 @@ import { act, useReducer } from 'react'
 import { type Root, createRoot } from 'react-dom/client'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
-import { applyLogicToFields } from '@heyform-inc/answer-utils'
+import { OTHER_CHOICE_ID, applyLogicToFields } from '@heyform-inc/answer-utils'
 
 import { Form } from '../src/blocks/Form'
 import { initI18n } from '../src/i18n'
@@ -106,7 +106,12 @@ async function mount(
                 key={field.id}
                 field={field}
                 initialValues={{ input: state.values[field.id] ?? '' }}
-                getValues={value => value.input}
+                // Choice answers are typed as JSON so one text input can drive every question.
+                getValues={value =>
+                  field.kind === FieldKindEnum.MULTIPLE_CHOICE && value.input
+                    ? JSON.parse(value.input)
+                    : value.input
+                }
               >
                 <Field name="input" rules={[{ required: field.validations?.required }]}>
                   <input aria-label={field.id} />
@@ -261,3 +266,51 @@ test.each(['no', ''])(
     expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('default-end')
   }
 )
+
+test('an "Other" answer follows the "Other" branch of a branching choice question', async () => {
+  const role: FormField = {
+    id: 'role',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    title: 'role',
+    validations: { required: true },
+    properties: {
+      allowOther: true,
+      choices: [
+        { id: 'motion', label: 'Motion' },
+        { id: 'director', label: 'Director' }
+      ]
+    }
+  }
+  const logic: Logic = {
+    fieldId: 'role',
+    branchByAnswer: true,
+    payloads: [
+      ['motion', 'motion-q'],
+      ['director', 'end'],
+      [OTHER_CHOICE_ID, 'other-q']
+    ].map(([expected, fieldId]) => ({
+      id: expected,
+      condition: { comparison: ComparisonEnum.IS, expected },
+      action: { kind: ActionEnum.NAVIGATE, fieldId }
+    }))
+  }
+  const onSubmit = await mount(
+    [role, question('motion-q', true), question('other-q', true), ending('end')],
+    [logic]
+  )
+
+  await answer(JSON.stringify({ value: [], other: 'Producer' }))
+  await submit()
+
+  expect(onSubmit).not.toHaveBeenCalled()
+  expect(currentQuestion()).toBe('other-q')
+
+  await answer('Runs the budget')
+  await submit()
+
+  expect(onSubmit).toHaveBeenCalledWith(
+    { role: { value: [], other: 'Producer' }, 'other-q': 'Runs the budget' },
+    false,
+    undefined
+  )
+})

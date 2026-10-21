@@ -2,6 +2,7 @@ import { FieldKindEnum, LogicCondition } from '@heyform-inc/shared-types-enums'
 import { type FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
 import { Input, Select } from '@/components'
@@ -92,7 +93,16 @@ const MultipleChoiceCondition: FC<DefaultProps & { field: FormFieldType }> = ({
   onComparisonChange,
   onExpectedChange
 }) => {
+  const { t } = useTranslation()
+
   const MemoSelect = useMemo(() => {
+    const options = [
+      ...(field.properties?.choices || []),
+      ...(field.properties?.allowOther
+        ? [{ id: OTHER_CHOICE_ID, label: t('form.builder.compose.otherChoice') }]
+        : [])
+    ] as AnyMap[]
+
     if (field.properties?.allowMultiple && SINGLE_CHOICE_CONDITIONS.includes(value?.comparison)) {
       const currValue = helper.isArray(value?.expected)
         ? value?.expected
@@ -101,7 +111,7 @@ const MultipleChoiceCondition: FC<DefaultProps & { field: FormFieldType }> = ({
       return (
         <Select.Multi
           className="flex-1"
-          options={(field.properties?.choices || []) as AnyMap[]}
+          options={options}
           valueKey="id"
           value={currValue}
           onChange={onExpectedChange}
@@ -114,13 +124,13 @@ const MultipleChoiceCondition: FC<DefaultProps & { field: FormFieldType }> = ({
     return (
       <Select
         className="flex-1"
-        options={(field.properties?.choices || []) as AnyMap[]}
+        options={options}
         valueKey="id"
         value={currValue}
         onChange={onExpectedChange}
       />
     )
-  }, [field.properties?.allowMultiple, onExpectedChange, value])
+  }, [field.properties, onExpectedChange, t, value])
 
   return (
     <>

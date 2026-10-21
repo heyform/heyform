@@ -1517,8 +1517,8 @@
         },
         "branching": {
           "label": "Ramificar por respuesta",
-          "description": "Envía cada respuesta a su propia pregunta. Cada opción necesita un destino y la pregunta pasará a ser obligatoria.",
-          "incompatible": "Desactiva la selección múltiple y “Otro” para ramificar por respuesta.",
+          "description": "Envía cada respuesta a su propia pregunta. Cada respuesta necesita un destino y la pregunta pasará a ser obligatoria.",
+          "incompatible": "Desactiva la selección múltiple para ramificar por respuesta.",
           "destinationPlaceholder": "Elige un destino",
           "destinationRequired": "Elige a dónde va esta respuesta",
           "untitledOption": "Opción {{index}}",
@@ -1527,7 +1527,7 @@
           "incomplete": "Algunas respuestas no tienen destino",
           "requiredLocked": "Obligatorio mientras esta pregunta se ramifica por respuesta",
           "settingLocked": "No disponible mientras esta pregunta se ramifica por respuesta",
-          "publishError": "“{{title}}” se ramifica por respuesta, por lo que debe ser obligatoria, de selección única sin “Otro”, y cada opción necesita un destino. Abre su lógica para terminar de configurarla."
+          "publishError": "“{{title}}” se ramifica por respuesta, por lo que debe ser obligatoria, de selección única, y cada respuesta necesita un destino. Abre su lógica para terminar de configurarla."
         }
       },
       "preview": {

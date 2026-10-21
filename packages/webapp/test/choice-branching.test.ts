@@ -14,6 +14,7 @@ import {
   getPayloadFormValues,
   toChoiceBranchPayloads
 } from '../src/pages/form/Builder/utils/logic'
+import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
 
 import type { FormFieldType } from '../src/types/form'
 
@@ -126,5 +127,29 @@ describe('choice branching in the builder', () => {
       destinations: { motion: 'motion-q', gone: 'end' }
     })
     expect(countUnmappedJumps(role, payloads)).toBe(1)
+  })
+
+  it('treats "Other" as one more answer only while it is allowed', () => {
+    const withOther = { ...role, properties: { ...role.properties, allowOther: true } }
+    const payloads = [jump('a', 'motion', 'motion-q'), jump('o', OTHER_CHOICE_ID, 'end')]
+
+    expect(getChoiceDestinations(payloads)).toEqual({
+      motion: 'motion-q',
+      [OTHER_CHOICE_ID]: 'end'
+    })
+    expect(countUnmappedJumps(withOther, payloads)).toBe(0)
+    expect(countUnmappedJumps(role, payloads)).toBe(1)
+
+    expect(
+      toChoiceBranchPayloads(withOther, { [OTHER_CHOICE_ID]: 'end' }, payloads).map(p => [
+        p.id,
+        p.condition
+      ])
+    ).toEqual([
+      [expect.any(String), { comparison: ComparisonEnum.IS, expected: 'motion' }],
+      [expect.any(String), { comparison: ComparisonEnum.IS, expected: 'director' }],
+      ['o', { comparison: ComparisonEnum.IS, expected: OTHER_CHOICE_ID }]
+    ])
+    expect(toChoiceBranchPayloads(role, {}, payloads)).toHaveLength(2)
   })
 })

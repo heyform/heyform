@@ -217,7 +217,7 @@ export function assertValidChoiceBranching(drafts: FormField[], logics?: Logic[]
     throw new BadRequestException({
       statusCode: HttpStatus.BAD_REQUEST,
       error: 'invalid_choice_branching',
-      message: `"${title}" branches by answer, so it must be required, single-select without "Other", and every option needs a destination`,
+      message: `"${title}" branches by answer, so it must be required, single-select, and every answer needs a destination`,
       fieldId: error.fieldId,
       code: error.code
     })

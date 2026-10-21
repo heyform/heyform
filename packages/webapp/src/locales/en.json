@@ -1524,8 +1524,8 @@
         },
         "branching": {
           "label": "Branch by answer",
-          "description": "Send each answer to its own question. Every option needs a destination, and the question will be made required.",
-          "incompatible": "Turn off multiple selection and “Other” to branch by answer.",
+          "description": "Send each answer to its own question. Every answer needs a destination, and the question will be made required.",
+          "incompatible": "Turn off multiple selection to branch by answer.",
           "destinationPlaceholder": "Choose a destination",
           "destinationRequired": "Choose where this answer goes",
           "untitledOption": "Option {{index}}",
@@ -1534,7 +1534,7 @@
           "incomplete": "Some answers don’t have a destination",
           "requiredLocked": "Required while this question branches by answer",
           "settingLocked": "Unavailable while this question branches by answer",
-          "publishError": "“{{title}}” branches by answer, so it must be required, single-select without “Other”, and every option needs a destination. Open its logic to finish setting it up."
+          "publishError": "“{{title}}” branches by answer, so it must be required, single-select, and every answer needs a destination. Open its logic to finish setting it up."
         }
       },
       "preview": {

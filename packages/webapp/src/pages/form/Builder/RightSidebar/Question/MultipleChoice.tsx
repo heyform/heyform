@@ -278,8 +278,8 @@ export default function MultipleChoiceSettings({ field }: RequiredSettingsProps)
         <label className="text-sm/6" htmlFor="#">
           {t('form.builder.settings.allowOther')}
         </label>
-        <BranchingLockedSwitch
-          isLocked={isBranching}
+        {/* "Other" can branch too; turning it on adds an answer that needs a destination. */}
+        <Switch
           value={field.properties?.allowOther}
           onChange={value => handleChange('allowOther', value)}
         />
