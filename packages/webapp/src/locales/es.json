@@ -1373,6 +1373,7 @@
         "multipleSelection": "Selección múltiple",
         "randomize": "Aleatorizar",
         "allowOther": "Opción \"Otro\"",
+        "requireOtherText": "Exigir texto en \"Otro\"",
         "total": "Total",
         "labels": "Etiquetas",
         "leftLabel": "Etiqueta izquierda",

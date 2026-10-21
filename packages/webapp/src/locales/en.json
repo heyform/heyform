@@ -1380,6 +1380,7 @@
         "multipleSelection": "Multiple selection",
         "randomize": "Randomize",
         "allowOther": "\"Other\" option",
+        "requireOtherText": "Require text for \"Other\"",
         "total": "Total",
         "labels": "Labels",
         "leftLabel": "Left label",
