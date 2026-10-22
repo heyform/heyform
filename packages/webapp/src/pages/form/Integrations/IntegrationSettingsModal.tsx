@@ -2,7 +2,11 @@ import { IconDots, IconLink } from '@tabler/icons-react'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getIntegrationDescription, getIntegrationSetting } from './utils'
+import {
+  getIntegrationDefaultConfig,
+  getIntegrationDescription,
+  getIntegrationSetting
+} from './utils'
 import { IntegrationService } from '@/services'
 import { useParam } from '@/utils'
 
@@ -38,6 +42,7 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, onValuesChange }) => 
     <Form.Simple
       className="space-y-4"
       initialValues={{
+        ...getIntegrationDefaultConfig(app),
         ...app.integration?.config,
         fields: app.integration?.config?.fields || [[]]
       }}

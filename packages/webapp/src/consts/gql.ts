@@ -825,8 +825,14 @@ export const APPS_GQL = gql`
         type
         name
         label
+        description
         placeholder
         required
+        options {
+          label
+          value
+        }
+        defaultValue
       }
     }
   }
