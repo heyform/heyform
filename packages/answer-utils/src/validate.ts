@@ -260,7 +260,10 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     value.value = []
   }
 
-  if (value.value.length < 1 && helper.isEmpty(value?.other)) {
+  // A blank "Other" is an answer only on questions that allow it.
+  const isBlankOther = !!(rule.allowOther && rule.allowBlankOther && value?.other === '')
+
+  if (value.value.length < 1 && helper.isEmpty(value?.other) && !isBlankOther) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -281,7 +284,9 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
       })
     }
   } else {
-    if (!(helper.isNil(value?.other) || (isOtherExists = helper.isValid(value?.other)))) {
+    isOtherExists = isBlankOther || helper.isValid(value?.other)
+
+    if (!helper.isNil(value?.other) && !isOtherExists) {
       throw new ValidateError({
         id: rule.id,
         kind: rule.kind,

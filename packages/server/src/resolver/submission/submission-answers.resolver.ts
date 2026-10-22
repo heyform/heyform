@@ -15,7 +15,11 @@ export class SubmissionAnswersResolver {
     @Team() team: TeamModel,
     @Args('input') input: SubmissionAnswersInput
   ): Promise<SubmissionAnswersType> {
-    const total = await this.submissionService.countAllWithFieldId(input.formId, input.fieldId)
+    const total = await this.submissionService.countAllWithFieldId(
+      input.formId,
+      input.fieldId,
+      input.otherOnly
+    )
     let answers: any[] = []
 
     if (total > 0) {
@@ -23,7 +27,8 @@ export class SubmissionAnswersResolver {
         input.formId,
         input.fieldId,
         input.page,
-        input.limit
+        input.limit,
+        input.otherOnly
       )
 
       answers = answers.map(row => {

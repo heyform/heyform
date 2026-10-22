@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 
-import { useTranslation } from '../utils'
+import { isOtherAnswered, useTranslation } from '../utils'
 import { helper } from '@heyform-inc/utils'
 
 import { ChoiceRadioGroup, FormField, SelectHelper } from '../components'
@@ -29,17 +29,17 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
   )
 
   function getValues({ value }: any) {
-    return helper.isValidArray(value?.value) || helper.isValid(value?.other) ? value : undefined
+    return helper.isValidArray(value?.value) || isOtherAnswered(field, value) ? value : undefined
   }
 
   function handleValuesChange(_: any, { value }: any) {
-    setIsOtherFilled(helper.isValid(value?.other))
+    setIsOtherFilled(isOtherAnswered(field, value))
   }
 
   useEffect(() => {
     const value = state.values[field.id]
 
-    setIsOtherFilled(helper.isValid(value?.other))
+    setIsOtherFilled(isOtherAnswered(field, value))
   }, [field.id, state.values])
 
   return (
@@ -71,7 +71,7 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
 
                 let count = value.value.length
 
-                if (field.properties?.allowOther && helper.isValid(value.other)) {
+                if (isOtherAnswered(field, value)) {
                   count += 1
                 }
 
@@ -96,6 +96,7 @@ export const MultipleChoice: FC<BlockProps> = ({ field, ...restProps }) => {
             options={options}
             allowMultiple={field.properties?.allowMultiple}
             allowOther={field.properties?.allowOther}
+            allowBlankOther={field.properties?.allowBlankOther}
             badge={field.properties?.badge}
             verticalAlignment={field.properties?.verticalAlignment}
             isOtherFilled={isOtherFilled}

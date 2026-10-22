@@ -115,6 +115,8 @@ export interface Property {
 
   // Choice
   allowOther?: boolean
+  // Lets a respondent choose "Other" without typing anything. Text is required when unset.
+  allowBlankOther?: boolean
   allowMultiple?: boolean
   choices?: Choice[]
   randomize?: boolean

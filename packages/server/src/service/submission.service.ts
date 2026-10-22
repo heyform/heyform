@@ -29,6 +29,16 @@ interface UpdateCategoryOptions {
   category: SubmissionCategoryEnum
 }
 
+// Matches a submission's answer to a field; otherOnly keeps answers with typed "Other" text.
+function answerMatch(fieldId: string, otherOnly: boolean) {
+  return {
+    $elemMatch: {
+      id: fieldId,
+      ...(otherOnly && { 'value.other': { $type: 'string', $ne: '' } })
+    }
+  }
+}
+
 @Injectable()
 export class SubmissionService {
   constructor(
@@ -78,10 +88,10 @@ export class SubmissionService {
       })
   }
 
-  async countAllWithFieldId(formId: string, fieldId: string): Promise<number> {
+  async countAllWithFieldId(formId: string, fieldId: string, otherOnly = false): Promise<number> {
     return this.submissionModel.countDocuments({
       formId,
-      'answers.id': fieldId,
+      answers: answerMatch(fieldId, otherOnly),
       status: SubmissionStatusEnum.PUBLIC
     })
   }
@@ -90,13 +100,10 @@ export class SubmissionService {
     formId: string,
     fieldId: string,
     page = 1,
-    limit = 30
+    limit = 30,
+    otherOnly = false
   ): Promise<SubmissionModel[]> {
-    const answers = {
-      $elemMatch: {
-        id: fieldId as string
-      }
-    }
+    const answers = answerMatch(fieldId, otherOnly)
     const projections = {
       id: 1,
       answers,

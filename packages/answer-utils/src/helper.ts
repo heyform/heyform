@@ -1,7 +1,10 @@
+import { Property } from '@heyform-inc/shared-types-enums'
 import dayjs from 'dayjs'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { helper } from '@heyform-inc/utils'
+
+import { OTHER_CHOICE_LABEL } from './consts'
 
 export { htmlToText } from '@heyform-inc/utils'
 
@@ -136,4 +139,16 @@ export function isAfterDate(
   const expectedFormat = getDateFormat(DEFAULT_DATE_FORMAT, allowTime)
 
   return dayjs(value, valueFormat).isAfter(dayjs(expected, expectedFormat))
+}
+
+// The respondent's "Other" text, or "Other" itself when they chose it without typing on a
+// question that allows that. Pass the properties saved with the answer.
+export function otherChoiceText(other?: string | null, properties?: Property): string | undefined {
+  if (helper.isValid(other)) {
+    return other!
+  }
+
+  if (other === '' && properties?.allowOther && properties?.allowBlankOther) {
+    return OTHER_CHOICE_LABEL
+  }
 }

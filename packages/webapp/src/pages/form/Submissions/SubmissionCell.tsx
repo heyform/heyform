@@ -12,7 +12,12 @@ import {
   isTrustedStripeReceiptUrl,
   unixDate
 } from '@/utils'
-import { CURRENCY_SYMBOLS, htmlUtils } from '@heyform-inc/answer-utils'
+import {
+  CURRENCY_SYMBOLS,
+  OTHER_CHOICE_ID,
+  htmlUtils,
+  otherChoiceText
+} from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
 import { Badge, Checkbox, Image } from '@/components'
@@ -215,23 +220,30 @@ const InputTableItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
 }
 
 const MultipleChoiceItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
+  const { t } = useTranslation()
   const choices = field.properties?.choices as Choice[]
+  // A blank "Other" is stored as an empty string and counts as an answer where the question allows it.
+  const hasOther =
+    helper.isObject(answer.value) &&
+    helper.isValid(otherChoiceText(answer.value.other, answer.properties || field.properties))
 
   if (
     answer.kind !== field.kind ||
     !helper.isValidArray(choices) ||
     !helper.isObject(answer.value) ||
-    (!helper.isValidArray(answer.value.value) && helper.isEmpty(answer.value.other))
+    (!helper.isValidArray(answer.value.value) && !hasOther)
   ) {
     return null
   }
 
-  const result = choices.filter(c => answer.value.value.includes(c.id))
+  const result = choices.filter(c => answer.value.value?.includes(c.id))
 
-  if (answer.value.other) {
+  if (hasOther) {
     result.push({
-      id: answer.value.other,
-      label: answer.value.other
+      id: OTHER_CHOICE_ID,
+      label: helper.isValid(answer.value.other)
+        ? answer.value.other
+        : String(t('form.builder.compose.otherChoice'))
     })
   }
 

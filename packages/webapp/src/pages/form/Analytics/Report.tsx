@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 import { FormService } from '@/services'
 import { useParam } from '@/utils'
-import { flattenFields, htmlUtils } from '@heyform-inc/answer-utils'
+import { OTHER_CHOICE_ID, flattenFields, htmlUtils } from '@heyform-inc/answer-utils'
 import { helper, pickValidValues } from '@heyform-inc/utils'
 
 import { Async, Repeat } from '@/components'
@@ -45,6 +45,8 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
           row.answers = result.submissions.find((row: any) => row._id === field.id)?.answers
 
           if (choiceKinds.includes(field.kind)) {
+            const other = row.chooses?.find((row: any) => row.id === OTHER_CHOICE_ID)
+
             row.chooses = field.properties?.choices?.map(choice => {
               const choose = row.chooses.find((row: any) => row.id === choice.id)
 
@@ -53,6 +55,20 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
                 ...choice
               }
             })
+
+            // "Other" answers sit beside the options, so they share the same percentage basis.
+            // Reports store a zero Other count on every choice question; show it where it means something.
+            if (other?.count > 0 || field.properties?.allowOther) {
+              row.chooses = [
+                ...(row.chooses || []),
+                {
+                  id: OTHER_CHOICE_ID,
+                  label: t('form.builder.compose.otherChoice'),
+                  count: other?.count ?? 0,
+                  isOther: true
+                }
+              ]
+            }
           }
 
           if (helper.isEmpty(row.chooses)) {
@@ -88,7 +104,7 @@ export const ReportList: FC<ReportListProps> = ({ isHideFieldEnabled }) => {
     }
 
     return false
-  }, [form?.drafts, formId])
+  }, [form?.drafts, formId, t])
 
   return (
     <Async

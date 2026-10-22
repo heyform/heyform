@@ -14,7 +14,9 @@ const tests = [
   'oauth-state.test.ts',
   'oidc-security.test.ts',
   'oidc-provisioning.test.ts',
-  'notification-recipients.test.ts'
+  'notification-recipients.test.ts',
+  'export-file.service.test.ts',
+  'form-report.service.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')
 

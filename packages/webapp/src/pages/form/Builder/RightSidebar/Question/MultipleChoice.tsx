@@ -274,15 +274,30 @@ export default function MultipleChoiceSettings({ field }: RequiredSettingsProps)
         />
       </div>
 
-      <div className="flex items-center justify-between">
-        <label className="text-sm/6" htmlFor="#">
-          {t('form.builder.settings.allowOther')}
-        </label>
-        <BranchingLockedSwitch
-          isLocked={isBranching}
-          value={field.properties?.allowOther}
-          onChange={value => handleChange('allowOther', value)}
-        />
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <label className="text-sm/6" htmlFor="#">
+            {t('form.builder.settings.allowOther')}
+          </label>
+          {/* "Other" can branch too; turning it on adds an answer that needs a destination. */}
+          <Switch
+            value={field.properties?.allowOther}
+            onChange={value => handleChange('allowOther', value)}
+          />
+        </div>
+
+        {field.properties?.allowOther && (
+          <div className="flex items-center justify-between pl-4">
+            <label className="text-secondary text-sm/6" htmlFor="#">
+              {String(t('form.builder.settings.requireOtherText'))}
+            </label>
+            {/* Stored as allowBlankOther, so forms saved before the setting still require text. */}
+            <Switch
+              value={!field.properties?.allowBlankOther}
+              onChange={value => handleChange('allowBlankOther', !value)}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between">

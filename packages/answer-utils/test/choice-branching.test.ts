@@ -10,6 +10,7 @@ import { describe, expect, test } from 'vitest'
 
 import {
   ChoiceBranchingErrorCode,
+  OTHER_CHOICE_ID,
   applyLogicToFields,
   getChoiceBranchingErrors,
   isChoiceBranchingField
@@ -106,16 +107,40 @@ describe('choice branching', () => {
     ])
   })
 
-  test('question must be required, single-select and without Other', () => {
+  test('question must be required and single-select', () => {
     const field = role({
       validations: { required: false },
-      properties: { ...role().properties, allowMultiple: true, allowOther: true }
+      properties: { ...role().properties, allowMultiple: true }
     })
     expect(codes(form(field), fullMapping)).toEqual([
       [ChoiceBranchingErrorCode.NOT_REQUIRED, undefined],
-      [ChoiceBranchingErrorCode.ALLOW_MULTIPLE, undefined],
-      [ChoiceBranchingErrorCode.ALLOW_OTHER, undefined]
+      [ChoiceBranchingErrorCode.ALLOW_MULTIPLE, undefined]
     ])
+  })
+
+  test('"Other" needs its own destination when it is allowed', () => {
+    const field = role({ properties: { ...role().properties, allowOther: true } })
+    expect(codes(form(field), fullMapping)).toEqual([
+      [ChoiceBranchingErrorCode.MISSING_DESTINATION, OTHER_CHOICE_ID]
+    ])
+
+    const logics = [
+      {
+        ...fullMapping[0],
+        payloads: [...fullMapping[0].payloads, jump('p3', OTHER_CHOICE_ID, 'shared')]
+      }
+    ]
+    expect(getChoiceBranchingErrors(form(field), logics)).toEqual([])
+  })
+
+  test('an "Other" rule is ignored once "Other" is turned off', () => {
+    const logics = [
+      {
+        ...fullMapping[0],
+        payloads: [...fullMapping[0].payloads, jump('p3', OTHER_CHOICE_ID, 'shared')]
+      }
+    ]
+    expect(getChoiceBranchingErrors(form(), logics)).toEqual([])
   })
 
   test('rules that are not one-option "is" jumps are rejected', () => {
@@ -153,6 +178,25 @@ describe('choice branching', () => {
         role: { value: [choice] }
       } as any)
       expect(result.fields.map(f => f.id)).toEqual(expected)
+    }
+  })
+
+  test('an "Other" answer follows the "Other" destination, whatever was typed', () => {
+    const fields = form(
+      role({ nextFieldId: 'shared', properties: { ...role().properties, allowOther: true } })
+    )
+    const logics = [
+      {
+        ...fullMapping[0],
+        payloads: [...fullMapping[0].payloads, jump('p3', OTHER_CHOICE_ID, 'director-q')]
+      }
+    ]
+
+    for (const other of ['Producer', 'Director']) {
+      const result = applyLogicToFields(structuredClone(fields), logics, [], {
+        role: { value: [], other }
+      } as any)
+      expect(result.fields.map(f => f.id)).toEqual(['role', 'director-q', 'shared'])
     }
   })
 })

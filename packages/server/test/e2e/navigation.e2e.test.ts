@@ -1,5 +1,7 @@
 import * as assert from 'assert'
 
+import { OTHER_CHOICE_ID } from '@heyform-inc/answer-utils'
+
 import { E2EClient } from './helpers/client'
 import { signUpUser } from './helpers/fixtures'
 import {
@@ -17,6 +19,17 @@ import {
 } from './helpers/gql'
 import { uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
+
+const SUBMISSION_ANSWERS_GQL = /* GraphQL */ `
+  query submissions($input: SubmissionsInput!) {
+    submissions(input: $input) {
+      submissions {
+        id
+        answers
+      }
+    }
+  }
+`
 
 export function build(baseUrl: string) {
   const { suite, test } = defineSuite('navigation')
@@ -210,7 +223,7 @@ export function build(baseUrl: string) {
 
     const partial = await publish([jump('motion', 'q2')], true)
     assert.ok(partial.errors.length > 0)
-    assert.match(partial.errors[0].message, /every option needs a destination/i)
+    assert.match(partial.errors[0].message, /every answer needs a destination/i)
 
     const complete = await publish([jump('motion', 'q2'), jump('producer', 'q4')], true)
     assert.ok(!complete.errors?.length, JSON.stringify(complete.errors))
@@ -220,7 +233,7 @@ export function build(baseUrl: string) {
       input: { formId }
     })
     const invalidEdit = await publish([jump('motion', 'q2')], true)
-    assert.match(invalidEdit.errors[0].message, /every option needs a destination/i)
+    assert.match(invalidEdit.errors[0].message, /every answer needs a destination/i)
     const afterRejection = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_GQL, {
       input: { formId }
     })
@@ -243,6 +256,89 @@ export function build(baseUrl: string) {
         answers: { q1: { value: ['producer'] }, q4: 'a', q5: 'b', q6: 'c' }
       }
     })
+  })
+
+  test('an "Other" answer on a branching choice question follows its own destination', async () => {
+    const detail = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    const choiceDrafts = drafts.map(field =>
+      field.id === 'q1'
+        ? {
+            ...field,
+            kind: 'multiple_choice',
+            nextFieldId: undefined,
+            properties: {
+              allowOther: true,
+              choices: [
+                { id: 'motion', label: 'Motion Designer' },
+                { id: 'producer', label: 'Producer' }
+              ]
+            }
+          }
+        : field
+    )
+    const jump = (choiceId: string, fieldId: string) => ({
+      id: choiceId,
+      condition: { comparison: 'is', expected: choiceId },
+      action: { kind: 'navigate', fieldId }
+    })
+    const publish = async (payloads: any[]) => {
+      await owner.gqlOk('updateFormLogics', UPDATE_FORM_LOGICS_GQL, {
+        input: { formId, logics: [{ fieldId: 'q1', payloads, branchByAnswer: true }] }
+      })
+      return owner.gql('publishForm', PUBLISH_FORM_GQL, {
+        input: { formId, version: detail.version, drafts: choiceDrafts }
+      })
+    }
+    const options = [jump('motion', 'q2'), jump('producer', 'q4')]
+
+    const missingOther = await publish(options)
+    assert.match(missingOther.errors[0].message, /every answer needs a destination/i)
+
+    const complete = await publish([...options, jump(OTHER_CHOICE_ID, 'q5')])
+    assert.ok(!complete.errors?.length, JSON.stringify(complete.errors))
+
+    // Only q5 -> q6 is on the Other route, so the required q2-q4 must not be demanded.
+    const submit = async (other: string) => {
+      const respondent = new E2EClient({ baseUrl })
+      const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+        input: { formId }
+      })
+      return respondent.gql('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+        input: {
+          formId,
+          openToken,
+          hiddenFields: [],
+          answers: { q1: { value: [], other }, q5: 'b', q6: 'c' }
+        }
+      })
+    }
+    const typed = await submit('Editor')
+    assert.ok(!typed.errors?.length, JSON.stringify(typed.errors))
+
+    // A blank "Other" is refused until the question allows it, then stored as an empty string.
+    const refused = await submit('')
+    assert.ok(refused.errors?.length > 0)
+
+    const blankDrafts = choiceDrafts.map((field: any) =>
+      field.id === 'q1'
+        ? { ...field, properties: { ...field.properties, allowBlankOther: true } }
+        : field
+    )
+    const latest = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, { input: { formId } })
+    await owner.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId, version: latest.version, drafts: blankDrafts }
+    })
+    const blank = await submit('')
+    assert.ok(!blank.errors?.length, JSON.stringify(blank.errors))
+
+    const stored = await owner.gqlOk<any>('submissions', SUBMISSION_ANSWERS_GQL, {
+      input: { formId, category: 'inbox', page: 1, limit: 30 }
+    })
+    const others = stored.submissions
+      .map((submission: any) => submission.answers.find((answer: any) => answer.id === 'q1'))
+      .filter((answer: any) => answer?.value?.other !== undefined)
+      .map((answer: any) => answer.value.other)
+    assert.deepStrictEqual(others.sort(), ['', 'Editor'])
   })
 
   test('saves and publishes fields and routing together, including clearing all rules', async () => {

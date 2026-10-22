@@ -9,7 +9,7 @@ import { FormFieldType } from '@/types'
 
 import { useStoreContext } from '../../store'
 
-// Branching choice questions must stay required, single-select and without "Other".
+// Branching choice questions must stay required and single-select.
 export function useIsChoiceBranching(field: FormFieldType) {
   const { state } = useStoreContext()
 

@@ -884,7 +884,8 @@
         "submission_other": "{{count}} respuestas",
         "submission2_zero": "Aún no hay respuestas · {{average}} de media",
         "submission2_one": "{{count}} respuesta · {{average}} de media",
-        "submission2_other": "{{count}} respuestas · {{average}} de media"
+        "submission2_other": "{{count}} respuestas · {{average}} de media",
+        "noOtherText": "Todos los que eligieron “Otro” lo dejaron en blanco."
       }
     },
     "customReport": {
@@ -1373,6 +1374,7 @@
         "multipleSelection": "Selección múltiple",
         "randomize": "Aleatorizar",
         "allowOther": "Opción \"Otro\"",
+        "requireOtherText": "Exigir texto en \"Otro\"",
         "total": "Total",
         "labels": "Etiquetas",
         "leftLabel": "Etiqueta izquierda",
@@ -1517,8 +1519,8 @@
         },
         "branching": {
           "label": "Ramificar por respuesta",
-          "description": "Envía cada respuesta a su propia pregunta. Cada opción necesita un destino y la pregunta pasará a ser obligatoria.",
-          "incompatible": "Desactiva la selección múltiple y “Otro” para ramificar por respuesta.",
+          "description": "Envía cada respuesta a su propia pregunta. Cada respuesta necesita un destino y la pregunta pasará a ser obligatoria.",
+          "incompatible": "Desactiva la selección múltiple para ramificar por respuesta.",
           "destinationPlaceholder": "Elige un destino",
           "destinationRequired": "Elige a dónde va esta respuesta",
           "untitledOption": "Opción {{index}}",
@@ -1527,7 +1529,7 @@
           "incomplete": "Algunas respuestas no tienen destino",
           "requiredLocked": "Obligatorio mientras esta pregunta se ramifica por respuesta",
           "settingLocked": "No disponible mientras esta pregunta se ramifica por respuesta",
-          "publishError": "“{{title}}” se ramifica por respuesta, por lo que debe ser obligatoria, de selección única sin “Otro”, y cada opción necesita un destino. Abre su lógica para terminar de configurarla."
+          "publishError": "“{{title}}” se ramifica por respuesta, por lo que debe ser obligatoria, de selección única, y cada respuesta necesita un destino. Abre su lógica para terminar de configurarla."
         }
       },
       "preview": {

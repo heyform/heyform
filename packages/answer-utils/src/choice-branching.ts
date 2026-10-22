@@ -10,6 +10,7 @@ import {
 
 import { helper } from '@heyform-inc/utils'
 
+import { OTHER_CHOICE_ID } from './consts'
 import { createFieldNavigation } from './navigation'
 
 export const BRANCHING_CHOICE_FIELD_KINDS = [
@@ -21,7 +22,6 @@ export const BRANCHING_CHOICE_FIELD_KINDS = [
 export enum ChoiceBranchingErrorCode {
   NOT_REQUIRED = 'not_required',
   ALLOW_MULTIPLE = 'allow_multiple',
-  ALLOW_OTHER = 'allow_other',
   UNSUPPORTED_RULE = 'unsupported_rule',
   MISSING_DESTINATION = 'missing_destination'
 }
@@ -75,6 +75,8 @@ export function getChoiceBranchingErrors(
 
     const fieldId = field.id
     const choiceIds = (field.properties?.choices || []).map(choice => choice.id)
+    // "Other" is one more answer, so it needs its own destination.
+    if (field.properties?.allowOther) choiceIds.push(OTHER_CHOICE_ID)
     const destinations = new Map<string, string>()
 
     if (!field.validations?.required) {
@@ -85,15 +87,11 @@ export function getChoiceBranchingErrors(
       errors.push({ fieldId, code: ChoiceBranchingErrorCode.ALLOW_MULTIPLE })
     }
 
-    if (field.properties?.allowOther) {
-      errors.push({ fieldId, code: ChoiceBranchingErrorCode.ALLOW_OTHER })
-    }
-
     for (const payload of logic!.payloads.filter(isNavigatePayload)) {
       const choiceId = getPayloadChoiceId(payload)
       const targetId = (payload.action as NavigateAction).fieldId
 
-      // Rules for deleted options can never match, so they don't affect where answers go.
+      // Rules for deleted options, or for "Other" once it's turned off, can never match.
       if (choiceId && !choiceIds.includes(choiceId)) {
         continue
       }
