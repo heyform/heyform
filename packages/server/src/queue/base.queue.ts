@@ -3,12 +3,6 @@ import { Job } from 'bull'
 
 import { Logger } from '@utils'
 
-export interface IntegrationQueueJob {
-  formId: string
-  integrationId: string
-  submissionId: string
-}
-
 export class BaseQueue {
   logger!: Logger
 

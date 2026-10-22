@@ -6,9 +6,11 @@ import { answersToHtml } from '@heyform-inc/answer-utils'
 import { FormService, MailService, SubmissionService, UserService } from '@service'
 import { readNotificationRecipients } from '@utils'
 
-import { BaseQueue, IntegrationQueueJob } from './base.queue'
+import { BaseQueue } from './base.queue'
 
-interface SubmissionNotificationJob extends IntegrationQueueJob {
+interface SubmissionNotificationJob {
+  formId: string
+  submissionId: string
   // Addresses already handed to the mail queue by a previous attempt of this job
   notified?: string[]
 }

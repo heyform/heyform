@@ -1,6 +1,8 @@
 import got from 'got'
 
-import { assertSafeOutboundRequest } from '@utils'
+import { assertSafeOutboundRequest, assertSafeOutboundUrl } from '@utils'
+
+import { defineApp } from './types'
 
 export const WEBHOOK_MAX_RESPONSE_BYTES = 64 * 1024
 
@@ -30,7 +32,7 @@ export async function readLimitedWebhookResponse(
   return Buffer.concat(chunks, totalBytes).toString('utf8')
 }
 
-export default {
+export default defineApp({
   id: 'webhook',
   name: 'Webhook',
   description:
@@ -45,6 +47,11 @@ export default {
       required: true
     }
   ],
+  validate: async config => {
+    // Reject private and loopback endpoints when the integration is saved;
+    // run() checks again because DNS can change between save and delivery
+    await assertSafeOutboundUrl(config.endpointUrl)
+  },
   run: async ({ config, submission, form }) => {
     const { lookup, url: endpointUrl } = await assertSafeOutboundRequest(config.endpointUrl)
 
@@ -73,4 +80,4 @@ export default {
 
     return readLimitedWebhookResponse(response)
   }
-}
+})

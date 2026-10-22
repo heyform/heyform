@@ -16,7 +16,9 @@ const tests = [
   'oidc-provisioning.test.ts',
   'notification-recipients.test.ts',
   'export-file.service.test.ts',
-  'form-report.service.test.ts'
+  'form-report.service.test.ts',
+  'webhook.test.ts',
+  'app-config.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')
 
