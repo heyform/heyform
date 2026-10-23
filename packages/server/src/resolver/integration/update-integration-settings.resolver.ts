@@ -1,12 +1,12 @@
 import { BadRequestException } from '@nestjs/common'
 
+import { validateAppConfig } from '../../apps/validate-config'
 import { Auth, FormGuard } from '@decorator'
 import { UpdateIntegrationInput } from '@graphql'
 import { helper } from '@heyform-inc/utils'
 import { IntegrationStatusEnum } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AppService, IntegrationService } from '@service'
-import { assertSafeOutboundUrl } from '@utils'
 
 @Resolver()
 @Auth()
@@ -24,16 +24,18 @@ export class UpdateIntegrationSettingsResolver {
   ): Promise<boolean> {
     const app = this.appService.findById(input.appId)
 
+    if (!app) {
+      throw new BadRequestException('The app does not exist')
+    }
+
     if (helper.isEmpty(input.config)) {
       throw new BadRequestException('Invalid attributes arguments')
     }
 
-    if (app.id === 'webhook') {
-      await assertSafeOutboundUrl(input.config.endpointUrl)
-    }
+    const config = await validateAppConfig(app, input.config)
 
     await this.integrationService.createOrUpdate(input.formId, app.id, {
-      config: input.config,
+      config,
       status: IntegrationStatusEnum.ACTIVE
     })
 

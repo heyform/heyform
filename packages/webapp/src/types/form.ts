@@ -2,13 +2,20 @@ import { FormField, FormModel, Property } from '@heyform-inc/shared-types-enums'
 
 import { APP_STATUS_ENUM } from '@/consts'
 
+export interface AppSettingOptionType {
+  label: string
+  value: string
+}
+
 export interface AppSettingType {
-  type: string
+  type: 'text' | 'url' | 'textarea' | 'select' | 'switch'
   name: string
   label: string
   description?: string
   placeholder?: string
   required: boolean
+  options?: AppSettingOptionType[]
+  defaultValue?: string | boolean
 }
 
 export interface AppType {
