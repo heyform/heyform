@@ -46,6 +46,8 @@ const {
   IntegrationSettingOptionsResolver
 } = require('../src/resolver/integration/integration-setting-options.resolver')
 const { AppError } = require('../src/apps/types')
+const { oauth2Providers } = require('../src/apps/oauth2-providers')
+const googlesheets = require('../src/apps/googlesheets').default
 const {
   IntegrationOAuthCallbackController,
   IntegrationOAuthController
@@ -2215,6 +2217,31 @@ async function testSavingValidatesWithThePickedAccount() {
   await assertBadRequest(save(), /Reconnect the Fake account or pick another one first/)
 }
 
+function testGoogleProviderAndSheetsApp() {
+  const google = oauth2Providers.google
+
+  assert.strictEqual(google.identityScopes.join(' '), 'openid email')
+  assert.deepStrictEqual(google.authorizeParams, {
+    access_type: 'offline',
+    prompt: 'consent',
+    include_granted_scopes: 'true'
+  })
+  assert.strictEqual(google.pkce, true)
+  assert.strictEqual(googlesheets.auth.provider, 'google')
+
+  // Hidden until the install sets the Google client credentials
+  const appService = new AppService()
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_ID
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_SECRET
+  assert.strictEqual(appService.isAvailable(googlesheets), false)
+
+  process.env.GOOGLE_INTEGRATION_CLIENT_ID = 'google-client'
+  process.env.GOOGLE_INTEGRATION_CLIENT_SECRET = 'google-secret'
+  assert.strictEqual(appService.isAvailable(googlesheets), true)
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_ID
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_SECRET
+}
+
 async function testAppsListDescribesLoadedAndConditionalSettings() {
   const app = defineApp({
     ...loaderApp,
@@ -2506,6 +2533,7 @@ async function run() {
     await testLoaderGetsAFreshTokenAndTheFormValues()
     await testLoaderAuthErrorMarksTheConnection()
     await testSavingValidatesWithThePickedAccount()
+    testGoogleProviderAndSheetsApp()
     await testAppsListDescribesLoadedAndConditionalSettings()
     await testCallbackConnectsAndRedirectsBack()
     await testCallbackNeedsTheSameLiveSession()

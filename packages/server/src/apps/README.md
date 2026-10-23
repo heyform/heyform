@@ -15,7 +15,9 @@ from `./types`. The definition drives both sides:
 3. Add its logo to `packages/webapp/public/static/` and set `icon` to `/static/<file>`.
 4. Optionally translate it in the webapp locales under `form.integrations.apps.<id>` (see below).
 
-The webhook (`webhook.ts`) is the smallest complete example:
+The webhook (`webhook.ts`) is the smallest complete example. Google Sheets (`googlesheets.ts`)
+shows OAuth2, options loaded from the service, a setting shown only for one choice, and a
+`validate` that uses the account and normalises what was entered.
 
 ```ts
 import { assertSafeOutboundRequest, assertSafeOutboundUrl } from '@utils'
@@ -161,8 +163,8 @@ export default defineApp({
 
 ### OAuth2
 
-`provider` is the id of a provider in `oauth2-providers.ts`. None ships yet; an app naming a
-provider that isn't there is hidden, like one whose provider has no credentials. To add one, give
+`provider` is the id of a provider in `oauth2-providers.ts` (only `google` so far); an app naming
+a provider that isn't there is hidden, like one whose provider has no credentials. To add one, give
 its authorize, token and OpenID Connect userinfo URLs, the scopes that let the userinfo endpoint
 identify the account (`identityScopes`, e.g. `openid email`), and its revoke URL (RFC 7009) if it
 has one, then add it to `oauth2Providers`:
@@ -194,6 +196,18 @@ client per provider, once:
 
 Form owners then only click **Connect <provider> account** and sign in. Until both variables are
 set, apps using that provider are hidden.
+
+**Google.** In the [Google Cloud console](https://console.cloud.google.com/), in one project:
+
+1. enable the **Google Sheets API** (APIs & Services → Library);
+2. configure the **OAuth consent screen** and set its publishing status to **In production**. It
+   can stay unverified for your own users, who'll see an "unverified app" warning when they
+   connect. Or make it **Internal** if everyone is in your Google Workspace. In **Testing**, Google
+   expires refresh tokens after 7 days, so every connection would need reconnecting weekly;
+3. create an **OAuth client ID** of type **Web application**, with
+   `${APP_HOMEPAGE_URL}/api/integrations/oauth/callback` as an authorised redirect URI;
+4. set `GOOGLE_INTEGRATION_CLIENT_ID` and `GOOGLE_INTEGRATION_CLIENT_SECRET` to its client ID and
+   secret, and restart the server.
 
 **Connections belong to the workspace.** Connecting an account stores it once for the form's
 workspace (team), identified by the provider's account id (`sub`), with its email shown to the team.

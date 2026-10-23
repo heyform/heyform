@@ -648,3 +648,15 @@ test('translates placeholders', () => {
   )
   expect(getIntegrationSetting(i18n.t, app, tabSetting).placeholder).toBe('Default tab')
 })
+
+test('translates the Google Sheets settings', async () => {
+  const sheetsApp = { ...app, id: 'googlesheets' } as IntegratedAppType
+  const sheet = { ...tabSetting, description: 'Row 1 holds the column headers' }
+
+  await i18n.changeLanguage('zh-cn')
+  expect(getIntegrationSetting(i18n.t, sheetsApp, sheet)).toMatchObject({
+    label: '工作表',
+    placeholder: '第一个工作表',
+    description: '第 1 行为列标题；每出现一个新问题，HeyForm 会添加一个标题。'
+  })
+})

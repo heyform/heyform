@@ -38,9 +38,33 @@ export interface OAuth2ProviderCredentials {
 
 export type ConfiguredOAuth2Provider = OAuth2Provider & OAuth2ProviderCredentials
 
-// Keyed by provider id. Empty until an app needs a provider; see
-// src/apps/README.md for how to add one.
-export const oauth2Providers: Record<string, OAuth2Provider> = {}
+// Google: GOOGLE_INTEGRATION_CLIENT_ID and GOOGLE_INTEGRATION_CLIENT_SECRET,
+// from a "Web application" OAuth client. See src/apps/README.md for the
+// Google Cloud setup.
+export const google: OAuth2Provider = {
+  id: 'google',
+  name: 'Google',
+  authorizeUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+  tokenUrl: 'https://oauth2.googleapis.com/token',
+  userInfoUrl: 'https://openidconnect.googleapis.com/v1/userinfo',
+  identityScopes: ['openid', 'email'],
+  // Revokes the whole grant: every token issued to this server's OAuth client
+  // for the account, not only the token sent
+  revokeUrl: 'https://oauth2.googleapis.com/revoke',
+  authorizeParams: {
+    // Google only returns a refresh token for offline access, and only on the
+    // consent screen, so ask for consent on every connect
+    access_type: 'offline',
+    prompt: 'consent',
+    include_granted_scopes: 'true'
+  },
+  pkce: true
+}
+
+// Keyed by provider id; see src/apps/README.md for how to add one
+export const oauth2Providers: Record<string, OAuth2Provider> = {
+  google
+}
 
 export function oauth2CredentialsEnvNames(providerId: string) {
   const prefix = providerId.toUpperCase().replace(/[^A-Z0-9]/g, '_')
