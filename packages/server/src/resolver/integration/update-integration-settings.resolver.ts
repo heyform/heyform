@@ -13,6 +13,7 @@ import {
 } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AppService, IntegrationAuthService, IntegrationService } from '@service'
+import { GraphQLJSONObject } from 'graphql-type-json'
 
 @Resolver()
 @Auth()
@@ -23,13 +24,15 @@ export class UpdateIntegrationSettingsResolver {
     private readonly integrationAuthService: IntegrationAuthService
   ) {}
 
-  @Mutation(returns => Boolean)
+  // Returns the config as stored, which the app's validate may have changed
+  // (e.g. a spreadsheet it created), so the client never keeps what was typed
+  @Mutation(returns => GraphQLJSONObject)
   @FormGuard()
   async updateIntegrationSettings(
     @Args('input')
     input: UpdateIntegrationInput,
     @Form() form?: FormModel
-  ): Promise<boolean> {
+  ): Promise<Record<string, any>> {
     const app = this.appService.findById(input.appId)
 
     if (!app) {
@@ -111,6 +114,6 @@ export class UpdateIntegrationSettingsResolver {
       })
     }
 
-    return true
+    return updates.config
   }
 }

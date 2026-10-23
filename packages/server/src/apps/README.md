@@ -120,7 +120,7 @@ When settings are saved, the server:
 3. checks each value's type, URL format and that a select value is one of its fixed `options`;
 4. drops any key that isn't a declared, visible setting;
 5. calls the app's `validate(config, { form, auth })` with the cleaned config, then stores that
-   config, or the config `validate` returns.
+   config, or the config `validate` returns, and sends the stored config back to the settings form.
 
 `auth` is the key or account being saved, as `run` would get it, so `validate` can check the
 config against the service and normalise it, e.g. reduce a pasted URL to an id, or create the

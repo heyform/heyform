@@ -39,7 +39,11 @@ export interface IntegrationSettingsProps {
   onValuesChange?: (changedValues: Any, values: Any) => void
 }
 
-const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onValuesChange }) => {
+export const SettingsForm: FC<IntegrationSettingsProps> = ({
+  app,
+  connections = [],
+  onValuesChange
+}) => {
   const { t } = useTranslation()
 
   const { formId } = useParam()
@@ -55,7 +59,9 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
       })
     )
 
-    await IntegrationService.updateSettings(
+    // The config as the server stored it: the app may have normalised it,
+    // e.g. created a spreadsheet, which saving again mustn't repeat
+    const storedConfig: AnyMap = await IntegrationService.updateSettings(
       formId,
       app.id,
       config,
@@ -72,18 +78,23 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
         : app.integration?.status === INTEGRATION_STATUS_ENUM.NEEDS_RECONNECT
 
     updateIntegration(app.id, {
-      config,
+      config: storedConfig ?? config,
       status: needsReconnect
         ? INTEGRATION_STATUS_ENUM.NEEDS_RECONNECT
         : INTEGRATION_STATUS_ENUM.ACTIVE,
       ...(connectionId ? { connectionId, connected: true } : {})
     })
 
-    // Pick up the config as the server stored it (the app may have
-    // normalised it, e.g. created a spreadsheet), the masked hint of a new
-    // key, the status it restores, and what's still waiting once the server
-    // has resent the rest
-    setIntegrations(await FormService.integrations(formId))
+    // Pick up the masked hint of a new key, the status it restores, and
+    // what's still waiting once the server has resent the rest. The save has
+    // already succeeded, so a failed reload doesn't keep the modal open.
+    if (apiKey || app.integration?.waitingCount) {
+      try {
+        setIntegrations(await FormService.integrations(formId))
+      } catch (err) {
+        console.error(err)
+      }
+    }
 
     closeModal('IntegrationSettingsModal')
   }

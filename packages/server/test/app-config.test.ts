@@ -434,13 +434,14 @@ async function testResolverRejectsUnknownApp() {
 async function testResolverSavesValidatedConfig() {
   const { resolver, saved } = createResolver()
 
-  assert.strictEqual(
+  assert.deepStrictEqual(
     await resolver.updateIntegrationSettings({
       formId: 'form_1',
       appId: 'webhook',
       config: { endpointUrl: 'https://93.184.215.14/hook', extra: 'dropped' }
     }),
-    true
+    // The config as stored
+    { endpointUrl: 'https://93.184.215.14/hook' }
   )
   assert.deepStrictEqual(saved, [
     {

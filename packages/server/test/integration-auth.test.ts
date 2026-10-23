@@ -2205,13 +2205,11 @@ async function testSavingValidatesWithThePickedAccount() {
       FORM
     )
 
-  await save()
-  // The config validate returned is the one stored
-  assert.deepStrictEqual(ctx.integrations.get(integrationId).config, {
-    sheet: 'Leads',
-    tab: 't1',
-    checkedFor: 'form_1'
-  })
+  // The config validate returned is the one stored, and the one returned to
+  // the client, so it never keeps what was typed
+  const stored = { sheet: 'Leads', tab: 't1', checkedFor: 'form_1' }
+  assert.deepStrictEqual(await save(), stored)
+  assert.deepStrictEqual(ctx.integrations.get(integrationId).config, stored)
 
   ctx.connections.get(connectionId).status = CONNECTION_NEEDS_RECONNECT
   await assertBadRequest(save(), /Reconnect the Fake account or pick another one first/)

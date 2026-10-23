@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react'
 import { type Root, createRoot } from 'react-dom/client'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
 import {
@@ -13,7 +14,7 @@ import {
   needsAccountConnection,
   startsOnNewAccount
 } from '../src/pages/form/Integrations/utils'
-import { IntegrationService } from '../src/services'
+import { FormService, IntegrationService } from '../src/services'
 
 import { Form } from '../src/components'
 import i18n from '../src/i18n'
@@ -30,7 +31,9 @@ import {
 import IntegrationSettingsItem, {
   VisibleSetting
 } from '../src/pages/form/Integrations/IntegrationSettingsItem'
+import { SettingsForm } from '../src/pages/form/Integrations/IntegrationSettingsModal'
 import { ConnectedAccountList } from '../src/pages/workspace/Settings/ConnectedAccounts'
+import { useAppStore, useFormStore } from '../src/store'
 import type { AppSettingType, IntegratedAppType } from '../src/types/form'
 
 let root: Root
@@ -312,6 +315,54 @@ test('lets a new account be saved without another change', () => {
     startsOnNewAccount({ ...oauthApp, integration: { connectionId: 'c1' } } as any, 'c1')
   ).toBe(false)
   expect(startsOnNewAccount(oauthApp, undefined)).toBe(false)
+})
+
+test('keeps the config the server stored, and closes even if reloading fails', async () => {
+  const updateSettings = IntegrationService.updateSettings
+  const integrations = FormService.integrations
+  const saved: any[] = []
+
+  // e.g. a spreadsheet the app created, in place of "create a new one"
+  IntegrationService.updateSettings = (async (...args: any[]) => {
+    saved.push(args)
+    return { spreadsheet: 'stored' }
+  }) as any
+  FormService.integrations = (async () => {
+    throw new Error('offline')
+  }) as any
+
+  try {
+    useFormStore.setState({ integrations: [] } as any)
+    useAppStore.getState().openModal('IntegrationSettingsModal')
+
+    const app = { ...oauthApp, integration: { waitingCount: 2 } } as any
+    await act(async () =>
+      root.render(
+        <MemoryRouter initialEntries={['/form/form_1']}>
+          <Routes>
+            <Route
+              path="/form/:formId"
+              element={<SettingsForm app={app} connections={connections as any} />}
+            />
+          </Routes>
+        </MemoryRouter>
+      )
+    )
+
+    // The account it starts on can be saved straight away
+    const submit = container.querySelector<HTMLButtonElement>('[data-slot="submit-button"]')!
+    expect(submit.disabled).toBe(false)
+    await act(async () => submit.click())
+
+    expect(saved).toEqual([['form_1', 'sheets', {}, undefined, 'c1']])
+    expect(useFormStore.getState().integrations).toEqual([
+      expect.objectContaining({ appId: 'sheets', config: { spreadsheet: 'stored' } })
+    ])
+    expect(useAppStore.getState().modals.has('IntegrationSettingsModal')).toBe(false)
+  } finally {
+    IntegrationService.updateSettings = updateSettings
+    FormService.integrations = integrations
+  }
 })
 
 test('offers to retry when the accounts fail to load', async () => {
