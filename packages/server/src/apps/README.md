@@ -5,7 +5,8 @@ from `./types`. The definition drives both sides:
 
 - the webapp renders the app's settings form from `settings`, with no app-specific UI;
 - the server validates saved settings against `settings`, then calls the app's `validate` hook;
-- the integration queue calls `run` for every new submission while the integration is active.
+- the integration queue calls `run` for every new submission while the integration is active,
+  with credentials for the app's `auth`.
 
 ## Adding an app
 
@@ -53,10 +54,11 @@ export default defineApp({
 | `name`        | Display name.                                                                                                  |
 | `description` | One sentence shown in the integrations list and settings modal.                                                |
 | `icon`        | Path of the logo served by the server, e.g. `/static/webhook.png`.                                             |
-| `auth`        | How HeyForm authenticates with the app. Defaults to `{ type: 'none' }`, the only type supported so far.        |
+| `auth`        | How HeyForm authenticates with the app's service: `none` (default), `apiKey` or `oauth2`. See below.           |
 | `settings`    | Fields the form owner fills in. See below.                                                                     |
+| `queue`       | Optional retry and timeout options for the app's delivery jobs. See below.                                     |
 | `validate`    | Optional. Receives the config after the generic checks; throw a `BadRequestException` to reject it.            |
-| `run`         | Receives `{ config, submission, form }` for each submission. Throwing fails the queue job, which Bull retries. |
+| `run`         | Receives `{ config, submission, form, auth }` for each submission. Throwing fails the job, which Bull retries. |
 
 ## Settings
 
@@ -78,6 +80,138 @@ When settings are saved, the server:
 3. drops any key that isn't a declared setting;
 4. calls the app's `validate` with the cleaned config, then stores that config.
 
+## Auth
+
+HeyForm stores the credentials, encrypted with `INTEGRATION_ENCRYPTION_KEY` (see
+[Encryption key](#encryption-key)), and passes `run` a ready-to-use `auth` value. Credentials are
+never sent to the browser, and app code never stores, decrypts or refreshes them.
+
+| `auth`                                     | The form owner                                                       | `run` receives                    |
+| ------------------------------------------ | -------------------------------------------------------------------- | --------------------------------- |
+| `{ type: 'none' }`                         | does nothing extra.                                                  | `{ type: 'none' }`                |
+| `{ type: 'apiKey', label?, description? }` | pastes a key above the settings. At most its last 4 characters show. | `{ type: 'apiKey', apiKey }`      |
+| `{ type: 'oauth2', provider, scopes }`     | picks one of the workspace's connected accounts, or connects one.    | `{ type: 'oauth2', accessToken }` |
+
+`defineApp` types `auth` in `run` from the definition, so an `oauth2` app can use
+`auth.accessToken` directly:
+
+```ts
+export default defineApp({
+  id: 'example',
+  // ...
+  auth: {
+    type: 'oauth2',
+    provider: 'example',
+    scopes: ['rows.write']
+  },
+  run: async ({ auth, config, submission }) => {
+    await got.post('https://api.example.com/rows', {
+      headers: { authorization: `Bearer ${auth.accessToken}` },
+      json: { submissionId: submission.id, sheet: config.sheet }
+    })
+  }
+})
+```
+
+### OAuth2
+
+`provider` is the id of a provider in `oauth2-providers.ts`. None ships yet; an app naming a
+provider that isn't there is hidden, like one whose provider has no credentials. To add one, give
+its authorize, token and OpenID Connect userinfo URLs, the scopes that let the userinfo endpoint
+identify the account (`identityScopes`, e.g. `openid email`), and its revoke URL (RFC 7009) if it
+has one, then add it to `oauth2Providers`:
+
+```ts
+export const example: OAuth2Provider = {
+  id: 'example',
+  name: 'Example', // the button reads "Connect Example account"
+  authorizeUrl: 'https://auth.example.com/oauth2/authorize',
+  tokenUrl: 'https://auth.example.com/oauth2/token',
+  userInfoUrl: 'https://auth.example.com/oauth2/userinfo',
+  identityScopes: ['openid', 'email'],
+  revokeUrl: 'https://auth.example.com/oauth2/revoke',
+  pkce: true
+}
+
+export const oauth2Providers: Record<string, OAuth2Provider> = {
+  example
+}
+```
+
+**Who configures what.** The OAuth client belongs to the installation, not to each form owner,
+like `GOOGLE_LOGIN_CLIENT_ID` for login with Google. Whoever runs the server registers one OAuth
+client per provider, once:
+
+- set `<PROVIDER>_INTEGRATION_CLIENT_ID` and `<PROVIDER>_INTEGRATION_CLIENT_SECRET`, e.g.
+  `EXAMPLE_INTEGRATION_CLIENT_ID` for the provider `example`;
+- register `${APP_HOMEPAGE_URL}/api/integrations/oauth/callback` as the redirect URI.
+
+Form owners then only click **Connect <provider> account** and sign in. Until both variables are
+set, apps using that provider are hidden.
+
+**Connections belong to the workspace.** Connecting an account stores it once for the form's
+workspace (team), identified by the provider's account id (`sub`), with its email shown to the team.
+Connecting the same account again, from any form and by any member, updates that connection rather
+than adding another. An integration uses one of the workspace's connections, picked in its settings;
+any member can pick any connection, and the picker shows whose account it is. A connection lists the
+scopes it has granted, and an app can only use one that has granted its scopes.
+
+The workspace's settings list its connected accounts, the forms using each, and their status. The
+member who connected an account, or the workspace owner, can disconnect it. Disconnecting revokes
+the grant at the provider's revoke URL, best effort (a failure is logged without the token and never
+stops the disconnect), deletes the tokens, and leaves the integrations that used it needing
+reconnection until someone picks another account. Some providers (Google, for one) revoke the
+whole grant, i.e. every token this server holds for that account, so the grant isn't revoked while
+another workspace on the server still has the same account connected. Deleting an integration doesn't touch the connection.
+
+When a job runs, HeyForm refreshes the connection's access token if it has expired (there's no
+scheduled refresh). One refresh runs at a time per connection (a Redis lock), and the others use
+its token, so integrations sharing a connection don't race. If the provider rejects the refresh
+token (`invalid_grant`, e.g. access was revoked), the connection and every active integration using
+it are marked as needing reconnection and the job stops retrying. Network errors and provider
+outages are retried like any other failure.
+
+While an integration needs reconnecting, new submissions aren't sent to it. Reconnecting the
+account makes every integration that uses it active again. A saved API key that can no longer be
+decrypted (see [Encryption key](#encryption-key)) is treated the same way: entering the key again
+reconnects it.
+
+### Encryption key
+
+API keys and OAuth2 tokens are encrypted with `INTEGRATION_ENCRYPTION_KEY` (AES-256-GCM, a key
+derived with HKDF, a random IV per value). It's separate from `FORM_ENCRYPTION_KEY`, which protects
+short-lived form tokens, so rotating either never breaks the other. Without it, apps whose `auth` is
+`apiKey` or `oauth2` are unavailable and hidden, and the server logs one warning at startup; `none`
+apps such as the webhook keep working.
+
+Each stored value starts with the id of the key that encrypted it (`<keyId>:…`, a fingerprint of
+the derived key). To rotate the key, set `INTEGRATION_ENCRYPTION_KEY_PREVIOUS` to the old value and
+`INTEGRATION_ENCRYPTION_KEY` to the new one, and restart. The previous key is only used to read.
+Every write uses the current key, so tokens move to it as they refresh. Then run
+`node dist/src/cli/reencrypt-integration-secrets.js` (or `pnpm integrations:reencrypt` from a source
+checkout) to re-encrypt everything still on the old key, and remove the previous key. The command
+only updates values that haven't changed since it read them, so it's safe to run while the server
+runs, and again.
+
+A value that neither key decrypts marks its connection, or its API-key integration, as needing
+reconnection, with the reason, until someone connects the account or enters the key again.
+
+## Queue
+
+Each submission becomes one job on the integration queue, which retries failures with the global
+`BULL_JOB_ATTEMPTS`, `BULL_JOB_BACKOFF_*` and `BULL_JOB_TIMEOUT` settings. An app can override them:
+
+```ts
+queue: {
+  attempts: 5, // total tries, including the first
+  backoff: { type: 'exponential', delay: 2000 }, // or a fixed delay in ms
+  timeout: 30_000 // ms per try
+}
+```
+
+Credential errors that a retry can't fix (no API key saved, a revoked OAuth grant) fail the job
+without further attempts.
+
 ## Translations
 
 The webapp looks labels up under `form.integrations.apps.<id>` and falls back to the English in the
@@ -86,6 +220,7 @@ definition, so translations are optional:
 ```json
 {
   "description": "...",
+  "auth": { "label": "...", "description": "..." },
   "settings": {
     "<name>": {
       "label": "...",
