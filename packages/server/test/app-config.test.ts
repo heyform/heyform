@@ -5,7 +5,8 @@ import { validateAppConfig } from '../src/apps/validate-config'
 import { UpdateIntegrationSettingsResolver } from '../src/resolver/integration/update-integration-settings.resolver'
 import { AppService } from '../src/service/app.service'
 
-import { AppConfig, defineApp } from '../src/apps/types'
+import { MAX_LOADED_OPTIONS, limitOptions, loadSettingOptions } from '../src/apps/load-options'
+import { AppConfig, AppError, defineApp } from '../src/apps/types'
 import webhook from '../src/apps/webhook'
 
 function createApp(validate?: (config: AppConfig) => Promise<void>) {
@@ -152,6 +153,216 @@ async function testRunsAppValidateOnNormalizedConfig() {
   assert.strictEqual(calls.length, 2)
 }
 
+async function testAppValidateCanReplaceTheConfig() {
+  const seen: any[] = []
+  const app = defineApp({
+    id: 'normalising',
+    name: 'Normalising',
+    description: '',
+    icon: '',
+    auth: { type: 'apiKey' },
+    settings: [{ type: 'text', name: 'url', label: 'URL', required: true }],
+    validate: async (config, ctx) => {
+      seen.push(ctx)
+
+      if (config.url === 'missing') {
+        throw new AppError('Not found', { retryable: false })
+      }
+
+      return { url: config.url.split('/').pop() }
+    },
+    run: async () => undefined
+  })
+  const form = { id: 'form_1', name: 'Form' } as any
+  const withAuth = <T>(fn: (auth: any) => Promise<T>) => fn({ type: 'apiKey', apiKey: 'k' })
+
+  assert.deepStrictEqual(
+    await validateAppConfig(app, { url: 'https://example.com/items/42' }, { form, withAuth }),
+    { url: '42' }
+  )
+  assert.deepStrictEqual(seen, [{ form, auth: { type: 'apiKey', apiKey: 'k' } }])
+
+  // Its errors are shown in the settings form
+  await assertBadRequest(
+    validateAppConfig(app, { url: 'missing' }, { form, withAuth }),
+    /^Not found$/
+  )
+
+  // Credentials aren't fetched for a config that fails the generic checks
+  let fetched = 0
+  await assertBadRequest(
+    validateAppConfig(app, {}, { form, withAuth: fn => (fetched++, withAuth(fn)) }),
+    /URL is required/
+  )
+  assert.strictEqual(fetched, 0)
+}
+
+function createVisibilityApp() {
+  return defineApp({
+    id: 'visibility',
+    name: 'Visibility',
+    description: '',
+    icon: '',
+    settings: [
+      { type: 'switch', name: 'createNew', label: 'Create new' },
+      {
+        type: 'text',
+        name: 'existing',
+        label: 'Existing',
+        required: true,
+        visibleWhen: { createNew: false }
+      },
+      {
+        type: 'select',
+        name: 'tab',
+        label: 'Tab',
+        dependsOn: ['existing'],
+        visibleWhen: { createNew: false },
+        loadOptions: async ({ config }) => [{ label: config.existing, value: 'a' }]
+      }
+    ],
+    run: async () => undefined
+  })
+}
+
+async function testHiddenSettingsAreNotRequiredOrStored() {
+  const app = createVisibilityApp()
+
+  assert.deepStrictEqual(
+    await validateAppConfig(app, { createNew: true, existing: 'kept?', tab: 'a' }),
+    { createNew: true }
+  )
+  await assertBadRequest(validateAppConfig(app, {}), /Existing is required/)
+  assert.deepStrictEqual(await validateAppConfig(app, { existing: 'x', tab: 'any-id' }), {
+    createNew: false,
+    existing: 'x',
+    tab: 'any-id'
+  })
+  // Loaded options can't be checked here, but must be text
+  await assertBadRequest(
+    validateAppConfig(app, { existing: 'x', tab: { $ne: 1 } }),
+    /Tab must be one of the available options/
+  )
+}
+
+function testDefineAppChecksLoadedSelectsAndReferences() {
+  const base = { id: 'bad', name: 'Bad', description: '', icon: '', run: async () => undefined }
+  const loadOptions = async () => []
+
+  assert.throws(
+    () => defineApp({ ...base, settings: [{ type: 'select', name: 's', label: 'S' }] }),
+    /needs either options or loadOptions/
+  )
+  assert.throws(
+    () =>
+      defineApp({
+        ...base,
+        settings: [{ type: 'select', name: 's', label: 'S', options: [], loadOptions }]
+      }),
+    /needs either options or loadOptions/
+  )
+  assert.throws(
+    () =>
+      defineApp({
+        ...base,
+        settings: [
+          { type: 'select', name: 's', label: 'S', loadOptions, dependsOn: ['later'] },
+          { type: 'text', name: 'later', label: 'Later' }
+        ]
+      }),
+    /s refers to later, which isn't declared before it/
+  )
+  assert.throws(
+    () =>
+      defineApp({
+        ...base,
+        settings: [{ type: 'text', name: 't', label: 'T', visibleWhen: { missing: true } }]
+      }),
+    /t refers to missing/
+  )
+}
+
+async function testLoadedOptionsAreLimited() {
+  const many = Array.from({ length: MAX_LOADED_OPTIONS + 10 }, (_, i) => ({
+    label: `Option ${i}`,
+    value: `v${i}`
+  }))
+
+  assert.strictEqual(limitOptions(many).length, MAX_LOADED_OPTIONS)
+  assert.deepStrictEqual(
+    limitOptions([
+      { label: 'x'.repeat(250), value: 'long' },
+      { label: 'Numeric', value: 7 },
+      { label: 'No value' },
+      { label: 'Empty', value: '' },
+      { label: 'Object', value: { a: 1 } },
+      { label: 'Huge value', value: 'v'.repeat(501) },
+      { value: 'unlabelled' }
+    ]),
+    [
+      { label: `${'x'.repeat(199)}…`, value: 'long' },
+      { label: 'Numeric', value: '7' },
+      { label: 'unlabelled', value: 'unlabelled' }
+    ]
+  )
+  assert.deepStrictEqual(limitOptions('nope'), [])
+}
+
+async function testLoadsOptionsWithTheFormValues() {
+  const app = createVisibilityApp()
+  const withAuth = <T>(fn: (auth: any) => Promise<T>) => fn({ type: 'none' })
+
+  assert.deepStrictEqual(
+    await loadSettingOptions(app, 'tab', { existing: 'Sheet', extra: 'x', createNew: 1 }, withAuth),
+    [{ label: 'Sheet', value: 'a' }]
+  )
+  await assertBadRequest(
+    loadSettingOptions(app, 'existing', {}, withAuth),
+    /has no options to load for existing/
+  )
+
+  const failing = (error: Error) =>
+    defineApp({
+      ...createVisibilityApp(),
+      settings: [
+        { type: 'text', name: 'existing', label: 'Existing' },
+        {
+          type: 'select',
+          name: 'tab',
+          label: 'Tab',
+          loadOptions: async () => {
+            throw error
+          }
+        }
+      ]
+    })
+
+  await assertBadRequest(
+    loadSettingOptions(failing(new AppError('No access to it')), 'tab', {}, withAuth),
+    /^No access to it$/
+  )
+  // Unknown errors may carry anything, so they aren't shown
+  await assertBadRequest(
+    loadSettingOptions(failing(new Error('secret detail')), 'tab', {}, withAuth),
+    /^Couldn't load the options for Tab$/
+  )
+}
+
+function testAppErrorFromStatus() {
+  const flags = (status: number) => {
+    const error = AppError.fromStatus(status, 'x')
+    return [error.retryable, error.unauthorized]
+  }
+
+  assert.deepStrictEqual(flags(401), [false, true])
+  assert.deepStrictEqual(flags(403), [false, false])
+  assert.deepStrictEqual(flags(404), [false, false])
+  assert.deepStrictEqual(flags(408), [true, false])
+  assert.deepStrictEqual(flags(429), [true, false])
+  assert.deepStrictEqual(flags(503), [true, false])
+  assert.strictEqual(new AppError('x').retryable, true)
+}
+
 // --- webhook ----------------------------------------------------------------
 
 function testWebhookDefinitionIsUnchanged() {
@@ -273,6 +484,12 @@ async function run() {
   await testRejectsSelectValueOutsideOptions()
   await testRejectsNonObjectConfig()
   await testRunsAppValidateOnNormalizedConfig()
+  await testAppValidateCanReplaceTheConfig()
+  await testHiddenSettingsAreNotRequiredOrStored()
+  testDefineAppChecksLoadedSelectsAndReferences()
+  await testLoadedOptionsAreLimited()
+  await testLoadsOptionsWithTheFormValues()
+  testAppErrorFromStatus()
   testWebhookDefinitionIsUnchanged()
   await testWebhookRejectsPrivateEndpoint()
   await testWebhookAcceptsPublicEndpoint()

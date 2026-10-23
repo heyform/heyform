@@ -140,7 +140,7 @@ async function testProcessResultDistinguishesSkippedJobs() {
     new IntegrationQueue(
       { findById: () => app },
       { findById: async () => integration },
-      { getRunAuth: async () => ({ type: 'none' }) },
+      { withRunAuth: async (_app: any, _integration: any, fn: any) => fn({ type: 'none' }) },
       { findById: async () => ({ id: 'submission_1' }) },
       { findById: async () => ({ id: 'form_1' }) }
     )
@@ -544,7 +544,7 @@ function createHoldingQueue(holdForReconnect: (input: any, resend: boolean) => P
   return new IntegrationQueue(
     { findById: () => app },
     integrationService,
-    { getRunAuth: async () => ({ type: 'none' }) },
+    { withRunAuth: async (_app: any, _integration: any, fn: any) => fn({ type: 'none' }) },
     { findById: async () => ({ id: 'submission_1' }) },
     { findById: async () => ({ id: 'form_1' }) }
   )

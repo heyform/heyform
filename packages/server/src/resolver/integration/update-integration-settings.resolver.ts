@@ -6,6 +6,7 @@ import { UpdateIntegrationInput } from '@graphql'
 import { helper } from '@heyform-inc/utils'
 import {
   FormModel,
+  IntegrationConnectionModel,
   IntegrationConnectionStatusEnum,
   IntegrationModel,
   IntegrationStatusEnum
@@ -43,15 +44,15 @@ export class UpdateIntegrationSettingsResolver {
       throw new BadRequestException('Invalid attributes arguments')
     }
 
-    const config = await validateAppConfig(app, input.config)
     const integration = await this.integrationService.findOne(input.formId, app.id)
     const updates: Partial<IntegrationModel> = {
-      config,
       status: IntegrationStatusEnum.ACTIVE
     }
+    let apiKey: string | undefined
+    let connection: IntegrationConnectionModel | undefined
 
     if (app.auth.type === 'apiKey') {
-      const apiKey = input.apiKey?.trim()
+      apiKey = input.apiKey?.trim()
 
       if (apiKey) {
         Object.assign(updates, this.integrationAuthService.encryptApiKey(apiKey))
@@ -65,7 +66,7 @@ export class UpdateIntegrationSettingsResolver {
 
     if (app.auth.type === 'oauth2') {
       // Any of the team's accounts, whoever connected it
-      const connection = await this.integrationAuthService.findUsableConnection(
+      connection = await this.integrationAuthService.findUsableConnection(
         app,
         form?.teamId ?? '',
         input.connectionId || integration?.connectionId
@@ -79,6 +80,21 @@ export class UpdateIntegrationSettingsResolver {
         updates.status = IntegrationStatusEnum.NEEDS_RECONNECT
       }
     }
+
+    // The app's validate may check the config with the key or account
+    // being saved
+    updates.config = await validateAppConfig(app, input.config, {
+      form: form!,
+      withAuth:
+        app.auth.type === 'none'
+          ? undefined
+          : fn =>
+              this.integrationAuthService.withSettingsAuth(
+                app,
+                { apiKey, integration, connection },
+                fn
+              )
+    })
 
     const integrationId = await this.integrationService.createOrUpdate(
       input.formId,

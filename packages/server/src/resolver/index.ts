@@ -40,6 +40,7 @@ export { DeleteIntegrationSettingsResolver } from './integration/delete-integrat
 export { UpdateIntegrationStatusResolver } from './integration/update-integration-status.resolver'
 export { IntegrationRecordsResolver } from './integration/integration-records.resolver'
 export { IntegrationConnectionsResolver } from './integration/integration-connections.resolver'
+export { IntegrationSettingOptionsResolver } from './integration/integration-setting-options.resolver'
 export { TeamIntegrationConnectionsResolver } from './integration/team-integration-connections.resolver'
 export { DisconnectIntegrationConnectionResolver } from './integration/disconnect-integration-connection.resolver'
 
