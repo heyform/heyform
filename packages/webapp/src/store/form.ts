@@ -10,7 +10,7 @@ import { helper } from '@heyform-inc/utils'
 import { immer } from 'zustand/middleware/immer'
 
 import { TypeNumberValue } from '@/components'
-import { APP_STATUS_ENUM, DEFAULT_EMBED_CONFIGS } from '@/consts'
+import { APP_STATUS_ENUM, DEFAULT_EMBED_CONFIGS, INTEGRATION_STATUS_ENUM } from '@/consts'
 import { DEFAULT_LNG } from '@/i18n'
 import {
   AppType,
@@ -81,7 +81,12 @@ const computeState = (state: FormStoreType): ComputedStoreType => {
 
     let status = APP_STATUS_ENUM.PENDING
 
-    if (helper.isValid(integration?.config)) {
+    // Connecting an OAuth2 account creates a pending integration with no
+    // config; it counts as set up once its settings are saved
+    if (
+      helper.isValid(integration?.config) ||
+      (integration && integration.status !== INTEGRATION_STATUS_ENUM.PERMITTED)
+    ) {
       status = APP_STATUS_ENUM.ACTIVE
     }
 

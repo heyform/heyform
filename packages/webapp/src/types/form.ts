@@ -18,11 +18,20 @@ export interface AppSettingType {
   defaultValue?: string | boolean
 }
 
+export interface AppAuthType {
+  type: 'none' | 'apiKey' | 'oauth2'
+  provider?: string
+  providerName?: string
+  label?: string
+  description?: string
+}
+
 export interface AppType {
   id: string
   name: string
   description?: string
   icon?: string
+  auth?: AppAuthType
   settings?: AppSettingType[]
   status?: APP_STATUS_ENUM
 }
@@ -36,6 +45,27 @@ export interface IntegrationType {
   appId: string
   config?: AnyMap
   status: number
+  // An OAuth2 account is connected
+  connected?: boolean
+  // The team's connected account it uses
+  connectionId?: string
+  // Masked end of the saved API key
+  apiKeyHint?: string
+}
+
+// An account the team has connected at an OAuth2 provider
+export interface IntegrationConnectionType {
+  id: string
+  provider: string
+  providerName: string
+  accountEmail?: string
+  accountName?: string
+  // Name of the member who connected it
+  connectedBy?: string
+  status: number
+  statusReason?: string
+  // For one app: whether the account has granted what it needs
+  hasScopes?: boolean
 }
 
 export interface FormFieldType extends FormField {

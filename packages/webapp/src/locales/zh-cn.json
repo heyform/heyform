@@ -1105,6 +1105,24 @@
           "headline": "数据库"
         }
       },
+      "auth": {
+        "apiKey": "API 密钥",
+        "apiKeySaved": "已保存密钥（{{hint}}）。留空则继续使用该密钥。",
+        "connectDescription": "连接你的 {{name}} 账号，以便 HeyForm 向其发送提交数据。",
+        "connectAccount": "连接 {{name}} 账号",
+        "reconnect": "重新连接",
+        "reconnectAccount": "重新连接 {{name}} 账号",
+        "needsReconnect": "你的 {{name}} 账号需要重新连接，在此之前将暂停发送。",
+        "accessDenied": "未获得你的 {{name}} 账号的访问授权。",
+        "connectFailed": "无法连接你的 {{name}} 账号，请重试。",
+        "account": "账号",
+        "accountLabel": "{{email}}（由 {{name}} 连接）",
+        "accountNeedsReconnect": "{{label}} · 需要重新连接",
+        "accountMissingAccess": "{{label}} · 尚未允许 {{app}} 访问",
+        "connectAnother": "连接其他 {{name}} 账号",
+        "accountShared": "账号对此工作区的所有成员共享。",
+        "accountsFailed": "无法加载工作区的账号。"
+      },
       "apps": {
         "webhook": {
           "description": "通过 Webhook 集成，你可以在收到每次提交后立即将其发送到任意 URL。",

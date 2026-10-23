@@ -761,6 +761,9 @@ export const FORM_INTEGRATIONS_GQL = gql`
       appId
       config
       status
+      connected
+      connectionId
+      apiKeyHint
     }
   }
 `
@@ -821,6 +824,13 @@ export const APPS_GQL = gql`
       name
       description
       icon
+      auth {
+        type
+        provider
+        providerName
+        label
+        description
+      }
       settings {
         type
         name
@@ -1083,6 +1093,22 @@ export const UPDATE_INTEGRATION_SETTINGS_GQL = gql`
 export const UPDATE_INTEGRATION_STATUS_GQL = gql`
   mutation updateIntegrationStatus($input: UpdateIntegrationStatusInput!) {
     updateIntegrationStatus(input: $input)
+  }
+`
+
+export const INTEGRATION_CONNECTIONS_GQL = gql`
+  query integrationConnections($input: IntegrationInput!) {
+    integrationConnections(input: $input) {
+      id
+      provider
+      providerName
+      accountEmail
+      accountName
+      connectedBy
+      status
+      statusReason
+      hasScopes
+    }
   }
 `
 

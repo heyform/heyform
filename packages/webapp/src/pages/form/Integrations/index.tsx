@@ -1,8 +1,13 @@
-import { AppService, FormService } from '@/services'
-import { useParam } from '@/utils'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-import { Async, Repeat } from '@/components'
-import { useFormStore } from '@/store'
+import { getIntegrationAuth } from './utils'
+import { AppService, FormService } from '@/services'
+import { useParam, useQuery } from '@/utils'
+
+import { Async, Repeat, useToast } from '@/components'
+import { useAppStore, useFormStore } from '@/store'
+import { AppType, IntegrationType } from '@/types'
 
 import IntegrationItem from './IntegrationItem'
 import IntegrationSettingsModal from './IntegrationSettingsModal'
@@ -30,8 +35,44 @@ const Skeleton = (
 )
 
 export default function FormIntegrations() {
+  const { t } = useTranslation()
   const { formId } = useParam()
+  const query = useQuery()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const toast = useToast()
+  const { openModal } = useAppStore()
   const { integratedApps, setApps, setIntegrations } = useFormStore()
+
+  // The OAuth2 callback redirects back here with the outcome
+  function handleConnectResult(apps: AppType[], integrations: IntegrationType[]) {
+    const app = apps.find(row => row.id === query.appId)
+
+    if (!app || !(query.integrationConnected || query.integrationError)) {
+      return
+    }
+
+    const integratedApp = {
+      ...app,
+      integration: integrations.find(row => row.appId === app.id)
+    } as Any
+
+    if (query.integrationConnected) {
+      openModal('IntegrationSettingsModal', { app: integratedApp })
+    } else {
+      toast({
+        title: t('components.error.title'),
+        message: t(
+          query.integrationError === 'access_denied'
+            ? 'form.integrations.auth.accessDenied'
+            : 'form.integrations.auth.connectFailed',
+          { name: getIntegrationAuth(t, integratedApp).providerName }
+        )
+      })
+    }
+
+    navigate(location.pathname, { replace: true })
+  }
 
   async function fetch() {
     const [apps, integrations] = await Promise.all([
@@ -41,6 +82,7 @@ export default function FormIntegrations() {
 
     setApps(apps)
     setIntegrations(integrations)
+    handleConnectResult(apps, integrations)
 
     return true
   }
