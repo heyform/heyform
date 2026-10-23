@@ -171,10 +171,10 @@ token (`invalid_grant`, e.g. access was revoked), the connection and every activ
 it are marked as needing reconnection and the job stops retrying. Network errors and provider
 outages are retried like any other failure.
 
-While an integration needs reconnecting, new submissions aren't sent to it. Reconnecting the
-account makes every integration that uses it active again. A saved API key that can no longer be
-decrypted (see [Encryption key](#encryption-key)) is treated the same way: entering the key again
-reconnects it.
+While an integration needs reconnecting, its submissions wait (see [Delivery log](#delivery-log)).
+Reconnecting the account sends the waiting submissions of every integration that uses it. A saved
+API key that can no longer be decrypted (see [Encryption key](#encryption-key)) is treated the same
+way: entering the key again reconnects it.
 
 ### Encryption key
 
@@ -194,7 +194,8 @@ only updates values that haven't changed since it read them, so it's safe to run
 runs, and again.
 
 A value that neither key decrypts marks its connection, or its API-key integration, as needing
-reconnection, with the reason, until someone connects the account or enters the key again.
+reconnection, with the reason, and its submissions wait until someone connects the account or
+enters the key again.
 
 ## Queue
 
@@ -211,6 +212,25 @@ queue: {
 
 Credential errors that a retry can't fix (no API key saved, a revoked OAuth grant) fail the job
 without further attempts.
+
+## Delivery log
+
+Every attempt is recorded in `IntegrationRecordModel`: whether it succeeded, the attempt number,
+whether the queue will retry, and the error message of a failure (shortened to 500 characters).
+The form owner sees the 20 most recent records in the integration's settings. Records are kept for
+30 days and deleted with the integration.
+
+A submission that can't be sent because the integration needs reconnecting gets a waiting record
+instead: either it arrived while the integration needed reconnecting, or its job found the grant
+revoked. Waiting records don't expire. When the integration becomes active again (the account is
+reconnected, a new API key is saved, or the integration is turned back on), each waiting submission
+is queued again, oldest first, and its record is removed. Each record is claimed once and jobs use
+`<integrationId>-<submissionId>` as their Bull job id, so a reconnect handled twice doesn't send a
+submission twice. An integration holds at most 1,000 waiting submissions (`MAX_WAITING_RECORDS`);
+later ones are recorded as failed. Deleting the integration discards them.
+
+The error message of whatever `run` throws is shown to the form owner, so keep secrets and
+submission data out of it.
 
 ## Translations
 
