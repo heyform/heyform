@@ -68,3 +68,97 @@ export const integrationSecrets = new IntegrationSecrets(
   INTEGRATION_ENCRYPTION_KEY,
   INTEGRATION_ENCRYPTION_KEY_PREVIOUS
 )
+
+export interface ReencryptionResult {
+  // Values moved to the current key
+  reencrypted: number
+  // Changed meanwhile (e.g. refreshed, which re-encrypts them anyway)
+  skipped: number
+  // Readable with neither key; they need reconnecting
+  unreadable: number
+}
+
+interface ReencryptionModels {
+  connectionModel: { find(filter: any): any; updateOne(filter: any, update: any): any }
+  integrationModel: { find(filter: any): any; updateOne(filter: any, update: any): any }
+}
+
+/**
+ * Re-encrypts with the current key every stored credential still on
+ * INTEGRATION_ENCRYPTION_KEY_PREVIOUS: connection tokens and API keys. Each
+ * update only applies if the value hasn't changed since it was read. Safe to
+ * run while the server runs, and to run again.
+ */
+export async function reencryptIntegrationSecrets(
+  { connectionModel, integrationModel }: ReencryptionModels,
+  secrets: IntegrationSecrets = integrationSecrets
+): Promise<ReencryptionResult> {
+  if (!secrets.isConfigured) {
+    throw new IntegrationSecretError('INTEGRATION_ENCRYPTION_KEY is not set')
+  }
+
+  const result: ReencryptionResult = { reencrypted: 0, skipped: 0, unreadable: 0 }
+
+  for (const connection of await connectionModel.find({}).lean()) {
+    const stored: Record<string, any> = mapEntries(connection.tokens)
+    const fields = ['accessToken', 'refreshToken'].filter(
+      field => stored[field] && !String(stored[field]).startsWith(`${secrets.currentKeyId}:`)
+    )
+
+    if (!fields.length) {
+      continue
+    }
+
+    let tokens: Record<string, any>
+
+    try {
+      tokens = { ...stored }
+
+      for (const field of fields) {
+        tokens[field] = secrets.encrypt(secrets.decrypt(stored[field]))
+      }
+    } catch (_) {
+      result.unreadable++
+      continue
+    }
+
+    const update = await connectionModel.updateOne(
+      { _id: connection._id, tokenVersion: connection.tokenVersion ?? 0 },
+      { $set: { tokens }, $inc: { tokenVersion: 1 } }
+    )
+    result[update.modifiedCount > 0 ? 'reencrypted' : 'skipped']++
+  }
+
+  for (const integration of await integrationModel
+    .find({ apiKey: { $exists: true, $ne: null } })
+    .lean()) {
+    if (String(integration.apiKey).startsWith(`${secrets.currentKeyId}:`)) {
+      continue
+    }
+
+    let apiKey: string
+
+    try {
+      apiKey = secrets.encrypt(secrets.decrypt(integration.apiKey))
+    } catch (_) {
+      result.unreadable++
+      continue
+    }
+
+    const update = await integrationModel.updateOne(
+      { _id: integration._id, apiKey: integration.apiKey },
+      { $set: { apiKey } }
+    )
+    result[update.modifiedCount > 0 ? 'reencrypted' : 'skipped']++
+  }
+
+  return result
+}
+
+function mapEntries(value: any): Record<string, any> {
+  if (!value) {
+    return {}
+  }
+
+  return value instanceof Map ? Object.fromEntries(value) : { ...value }
+}

@@ -8,7 +8,8 @@ delete process.env.INTEGRATION_ENCRYPTION_KEY_PREVIOUS
 const {
   IntegrationSecrets,
   IntegrationSecretError,
-  integrationSecrets
+  integrationSecrets,
+  reencryptIntegrationSecrets
 } = require('../src/service/integration-secrets')
 const { AppService } = require('../src/service/app.service')
 const {
@@ -217,6 +218,155 @@ async function testAKeyNeitherKeyReadsNeedsReconnecting() {
   )
 }
 
+// --- re-encryption -------------------------------------------------------------
+
+function createModel(docs: any[]) {
+  const updates: any[] = []
+  const matches = (doc: any, filter: any) =>
+    Object.entries(filter).every(([key, value]: [string, any]) => {
+      if (value && typeof value === 'object' && '$exists' in value) {
+        return value.$exists ? doc[key] != null : doc[key] == null
+      }
+      return doc[key] === value
+    })
+
+  return {
+    docs,
+    updates,
+    find: (filter: any) => ({ lean: async () => docs.filter(doc => matches(doc, filter)) }),
+    updateOne: async (filter: any, update: any) => {
+      updates.push(filter)
+      const doc = docs.find(row => matches(row, filter))
+
+      if (!doc) {
+        return { modifiedCount: 0 }
+      }
+
+      Object.assign(doc, update.$set)
+      if (update.$inc) {
+        doc.tokenVersion += update.$inc.tokenVersion
+      }
+      return { modifiedCount: 1 }
+    }
+  }
+}
+
+async function testReencryptionMovesEverythingToTheCurrentKey() {
+  const old = new IntegrationSecrets(OLD_KEY)
+  const current = new IntegrationSecrets(NEW_KEY, OLD_KEY)
+  const connections = createModel([
+    {
+      _id: 'connection_old',
+      tokenVersion: 4,
+      tokens: new Map([
+        ['accessToken', old.encrypt('access-1')],
+        ['refreshToken', old.encrypt('refresh-1')],
+        ['expiresAt', 1234]
+      ])
+    },
+    // Refreshed since the rotation: already on the current key
+    {
+      _id: 'connection_new',
+      tokenVersion: 1,
+      tokens: {
+        accessToken: current.encrypt('access-2'),
+        refreshToken: current.encrypt('refresh-2')
+      }
+    },
+    // Encrypted with a key nobody kept
+    {
+      _id: 'connection_lost',
+      tokenVersion: 0,
+      tokens: { refreshToken: new IntegrationSecrets('lost').encrypt('refresh-3') }
+    }
+  ])
+  const integrations = createModel([
+    { _id: 'integration_old', apiKey: old.encrypt('api-key-1') },
+    { _id: 'integration_new', apiKey: current.encrypt('api-key-2') },
+    { _id: 'integration_none' }
+  ])
+
+  const result = await reencryptIntegrationSecrets(
+    { connectionModel: connections, integrationModel: integrations },
+    current
+  )
+
+  assert.deepStrictEqual(result, { reencrypted: 2, skipped: 0, unreadable: 1 })
+
+  const moved = connections.docs[0]
+  const newId = secretKeyId(NEW_KEY)
+  assert.ok(moved.tokens.accessToken.startsWith(`${newId}:`))
+  assert.ok(moved.tokens.refreshToken.startsWith(`${newId}:`))
+  assert.strictEqual(
+    new IntegrationSecrets(NEW_KEY).decrypt(moved.tokens.refreshToken),
+    'refresh-1'
+  )
+  assert.strictEqual(moved.tokens.expiresAt, 1234)
+  assert.strictEqual(moved.tokenVersion, 5)
+  // Updates only apply to what was read
+  assert.deepStrictEqual(connections.updates, [{ _id: 'connection_old', tokenVersion: 4 }])
+  assert.strictEqual(
+    new IntegrationSecrets(NEW_KEY).decrypt(integrations.docs[0].apiKey),
+    'api-key-1'
+  )
+  assert.deepStrictEqual(
+    integrations.updates.map((filter: any) => filter._id),
+    ['integration_old']
+  )
+
+  // Running it again finds nothing left to move
+  assert.deepStrictEqual(
+    await reencryptIntegrationSecrets(
+      { connectionModel: connections, integrationModel: integrations },
+      current
+    ),
+    { reencrypted: 0, skipped: 0, unreadable: 1 }
+  )
+}
+
+async function testReencryptionSkipsValuesThatChangedMeanwhile() {
+  const old = new IntegrationSecrets(OLD_KEY)
+  const current = new IntegrationSecrets(NEW_KEY, OLD_KEY)
+  const connections = createModel([
+    { _id: 'connection_1', tokenVersion: 2, tokens: { refreshToken: old.encrypt('r') } }
+  ])
+  const integrations = createModel([{ _id: 'integration_1', apiKey: old.encrypt('k') }])
+  // A refresh and a key change land between the read and the write
+  const find = connections.find
+  connections.find = (filter: any) => ({
+    lean: async () => {
+      const rows = (await find(filter).lean()).map((row: any) => ({ ...row }))
+      connections.docs[0].tokenVersion = 3
+      return rows
+    }
+  })
+  const findIntegrations = integrations.find
+  integrations.find = (filter: any) => ({
+    lean: async () => {
+      const rows = (await findIntegrations(filter).lean()).map((row: any) => ({ ...row }))
+      integrations.docs[0].apiKey = current.encrypt('new-key')
+      return rows
+    }
+  })
+
+  assert.deepStrictEqual(
+    await reencryptIntegrationSecrets(
+      { connectionModel: connections, integrationModel: integrations },
+      current
+    ),
+    { reencrypted: 0, skipped: 2, unreadable: 0 }
+  )
+  assert.strictEqual(current.decrypt(integrations.docs[0].apiKey), 'new-key', 'not overwritten')
+
+  await assert.rejects(
+    reencryptIntegrationSecrets(
+      { connectionModel: connections, integrationModel: integrations },
+      new IntegrationSecrets(undefined, OLD_KEY)
+    ),
+    /INTEGRATION_ENCRYPTION_KEY is not set/
+  )
+}
+
 async function run() {
   testValuesSayWhichKeyEncryptedThem()
   testThePreviousKeyOnlyReads()
@@ -225,6 +375,8 @@ async function run() {
   await testAppsThatStoreCredentialsNeedTheKey()
   await testJobsFailWithoutTheKeyButDontNeedReconnecting()
   await testAKeyNeitherKeyReadsNeedsReconnecting()
+  await testReencryptionMovesEverythingToTheCurrentKey()
+  await testReencryptionSkipsValuesThatChangedMeanwhile()
 }
 
 if (require.main === module) {
