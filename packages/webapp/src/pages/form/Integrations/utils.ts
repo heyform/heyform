@@ -24,6 +24,11 @@ export function getIntegrationSetting(
           defaultValue: setting.description
         })
       : undefined,
+    placeholder: setting.placeholder
+      ? t(`form.integrations.apps.${app.id}.settings.${setting.name}.placeholder`, {
+          defaultValue: setting.placeholder
+        })
+      : undefined,
     options: setting.options?.map(option => ({
       ...option,
       label: t(
@@ -34,6 +39,14 @@ export function getIntegrationSetting(
       )
     }))
   }
+}
+
+// Whether a setting is shown for the values in the form, as on the server
+export function isSettingVisible(setting: AppSettingType, values: AnyMap = {}) {
+  return Object.entries(setting.visibleWhen ?? {}).every(
+    ([name, expected]) =>
+      (values[name] ?? (typeof expected === 'boolean' ? false : undefined)) === expected
+  )
 }
 
 export function getIntegrationDefaultConfig(app: IntegratedAppType) {

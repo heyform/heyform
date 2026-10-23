@@ -843,6 +843,9 @@ export const APPS_GQL = gql`
           label
           value
         }
+        loadsOptions
+        dependsOn
+        visibleWhen
         defaultValue
       }
     }
@@ -1109,6 +1112,15 @@ export const INTEGRATION_RECORDS_GQL = gql`
 export const UPDATE_INTEGRATION_STATUS_GQL = gql`
   mutation updateIntegrationStatus($input: UpdateIntegrationStatusInput!) {
     updateIntegrationStatus(input: $input)
+  }
+`
+
+export const INTEGRATION_SETTING_OPTIONS_GQL = gql`
+  query integrationSettingOptions($input: IntegrationSettingOptionsInput!) {
+    integrationSettingOptions(input: $input) {
+      label
+      value
+    }
   }
 `
 

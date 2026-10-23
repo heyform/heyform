@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from 'react'
 import { type Root, createRoot } from 'react-dom/client'
-import { afterEach, beforeEach, expect, test } from 'vitest'
+import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 
 import {
   getConnectionLabel,
@@ -9,9 +9,11 @@ import {
   getIntegrationAuthorizeUrl,
   getIntegrationDefaultConfig,
   getIntegrationSetting,
+  isSettingVisible,
   needsAccountConnection,
   startsOnNewAccount
 } from '../src/pages/form/Integrations/utils'
+import { IntegrationService } from '../src/services'
 
 import { Form } from '../src/components'
 import i18n from '../src/i18n'
@@ -25,7 +27,9 @@ import {
   IntegrationRecordList,
   IntegrationWaitingCount
 } from '../src/pages/form/Integrations/IntegrationRecords'
-import IntegrationSettingsItem from '../src/pages/form/Integrations/IntegrationSettingsItem'
+import IntegrationSettingsItem, {
+  VisibleSetting
+} from '../src/pages/form/Integrations/IntegrationSettingsItem'
 import { ConnectedAccountList } from '../src/pages/workspace/Settings/ConnectedAccounts'
 import type { AppSettingType, IntegratedAppType } from '../src/types/form'
 
@@ -485,4 +489,162 @@ test('counts the submissions that are waiting', async () => {
   await i18n.changeLanguage('zh-cn')
   await act(async () => root.render(<IntegrationWaitingCount count={3} />))
   expect(container.textContent).toBe('3 条提交等待发送。')
+})
+
+// --- loaded options and conditional settings ---------------------------------
+
+const tabSetting: AppSettingType = {
+  type: 'select',
+  name: 'sheet',
+  label: 'Tab',
+  placeholder: 'First tab',
+  required: false,
+  loadsOptions: true,
+  dependsOn: ['spreadsheet']
+}
+
+const wait = (ms: number) => act(() => new Promise(resolve => setTimeout(resolve, ms)))
+
+type FormInstance = ReturnType<typeof Form.useForm>[0]
+
+async function renderForm(initialValues: AnyMap, children: React.ReactNode) {
+  let instance: FormInstance | undefined
+
+  function Harness() {
+    const [form] = Form.useForm()
+    instance = form
+
+    return (
+      <Form form={form} initialValues={initialValues}>
+        {children}
+      </Form>
+    )
+  }
+
+  await act(async () => root.render(<Harness />))
+  return instance!
+}
+
+test('shows a setting only while the settings it depends on match', async () => {
+  const existing: AppSettingType = {
+    type: 'text',
+    name: 'existing',
+    label: 'Existing',
+    required: true,
+    visibleWhen: { createNew: false }
+  }
+  const form = await renderForm(
+    {},
+    <>
+      <IntegrationSettingsItem
+        setting={{ type: 'switch', name: 'createNew', label: 'Create', required: false }}
+      />
+      <VisibleSetting setting={existing}>
+        <IntegrationSettingsItem setting={existing} />
+      </VisibleSetting>
+    </>
+  )
+
+  // A switch that hasn't been touched is off
+  expect(container.textContent).toContain('Existing')
+
+  await act(async () => form.setFieldsValue({ createNew: true }))
+  expect(container.textContent).not.toContain('Existing')
+
+  await act(async () => form.setFieldsValue({ createNew: false }))
+  expect(container.textContent).toContain('Existing')
+
+  expect(isSettingVisible(existing, { createNew: true })).toBe(false)
+  expect(isSettingVisible({ ...existing, visibleWhen: { mode: 'new' } }, {})).toBe(false)
+  expect(isSettingVisible({ ...existing, visibleWhen: undefined }, {})).toBe(true)
+})
+
+test('loads the options with the values in the form and the picked account', async () => {
+  const load = vi.spyOn(IntegrationService, 'settingOptions').mockResolvedValue([
+    { label: 'Responses', value: '0' },
+    { label: 'Archive', value: '100' }
+  ] as never)
+
+  await renderForm(
+    { connectionId: 'c1', spreadsheet: 'https://docs.google.com/x', sheet: '100' },
+    <IntegrationSettingsItem formId="form_1" appId="sheets" setting={tabSetting} />
+  )
+  await wait(500)
+
+  expect(load).toHaveBeenCalledTimes(1)
+  expect(load).toHaveBeenCalledWith(
+    'form_1',
+    'sheets',
+    'sheet',
+    { spreadsheet: 'https://docs.google.com/x', sheet: '100' },
+    undefined,
+    'c1'
+  )
+  expect(container.querySelector('label')?.textContent).toBe('Tab')
+  expect(container.querySelector('button[role="combobox"]')?.textContent).toContain('Archive')
+
+  load.mockRestore()
+})
+
+test('reloads when a setting it depends on changes, and drops a value no longer offered', async () => {
+  const load = vi
+    .spyOn(IntegrationService, 'settingOptions')
+    .mockResolvedValue([{ label: 'Archive', value: '100' }] as never)
+  const form = await renderForm(
+    { connectionId: 'c1', spreadsheet: 'first', sheet: '100' },
+    <IntegrationSettingsItem formId="form_1" appId="sheets" setting={tabSetting} />
+  )
+  await wait(500)
+  expect(load).toHaveBeenCalledTimes(1)
+
+  // Not loaded while it's blank, and the picked tab is kept meanwhile
+  await act(async () => form.setFieldsValue({ spreadsheet: '' }))
+  await wait(500)
+  expect(load).toHaveBeenCalledTimes(1)
+  expect(form.getFieldValue('sheet')).toBe('100')
+
+  load.mockResolvedValue([{ label: 'Sheet1', value: '0' }] as never)
+  await act(async () => form.setFieldsValue({ spreadsheet: 'second' }))
+  await wait(500)
+  expect(load).toHaveBeenCalledTimes(2)
+  expect(load.mock.calls[1][3]).toEqual({ spreadsheet: 'second', sheet: '100' })
+  expect(form.getFieldValue('sheet')).toBeUndefined()
+
+  // Picking another account loads them again
+  await act(async () => form.setFieldsValue({ connectionId: 'c2' }))
+  await wait(500)
+  expect(load).toHaveBeenCalledTimes(3)
+  expect(load.mock.calls[2][5]).toBe('c2')
+
+  load.mockRestore()
+})
+
+test('says why the options could not be loaded', async () => {
+  const load = vi
+    .spyOn(IntegrationService, 'settingOptions')
+    .mockRejectedValue(new Error("The spreadsheet wasn't found."))
+
+  await renderForm(
+    { spreadsheet: 'missing', sheet: '100' },
+    <IntegrationSettingsItem formId="form_1" appId="sheets" setting={tabSetting} />
+  )
+  await wait(500)
+
+  expect(container.querySelector('[data-slot="options-error"]')?.textContent).toBe(
+    "The spreadsheet wasn't found."
+  )
+
+  load.mockRestore()
+})
+
+test('translates placeholders', () => {
+  expect(getIntegrationSetting(i18n.t, app, tabSetting).placeholder).toBe('First tab')
+
+  i18n.addResource(
+    'en',
+    'translation',
+    'form.integrations.apps.example.settings.sheet.placeholder',
+    'Default tab'
+  )
+  expect(getIntegrationSetting(i18n.t, app, tabSetting).placeholder).toBe('Default tab')
 })

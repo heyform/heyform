@@ -27,6 +27,7 @@ import {
   HUBSPOT_OAUTH_GQL,
   INTEGRATION_CONNECTIONS_GQL,
   INTEGRATION_RECORDS_GQL,
+  INTEGRATION_SETTING_OPTIONS_GQL,
   INTEGRATION_STATUS_ENUM,
   MAILCHIMP_AUDIENCES_GQL,
   MAILCHIMP_OAUTH_GQL,
@@ -97,6 +98,31 @@ export class IntegrationService {
         input: {
           formId,
           appId,
+          config,
+          apiKey,
+          connectionId
+        }
+      }
+    })
+  }
+
+  // Options of a select setting that loads them, for the values in the form
+  static async settingOptions(
+    formId: string,
+    appId: string,
+    setting: string,
+    config: AnyMap,
+    apiKey?: string,
+    connectionId?: string
+  ) {
+    return apollo.query({
+      query: INTEGRATION_SETTING_OPTIONS_GQL,
+      fetchPolicy: 'no-cache',
+      variables: {
+        input: {
+          formId,
+          appId,
+          setting,
           config,
           apiKey,
           connectionId
