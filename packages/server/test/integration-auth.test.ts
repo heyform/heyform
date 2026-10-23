@@ -42,7 +42,10 @@ const {
 const {
   DisconnectIntegrationConnectionResolver
 } = require('../src/resolver/integration/disconnect-integration-connection.resolver')
-const { IntegrationOAuthController } = require('../src/controller/integration-oauth.controller')
+const {
+  IntegrationOAuthCallbackController,
+  IntegrationOAuthController
+} = require('../src/controller/integration-oauth.controller')
 const { decryptSecret, encryptSecret } = require('../src/utils/crypto')
 const { IntegrationSecrets, integrationSecrets } = require('../src/service/integration-secrets')
 const { secretKeyId } = require('../src/utils/crypto')
@@ -663,7 +666,12 @@ async function testUnreadableApiKeyNeedsANewKey() {
 
 async function testAuthorizeUrlAndState() {
   const ctx = createAuth()
-  const { url, state } = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1')
+  const { url, state } = await ctx.service.createAuthorization(
+    oauthApp,
+    'form_1',
+    'user_1',
+    'device_1'
+  )
   const parsed = new URL(url)
   const stored = JSON.parse(ctx.redis.get(`integration_oauth_state:${state}`)!)
 
@@ -689,14 +697,21 @@ async function testAuthorizeUrlAndState() {
   )
   assert.deepStrictEqual(
     { ...stored, codeVerifier: undefined },
-    { appId: 'fakeapp', formId: 'form_1', userId: 'user_1', codeVerifier: undefined }
+    {
+      appId: 'fakeapp',
+      formId: 'form_1',
+      userId: 'user_1',
+      deviceId: 'device_1',
+      codeVerifier: undefined
+    }
   )
 
   await assertBadRequest(
     ctx.service.createAuthorization(
       { ...oauthApp, auth: { type: 'oauth2', provider: 'unconfigured', scopes: ['x'] } },
       'form_1',
-      'user_1'
+      'user_1',
+      'device_1'
     ),
     /not available on this server/
   )
@@ -704,21 +719,37 @@ async function testAuthorizeUrlAndState() {
 
 async function testStateIsBoundToUserAndSingleUse() {
   const ctx = createAuth()
-  const { state } = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1')
+  const { state } = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1', 'device_1')
 
-  await assertBadRequest(ctx.service.consumeAuthorization(state, 'user_2'), /Invalid OAuth state/)
-
-  // The failed attempt consumed it too, so a stolen state can't be retried
-  await assertBadRequest(ctx.service.consumeAuthorization(state, 'user_1'), /Invalid OAuth state/)
-
-  const second = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1')
-  const data = await ctx.service.consumeAuthorization(second.state, 'user_1')
-  assert.strictEqual(data.formId, 'form_1')
   await assertBadRequest(
-    ctx.service.consumeAuthorization(second.state, 'user_1'),
+    ctx.service.consumeAuthorization(state, 'user_2', 'device_1'),
     /Invalid OAuth state/
   )
-  await assertBadRequest(ctx.service.consumeAuthorization('', 'user_1'), /Invalid OAuth state/)
+
+  // The failed attempt consumed it too, so a stolen state can't be retried
+  await assertBadRequest(
+    ctx.service.consumeAuthorization(state, 'user_1', 'device_1'),
+    /Invalid OAuth state/
+  )
+
+  // The same user on another device (another browser's session)
+  const other = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1', 'device_1')
+  await assertBadRequest(
+    ctx.service.consumeAuthorization(other.state, 'user_1', 'device_2'),
+    /Invalid OAuth state/
+  )
+
+  const second = await ctx.service.createAuthorization(oauthApp, 'form_1', 'user_1', 'device_1')
+  const data = await ctx.service.consumeAuthorization(second.state, 'user_1', 'device_1')
+  assert.strictEqual(data.formId, 'form_1')
+  await assertBadRequest(
+    ctx.service.consumeAuthorization(second.state, 'user_1', 'device_1'),
+    /Invalid OAuth state/
+  )
+  await assertBadRequest(
+    ctx.service.consumeAuthorization('', 'user_1', 'device_1'),
+    /Invalid OAuth state/
+  )
 }
 
 function grantTokens(extra: Record<string, unknown> = {}) {
@@ -1902,9 +1933,29 @@ async function testJobRetriesTransientRefreshFailures() {
 
 // --- callback controller ----------------------------------------------------
 
-function createController(ctx: ReturnType<typeof createAuth>, members = true) {
-  const controller = new IntegrationOAuthController(
+const SESSION = { id: 'user_1', deviceId: 'device_1' }
+
+// Sessions are read from `req.session` here; `live` lists the user:device
+// pairs whose login hasn't expired
+function createAuthService(live = new Set(['user_1:device_1', 'user_2:device_1'])) {
+  return {
+    getSession: (req: any) => req.session,
+    isExpired: async (userId: string, deviceId: string) => !live.has(`${userId}:${deviceId}`)
+  }
+}
+
+function createController(ctx: ReturnType<typeof createAuth>) {
+  return new IntegrationOAuthController(ctx.appService, createAuthService(), ctx.service)
+}
+
+function createCallbackController(
+  ctx: ReturnType<typeof createAuth>,
+  members = true,
+  authService = createAuthService()
+) {
+  return new IntegrationOAuthCallbackController(
     ctx.appService,
+    authService,
     {
       findById: async (id: string) =>
         id === 'form_1' ? { id: 'form_1', teamId: 'team_1', projectId: 'project_1' } : null
@@ -1913,8 +1964,13 @@ function createController(ctx: ReturnType<typeof createAuth>, members = true) {
     { findMemberById: async () => (members ? { id: 'member' } : null) },
     ctx.service
   )
+}
 
-  return controller
+// The provider's redirect back: a cross-site navigation, so the browser sends
+// the SameSite=None session and the Lax state cookie, but not the webapp's
+// SameSite=Strict device-id cookie
+function callbackRequest(state: string, session: any = SESSION) {
+  return { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: state }, session }
 }
 
 function createResponse() {
@@ -1938,7 +1994,9 @@ function createResponse() {
 
 async function startAuthorization(ctx: ReturnType<typeof createAuth>) {
   const res = createResponse()
-  await createController(ctx).authorize('form_1', 'fakeapp', { id: 'user_1' }, res)
+  await createController(ctx).authorize('form_1', 'fakeapp', { id: 'user_1' }, res, {
+    session: SESSION
+  })
 
   const cookie = res.cookies.HEYFORM_INTEGRATION_OAUTH_STATE
   assert.strictEqual(cookie.options.httpOnly, true)
@@ -1956,10 +2014,9 @@ async function testCallbackConnectsAndRedirectsBack() {
   grantTokens()
 
   const res = createResponse()
-  await createController(ctx).callback(
+  await createCallbackController(ctx).callback(
     { state, code: 'code-1' },
-    { id: 'user_1' },
-    { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: state } },
+    callbackRequest(state),
     res
   )
 
@@ -1975,22 +2032,47 @@ async function testCallbackConnectsAndRedirectsBack() {
   assert.strictEqual([...ctx.integrations.values()][0].connectionId, connection.id)
 }
 
+async function testCallbackNeedsTheSameLiveSession() {
+  const ctx = createAuth()
+  const state = await startAuthorization(ctx)
+  const controller = createCallbackController(ctx)
+
+  // Logged out, or no session cookie
+  await assert.rejects(
+    controller.callback({ state, code: 'c' }, callbackRequest(state, null), createResponse()),
+    /Unauthorized/
+  )
+  // A session whose login has expired or was revoked
+  await assert.rejects(
+    createCallbackController(ctx, true, createAuthService(new Set())).callback(
+      { state, code: 'c' },
+      callbackRequest(state),
+      createResponse()
+    ),
+    /Unauthorized/
+  )
+  // Neither attempt used up the state, so the real callback still works
+  grantTokens()
+  const res = createResponse()
+  await controller.callback({ state, code: 'c' }, callbackRequest(state), res)
+  assert.match(res.redirectedTo!, /integrationConnected=1$/)
+}
+
 async function testCallbackRejectsForeignOrForgedState() {
   const ctx = createAuth()
   const state = await startAuthorization(ctx)
-  const controller = createController(ctx)
+  const controller = createCallbackController(ctx)
 
   // No cookie, e.g. a link opened in another browser
   await assertBadRequest(
-    controller.callback({ state, code: 'c' }, { id: 'user_1' }, { cookies: {} }, createResponse()),
+    controller.callback({ state, code: 'c' }, { cookies: {}, session: SESSION }, createResponse()),
     /Invalid OAuth state/
   )
   // Cookie doesn't match
   await assertBadRequest(
     controller.callback(
       { state, code: 'c' },
-      { id: 'user_1' },
-      { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: 'x'.repeat(state.length) } },
+      callbackRequest('x'.repeat(state.length)),
       createResponse()
     ),
     /Invalid OAuth state/
@@ -1999,8 +2081,23 @@ async function testCallbackRejectsForeignOrForgedState() {
   await assertBadRequest(
     controller.callback(
       { state, code: 'c' },
-      { id: 'user_2' },
-      { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: state } },
+      callbackRequest(state, { id: 'user_2', deviceId: 'device_1' }),
+      createResponse()
+    ),
+    /Invalid OAuth state/
+  )
+  assert.strictEqual(ctx.integrations.size, 0)
+
+  // The same user, but a session from another device
+  const otherDevice = await startAuthorization(ctx)
+  await assertBadRequest(
+    createCallbackController(
+      ctx,
+      true,
+      createAuthService(new Set(['user_1:device_1', 'user_1:device_2']))
+    ).callback(
+      { state: otherDevice, code: 'c' },
+      callbackRequest(otherDevice, { id: 'user_1', deviceId: 'device_2' }),
       createResponse()
     ),
     /Invalid OAuth state/
@@ -2010,10 +2107,9 @@ async function testCallbackRejectsForeignOrForgedState() {
   // Lost access to the form while at the provider
   const second = await startAuthorization(ctx)
   await assertBadRequest(
-    createController(ctx, false).callback(
+    createCallbackController(ctx, false).callback(
       { state: second, code: 'c' },
-      { id: 'user_1' },
-      { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: second } },
+      callbackRequest(second),
       createResponse()
     ),
     /permission/
@@ -2027,10 +2123,9 @@ async function testCallbackReportsDeniedAndFailedConnections() {
   const denied = await startAuthorization(ctx)
   const res = createResponse()
 
-  await createController(ctx).callback(
+  await createCallbackController(ctx).callback(
     { state: denied, error: 'access_denied' },
-    { id: 'user_1' },
-    { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: denied } },
+    callbackRequest(denied),
     res
   )
   assert.match(res.redirectedTo!, /\?appId=fakeapp&integrationError=access_denied$/)
@@ -2039,10 +2134,9 @@ async function testCallbackReportsDeniedAndFailedConnections() {
   const failedRes = createResponse()
   provider.handler = () => ({ status: 400, body: { error: 'invalid_grant' } })
 
-  await createController(ctx).callback(
+  await createCallbackController(ctx).callback(
     { state: failed, code: 'expired-code' },
-    { id: 'user_1' },
-    { cookies: { HEYFORM_INTEGRATION_OAUTH_STATE: failed } },
+    callbackRequest(failed),
     failedRes
   )
   assert.match(failedRes.redirectedTo!, /integrationError=connect_failed$/)
@@ -2095,6 +2189,7 @@ async function run() {
     await testJobStopsRetryingWhenReconnectIsNeeded()
     await testJobRetriesTransientRefreshFailures()
     await testCallbackConnectsAndRedirectsBack()
+    await testCallbackNeedsTheSameLiveSession()
     await testCallbackRejectsForeignOrForgedState()
     await testCallbackReportsDeniedAndFailedConnections()
   } finally {

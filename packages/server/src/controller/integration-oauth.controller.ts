@@ -1,4 +1,12 @@
-import { BadRequestException, Controller, Get, Query, Req, Res } from '@nestjs/common'
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Query,
+  Req,
+  Res,
+  UnauthorizedException
+} from '@nestjs/common'
 import * as crypto from 'crypto'
 
 import { CookieOptionsFactory } from '@config'
@@ -6,6 +14,7 @@ import { Auth, FormGuard, User } from '@decorator'
 import { UserModel } from '@model'
 import {
   AppService,
+  AuthService,
   FormService,
   IntegrationAuthService,
   ProjectService,
@@ -27,19 +36,16 @@ function sameState(a?: string, b?: string): boolean {
 
 /**
  * Connects an OAuth2 account to a form's integration. The webapp navigates to
- * `authorize`; the provider sends the browser back to `callback`, which is the
- * redirect URI to register with every provider.
+ * `authorize`; the provider sends the browser back to `callback`
+ * (IntegrationOAuthCallbackController), which is the redirect URI to register
+ * with every provider.
  */
 @Controller()
 @Auth()
 export class IntegrationOAuthController {
-  private readonly logger = new Logger(IntegrationOAuthController.name)
-
   constructor(
     private readonly appService: AppService,
-    private readonly formService: FormService,
-    private readonly projectService: ProjectService,
-    private readonly teamService: TeamService,
+    private readonly authService: AuthService,
     private readonly integrationAuthService: IntegrationAuthService
   ) {}
 
@@ -49,7 +55,8 @@ export class IntegrationOAuthController {
     @Query('formId') formId: string,
     @Query('appId') appId: string,
     @User() user: UserModel,
-    @Res() res: any
+    @Res() res: any,
+    @Req() req: any
   ) {
     const app = typeof appId === 'string' ? this.appService.findById(appId) : undefined
 
@@ -57,10 +64,12 @@ export class IntegrationOAuthController {
       throw new BadRequestException('The app does not exist')
     }
 
+    // AuthGuard has checked that the session belongs to this device
     const { url, state } = await this.integrationAuthService.createAuthorization(
       app,
       formId,
-      user.id
+      user.id,
+      this.authService.getSession(req).deviceId
     )
 
     // Ties the callback to this browser as well as to the user, so a link to
@@ -76,14 +85,41 @@ export class IntegrationOAuthController {
     )
     res.redirect(302, url)
   }
+}
+
+/**
+ * The provider's redirect back to HeyForm. It can't use `@Auth()`: the browser
+ * arrives from the provider's site, so it withholds the webapp's SameSite=Strict
+ * device-id cookie, which AuthGuard compares with the session. Instead the
+ * session (SameSite=None) must still be live and belong to the same user and
+ * device that started the authorization.
+ */
+@Controller()
+export class IntegrationOAuthCallbackController {
+  private readonly logger = new Logger(IntegrationOAuthCallbackController.name)
+
+  constructor(
+    private readonly appService: AppService,
+    private readonly authService: AuthService,
+    private readonly formService: FormService,
+    private readonly projectService: ProjectService,
+    private readonly teamService: TeamService,
+    private readonly integrationAuthService: IntegrationAuthService
+  ) {}
 
   @Get('/api/integrations/oauth/callback')
-  async callback(
-    @Query() query: Record<string, unknown>,
-    @User() user: UserModel,
-    @Req() req: any,
-    @Res() res: any
-  ) {
+  async callback(@Query() query: Record<string, unknown>, @Req() req: any, @Res() res: any) {
+    const session = this.authService.getSession(req)
+
+    if (
+      !session?.id ||
+      !session?.deviceId ||
+      (await this.authService.isExpired(session.id, session.deviceId))
+    ) {
+      throw new UnauthorizedException('Unauthorized')
+    }
+
+    const user = { id: String(session.id) }
     const state = typeof query.state === 'string' ? query.state : undefined
     const code = typeof query.code === 'string' ? query.code : undefined
 
@@ -96,7 +132,11 @@ export class IntegrationOAuthController {
       throw new BadRequestException('Invalid OAuth state')
     }
 
-    const pending = await this.integrationAuthService.consumeAuthorization(state!, user.id)
+    const pending = await this.integrationAuthService.consumeAuthorization(
+      state!,
+      user.id,
+      session.deviceId
+    )
     const form = await this.formService.findById(pending.formId)
 
     // The same access FormGuard requires, checked again in case it was

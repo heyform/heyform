@@ -9,4 +9,7 @@ export * from './form.controller'
 export * from './changelog.controller'
 export { LogoutController } from './logout.controller'
 export { DashboardController } from './dashboard.controller'
-export { IntegrationOAuthController } from './integration-oauth.controller'
+export {
+  IntegrationOAuthCallbackController,
+  IntegrationOAuthController
+} from './integration-oauth.controller'

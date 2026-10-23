@@ -90,6 +90,8 @@ export interface IntegrationOAuthState {
   appId: string
   formId: string
   userId: string
+  // The device whose session started it; the callback must come from it
+  deviceId: string
   codeVerifier?: string
 }
 
@@ -154,7 +156,8 @@ export class IntegrationAuthService {
   async createAuthorization(
     app: AppDefinition,
     formId: string,
-    userId: string
+    userId: string,
+    deviceId: string
   ): Promise<{ url: string; state: string }> {
     const provider = this.requireProvider(app)
     // The identity scopes let the userinfo endpoint say whose account it is
@@ -166,7 +169,7 @@ export class IntegrationAuthService {
     ]
     const state = base64Url(crypto.randomBytes(32))
     const codeVerifier = provider.pkce ? base64Url(crypto.randomBytes(32)) : undefined
-    const data: IntegrationOAuthState = { appId: app.id, formId, userId, codeVerifier }
+    const data: IntegrationOAuthState = { appId: app.id, formId, userId, deviceId, codeVerifier }
 
     await this.redisService.set({
       key: this.stateKey(state),
@@ -199,9 +202,13 @@ export class IntegrationAuthService {
 
   /**
    * Reads and deletes a pending authorization, so each `state` works once.
-   * Rejects a state that was started by another user.
+   * Rejects a state that was started by another user or on another device.
    */
-  async consumeAuthorization(state: string, userId: string): Promise<IntegrationOAuthState> {
+  async consumeAuthorization(
+    state: string,
+    userId: string,
+    deviceId: string
+  ): Promise<IntegrationOAuthState> {
     const value = state ? await this.redisService.getdel(this.stateKey(state)) : null
     let data: IntegrationOAuthState | undefined
 
@@ -211,7 +218,14 @@ export class IntegrationAuthService {
       data = undefined
     }
 
-    if (!data || !data.formId || !data.appId || data.userId !== userId) {
+    if (
+      !data ||
+      !data.formId ||
+      !data.appId ||
+      data.userId !== userId ||
+      !deviceId ||
+      data.deviceId !== deviceId
+    ) {
       throw new BadRequestException('Invalid OAuth state')
     }
 
