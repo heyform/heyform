@@ -590,7 +590,7 @@ function testDefinition() {
   assert.deepStrictEqual(app.queue, {
     attempts: 5,
     backoff: { type: 'exponential', delay: 10_000 },
-    timeout: 60_000
+    timeout: 120_000
   })
 }
 

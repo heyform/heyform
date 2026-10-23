@@ -14,7 +14,7 @@ export const SUBMISSION_ID = 'Submission ID'
 
 // Google Sheets' limit on the text in one cell
 const MAX_CELL_LENGTH = 50_000
-const REQUEST_TIMEOUT = 15_000
+const REQUEST_TIMEOUT = 10_000
 
 type CellValue = string | number
 
@@ -450,8 +450,9 @@ export function createGoogleSheetsApp(apiUrl = GOOGLE_SHEETS_API) {
       attempts: 5,
       // 10s, 20s, 40s, 80s: past Google's per-minute quota window
       backoff: { type: 'exponential', delay: 10_000 },
-      // Up to four requests of 15s each
-      timeout: 60_000
+      // run sends up to five requests of 10s each, and sends them again after
+      // refreshing a token Google rejected (15s): 115s at most
+      timeout: 120_000
     },
     // Stores the spreadsheet as its URL and the tab as its id, which stays the
     // same when the tab is renamed
