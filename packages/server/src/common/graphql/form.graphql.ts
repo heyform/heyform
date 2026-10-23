@@ -1342,6 +1342,18 @@ export class FormIntegrationType {
 
   @Field(type => Number)
   status: IntegrationStatusEnum
+
+  // An OAuth2 account is connected
+  @Field({ nullable: true })
+  connected?: boolean
+
+  // The team connection it uses (IntegrationConnectionType)
+  @Field({ nullable: true })
+  connectionId?: string
+
+  // Masked end of the saved API key, e.g. `••••a1b2`
+  @Field({ nullable: true })
+  apiKeyHint?: string
 }
 
 @InputType()

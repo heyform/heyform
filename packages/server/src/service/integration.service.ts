@@ -1,17 +1,44 @@
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
-import { Queue } from 'bull'
+import { JobOptions, Queue } from 'bull'
 import { Model } from 'mongoose'
-import * as apps from 'src/apps'
 
+import { AppService } from './app.service'
 import { FormModel, IntegrationModel, IntegrationStatusEnum } from '@model'
+
+import { AppDefinition } from '../apps/types'
+
+/**
+ * Bull options for one delivery job of the app. Only the options the app sets
+ * are passed, so the rest keep the queue's BULL_JOB_* defaults.
+ */
+export function getAppJobOptions(app: AppDefinition): JobOptions {
+  const options: JobOptions = {}
+  const queue = app.queue
+
+  if (queue?.attempts !== undefined) {
+    options.attempts = queue.attempts
+  }
+
+  if (queue?.backoff !== undefined) {
+    options.backoff =
+      typeof queue.backoff === 'number' ? { type: 'fixed', delay: queue.backoff } : queue.backoff
+  }
+
+  if (queue?.timeout !== undefined) {
+    options.timeout = queue.timeout
+  }
+
+  return options
+}
 
 @Injectable()
 export class IntegrationService {
   constructor(
     @InjectModel(IntegrationModel.name)
     private readonly integrationModel: Model<IntegrationModel>,
+    private readonly appService: AppService,
     @InjectQueue('IntegrationQueue') private readonly integrationQueue: Queue,
     @InjectQueue('SubmissionNotificationQueue') private readonly submissionNotificationQueue: Queue
   ) {}
@@ -60,6 +87,30 @@ export class IntegrationService {
     return result.matchedCount > 0
   }
 
+  // --- Team connections ---------------------------------------------------------
+
+  async findAllByConnection(connectionId: string): Promise<IntegrationModel[]> {
+    return this.integrationModel.find({ connectionId })
+  }
+
+  async findAllByConnections(connectionIds: string[]): Promise<IntegrationModel[]> {
+    return this.integrationModel.find({ connectionId: { $in: connectionIds } })
+  }
+
+  // The connection stopped working: its active integrations wait for a reconnect
+  async markConnectionNeedsReconnect(connectionId: string): Promise<void> {
+    await this.integrationModel.updateMany(
+      { connectionId, status: IntegrationStatusEnum.ACTIVE },
+      { status: IntegrationStatusEnum.NEEDS_RECONNECT }
+    )
+  }
+
+  // The connection was removed: its integrations need another account
+  async detachConnection(connectionId: string): Promise<void> {
+    await this.markConnectionNeedsReconnect(connectionId)
+    await this.integrationModel.updateMany({ connectionId }, { $unset: { connectionId: 1 } })
+  }
+
   async createOrUpdate(
     formId: string,
     appId: string,
@@ -102,15 +153,18 @@ export class IntegrationService {
     })
 
     for (const integration of integrations) {
-      const app = apps[integration.appId]
+      const app = this.appService.findById(integration.appId)
 
       if (app) {
-        this.integrationQueue.add({
-          appId: integration.appId,
-          formId: form.id,
-          integrationId: integration.id,
-          submissionId
-        })
+        this.integrationQueue.add(
+          {
+            appId: integration.appId,
+            formId: form.id,
+            integrationId: integration.id,
+            submissionId
+          },
+          getAppJobOptions(app)
+        )
       }
     }
   }

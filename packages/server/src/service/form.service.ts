@@ -136,6 +136,10 @@ export class FormService {
     })
   }
 
+  async findAllByIds(ids: string[]): Promise<FormModel[]> {
+    return this.formModel.find({ _id: { $in: ids } })
+  }
+
   async findAllByFieldLength(maxLength = 2) {
     return this.formModel.find({
       $where: `this.fields.length <= ${maxLength}`

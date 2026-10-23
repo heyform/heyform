@@ -59,6 +59,14 @@ export const UPLOAD_DIR: string = resolve(STATIC_DIR, 'upload')
 // Encryption
 export const FORM_ENCRYPTION_KEY: string = process.env.FORM_ENCRYPTION_KEY
 
+// Encrypts integration credentials (API keys, OAuth2 tokens). Separate from
+// FORM_ENCRYPTION_KEY so rotating either never breaks the other. The previous
+// key is only used to read values written before a rotation.
+export const INTEGRATION_ENCRYPTION_KEY: string | undefined =
+  process.env.INTEGRATION_ENCRYPTION_KEY?.trim() || undefined
+export const INTEGRATION_ENCRYPTION_KEY_PREVIOUS: string | undefined =
+  process.env.INTEGRATION_ENCRYPTION_KEY_PREVIOUS?.trim() || undefined
+
 // Bcrypt
 export const BCRYPT_SALT: number = +process.env.BCRYPT_SALT || 10
 
@@ -132,7 +140,8 @@ export const DISABLE_LOGIN_WITH_OIDC =
   helper.isEmpty(OIDC_ISSUER) ||
   !['client_secret_basic', 'client_secret_post'].includes(OIDC_CLIENT_AUTH_METHOD)
 
-export const DISABLE_LOGIN_WITH_PASSWORD: boolean = process.env.DISABLE_LOGIN_WITH_PASSWORD?.toLowerCase() === 'true'
+export const DISABLE_LOGIN_WITH_PASSWORD: boolean =
+  process.env.DISABLE_LOGIN_WITH_PASSWORD?.toLowerCase() === 'true'
 
 // Stripe
 export const STRIPE_VERSION: string = process.env.STRIPE_VERSION
