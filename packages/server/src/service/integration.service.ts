@@ -5,9 +5,30 @@ import { JobOptions, Queue } from 'bull'
 import { Model } from 'mongoose'
 
 import { AppService } from './app.service'
-import { FormModel, IntegrationModel, IntegrationStatusEnum } from '@model'
+import {
+  FormModel,
+  IntegrationModel,
+  IntegrationRecordModel,
+  IntegrationRecordStatusEnum,
+  IntegrationStatusEnum
+} from '@model'
 
 import { AppDefinition } from '../apps/types'
+
+// Longest error message kept on a delivery record
+const RECORD_ERROR_MAX_LENGTH = 500
+
+export interface IntegrationRecordInput {
+  formId: string
+  appId: string
+  integrationId: string
+  submissionId: string
+  status: IntegrationRecordStatusEnum
+  attempt: number
+  maxAttempts: number
+  willRetry?: boolean
+  error?: string
+}
 
 /**
  * Bull options for one delivery job of the app. Only the options the app sets
@@ -38,6 +59,8 @@ export class IntegrationService {
   constructor(
     @InjectModel(IntegrationModel.name)
     private readonly integrationModel: Model<IntegrationModel>,
+    @InjectModel(IntegrationRecordModel.name)
+    private readonly integrationRecordModel: Model<IntegrationRecordModel>,
     private readonly appService: AppService,
     @InjectQueue('IntegrationQueue') private readonly integrationQueue: Queue,
     @InjectQueue('SubmissionNotificationQueue') private readonly submissionNotificationQueue: Queue
@@ -135,7 +158,44 @@ export class IntegrationService {
       formId,
       appId
     })
+    await this.integrationRecordModel.deleteMany({ formId, appId })
+
     return (result.deletedCount ?? 0) > 0
+  }
+
+  async addRecord(record: IntegrationRecordInput): Promise<void> {
+    const error =
+      record.error && record.error.length > RECORD_ERROR_MAX_LENGTH
+        ? `${record.error.slice(0, RECORD_ERROR_MAX_LENGTH - 1)}…`
+        : record.error
+
+    await this.integrationRecordModel.create({
+      ...record,
+      willRetry: !!record.willRetry,
+      error
+    })
+  }
+
+  /**
+   * The current integration's records, newest first. Scoped by integration id
+   * so a job that finishes after its integration was deleted can't show up
+   * under a new integration of the same app.
+   */
+  async findRecords(
+    formId: string,
+    appId: string,
+    limit: number
+  ): Promise<IntegrationRecordModel[]> {
+    const integration = await this.findOne(formId, appId)
+
+    if (!integration) {
+      return []
+    }
+
+    return this.integrationRecordModel
+      .find({ formId, appId, integrationId: integration.id })
+      .sort({ createdAt: -1, _id: -1 })
+      .limit(limit)
   }
 
   public async addQueue(form: FormModel, submissionId: string): Promise<void> {

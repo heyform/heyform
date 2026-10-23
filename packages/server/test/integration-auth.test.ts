@@ -491,6 +491,7 @@ async function testAddQueueAppliesAppOptions() {
   const queue = { add: (data: any, options: any) => added.push({ data, options }) }
   const service = new IntegrationService(
     integrationModel,
+    {},
     createAppService([queuedApp, webhook]),
     queue,
     { add: () => undefined }
