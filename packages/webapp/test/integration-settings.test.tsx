@@ -5,10 +5,12 @@ import { afterEach, beforeEach, expect, test } from 'vitest'
 
 import {
   getConnectionLabel,
+  getDefaultConnectionId,
   getIntegrationAuthorizeUrl,
   getIntegrationDefaultConfig,
   getIntegrationSetting,
-  needsAccountConnection
+  needsAccountConnection,
+  startsOnNewAccount
 } from '../src/pages/form/Integrations/utils'
 
 import { Form } from '../src/components'
@@ -267,6 +269,41 @@ test('picks one of the workspace accounts or connects another', async () => {
   expect(container.querySelector('label')?.textContent).toBe('Account')
   expect(container.textContent).toContain('Accounts are shared with everyone in this workspace.')
   expect(container.textContent).toContain('Connect another Example account')
+})
+
+test('starts the picker on a usable account', () => {
+  const [ann, ben, cat] = connections
+
+  // The integration's own account, while the workspace still has it
+  expect(
+    getDefaultConnectionId({ ...oauthApp, integration: { connectionId: 'c2' } } as any, connections)
+  ).toBe('c2')
+  // Otherwise the first account that works, skipping ones needing reconnection
+  expect(getDefaultConnectionId(oauthApp, [ben, ann])).toBe('c1')
+  expect(
+    getDefaultConnectionId({ ...oauthApp, integration: { connectionId: 'gone' } } as any, [
+      cat,
+      ben,
+      ann
+    ])
+  ).toBe('c1')
+  // One needing reconnection beats none; one without the app's access never
+  expect(getDefaultConnectionId(oauthApp, [cat, ben])).toBe('c2')
+  expect(getDefaultConnectionId(oauthApp, [cat])).toBeUndefined()
+  expect(getDefaultConnectionId(oauthApp, [])).toBeUndefined()
+})
+
+test('lets a new account be saved without another change', () => {
+  // A new integration, or one whose account is gone, starts with an account to save
+  expect(startsOnNewAccount(oauthApp, 'c1')).toBe(true)
+  expect(
+    startsOnNewAccount({ ...oauthApp, integration: { connectionId: 'gone' } } as any, 'c1')
+  ).toBe(true)
+  // The integration's own account, or none, waits for a change
+  expect(
+    startsOnNewAccount({ ...oauthApp, integration: { connectionId: 'c1' } } as any, 'c1')
+  ).toBe(false)
+  expect(startsOnNewAccount(oauthApp, undefined)).toBe(false)
 })
 
 test('offers to retry when the accounts fail to load', async () => {

@@ -103,7 +103,7 @@ export function ConnectionItem({
       }
       rules={[{ required: true }]}
     >
-      <Select options={options} />
+      <Select className="h-11 w-full sm:h-10" options={options} />
     </Form.Item>
   )
 }

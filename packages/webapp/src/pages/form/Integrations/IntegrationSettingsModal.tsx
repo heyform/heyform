@@ -4,12 +4,14 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  getDefaultConnectionId,
   getIntegrationAuth,
   getIntegrationAuthorizeUrl,
   getIntegrationDefaultConfig,
   getIntegrationDescription,
   getIntegrationSetting,
-  needsAccountConnection
+  needsAccountConnection,
+  startsOnNewAccount
 } from './utils'
 import { FormService, IntegrationService } from '@/services'
 import { useParam } from '@/utils'
@@ -75,6 +77,9 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
     closeModal('IntegrationSettingsModal')
   }
 
+  // Starts on an account, so the picker is never blank
+  const connectionId = getDefaultConnectionId(app, connections)
+
   return (
     <Form.Simple
       className="space-y-4"
@@ -82,7 +87,7 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
         ...getIntegrationDefaultConfig(app),
         ...app.integration?.config,
         fields: app.integration?.config?.fields || [[]],
-        connectionId: app.integration?.connectionId
+        connectionId
       }}
       fetch={fetch}
       refreshDeps={[formId, app.id]}
@@ -90,7 +95,8 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
         className: 'w-full !mt-0',
         label: t('form.integrations.connectWith', { name: app.name })
       }}
-      submitOnChangedOnly
+      // An account picked for the integration is itself a change to save
+      submitOnChangedOnly={!startsOnNewAccount(app, connectionId)}
       onValuesChange={onValuesChange}
     >
       {app.auth?.type === 'apiKey' && <ApiKeyItem app={app} />}
