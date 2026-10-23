@@ -517,6 +517,8 @@ export enum INTEGRATION_CONNECTION_STATUS_ENUM {
 }
 
 export enum INTEGRATION_RECORD_STATUS_ENUM {
+  // Kept until the integration is reconnected, then sent
+  WAITING = 0,
   SUCCEEDED = 1,
   FAILED = 2
 }

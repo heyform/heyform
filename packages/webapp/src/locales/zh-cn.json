@@ -1142,7 +1142,9 @@
         "succeeded": "已发送",
         "failed": "失败",
         "retrying": "重试中",
-        "attempt": "第 {{attempt}} 次尝试，共 {{maxAttempts}} 次"
+        "attempt": "第 {{attempt}} 次尝试，共 {{maxAttempts}} 次",
+        "waiting": "等待中",
+        "waitingCount_other": "{{count}} 条提交等待发送。"
       },
       "apps": {
         "webhook": {

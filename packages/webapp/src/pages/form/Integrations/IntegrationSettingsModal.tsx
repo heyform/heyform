@@ -70,8 +70,9 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
       ...(connectionId ? { connectionId, connected: true } : {})
     })
 
-    // Pick up the masked hint of the new key
-    if (apiKey) {
+    // Pick up the masked hint of a new key, the status it restores, and
+    // what's still waiting once the server has resent the rest
+    if (apiKey || app.integration?.waitingCount) {
       setIntegrations(await FormService.integrations(formId))
     }
 
@@ -195,7 +196,13 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
           </>
         )}
 
-        {app.integration && <IntegrationRecords formId={formId} appId={app.id} />}
+        {app.integration && (
+          <IntegrationRecords
+            formId={formId}
+            appId={app.id}
+            waitingCount={app.integration.waitingCount}
+          />
+        )}
       </div>
     </div>
   )

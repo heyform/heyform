@@ -51,6 +51,8 @@ export interface IntegrationType {
   connectionId?: string
   // Masked end of the saved API key
   apiKeyHint?: string
+  // Submissions waiting for the integration to be reconnected
+  waitingCount?: number
 }
 
 // An account the team has connected at an OAuth2 provider

@@ -764,6 +764,7 @@ export const FORM_INTEGRATIONS_GQL = gql`
       connected
       connectionId
       apiKeyHint
+      waitingCount
     }
   }
 `

@@ -1144,7 +1144,10 @@
         "succeeded": "Delivered",
         "failed": "Failed",
         "retrying": "Retrying",
-        "attempt": "Attempt {{attempt}} of {{maxAttempts}}"
+        "attempt": "Attempt {{attempt}} of {{maxAttempts}}",
+        "waiting": "Waiting",
+        "waitingCount_one": "{{count}} submission is waiting to be sent.",
+        "waitingCount_other": "{{count}} submissions are waiting to be sent."
       },
       "apps": {
         "webhook": {
