@@ -39,6 +39,48 @@ function neutralizeSpreadsheetFormula(value: string): string {
   return value
 }
 
+// An answer as readable text, as in the CSV export: file uploads as their
+// URL, other answers as in email notifications
+export function answerToText(answer: Answer): string {
+  const value = answer.value
+  let result = ''
+
+  if (helper.isEmpty(value)) {
+    return result
+  }
+
+  switch (answer?.kind) {
+    case FieldKindEnum.FILE_UPLOAD:
+      if (helper.isString(value)) {
+        result = value
+      } else if (helper.isObject(value)) {
+        if (helper.isString(value.url)) {
+          result = value.url
+        } else {
+          const prefix = value.urlPrefix || value.cdnUrlPrefix
+          const key = value.key || value.cdnKey
+
+          if (helper.isString(prefix) && helper.isString(key)) {
+            result = `${prefix.replace(/\/+$/, '')}/${key.replace(/^\/+/, '')}`
+          }
+        }
+      }
+      break
+
+    default:
+      try {
+        result = parsePlainAnswer(answer)
+      } catch {
+        // Historical submissions may predate current validation. Treat a malformed answer as
+        // an empty cell so one poisoned record cannot make the entire form unexportable.
+        result = ''
+      }
+      break
+  }
+
+  return result
+}
+
 @Injectable()
 export class ExportFileService {
   async csv(
@@ -65,9 +107,7 @@ export class ExportFileService {
         value: (submission: SubmissionModel) => {
           const answer = submission.answers.find(answer => answer.id === field.id)
 
-          return helper.isEmpty(answer)
-            ? ''
-            : neutralizeSpreadsheetFormula(this.parseAnswer(answer))
+          return helper.isEmpty(answer) ? '' : neutralizeSpreadsheetFormula(answerToText(answer))
         }
       })),
       ...selectedHiddenFields.map(hiddenField => ({
@@ -91,45 +131,5 @@ export class ExportFileService {
     return parseAsync(submissions, {
       fields
     })
-  }
-
-  private parseAnswer(answer: Answer): string {
-    const value = answer.value
-    let result = ''
-
-    if (helper.isEmpty(value)) {
-      return result
-    }
-
-    switch (answer?.kind) {
-      case FieldKindEnum.FILE_UPLOAD:
-        if (helper.isString(value)) {
-          result = value
-        } else if (helper.isObject(value)) {
-          if (helper.isString(value.url)) {
-            result = value.url
-          } else {
-            const prefix = value.urlPrefix || value.cdnUrlPrefix
-            const key = value.key || value.cdnKey
-
-            if (helper.isString(prefix) && helper.isString(key)) {
-              result = `${prefix.replace(/\/+$/, '')}/${key.replace(/^\/+/, '')}`
-            }
-          }
-        }
-        break
-
-      default:
-        try {
-          result = parsePlainAnswer(answer)
-        } catch {
-          // Historical submissions may predate current validation. Treat a malformed answer as
-          // an empty cell so one poisoned record cannot make the entire form unexportable.
-          result = ''
-        }
-        break
-    }
-
-    return result
   }
 }
