@@ -66,6 +66,9 @@ export interface IntegrationConnectionType {
   statusReason?: string
   // For one app: whether the account has granted what it needs
   hasScopes?: boolean
+  // Forms whose integrations use it
+  forms?: { id: string; name: string }[]
+  canDisconnect?: boolean
 }
 
 export interface FormFieldType extends FormField {

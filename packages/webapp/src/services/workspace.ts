@@ -4,6 +4,7 @@ import {
   ADD_CUSTOM_DOMAIN_GQL,
   CREATE_BRAND_KIT_GQL,
   CREATE_WORKSPACE_GQL,
+  DISCONNECT_INTEGRATION_CONNECTION_GQL,
   DISSOLVE_WORKSPACE_CODE_GQL,
   DISSOLVE_WORKSPACE_GQL,
   EXPORT_WORKSPACE_DATA_GQL,
@@ -14,6 +15,7 @@ import {
   REMOVE_WORKSPACE_MEMBER_GQL,
   RESET_WORKSPACE_INVITE_CODE_GQL,
   SEARCH_WORKSPACE_GQL,
+  TEAM_INTEGRATION_CONNECTIONS_GQL,
   TRANSFER_WORKSPACE_GQL,
   UPDATE_BRAND_KIT_GQL,
   UPDATE_WORKSPACE_GQL,
@@ -110,6 +112,31 @@ export class WorkspaceService {
         }
       },
       fetchPolicy: 'network-only'
+    })
+  }
+
+  // Accounts the workspace has connected for integrations
+  static async integrationConnections(teamId: string) {
+    return apollo.query({
+      query: TEAM_INTEGRATION_CONNECTIONS_GQL,
+      variables: {
+        input: {
+          teamId
+        }
+      },
+      fetchPolicy: 'network-only'
+    })
+  }
+
+  static async disconnectIntegrationConnection(teamId: string, connectionId: string) {
+    return apollo.mutate({
+      mutation: DISCONNECT_INTEGRATION_CONNECTION_GQL,
+      variables: {
+        input: {
+          teamId,
+          connectionId
+        }
+      }
     })
   }
 

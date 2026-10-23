@@ -659,6 +659,20 @@
         "next": "Next"
       }
     },
+    "connectedAccounts": {
+      "title": "Connected accounts",
+      "description": "Accounts connected for integrations. Everyone in the workspace can use them on any form.",
+      "empty": "No accounts are connected yet. Connect one from a form’s integrations.",
+      "connectedBy": "Connected by {{name}}",
+      "active": "Connected",
+      "needsReconnect": "Needs reconnecting",
+      "forms_one": "Used by {{count}} form: {{names}}",
+      "forms_other": "Used by {{count}} forms: {{names}}",
+      "unused": "Not used by any form",
+      "disconnect": "Disconnect",
+      "disconnectHeadline": "Disconnect {{account}}?",
+      "disconnectDescription": "HeyForm will stop using this account and ask {{provider}} to revoke its access. Integrations using it will pause, and their submissions will wait until someone picks another account or connects this one again."
+    },
     "exportData": {
       "title": "Export Data",
       "description": "Get an email with all your forms, settings in one file.",

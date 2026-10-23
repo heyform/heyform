@@ -659,6 +659,19 @@
         "next": "下一步"
       }
     },
+    "connectedAccounts": {
+      "title": "已连接的账号",
+      "description": "为集成连接的账号。工作区内的所有成员都可以在任何表单中使用。",
+      "empty": "尚未连接任何账号。请在表单的集成中连接。",
+      "connectedBy": "由 {{name}} 连接",
+      "active": "已连接",
+      "needsReconnect": "需要重新连接",
+      "forms_other": "{{count}} 个表单在使用：{{names}}",
+      "unused": "没有表单在使用",
+      "disconnect": "断开连接",
+      "disconnectHeadline": "断开 {{account}}？",
+      "disconnectDescription": "HeyForm 将停止使用此账号，并请求 {{provider}} 撤销其访问权限。使用它的集成将暂停，其提交数据将等待，直到有人选择其他账号或重新连接此账号。"
+    },
     "exportData": {
       "title": "导出数据",
       "description": "通过电子邮件获取包含所有表单和设置的文件。",

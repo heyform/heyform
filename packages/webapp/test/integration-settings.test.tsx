@@ -20,6 +20,7 @@ import {
   ConnectionsLoadFailed
 } from '../src/pages/form/Integrations/IntegrationAuthItem'
 import IntegrationSettingsItem from '../src/pages/form/Integrations/IntegrationSettingsItem'
+import { ConnectedAccountList } from '../src/pages/workspace/Settings/ConnectedAccounts'
 import type { AppSettingType, IntegratedAppType } from '../src/types/form'
 
 let root: Root
@@ -275,6 +276,53 @@ test('offers to retry when the accounts fail to load', async () => {
   expect(container.textContent).toContain("Couldn't load the workspace's accounts.")
   await act(async () => container.querySelector('button')!.click())
   expect(retries).toBe(1)
+})
+
+test('lists the connected accounts in the workspace settings', async () => {
+  const disconnected: string[] = []
+
+  await act(async () =>
+    root.render(
+      <ConnectedAccountList
+        connections={[
+          {
+            ...connections[0],
+            forms: [
+              { id: 'f1', name: 'Leads' },
+              { id: 'f2', name: 'Survey' }
+            ],
+            canDisconnect: true
+          },
+          { ...connections[1], forms: [{ id: 'f3', name: 'Signups' }], canDisconnect: false },
+          { ...connections[2], forms: [], canDisconnect: true }
+        ]}
+        onDisconnect={connection => disconnected.push(connection.id)}
+      />
+    )
+  )
+
+  const items = [...container.querySelectorAll('li')]
+  expect(items.map(li => li.textContent)).toEqual([
+    expect.stringContaining('Used by 2 forms: Leads, Survey'),
+    expect.stringContaining('Used by 1 form: Signups'),
+    expect.stringContaining('Not used by any form')
+  ])
+  expect(items[0].textContent).toContain('ann@example.com')
+  expect(items[0].textContent).toContain('Connected by Ann')
+  expect(items[0].textContent).toContain('Connected')
+  expect(items[1].textContent).toContain('Needs reconnecting')
+
+  // Only for the member who connected it, or the owner
+  expect(items.map(li => !!li.querySelector('button'))).toEqual([true, false, true])
+  await act(async () => items[0].querySelector('button')!.click())
+  expect(disconnected).toEqual(['c1'])
+})
+
+test('says when the workspace has no connected accounts', async () => {
+  await act(async () => root.render(<ConnectedAccountList connections={[]} />))
+  expect(container.textContent).toBe(
+    'No accounts are connected yet. Connect one from a form’s integrations.'
+  )
 })
 
 test('builds the authorize URL for the form and app', () => {
