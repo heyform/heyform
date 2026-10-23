@@ -1090,6 +1090,21 @@ export const UPDATE_INTEGRATION_SETTINGS_GQL = gql`
   }
 `
 
+export const INTEGRATION_RECORDS_GQL = gql`
+  query integrationRecords($input: IntegrationInput!) {
+    integrationRecords(input: $input) {
+      id
+      submissionId
+      status
+      attempt
+      maxAttempts
+      willRetry
+      error
+      createdAt
+    }
+  }
+`
+
 export const UPDATE_INTEGRATION_STATUS_GQL = gql`
   mutation updateIntegrationStatus($input: UpdateIntegrationStatusInput!) {
     updateIntegrationStatus(input: $input)

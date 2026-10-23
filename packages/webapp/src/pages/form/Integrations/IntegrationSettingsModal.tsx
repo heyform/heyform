@@ -28,6 +28,7 @@ import {
   ConnectionItem,
   ConnectionsLoadFailed
 } from './IntegrationAuthItem'
+import IntegrationRecords from './IntegrationRecords'
 import IntegrationSettingsItem from './IntegrationSettingsItem'
 
 export interface IntegrationSettingsProps {
@@ -193,6 +194,8 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
             <SettingsForm app={app} connections={connections} />
           </>
         )}
+
+        {app.integration && <IntegrationRecords formId={formId} appId={app.id} />}
       </div>
     </div>
   )

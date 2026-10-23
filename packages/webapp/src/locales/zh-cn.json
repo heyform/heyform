@@ -1136,6 +1136,14 @@
         "accountShared": "账号对此工作区的所有成员共享。",
         "accountsFailed": "无法加载工作区的账号。"
       },
+      "records": {
+        "title": "最近发送记录",
+        "empty": "尚未发送任何提交数据。",
+        "succeeded": "已发送",
+        "failed": "失败",
+        "retrying": "重试中",
+        "attempt": "第 {{attempt}} 次尝试，共 {{maxAttempts}} 次"
+      },
       "apps": {
         "webhook": {
           "description": "通过 Webhook 集成，你可以在收到每次提交后立即将其发送到任意 URL。",

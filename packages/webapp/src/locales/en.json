@@ -1138,6 +1138,14 @@
         "accountShared": "Accounts are shared with everyone in this workspace.",
         "accountsFailed": "Couldn't load the workspace's accounts."
       },
+      "records": {
+        "title": "Recent deliveries",
+        "empty": "No submissions have been sent yet.",
+        "succeeded": "Delivered",
+        "failed": "Failed",
+        "retrying": "Retrying",
+        "attempt": "Attempt {{attempt}} of {{maxAttempts}}"
+      },
       "apps": {
         "webhook": {
           "description": "With webhooks integration, you can send every submission straight to any URL as soon as it's submitted.",
