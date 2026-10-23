@@ -111,7 +111,7 @@ export class IntegrationRecordType {
   @Field()
   submissionId: string
 
-  // IntegrationRecordStatusEnum: 1 succeeded, 2 failed
+  // IntegrationRecordStatusEnum: 0 waiting for reconnection, 1 succeeded, 2 failed
   @Field(type => Number)
   status: number
 

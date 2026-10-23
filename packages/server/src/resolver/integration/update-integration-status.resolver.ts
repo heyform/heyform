@@ -32,6 +32,12 @@ export class UpdateIntegrationStatusResolver {
       await this.integrationService.update(integration.id, {
         status: input.status
       })
+
+      // Submissions kept while it needed reconnecting, if it was turned off
+      // before being reconnected
+      if (input.status === IntegrationStatusEnum.ACTIVE) {
+        await this.integrationService.resendWaiting(integration)
+      }
     }
 
     return true

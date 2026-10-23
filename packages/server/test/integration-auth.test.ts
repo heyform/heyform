@@ -132,6 +132,10 @@ function createStores() {
   const integrations = new Map<string, any>()
   const connections = new Map<string, any>()
   const redis = new Map<string, string>()
+  // Integrations whose waiting submissions were resent
+  const resent: string[] = []
+  // Submissions kept waiting for a reconnect
+  const held: any[] = []
   // Keys locked with withLock, in order
   const locks: string[] = []
   const lockQueues = new Map<string, Promise<unknown>>()
@@ -179,6 +183,15 @@ function createStores() {
           delete i.connectionId
         }
       }
+    },
+    countWaiting: async () => 0,
+    holdForReconnect: async (input: any) => {
+      held.push(input)
+      return true
+    },
+    resendWaiting: async (integration: any) => {
+      resent.push(integration.id)
+      return 0
     }
   }
 
@@ -268,6 +281,8 @@ function createStores() {
     integrations,
     connections,
     redis,
+    resent,
+    held,
     locks,
     integrationService,
     connectionService,
@@ -507,7 +522,7 @@ async function testAddQueueAppliesAppOptions() {
         integrationId: 'integration_1',
         submissionId: 'submission_1'
       },
-      options: { attempts: 6, timeout: 45000 }
+      options: { attempts: 6, timeout: 45000, jobId: 'integration_1-submission_1' }
     },
     {
       data: {
@@ -516,7 +531,8 @@ async function testAddQueueAppliesAppOptions() {
         integrationId: 'integration_2',
         submissionId: 'submission_1'
       },
-      options: {}
+      // Only the job id; the queue's defaults apply
+      options: { jobId: 'integration_2-submission_1' }
     }
   ])
 }
@@ -590,7 +606,8 @@ async function testApiKeyIsStoredEncryptedAndNeverReturned() {
     status: IntegrationStatusEnum.ACTIVE,
     connected: false,
     connectionId: undefined,
-    apiKeyHint: '••••WXYZ'
+    apiKeyHint: '••••WXYZ',
+    waitingCount: 0
   })
   assert.ok(!JSON.stringify(listed).includes(integration.apiKey), 'ciphertext not returned')
 
@@ -652,8 +669,9 @@ async function testUnreadableApiKeyNeedsANewKey() {
     config: { list: 'b' }
   })
   assert.strictEqual(ctx.integrations.get(integrationId).status, NEEDS_RECONNECT)
+  assert.deepStrictEqual(ctx.resent, [])
 
-  // A new key reconnects it
+  // A new key reconnects it and sends what waited
   await resolver.updateIntegrationSettings({
     formId: 'form_1',
     appId: 'keyapp',
@@ -661,6 +679,7 @@ async function testUnreadableApiKeyNeedsANewKey() {
     apiKey: 'test-api-key-0123456789-NEW1'
   })
   assert.strictEqual(ctx.integrations.get(integrationId).status, IntegrationStatusEnum.ACTIVE)
+  assert.deepStrictEqual(ctx.resent, [integrationId])
 }
 
 // --- OAuth2 connect ---------------------------------------------------------
@@ -829,6 +848,7 @@ async function testConnectingCreatesATeamConnection() {
   const [integration] = ctx.integrations.values()
   assert.strictEqual(integration.connectionId, connectionId)
   assert.strictEqual(integration.status, IntegrationStatusEnum.PENDING)
+  assert.deepStrictEqual(ctx.resent, [], 'nothing to send until it is active')
 
   const [listed] = await new FormIntegrationsResolver(ctx.integrationService).formIntegrations({
     formId: 'form_1'
@@ -994,6 +1014,8 @@ async function testReconnectingResumesEveryIntegrationUsingIt() {
     [integrationId, otherForm, disabled].map(id => ctx.integrations.get(id).status),
     [IntegrationStatusEnum.ACTIVE, IntegrationStatusEnum.ACTIVE, IntegrationStatusEnum.DISABLED]
   )
+  // Both forms send what waited
+  assert.deepStrictEqual(ctx.resent.sort(), [integrationId, otherForm].sort())
   // The same account's new tokens share its grant: nothing revoked
   assert.deepStrictEqual(provider.revokeRequests, [])
 }
@@ -1058,6 +1080,7 @@ async function testSettingsPickOneOfTheTeamsAccounts() {
   const integration = await ctx.integrationService.findOne('form_1', 'fakeapp')
   assert.strictEqual(integration.connectionId, shared)
   assert.strictEqual(integration.status, IntegrationStatusEnum.ACTIVE)
+  assert.deepStrictEqual(ctx.resent, [integration.id])
 
   // Saving again keeps the account
   await save({ config: { sheet: 'Other' } })
@@ -1085,6 +1108,7 @@ async function testPickingAnAccountThatNeedsReconnecting() {
     NEEDS_RECONNECT,
     'saving settings does not hide a revoked grant'
   )
+  assert.deepStrictEqual(ctx.resent, [])
 
   const statusResolver = new UpdateIntegrationStatusResolver(ctx.integrationService)
   await assertBadRequest(
@@ -1096,7 +1120,7 @@ async function testPickingAnAccountThatNeedsReconnecting() {
     /Reconnect the account/
   )
 
-  // Picking a working account fixes it
+  // Picking a working account fixes it, and sends what waited
   const working = await ctx.connectionService.create({
     teamId: 'team_1',
     provider: 'fake',
@@ -1108,6 +1132,7 @@ async function testPickingAnAccountThatNeedsReconnecting() {
   await save(working)
   assert.strictEqual(ctx.integrations.get(integrationId).status, IntegrationStatusEnum.ACTIVE)
   assert.strictEqual(ctx.integrations.get(integrationId).connectionId, working)
+  assert.deepStrictEqual(ctx.resent, [integrationId])
   assert.ok(ctx.connections.has(connectionId), 'the other account stays connected')
 }
 
@@ -1331,7 +1356,7 @@ async function testDisconnectingRevokesAndHoldsIntegrations() {
       }
     ]
   )
-  // Its integrations need another account
+  // Its integrations wait for another account, with their submissions held
   const active = ctx.integrations.get(integrationId)
   assert.strictEqual(active.status, NEEDS_RECONNECT)
   assert.strictEqual(active.connectionId, undefined)
@@ -1518,27 +1543,23 @@ async function testConcurrentDisconnectsStillRevokeTheGrant() {
   assert.strictEqual(provider.revokeRequests.length, 1)
 }
 
-async function testAConnectionsIntegrationsWaitAndLetGo() {
-  const updates: any[] = []
-  const service = new IntegrationService(
-    { updateMany: async (filter: any, update: any) => updates.push([filter, update]) },
-    {},
-    {},
-    {}
+async function testTurningOnResendsWaitingSubmissions() {
+  const ctx = createAuth()
+  const { integrationId } = await connect(
+    ctx,
+    { accessToken: 'a', refreshToken: 'r' },
+    { status: IntegrationStatusEnum.DISABLED }
   )
+  const resolver = new UpdateIntegrationStatusResolver(ctx.integrationService)
+  const setStatus = (status: number) =>
+    resolver.updateIntegrationStatus({ formId: 'form_1', appId: 'fakeapp', status })
 
-  await service.markConnectionNeedsReconnect('connection_1')
-  assert.deepStrictEqual(updates, [
-    [{ connectionId: 'connection_1', status: 1 }, { status: NEEDS_RECONNECT }]
-  ])
+  await setStatus(IntegrationStatusEnum.DISABLED)
+  assert.deepStrictEqual(ctx.resent, [])
 
-  // Disconnected: active ones need reconnecting, and none of them uses it any more
-  updates.length = 0
-  await service.detachConnection('connection_1')
-  assert.deepStrictEqual(updates, [
-    [{ connectionId: 'connection_1', status: 1 }, { status: NEEDS_RECONNECT }],
-    [{ connectionId: 'connection_1' }, { $unset: { connectionId: 1 } }]
-  ])
+  // e.g. turned off while it needed reconnecting, then reconnected
+  await setStatus(IntegrationStatusEnum.ACTIVE)
+  assert.deepStrictEqual(ctx.resent, [integrationId])
 }
 
 // --- refresh on use ---------------------------------------------------------
@@ -1913,6 +1934,11 @@ async function testJobStopsRetryingWhenReconnectIsNeeded() {
   assert.strictEqual(job.discarded, true, 'no further attempts')
   assert.strictEqual(runs.length, 0)
   assert.strictEqual(ctx.integrations.get(integrationId).status, NEEDS_RECONNECT)
+  assert.deepStrictEqual(
+    ctx.held.map(input => [input.submissionId, input.attempt]),
+    [['submission_1', 1]],
+    'kept for the reconnect'
+  )
 
   // Jobs already queued fail straight away, without calling the provider
   provider.requests = []
@@ -2176,7 +2202,7 @@ async function run() {
     await testNothingToRevokeStillDisconnects()
     await testAccountUsedByAnotherWorkspaceIsNotRevoked()
     await testConcurrentDisconnectsStillRevokeTheGrant()
-    await testAConnectionsIntegrationsWaitAndLetGo()
+    await testTurningOnResendsWaitingSubmissions()
     await testValidTokenIsUsedWithoutRefresh()
     await testExpiredTokenIsRefreshed()
     await testRefreshMovesTokensToTheCurrentKey()
