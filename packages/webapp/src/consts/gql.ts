@@ -1087,7 +1087,7 @@ export const UPDATE_INTEGRATION_STATUS_GQL = gql`
 `
 
 export const DELETE_INTEGRATION_SETTINGS_GQL = gql`
-  mutation deleteIntegrationSettings($input: ThirdPartyInput!) {
+  mutation deleteIntegrationSettings($input: IntegrationInput!) {
     deleteIntegrationSettings(input: $input)
   }
 `
