@@ -90,6 +90,7 @@ async function testIpLimitStoresAHashOfTheIp() {
   const created: Record<string, any>[] = []
   const service = new SubmissionIpLimitService({
     findOne: async () => null,
+    findOneAndUpdate: async () => null,
     create: async (data: Record<string, any>) => {
       created.push(data)
       return { id: 'limit_1' }
@@ -107,10 +108,37 @@ async function testIpLimitStoresAHashOfTheIp() {
   assert.notStrictEqual(created[0].ip, created[2].ip)
 }
 
+async function testIpLimitRekeysACountKeptUnderTheRawIp() {
+  const rekeys: Record<string, any>[] = []
+  const updates: Record<string, any>[] = []
+  const service = new SubmissionIpLimitService({
+    findOne: async () => null,
+    findOneAndUpdate: async (filter: Record<string, any>, update: Record<string, any>) => {
+      rekeys.push({ filter, update })
+      return { id: 'limit_1', count: 2, expiredAt: 0 }
+    },
+    updateOne: async (_filter: unknown, update: Record<string, any>) => {
+      updates.push(update)
+    },
+    create: async () => {
+      throw new Error('The existing count should be reused')
+    }
+  } as any)
+
+  await service.checkIp({ id: 'form_1', settings: { ipLimitCount: 5 } }, IP)
+
+  // The count saved under the raw address now sits under its hash
+  assert.strictEqual(rekeys[0].filter.ip, IP)
+  assert.notStrictEqual(rekeys[0].update.ip, IP)
+  assert.ok(!rekeys[0].update.ip.includes('203.0.113'))
+  assert.strictEqual(updates[0].count, 3)
+}
+
 async function run() {
   testFormSettingCannotShowIps()
   await testSubmissionIsSavedWithoutTheIp()
   await testIpLimitStoresAHashOfTheIp()
+  await testIpLimitRekeysACountKeptUnderTheRawIp()
 }
 
 if (require.main === module) {
