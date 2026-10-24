@@ -134,11 +134,32 @@ async function testIpLimitRekeysACountKeptUnderTheRawIp() {
   assert.strictEqual(updates[0].count, 3)
 }
 
+async function testIpLimitUsesACountAnotherSubmissionJustMoved() {
+  let lookups = 0
+  const updates: Record<string, any>[] = []
+  const service = new SubmissionIpLimitService({
+    // Missing on the first lookup, there once the other submission has moved it
+    findOne: async () => (++lookups === 1 ? null : { id: 'limit_1', count: 1, expiredAt: 0 }),
+    findOneAndUpdate: async () => null,
+    updateOne: async (_filter: unknown, update: Record<string, any>) => {
+      updates.push(update)
+    },
+    create: async () => {
+      throw new Error('E11000 duplicate key')
+    }
+  } as any)
+
+  await service.checkIp({ id: 'form_1', settings: { ipLimitCount: 5 } }, IP)
+
+  assert.strictEqual(updates[0].count, 2)
+}
+
 async function run() {
   testFormSettingCannotShowIps()
   await testSubmissionIsSavedWithoutTheIp()
   await testIpLimitStoresAHashOfTheIp()
   await testIpLimitRekeysACountKeptUnderTheRawIp()
+  await testIpLimitUsesACountAnotherSubmissionJustMoved()
 }
 
 if (require.main === module) {

@@ -55,6 +55,14 @@ export class SubmissionIpLimitService {
     }
 
     if (!limit) {
+      // Another submission may have just moved it
+      limit = await this.submissionIpLimitModel.findOne({
+        formId: form.id,
+        ip: key
+      })
+    }
+
+    if (!limit) {
       await this.create({
         formId: form.id,
         ip: key,
