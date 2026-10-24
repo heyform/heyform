@@ -293,7 +293,6 @@ export const TEMPLATES_GQL = gql`
   query templates {
     templates {
       id
-      recordId
       category
       name
       thumbnail
@@ -305,6 +304,11 @@ export const TEMPLATE_DETAILS_GQL = gql`
   query templateDetail($input: TemplateDetailInput!) {
     templateDetail(input: $input) {
       id
+      kind
+      interactiveMode
+      logics
+      variables
+      translations
       fields {
         id
         nextFieldId

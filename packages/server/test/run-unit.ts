@@ -3,6 +3,7 @@ import * as path from 'path'
 
 const tests = [
   'form-branding.test.ts',
+  'templates.test.ts',
   'password-login.test.ts',
   'ai-json.test.ts',
   'ai-fields.test.ts',

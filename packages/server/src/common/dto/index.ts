@@ -55,6 +55,7 @@ export const FIRST_PARTY_IMAGE_ORIGINS = [
 ].filter(Boolean) as string[]
 
 export const ALLOWED_IMAGE_HOSTS = [
+  'heyform.github.io',
   'secure.gravatar.com',
   'googleusercontent.com',
   'images.unsplash.com',

@@ -259,10 +259,7 @@ export function build(baseUrl: string) {
       buildVars: () => ({ input: { keyword: `no-such-${randomString(6)}` } }),
       expected: ok({ all: 'error' })
     },
-    // templateDetail is a stub on the server (returns `{}`), but `TemplateType.id`
-    // is declared non-nullable, so the GraphQL layer errors before the schema
-    // is exercised. Probed here only to document that it is currently broken
-    // for everyone — drop the row once the resolver is implemented.
+    // Missing templates must not expose data to any caller.
     {
       op: 'templateDetail',
       query: TEMPLATE_DETAIL_GQL,

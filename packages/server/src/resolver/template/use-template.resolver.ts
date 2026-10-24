@@ -53,7 +53,11 @@ export class UseTemplateResolver {
         enableEmailNotification: true
       },
       themeSettings: template.themeSettings,
-      hiddenFields: [],
+      hiddenFields: template.hiddenFields || [],
+      logics: [],
+      draftLogics: template.logics || [],
+      variables: template.variables || [],
+      translations: template.translations || {},
       version: 0,
       status: FormStatusEnum.NORMAL
     }

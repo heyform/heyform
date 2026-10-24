@@ -445,12 +445,7 @@ export class FormService {
   static templates(): Promise<TemplateType[]> {
     return apollo.query({
       query: TEMPLATES_GQL,
-      fetchPolicy: 'cache-first',
-      variables: {
-        input: {
-          limit: 0
-        }
-      }
+      fetchPolicy: 'cache-first'
     })
   }
 
@@ -465,7 +460,7 @@ export class FormService {
     })
   }
 
-  static useTemplate(input: { projectId: string; templateId: string; recordId: string }) {
+  static useTemplate(input: { projectId: string; templateId: string }) {
     return apollo.mutate({
       mutation: USE_TEMPLATE_GQL,
       variables: {

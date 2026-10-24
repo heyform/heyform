@@ -817,6 +817,10 @@
     },
     "template": {
       "headline": "Templates",
+      "emptyHeadline": "No templates available",
+      "emptyDescription": "You can import a form from JSON or go back to create one from scratch.",
+      "loadError": "Unable to load templates. Please reopen this window to try again.",
+      "importJson": "Import from JSON",
       "categories": [
         "Survey",
         "Lead Generation",
