@@ -1241,6 +1241,10 @@
           "times": "vezes",
           "inEvery": "em cada"
         },
+        "displayIpAddress": {
+          "headline": "Mostrar os endereços IP dos respondentes",
+          "subHeadline": "Mostra o endereço IP de cada respondente na tabela de envios, nas exportações CSV e nos webhooks."
+        },
         "quotaLimit": {
           "headline": "Limite o número de envios",
           "subHeadline": "Isso permite que você defina um número total específico de envios permitidos para o seu formulário.",
@@ -1332,6 +1336,7 @@
         "website": "Site",
         "inputTable": "Tabela",
         "submitDate": "Data de envio",
+        "ipAddress": "Endereço IP",
         "hiddenFields": "Campos ocultos",
         "contactInfo": "Informações de contato",
         "choices": "Escolhas",

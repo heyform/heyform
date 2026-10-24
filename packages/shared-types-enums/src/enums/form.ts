@@ -66,6 +66,7 @@ export enum FieldKindEnum {
 
   // Hidden fields
   SUBMIT_DATE = 'submit_date',
+  IP_ADDRESS = 'ip_address',
   HIDDEN_FIELDS = 'hidden_fields',
   VARIABLE = 'variable',
   HIDDEN_CHECKBOX = 'hidden_checkbox',

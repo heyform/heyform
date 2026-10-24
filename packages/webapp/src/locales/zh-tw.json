@@ -1179,6 +1179,10 @@
           "times": "次數",
           "inEvery": "每隔"
         },
+        "displayIpAddress": {
+          "headline": "顯示填寫者的 IP 地址",
+          "subHeadline": "在提交列表、CSV 匯出和 Webhook 中顯示每位填寫者的 IP 地址。"
+        },
         "quotaLimit": {
           "headline": "限制提交數量",
           "subHeadline": "這允許您設置您的表單允許的特定總提交數量。",
@@ -1265,6 +1269,7 @@
         "website": "網站",
         "inputTable": "輸入表",
         "submitDate": "提交日期",
+        "ipAddress": "IP 地址",
         "hiddenFields": "隱藏字段",
         "contactInfo": "聯繫信息",
         "choices": "選項",

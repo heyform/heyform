@@ -45,6 +45,7 @@ declare global {
       oidcDisplayName?: string
       oidcDisplayIconUrl?: string
       verifyUserEmail?: boolean | string
+      disableSubmissionIp?: boolean | string
       templatesURL?: string
       helpCenterURL?: string
     }

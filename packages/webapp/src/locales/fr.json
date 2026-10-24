@@ -1183,6 +1183,10 @@
           "times": "fois",
           "inEvery": "dans chaque"
         },
+        "displayIpAddress": {
+          "headline": "Afficher les adresses IP des répondants",
+          "subHeadline": "Affiche l'adresse IP de chaque répondant dans le tableau des soumissions, les exports CSV et les webhooks."
+        },
         "quotaLimit": {
           "headline": "Limiter le nombre de soumissions",
           "subHeadline": "Cela vous permet de définir un nombre total spécifique de soumissions autorisées pour votre formulaire.",
@@ -1269,6 +1273,7 @@
         "website": "Site web",
         "inputTable": "Tableau d'entrée",
         "submitDate": "Date de soumission",
+        "ipAddress": "Adresse IP",
         "hiddenFields": "Champs cachés",
         "contactInfo": "Informations de contact",
         "choices": "Choix",
