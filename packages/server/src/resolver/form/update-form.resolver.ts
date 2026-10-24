@@ -39,6 +39,7 @@ export class UpdateFormResolver {
       ['enableIpLimit', 'settings.enableIpLimit'],
       ['ipLimitCount', 'settings.ipLimitCount'],
       ['ipLimitTime', 'settings.ipLimitTime'],
+      ['displayIpAddress', 'settings.displayIpAddress'],
       ['enableProgress', 'settings.enableProgress'],
       ['enableQuestionList', 'settings.enableQuestionList'],
       ['enableNavigationArrows', 'settings.enableNavigationArrows'],

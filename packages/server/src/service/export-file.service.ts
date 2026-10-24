@@ -15,6 +15,7 @@ import { SubmissionModel } from '@model'
 const FIELD_ID_KEY = '#'
 const START_DATE_KEY = 'Start Date (UTC)'
 const SUBMIT_DATE_KEY = 'Submit Date (UTC)'
+const IP_ADDRESS_KEY = 'IP Address'
 const SPREADSHEET_FORMULA_PREFIXES = new Set(['=', '+', '-', '@'])
 
 function neutralizeSpreadsheetFormula(value: string): string {
@@ -86,7 +87,8 @@ export class ExportFileService {
   async csv(
     formFields: FormField[],
     selectedHiddenFields: HiddenField[],
-    submissions: SubmissionModel[]
+    submissions: SubmissionModel[],
+    withIp = false
   ): Promise<string> {
     const selectedFormFields = formFields
       .filter(field => !STATEMENT_FIELD_KINDS.includes(field.kind))
@@ -125,7 +127,15 @@ export class ExportFileService {
       {
         label: SUBMIT_DATE_KEY,
         value: submission => (submission.startAt ? unixDate(submission.endAt!).toISOString() : '')
-      }
+      },
+      ...(withIp
+        ? [
+            {
+              label: IP_ADDRESS_KEY,
+              value: (submission: SubmissionModel) => submission.ip || ''
+            }
+          ]
+        : [])
     ]
 
     return parseAsync(submissions, {

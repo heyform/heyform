@@ -6,6 +6,7 @@ import { ExportSubmissionsDto } from '@dto'
 import { flattenFields } from '@heyform-inc/answer-utils'
 import { date } from '@heyform-inc/utils'
 import { ExportFileService, FormService, SubmissionService } from '@service'
+import { isSubmissionIpVisible } from '@utils'
 
 @Controller()
 @Auth()
@@ -27,7 +28,8 @@ export class ExportSubmissionsController {
       throw new BadRequestException('The form does not exist')
     }
 
-    const submissions = await this.submissionService.findAllByForm(input.formId)
+    const withIp = isSubmissionIpVisible(form)
+    const submissions = await this.submissionService.findAllByForm(input.formId, withIp)
     if (submissions.length < 1) {
       throw new BadRequestException('The submissions does not exist')
     }
@@ -35,7 +37,8 @@ export class ExportSubmissionsController {
     const data = await this.exportFileService.csv(
       flattenFields(form.fields),
       form.hiddenFields,
-      submissions
+      submissions,
+      withIp
     )
     const dateStr = date().format('YYYY-MM-DD')
     const filename = `${encodeURIComponent(form.name)}-${dateStr}.csv`

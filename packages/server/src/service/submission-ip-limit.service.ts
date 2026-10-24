@@ -2,8 +2,16 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
+import { DISABLE_SUBMISSION_IP, FORM_ENCRYPTION_KEY } from '@environments'
 import { helper, timestamp } from '@heyform-inc/utils'
 import { FormModel, SubmissionIpLimitModel } from '@model'
+import { hmac } from '@utils'
+
+// When submission IPs mustn't be stored, count submissions against a keyed
+// hash of the address instead, so the limit still works
+function limitKey(ip: string): string {
+  return DISABLE_SUBMISSION_IP ? hmac(ip, FORM_ENCRYPTION_KEY, 'sha256') : ip
+}
 
 @Injectable()
 export class SubmissionIpLimitService {
@@ -20,15 +28,16 @@ export class SubmissionIpLimitService {
       expiredAt = timestamp() + form.settings.ipLimitTime!
     }
 
+    const key = limitKey(ip)
     const limit = await this.submissionIpLimitModel.findOne({
       formId: form.id,
-      ip
+      ip: key
     })
 
     if (!limit) {
       await this.create({
         formId: form.id,
-        ip,
+        ip: key,
         count: 1,
         expiredAt
       })

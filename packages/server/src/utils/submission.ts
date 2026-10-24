@@ -9,7 +9,13 @@ import {
 } from '@heyform-inc/shared-types-enums'
 import { BadRequestException } from '@nestjs/common'
 
-import { APP_HOMEPAGE_URL, S3_BUCKET, S3_ENDPOINT, S3_PUBLIC_URL } from '@environments'
+import {
+  APP_HOMEPAGE_URL,
+  DISABLE_SUBMISSION_IP,
+  S3_BUCKET,
+  S3_ENDPOINT,
+  S3_PUBLIC_URL
+} from '@environments'
 
 import { isAllowedUrlOrigin } from './outbound-url'
 
@@ -256,4 +262,10 @@ export function normalizeSubmissionHiddenFields(
       }
     })
     .filter(Boolean) as HiddenFieldAnswer[]
+}
+
+// Whether a form's submissions show the respondent's IP address: in the
+// dashboard, the CSV export and webhook payloads
+export function isSubmissionIpVisible(form: { settings?: { displayIpAddress?: boolean } }) {
+  return !DISABLE_SUBMISSION_IP && form.settings?.displayIpAddress === true
 }
