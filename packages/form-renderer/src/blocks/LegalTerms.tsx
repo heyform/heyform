@@ -44,8 +44,11 @@ export const LegalTerms: FC<BlockProps> = ({ field, ...restProps }) => {
           name="input"
           rules={[
             {
-              required: field.validations?.required,
-              message: t('This field is required')
+              // A required block must be accepted; the server rejects anything else.
+              validator: (_, value) =>
+                field.validations?.required && value?.[0] !== true
+                  ? Promise.reject(t('This field is required'))
+                  : Promise.resolve()
             }
           ]}
         >

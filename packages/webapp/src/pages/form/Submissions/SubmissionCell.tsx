@@ -292,6 +292,28 @@ const YesNoItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
   )
 }
 
+const LegalTermsItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
+  const { t } = useTranslation()
+
+  if (answer.kind !== field.kind || !helper.isBoolean(answer.value)) {
+    return null
+  }
+
+  // The form renderer's own labels, so the table shows what the respondent clicked.
+  return (
+    <div className={cn('flex', isTableCell ? 'gap-x-2 overflow-hidden py-2' : 'flex-wrap gap-2')}>
+      <Badge
+        color="zinc"
+        className={cn('text-primary', {
+          'text-nowrap': isTableCell
+        })}
+      >
+        {answer.value ? t('I accept') : t("I don't accept")}
+      </Badge>
+    </div>
+  )
+}
+
 const OpinionScaleItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
   if (answer.kind !== field.kind || !helper.isNumeric(answer.value)) {
     return null
@@ -416,6 +438,9 @@ export default function SubmissionCell(props: SubmissionCellProps) {
 
     case FieldKindEnum.YES_NO:
       return <YesNoItem {...props} />
+
+    case FieldKindEnum.LEGAL_TERMS:
+      return <LegalTermsItem {...props} />
 
     case FieldKindEnum.RATING:
     case FieldKindEnum.OPINION_SCALE:
