@@ -22,10 +22,10 @@ export default function Overview() {
   )
 
   return (
-    <div className="ml-6 mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
       {/* Forms */}
-      <div className="hf-card p-5">
-        <div className="hf-label-muted">{t('dashboard.forms')}</div>
+      <div>
+        <div className="text-base/6 font-medium sm:text-sm/6">{t('dashboard.forms')}</div>
         <Skeleton
           className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-2/5 [&_[data-slot=skeleton]]:sm:h-6"
           loading={loading || !data}
@@ -35,8 +35,8 @@ export default function Overview() {
       </div>
 
       {/* Submissions */}
-      <div className="hf-card p-5">
-        <div className="hf-label-muted">{t('dashboard.submission')}</div>
+      <div>
+        <div className="text-base/6 font-medium sm:text-sm/6">{t('dashboard.submission')}</div>
         <Skeleton
           className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-2/5 [&_[data-slot=skeleton]]:sm:h-6"
           loading={loading || !data}
@@ -46,8 +46,8 @@ export default function Overview() {
       </div>
 
       {/* Members */}
-      <div className="hf-card p-5">
-        <div className="hf-label-muted">{t('dashboard.members')}</div>
+      <div>
+        <div className="text-base/6 font-medium sm:text-sm/6">{t('dashboard.members')}</div>
         <Skeleton
           className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-2/5 [&_[data-slot=skeleton]]:sm:h-6"
           loading={loading || !data}
@@ -59,8 +59,8 @@ export default function Overview() {
       </div>
 
       {/* Storage */}
-      <div className="hf-card p-5">
-        <div className="hf-label-muted">{t('dashboard.storage')}</div>
+      <div>
+        <div className="text-base/6 font-medium sm:text-sm/6">{t('dashboard.storage')}</div>
         <Skeleton
           className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-2/5 [&_[data-slot=skeleton]]:sm:h-6"
           loading={loading || !data}

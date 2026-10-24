@@ -35,7 +35,7 @@ export default function FormSettingsTranslations() {
 
   return (
     <section id="translations" className="pt-10">
-      <h2 className="hf-section-title">{t('form.settings.translations.title')}</h2>
+      <h2 className="text-lg font-semibold">{t('form.settings.translations.title')}</h2>
 
       <div className="mt-4 space-y-8">
         <Form.Item

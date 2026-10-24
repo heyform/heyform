@@ -89,7 +89,7 @@ export default function FormIntegrations() {
 
   return (
     <>
-      <div className="mt-10 space-y-12 px-6">
+      <div className="mt-10 space-y-12">
         <Async fetch={fetch} refreshDeps={[formId]} loader={Skeleton}>
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {integratedApps.map(app => (

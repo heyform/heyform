@@ -267,21 +267,21 @@ const LayoutComponent: FC<LayoutProps> = ({ options, children }) => {
     <>
       <div
         className={cn(
-          'relative isolate flex min-h-svh w-full max-lg:flex-col',
-          {
-            '[&_[data-slot=layout-main]]:pt-16 [&_[data-slot=layout-main]]:lg:pt-16 [&_[data-slot=layout-sidebar]]:top-16': false
-          },
+          'bg-foreground lg:bg-background relative isolate flex min-h-svh w-full max-lg:flex-col',
           options?.className
         )}
       >
         <WorkspaceSidebar />
 
         <main
-          className="bg-foreground flex flex-1 flex-col lg:min-w-0 lg:pl-64"
+          className="flex flex-1 flex-col pb-2 lg:min-w-0 lg:pl-64 lg:pr-2 lg:pt-2"
           data-slot="layout-main"
         >
-          <div className="grow" data-slot="layout-container">
-            <div className="hf-page-shell flex min-h-full flex-col" data-slot="layout-inner">
+          <div
+            className="lg:bg-foreground lg:ring-accent-light dark:lg:ring-input grow p-6 lg:rounded-lg lg:p-10 lg:shadow-sm lg:ring-1"
+            data-slot="layout-container"
+          >
+            <div className="mx-auto flex min-h-full max-w-6xl flex-col" data-slot="layout-inner">
               <div className="mb-6 flex items-center justify-between lg:hidden">
                 <Button.Link
                   size="md"

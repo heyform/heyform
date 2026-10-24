@@ -55,7 +55,7 @@ export default function WorkspaceSwitcher() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <Button.Link className="data-[state=open]:bg-accent-light w-full px-3 py-2.5 sm:px-2 sm:py-1.5 [&_[data-slot=button]]:justify-between">
+        <Button.Link className="data-[state=open]:bg-accent-light w-full rounded-lg px-3 py-2.5 sm:px-2 sm:py-1.5 [&_[data-slot=button]]:justify-between">
           <div className="flex max-w-[calc(100%-1.25rem)] flex-1 items-center gap-x-2">
             <Avatar
               className="h-6 w-6"

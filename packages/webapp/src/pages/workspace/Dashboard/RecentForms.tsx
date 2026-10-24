@@ -45,7 +45,7 @@ export default function RecentForms() {
       fetch={fetch}
       refreshDeps={[workspaceId]}
       loader={
-        <div className="mt-4">
+        <div className="border-accent-light divide-accent-light mt-4 divide-y border-y">
           <Repeat count={3}>
             <FormItem.Skeleton />
           </Repeat>
@@ -54,6 +54,7 @@ export default function RecentForms() {
       emptyRender={() => (
         <div className="mt-4">
           <EmptyState
+            className="py-20 shadow-sm sm:py-36"
             headline={t('dashboard.noForms')}
             subHeadline={t('dashboard.pickTemplate')}
             buttonTitle={t('form.creation.title')}
@@ -62,9 +63,9 @@ export default function RecentForms() {
         </div>
       )}
     >
-      <div className="mt-4">
+      <div className="border-accent-light divide-accent-light mt-4 divide-y border-y">
         {data.map(f => (
-          <FormItem key={f.id} form={f} />
+          <FormItem key={f.id} form={f} compact />
         ))}
       </div>
     </Async>

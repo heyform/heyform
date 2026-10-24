@@ -103,7 +103,7 @@ export default function FormSettings() {
   }, [rcForm, isFormLoaded])
 
   return (
-    <div className="mt-10 px-6">
+    <div className="mt-10">
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-16 lg:space-y-0">
         <aside className="-mx-3 lg:w-1/4">
           <AnchorNavigation

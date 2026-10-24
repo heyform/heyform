@@ -12,7 +12,7 @@ export default function ChangelogButton() {
       className="hf-sidebar-link"
     >
       <div className="flex flex-1 items-center gap-3">
-        <IconGift className="stroke-secondary group-hover:stroke-primary h-4 w-4" />
+        <IconGift className="hf-sidebar-link-icon" />
         <span className="truncate">{t('workspace.sidebar.whatsNew')}</span>
       </div>
     </a>

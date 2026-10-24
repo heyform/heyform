@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { FormService } from '@/services'
-import { timeFromNow, timeToNow, useRouter } from '@/utils'
+import { cn, timeFromNow, timeToNow, useRouter } from '@/utils'
 
 import IconLink from '@/assets/link.svg?react'
 import IconMoveTo from '@/assets/move-to.svg?react'
@@ -84,12 +84,13 @@ const FormItemLink: FC<FormItemLinkProps> = ({
 }
 
 interface FormItemProps {
+  compact?: boolean
   form: FormType
   isInTrash?: boolean
   onChange?: (type: 'rename' | 'trash' | 'restore' | 'delete' | 'move', form: FormType) => void
 }
 
-const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange }) => {
+const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange, compact = false }) => {
   const { t, i18n } = useTranslation()
 
   const alert = useAlert()
@@ -301,14 +302,19 @@ const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange }) => {
 
   return (
     <FormItemLink
-      className="group flex items-center justify-between gap-6 px-6 py-6 hover:bg-[#f8fafc] has-[[data-state=open]]:bg-[#f8fafc] dark:hover:bg-[#374151]"
+      className={cn(
+        'group flex items-center justify-between',
+        compact
+          ? 'hover:bg-secondary-light has-[[data-state=open]]:bg-secondary-light gap-3 py-4 sm:gap-6'
+          : 'gap-6 px-6 py-6 hover:bg-[#f8fafc] has-[[data-state=open]]:bg-[#f8fafc] dark:hover:bg-[#374151]'
+      )}
       to={`/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/analytics`}
       isInTrash={isInTrash}
       isSuspended={form.suspended}
     >
-      <div className="flex-1">
-        <div className="text-sm/6 font-medium">{form.name}</div>
-        <div className="text-secondary mt-1 text-sm/6">
+      <div className={cn('min-w-0 flex-1', compact && 'pl-2')}>
+        <div className="break-words text-sm/6 font-medium">{form.name}</div>
+        <div className={cn('text-secondary text-sm/6', !compact && 'mt-1')}>
           {isInTrash
             ? t('form.metadata2', {
                 count: form.submissionCount,
@@ -321,9 +327,14 @@ const FormItem: FC<FormItemProps> = ({ form, isInTrash, onChange }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className={cn('flex shrink-0 items-center', compact ? 'gap-2 sm:gap-4' : 'gap-4')}>
         {!isInTrash && !form.suspended && (
-          <div className="_hidden flex items-center group-hover:flex">
+          <div
+            className={cn(
+              'items-center',
+              compact ? 'hidden group-focus-within:sm:flex group-hover:sm:flex' : 'flex'
+            )}
+          >
             <Tooltip label={t('components.edit')}>
               <Button.Link size="sm" iconOnly onClick={handleEdit}>
                 <IconPencil className="h-5 w-5" />

@@ -30,9 +30,9 @@ const SubmissionItem: FC<SubmissionItemProps> = ({ submission, field }) => {
   const answer = submission.answers.find(answer => answer.id === field.id)
 
   return (
-    <div className="space-y-3 pt-4 text-sm/6">
+    <div className="grid grid-cols-1 gap-5 pt-4 text-sm/6 sm:grid-cols-[min(50%,theme(spacing.80))_auto]">
       <SubmissionHeaderCell
-        className="text-secondary items-start gap-x-2 [&_[data-slot=icon]]:h-5 [&_[data-slot=icon]]:w-5 [&_[data-slot=label]]:text-wrap [&_[data-slot=label]]:text-base/6 [&_[data-slot=label]]:font-medium [&_[data-slot=question-icon]]:h-6 [&_[data-slot=question-icon]]:w-6"
+        className="text-secondary items-start gap-x-2 [&_[data-slot=icon]]:h-5 [&_[data-slot=icon]]:w-5 [&_[data-slot=label]]:text-wrap [&_[data-slot=question-icon]]:h-6 [&_[data-slot=question-icon]]:w-6"
         field={field}
       />
       <div className="min-w-0 flex-1">
@@ -73,7 +73,7 @@ const SubmissionDetail: FC<SubmissionDetailProps> = () => {
             {t('form.submissions.detail.headline')}
           </h1>
 
-          <div className="mt-4 flex flex-wrap gap-4">
+          <div className="mt-2 flex flex-wrap gap-4">
             <span className="text-primary flex items-center gap-3 text-base/6 sm:text-sm/6">
               <IconCalendar className="text-secondary h-4 w-4" />
               <span>{submitDate}</span>
@@ -107,7 +107,7 @@ const SubmissionDetail: FC<SubmissionDetailProps> = () => {
         </div>
       </div>
 
-      <div className="scrollbar flex-1 overflow-y-auto px-6 pb-12">
+      <div className="scrollbar flex-1 overflow-y-auto px-6 pb-6">
         <div className="divide-accent-light space-y-4 divide-y">
           {fields.map(field => (
             <SubmissionItem key={field.id} submission={payload?.submission} field={field} />
@@ -131,7 +131,7 @@ export default function SubmissionDetailModal({ onClose }: SubmissionDetailProps
     <Modal
       open={isOpen}
       contentProps={{
-        className: 'max-w-2xl !p-0'
+        className: 'max-w-6xl h-[80vh] !p-0'
       }}
       onOpenChange={handleOpenChange}
     >

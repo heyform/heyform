@@ -68,9 +68,9 @@ export default function ProjectTrash() {
           </div>
         )}
       >
-        <div className="mt-4">
+        <div className="divide-accent-light mt-4 divide-y">
           {forms.map(f => (
-            <FormItem key={f.id} form={f} isInTrash onChange={handleChange} />
+            <FormItem key={f.id} form={f} compact isInTrash onChange={handleChange} />
           ))}
         </div>
       </Async>

@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --hf-background: 249, 248, 247;
+    --hf-background: 244, 244, 245;
     --hf-foreground: 255, 255, 255;
     --hf-input: 9, 9, 11, 15%;
     --hf-primary: 9, 9, 11;
@@ -108,10 +108,6 @@ body {
     }
   }
 
-  .hf-page-shell {
-    @apply mx-auto w-full max-w-6xl px-8 py-8 max-lg:px-4 max-lg:py-6;
-  }
-
   .hf-page-title {
     @apply text-2xl font-semibold tracking-tight;
   }
@@ -136,13 +132,8 @@ body {
     background: rgba(var(--hf-dashboard-zone));
   }
 
-  .hf-sidebar-surface {
-    @apply bg-background;
-    border-right: 1px solid rgba(var(--hf-dashboard-border));
-  }
-
   .hf-sidebar-link {
-    @apply relative flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-primary transition-colors;
+    @apply relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-primary transition-colors sm:px-2 sm:py-1.5 lg:py-2;
   }
 
   .hf-sidebar-link:hover {
@@ -151,18 +142,18 @@ body {
 
   .hf-sidebar-link[data-state='active'],
   .hf-sidebar-link-active {
-    background: rgba(var(--hf-dashboard-zone));
+    @apply bg-transparent;
   }
 
   .hf-sidebar-link[data-state='active']::before,
   .hf-sidebar-link-active::before {
-    @apply absolute inset-y-1.5 -left-4 w-0.5 rounded-full;
+    @apply absolute inset-y-2 -left-4 w-0.5 rounded-full;
     content: '';
     background: rgba(var(--hf-primary));
   }
 
   .hf-sidebar-link-icon {
-    @apply h-4 w-4 shrink-0 text-secondary;
+    @apply h-5 w-5 shrink-0 text-secondary;
   }
 
   .hf-sidebar-link[data-state='active'] .hf-sidebar-link-icon,

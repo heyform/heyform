@@ -72,7 +72,7 @@ export default function FormShare() {
 
   return (
     <>
-      <div className="mt-10 space-y-10 px-6">
+      <div className="mt-10 space-y-10">
         {form?.canPublish && (
           <div className="border-accent-light flex items-center justify-center gap-x-2 rounded-lg border bg-red-50 py-2">
             <IconExclamationCircle className="h-5 w-5 text-red-700" />
@@ -83,10 +83,10 @@ export default function FormShare() {
         )}
 
         <section id="link">
-          <h2 className="hf-section-title">{t('form.share.link.headline')}</h2>
+          <h2 className="text-base/6 font-semibold">{t('form.share.link.headline')}</h2>
           <div className="mt-4">
             <div className="flex flex-col gap-2 text-sm/6 sm:flex-row sm:items-center">
-              <div className="hf-card border-input flex items-center gap-x-4 rounded-lg border">
+              <div className="border-input flex items-center gap-x-4 rounded-lg border">
                 <div className="h-10 flex-1 truncate pl-4 leading-10">{shareLink}</div>
                 <Button.Copy className="rounded-l-none" text={shareLink} />
               </div>
@@ -139,7 +139,7 @@ export default function FormShare() {
         <LinkSettings />
 
         <section id="embed">
-          <h2 className="hf-section-title">{t('form.share.embed.headline')}</h2>
+          <h2 className="text-base/6 font-semibold">{t('form.share.embed.headline')}</h2>
           <p className="text-secondary text-sm/6">{t('form.share.embed.subHeadline')}</p>
 
           <div className="mt-4 flex gap-4 sm:gap-8">

@@ -43,7 +43,7 @@ export default function ProjectForms() {
       fetch={fetch}
       refreshDeps={[projectId]}
       loader={
-        <div className="hf-card divide-y divide-[#e5e7eb]">
+        <div className="divide-accent-light divide-y">
           <Repeat count={3}>
             <FormItem.Skeleton />
           </Repeat>
@@ -60,9 +60,9 @@ export default function ProjectForms() {
         </div>
       )}
     >
-      <div className="mt-4">
+      <div className="divide-accent-light divide-y">
         {forms.map(f => (
-          <FormItem key={f.id} form={f} onChange={handleChange} />
+          <FormItem key={f.id} form={f} compact onChange={handleChange} />
         ))}
       </div>
     </Async>

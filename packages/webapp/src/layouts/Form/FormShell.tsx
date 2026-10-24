@@ -1,9 +1,9 @@
 import { preventDefault } from '@heyform-inc/form-renderer'
-import { IconCopy, IconDots, IconTag, IconTrash } from '@tabler/icons-react'
+import { IconChevronLeft, IconCopy, IconDots, IconTag, IconTrash } from '@tabler/icons-react'
 import { useRequest } from 'ahooks'
 import { FC, useEffect, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import { FormService } from '@/services'
 import { cn, timeFromNow, useParam, useRouter } from '@/utils'
@@ -43,7 +43,7 @@ export const FormShell: FC<ComponentProps> = ({ children }) => {
   const prompt = usePrompt()
   const router = useRouter()
   const { workspaceId, projectId, formId } = useParam()
-  const { workspace, sharingURLPrefix } = useWorkspaceStore()
+  const { workspace, project, sharingURLPrefix } = useWorkspaceStore()
   const { form, setForm, updateForm } = useFormStore()
 
   const navigations = useMemo(
@@ -226,98 +226,105 @@ export const FormShell: FC<ComponentProps> = ({ children }) => {
   }, [form?.suspended])
 
   return (
-    <div className="w-full">
-      <div className="mx-auto max-w-5xl px-6 py-8">
-        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="sm:flex-1">
-            <Skeleton
-              className="h-8 [&_[data-slot=skeleton]]:h-5 [&_[data-slot=skeleton]]:w-44 [&_[data-slot=skeleton]]:sm:h-6"
-              loading={loading}
-            >
-              <div className="flex items-center gap-2">
-                <h1 className="ml-6 text-2xl/8 font-semibold sm:text-xl/8">{form?.name}</h1>
-
-                <Dropdown
-                  contentProps={{
-                    className:
-                      'min-w-36 [&_[data-value=delete]]:text-error [&_[data-value=trash]]:text-error',
-                    side: 'bottom',
-                    sideOffset: 8,
-                    align: 'start'
-                  }}
-                  options={DROPDOWN_OPTIONS}
-                  multiLanguage
-                  onClick={handleClick}
-                >
-                  <Button.Link
-                    size="sm"
-                    className="text-secondary hover:text-primary data-[state=open]:bg-accent-light"
-                    iconOnly
-                  >
-                    <Tooltip label={t('form.menuTip')}>
-                      <IconDots className="h-5 w-5" />
-                    </Tooltip>
-                  </Button.Link>
-                </Dropdown>
-              </div>
-            </Skeleton>
-
-            <Skeleton className="[&_[data-slot=skeleton]]:w-64" loading={loading}>
-              <div className="text-secondary ml-6 text-sm/6">
-                <Trans
-                  t={t}
-                  i18nKey="form.metadata3"
-                  components={{
-                    span: <span />
-                  }}
-                  values={{
-                    status: t(`form.${status}`),
-                    count: form?.submissionCount || 0,
-                    date: timeFromNow(form?.updatedAt || 0, i18n.language)
-                  }}
-                />
-              </div>
-            </Skeleton>
-          </div>
-
-          <div className="flex items-center gap-2 sm:flex-row">
-            <Button.Copy
-              size="md"
-              className="order-last sm:order-first"
-              text={`${sharingURLPrefix}/form/${formId}`}
-              label={t('form.copyLinkToShare')}
-              icon={<IconLink className="h-5 w-5" />}
-            />
-
-            <Button size="md" onClick={handleEdit} className="mr-6">
-              {t('form.editForm')}
-            </Button>
-          </div>
-        </div>
-
-        <div className="mt-5 overflow-x-auto">
-          <div className="border-accent-light border-b px-6">
-            <nav className="text-secondary flex items-center gap-6 text-sm font-medium">
-              {navigations.map(n => (
-                <NavLink
-                  key={n.value}
-                  className={({ isActive }) =>
-                    cn('hover:text-primary text-nowrap py-3', {
-                      'text-primary after:bg-primary relative after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:rounded-full':
-                        isActive
-                    })
-                  }
-                  to={n.to}
-                >
-                  {n.label}
-                </NavLink>
-              ))}
-            </nav>
-          </div>
-        </div>
-
-        {children}
+    <>
+      <div className="max-lg:hidden">
+        <Link
+          className="text-secondary hover:text-primary -ml-[0.15rem] inline-flex items-center gap-2 text-sm/6"
+          to={`/workspace/${workspaceId}/project/${projectId}/`}
+        >
+          <IconChevronLeft className="h-4 w-4" />
+          <span>{project?.name}</span>
+        </Link>
       </div>
-    </div>
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="sm:flex-1">
+          <Skeleton
+            className="h-8 [&_[data-slot=skeleton]]:h-5 [&_[data-slot=skeleton]]:w-44 [&_[data-slot=skeleton]]:sm:h-6"
+            loading={loading}
+          >
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl/8 font-semibold sm:text-xl/8">{form?.name}</h1>
+
+              <Dropdown
+                contentProps={{
+                  className:
+                    'min-w-36 [&_[data-value=delete]]:text-error [&_[data-value=trash]]:text-error',
+                  side: 'bottom',
+                  sideOffset: 8,
+                  align: 'start'
+                }}
+                options={DROPDOWN_OPTIONS}
+                multiLanguage
+                onClick={handleClick}
+              >
+                <Button.Link
+                  size="sm"
+                  className="text-secondary hover:text-primary data-[state=open]:bg-accent-light"
+                  iconOnly
+                >
+                  <Tooltip label={t('form.menuTip')}>
+                    <IconDots className="h-5 w-5" />
+                  </Tooltip>
+                </Button.Link>
+              </Dropdown>
+            </div>
+          </Skeleton>
+
+          <Skeleton className="[&_[data-slot=skeleton]]:w-64" loading={loading}>
+            <div className="text-secondary text-sm/6">
+              <Trans
+                t={t}
+                i18nKey="form.metadata3"
+                components={{
+                  span: <span />
+                }}
+                values={{
+                  status: t(`form.${status}`),
+                  count: form?.submissionCount || 0,
+                  date: timeFromNow(form?.updatedAt || 0, i18n.language)
+                }}
+              />
+            </div>
+          </Skeleton>
+        </div>
+
+        <div className="flex items-center gap-2 sm:flex-row">
+          <Button.Copy
+            size="md"
+            className="order-last sm:order-first"
+            text={`${sharingURLPrefix}/form/${formId}`}
+            label={t('form.copyLinkToShare')}
+            icon={<IconLink className="h-5 w-5" />}
+          />
+
+          <Button size="md" onClick={handleEdit}>
+            {t('form.editForm')}
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-5 overflow-x-auto">
+        <div className="border-accent-light border-b">
+          <nav className="text-secondary flex items-center gap-6 text-sm font-medium">
+            {navigations.map(n => (
+              <NavLink
+                key={n.value}
+                className={({ isActive }) =>
+                  cn('hover:text-primary text-nowrap py-3', {
+                    'text-primary after:bg-primary relative after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:rounded-full':
+                      isActive
+                  })
+                }
+                to={n.to}
+              >
+                {n.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {children}
+    </>
   )
 }

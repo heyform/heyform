@@ -62,7 +62,7 @@ export default function FormSettingsAccess() {
 
   return (
     <section id="access" className="pt-10">
-      <h2 className="hf-section-title">{t('form.settings.access.title')}</h2>
+      <h2 className="text-lg font-semibold">{t('form.settings.access.title')}</h2>
 
       <div className="mt-4 space-y-8">
         <Form.Item

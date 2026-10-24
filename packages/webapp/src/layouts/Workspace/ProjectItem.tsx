@@ -73,7 +73,7 @@ export default function ProjectItem({ project }: ProjectItemProps) {
   return (
     <NavLink
       className={({ isActive }) =>
-        cn('hf-sidebar-link group justify-between has-[[data-state=open]]:bg-[#f8fafc]', {
+        cn('hf-sidebar-link has-[[data-state=open]]:bg-accent-light group justify-between', {
           'hf-sidebar-link-active': isActive
         })
       }
@@ -92,7 +92,7 @@ export default function ProjectItem({ project }: ProjectItemProps) {
         onClick={handleClick}
       >
         <Button.Link
-          className="!h-5 !w-5 rounded-md opacity-0 group-hover:opacity-100 data-[state=open]:bg-[#f8fafc] data-[state=open]:opacity-100"
+          className="data-[state=open]:bg-accent-light !h-5 !w-5 rounded-md opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100"
           size="sm"
           iconOnly
         >

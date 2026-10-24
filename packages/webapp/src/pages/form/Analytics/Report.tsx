@@ -146,14 +146,12 @@ export default function FormAnalyticsReport() {
 
   return (
     <>
-      <div className="ml-6 mt-12 flex items-center justify-between">
-        <h2 className="hf-section-title">{t('form.analytics.report.headline')}</h2>
+      <div className="mt-14 flex items-center justify-between">
+        <h2 className="text-base/6 font-semibold">{t('form.analytics.report.headline')}</h2>
       </div>
 
-      <div className="p-6">
-        <div className="heyform-report">
-          <ReportList />
-        </div>
+      <div className="heyform-report">
+        <ReportList />
       </div>
     </>
   )

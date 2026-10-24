@@ -77,10 +77,10 @@ export default function FormAnalyticsOverview() {
 
   return (
     <>
-      <div className="mt-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <h2 className="hf-section-title ml-6">{t('dashboard.overview')}</h2>
+      <div className="mt-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <h2 className="text-base/6 font-semibold">{t('dashboard.overview')}</h2>
         <Select
-          className="mr-6 w-full sm:w-40"
+          className="w-full sm:w-40"
           value={range}
           options={ANALYTIC_RANGES}
           placeholder={t('form.analytics.7d')}
@@ -90,9 +90,9 @@ export default function FormAnalyticsOverview() {
         />
       </div>
 
-      <div className="mt-4 grid gap-6 px-6 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="hf-card p-5">
-          <div className="hf-label-muted">{t('form.analytics.views')}</div>
+      <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+        <div>
+          <div className="text-base/6 font-medium sm:text-sm/6">{t('form.analytics.views')}</div>
           <Skeleton
             className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-16 [&_[data-slot=skeleton]]:sm:h-6"
             loading={loading}
@@ -113,8 +113,8 @@ export default function FormAnalyticsOverview() {
           </Skeleton>
         </div>
 
-        <div className="hf-card p-5">
-          <div className="hf-label-muted">{t('form.submissions.title')}</div>
+        <div>
+          <div className="text-base/6 font-medium sm:text-sm/6">{t('form.submissions.title')}</div>
           <Skeleton
             className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-16 [&_[data-slot=skeleton]]:sm:h-6"
             loading={loading}
@@ -135,8 +135,10 @@ export default function FormAnalyticsOverview() {
           </Skeleton>
         </div>
 
-        <div className="hf-card p-5">
-          <div className="hf-label-muted">{t('form.analytics.completeRate')}</div>
+        <div>
+          <div className="text-base/6 font-medium sm:text-sm/6">
+            {t('form.analytics.completeRate')}
+          </div>
           <Skeleton
             className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-16 [&_[data-slot=skeleton]]:sm:h-6"
             loading={loading}
@@ -157,8 +159,10 @@ export default function FormAnalyticsOverview() {
           </Skeleton>
         </div>
 
-        <div className="hf-card p-5">
-          <div className="hf-label-muted">{t('form.analytics.averageDuration')}</div>
+        <div>
+          <div className="text-base/6 font-medium sm:text-sm/6">
+            {t('form.analytics.averageDuration')}
+          </div>
           <Skeleton
             className="mt-3 h-8 [&_[data-slot=skeleton]]:h-[1.875rem] [&_[data-slot=skeleton]]:w-16 [&_[data-slot=skeleton]]:sm:h-6"
             loading={loading}
