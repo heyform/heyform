@@ -10,6 +10,7 @@ import {
   getIntegrationDefaultConfig,
   getIntegrationDescription,
   getIntegrationSetting,
+  isSettingVisible,
   needsAccountConnection,
   startsOnNewAccount
 } from './utils'
@@ -29,7 +30,7 @@ import {
   ConnectionsLoadFailed
 } from './IntegrationAuthItem'
 import IntegrationRecords from './IntegrationRecords'
-import IntegrationSettingsItem from './IntegrationSettingsItem'
+import IntegrationSettingsItem, { VisibleSetting } from './IntegrationSettingsItem'
 
 export interface IntegrationSettingsProps {
   app: IntegratedAppType
@@ -38,15 +39,29 @@ export interface IntegrationSettingsProps {
   onValuesChange?: (changedValues: Any, values: Any) => void
 }
 
-const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onValuesChange }) => {
+export const SettingsForm: FC<IntegrationSettingsProps> = ({
+  app,
+  connections = [],
+  onValuesChange
+}) => {
   const { t } = useTranslation()
 
   const { formId } = useParam()
   const { closeModal } = useAppStore()
   const { updateIntegration, setIntegrations } = useFormStore()
 
-  async function fetch({ apiKey, connectionId, ...config }: AnyMap) {
-    await IntegrationService.updateSettings(
+  async function fetch({ apiKey, connectionId, ...values }: AnyMap) {
+    // Only visible settings, as the server stores
+    const config = Object.fromEntries(
+      Object.entries(values).filter(([name]) => {
+        const setting = app.settings?.find(row => row.name === name)
+        return !setting || isSettingVisible(setting, values)
+      })
+    )
+
+    // The config as the server stored it: the app may have normalised it,
+    // e.g. created a spreadsheet, which saving again mustn't repeat
+    const storedConfig: AnyMap = await IntegrationService.updateSettings(
       formId,
       app.id,
       config,
@@ -63,7 +78,7 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
         : app.integration?.status === INTEGRATION_STATUS_ENUM.NEEDS_RECONNECT
 
     updateIntegration(app.id, {
-      config,
+      config: storedConfig ?? config,
       status: needsReconnect
         ? INTEGRATION_STATUS_ENUM.NEEDS_RECONNECT
         : INTEGRATION_STATUS_ENUM.ACTIVE,
@@ -71,9 +86,14 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
     })
 
     // Pick up the masked hint of a new key, the status it restores, and
-    // what's still waiting once the server has resent the rest
+    // what's still waiting once the server has resent the rest. The save has
+    // already succeeded, so a failed reload doesn't keep the modal open.
     if (apiKey || app.integration?.waitingCount) {
-      setIntegrations(await FormService.integrations(formId))
+      try {
+        setIntegrations(await FormService.integrations(formId))
+      } catch (err) {
+        console.error(err)
+      }
     }
 
     closeModal('IntegrationSettingsModal')
@@ -108,10 +128,13 @@ const SettingsForm: FC<IntegrationSettingsProps> = ({ app, connections = [], onV
       )}
 
       {app.settings?.map(setting => (
-        <IntegrationSettingsItem
-          key={setting.name}
-          setting={getIntegrationSetting(t, app, setting)}
-        />
+        <VisibleSetting key={setting.name} setting={setting}>
+          <IntegrationSettingsItem
+            formId={formId}
+            appId={app.id}
+            setting={getIntegrationSetting(t, app, setting)}
+          />
+        </VisibleSetting>
       ))}
     </Form.Simple>
   )

@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql'
-import GraphQLJSON from 'graphql-type-json'
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json'
 
 @ObjectType()
 export class AppSettingOptionType {
@@ -32,6 +32,18 @@ export class AppSettingType {
 
   @Field(type => [AppSettingOptionType], { nullable: true })
   options?: AppSettingOptionType[]
+
+  // select: the options are loaded with integrationSettingOptions
+  @Field({ nullable: true })
+  loadsOptions?: boolean
+
+  // Settings whose values the loaded options depend on
+  @Field(type => [String], { nullable: true })
+  dependsOn?: string[]
+
+  // Shown only while each named setting has the given value
+  @Field(type => GraphQLJSONObject, { nullable: true })
+  visibleWhen?: Record<string, string | boolean>
 
   @Field(type => GraphQLJSON, { nullable: true })
   defaultValue?: unknown

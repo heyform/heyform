@@ -39,6 +39,34 @@ export class UpdateIntegrationInput extends IntegrationInput {
   connectionId?: string
 }
 
+// Loads the options of a select setting with `loadOptions`
+@InputType()
+export class IntegrationSettingOptionsInput extends IntegrationInput {
+  // Name of the setting
+  @Field()
+  @IsString()
+  @MaxLength(64)
+  setting: string
+
+  // The values in the settings form
+  @Field(type => GraphQLJSONObject)
+  config: Record<string, any>
+
+  // As in UpdateIntegrationInput: the key or account being picked. Omit to
+  // use the saved one.
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(4096)
+  apiKey?: string
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  connectionId?: string
+}
+
 @InputType()
 export class IntegrationConnectionInput extends TeamDetailInput {
   @Field()

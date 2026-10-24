@@ -12,6 +12,10 @@ interface BaseAppSetting {
   description?: string
   placeholder?: string
   required?: boolean
+  // Shows the setting only while each named setting, declared earlier, has
+  // the given value, e.g. `{ createSpreadsheet: false }`. A hidden setting
+  // isn't required, and its value isn't stored.
+  visibleWhen?: Record<string, string | boolean>
 }
 
 export interface TextAppSetting extends BaseAppSetting {
@@ -29,9 +33,18 @@ export interface TextareaAppSetting extends BaseAppSetting {
   defaultValue?: string
 }
 
-export interface SelectAppSetting extends BaseAppSetting {
+export interface SelectAppSetting<A extends AppAuth = AppAuth> extends BaseAppSetting {
   type: 'select'
-  options: AppSettingOption[]
+  // Fixed options, or `loadOptions` to load them from the app's service
+  options?: AppSettingOption[]
+  // Called when the settings open, and again when a setting named in
+  // `dependsOn` changes, with the values in the form and fresh credentials.
+  // The server can't check a saved value against options it loads, so
+  // `validate` should.
+  loadOptions?(ctx: AppLoadOptionsContext<A>): Promise<AppSettingOption[]>
+  // Settings whose values the loader reads. It isn't called while one of
+  // them is blank.
+  dependsOn?: string[]
   defaultValue?: string
 }
 
@@ -40,11 +53,11 @@ export interface SwitchAppSetting extends BaseAppSetting {
   defaultValue?: boolean
 }
 
-export type AppSetting =
+export type AppSetting<A extends AppAuth = AppAuth> =
   | TextAppSetting
   | UrlAppSetting
   | TextareaAppSetting
-  | SelectAppSetting
+  | SelectAppSetting<A>
   | SwitchAppSetting
 
 // How HeyForm authenticates with the app's service. HeyForm stores the
@@ -99,6 +112,52 @@ export interface AppRunContext<A extends AppAuth = AppAuth> {
   auth: AppRunAuth<A>
 }
 
+export interface AppValidateContext<A extends AppAuth = AppAuth> {
+  form: FormModel
+  // The credentials being saved: the API key entered (or the saved one), or
+  // the picked account's access token
+  auth: AppRunAuth<A>
+}
+
+export interface AppLoadOptionsContext<A extends AppAuth = AppAuth> {
+  // The values in the settings form, not yet validated or saved
+  config: AppConfig
+  auth: AppRunAuth<A>
+}
+
+/**
+ * An error an app throws from `run`, `validate` or `loadOptions` to say what
+ * went wrong and whether trying again can help. Its message is shown to the
+ * form owner, in the delivery log or the settings form, so keep secrets and
+ * submission data out of it.
+ */
+export class AppError extends Error {
+  // Whether another try could succeed, e.g. after a rate limit or an outage.
+  // A delivery that fails with a non-retryable error isn't tried again.
+  readonly retryable: boolean
+  // The service rejected the access token, e.g. because access was revoked
+  // before the token expired. HeyForm refreshes the token and calls the app
+  // once more; if the provider refuses to refresh it, the account needs
+  // reconnecting and the submission waits.
+  readonly unauthorized: boolean
+
+  constructor(message: string, options: { retryable?: boolean; unauthorized?: boolean } = {}) {
+    super(message)
+    this.name = 'AppError'
+    this.retryable = options.retryable ?? true
+    this.unauthorized = options.unauthorized ?? false
+  }
+
+  // The usual meaning of an HTTP error status: 401 is an unauthorized token,
+  // 408, 429 and 5xx are worth retrying, and other 4xx aren't
+  static fromStatus(status: number, message: string): AppError {
+    return new AppError(message, {
+      unauthorized: status === 401,
+      retryable: status === 408 || status === 429 || status >= 500
+    })
+  }
+}
+
 export interface AppDefinition<A extends AppAuth = AppAuth> {
   id: string
   name: string
@@ -106,17 +165,18 @@ export interface AppDefinition<A extends AppAuth = AppAuth> {
   // Path served by the server, e.g. `/static/webhook.png`
   icon: string
   auth: A
-  settings: Array<AppSetting & { required: boolean }>
+  settings: Array<AppSetting<A> & { required: boolean }>
   queue?: AppQueueOptions
-  // Runs after the config has passed the generic settings validation.
-  // Throw a BadRequestException to reject it.
-  validate?(config: AppConfig): Promise<void>
+  // Runs after the config has passed the generic settings validation. Throw
+  // an AppError or a BadRequestException to reject it, or return the config
+  // to store instead, e.g. with a pasted URL reduced to an id.
+  validate?(config: AppConfig, ctx: AppValidateContext<A>): Promise<AppConfig | void>
   run(ctx: AppRunContext<A>): Promise<unknown>
 }
 
 export type AppDefinitionInput<A extends AppAuth> = Omit<AppDefinition<A>, 'auth' | 'settings'> & {
   auth?: A
-  settings: AppSetting[]
+  settings: AppSetting<A>[]
 }
 
 function isPositiveInteger(value: unknown): boolean {
@@ -127,9 +187,38 @@ function isDelay(value: unknown): boolean {
   return typeof value === 'number' && Number.isFinite(value) && value >= 0
 }
 
+// Loaded selects have no fixed options, and settings only refer to ones
+// declared before them, which the form renders first
+function assertValidSettings(app: AppDefinitionInput<AppAuth>) {
+  const declared = new Set<string>()
+
+  for (const setting of app.settings) {
+    if (setting.type === 'select' && !setting.options === !setting.loadOptions) {
+      throw new Error(`App ${app.id}: select ${setting.name} needs either options or loadOptions`)
+    }
+
+    const references = [
+      ...Object.keys(setting.visibleWhen ?? {}),
+      ...(setting.type === 'select' ? (setting.dependsOn ?? []) : [])
+    ]
+
+    for (const name of references) {
+      if (!declared.has(name)) {
+        throw new Error(
+          `App ${app.id}: ${setting.name} refers to ${name}, which isn't declared before it`
+        )
+      }
+    }
+
+    declared.add(setting.name)
+  }
+}
+
 // Catches mistakes in an app file when the server starts, rather than when
 // the first submission is delivered
 function assertValidDefinition(app: AppDefinitionInput<AppAuth>) {
+  assertValidSettings(app)
+
   const auth = app.auth
 
   if (auth?.type === 'oauth2' && (!auth.provider || !auth.scopes?.length)) {

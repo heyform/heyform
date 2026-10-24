@@ -1157,6 +1157,25 @@
               "label": "Endpoint URL"
             }
           }
+        },
+        "googlesheets": {
+          "description": "Adds a row to a Google Sheets spreadsheet for every submission, with a column for each question.",
+          "settings": {
+            "createSpreadsheet": {
+              "label": "Create a new spreadsheet",
+              "description": "When you save, a spreadsheet named after this form is created in the connected Google account."
+            },
+            "spreadsheet": {
+              "label": "Spreadsheet URL",
+              "description": "The URL or ID of a spreadsheet the connected account can edit.",
+              "placeholder": "https://docs.google.com/spreadsheets/d/…"
+            },
+            "sheet": {
+              "label": "Tab",
+              "description": "Row 1 holds the column headers; HeyForm adds one for each new question.",
+              "placeholder": "First tab"
+            }
+          }
         }
       }
     },

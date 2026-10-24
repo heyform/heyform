@@ -16,7 +16,7 @@ import {
 import { Logger, mapToObject } from '@utils'
 
 import { ConfiguredOAuth2Provider } from '../apps/oauth2-providers'
-import { AppDefinition, AppRunAuth } from '../apps/types'
+import { AppDefinition, AppError, AppRunAuth } from '../apps/types'
 import { IntegrationSecrets } from './integration-secrets'
 
 export const INTEGRATION_OAUTH_CALLBACK_PATH = '/api/integrations/oauth/callback'
@@ -539,6 +539,19 @@ export class IntegrationAuthService {
    * when retrying can't help.
    */
   async getRunAuth(app: AppDefinition, integration: IntegrationModel): Promise<AppRunAuth> {
+    return this.withRunAuth(app, integration, async auth => auth)
+  }
+
+  /**
+   * Calls `fn` with the integration's credentials, for a delivery. Throws
+   * IntegrationAuthError when retrying can't help. See withAccessToken for an
+   * access token the app's service rejects.
+   */
+  async withRunAuth<T>(
+    app: AppDefinition,
+    integration: IntegrationModel,
+    fn: (auth: AppRunAuth) => Promise<T>
+  ): Promise<T> {
     // An install problem, not the form owner's: no reconnecting can fix it
     if (app.auth.type !== 'none' && !this.secrets.isConfigured) {
       throw new IntegrationAuthError('INTEGRATION_ENCRYPTION_KEY is not set on this server')
@@ -546,13 +559,113 @@ export class IntegrationAuthService {
 
     switch (app.auth.type) {
       case 'apiKey':
-        return { type: 'apiKey', apiKey: await this.readApiKey(integration) }
+        return fn({ type: 'apiKey', apiKey: await this.readApiKey(integration) })
 
-      case 'oauth2':
-        return { type: 'oauth2', accessToken: await this.getAccessToken(app, integration) }
+      case 'oauth2': {
+        const { provider, connection } = await this.findRunConnection(app, integration)
+        return this.withAccessToken(provider, connection, fn)
+      }
 
       default:
-        return { type: 'none' }
+        return fn({ type: 'none' })
+    }
+  }
+
+  /**
+   * Calls `fn` with the credentials being saved in the settings form, for the
+   * app's validate or an options loader: the API key entered or the saved
+   * one, or the picked account's access token. Credential problems become a
+   * BadRequestException for the form; a revoked grant still marks the
+   * connection as needing reconnection, as in a delivery.
+   */
+  async withSettingsAuth<T>(
+    app: AppDefinition,
+    credentials: {
+      apiKey?: string
+      integration?: IntegrationModel | null
+      connection?: IntegrationConnectionModel
+    },
+    fn: (auth: AppRunAuth) => Promise<T>
+  ): Promise<T> {
+    try {
+      switch (app.auth.type) {
+        case 'apiKey': {
+          const apiKey =
+            credentials.apiKey?.trim() ||
+            (credentials.integration?.apiKey
+              ? this.decryptApiKey(credentials.integration.apiKey)
+              : undefined)
+
+          if (!apiKey) {
+            throw new BadRequestException(`${app.auth.label || 'API key'} is required`)
+          }
+
+          return await fn({ type: 'apiKey', apiKey })
+        }
+
+        case 'oauth2': {
+          const provider = this.requireProvider(app)
+          const connection = credentials.connection
+
+          if (!connection) {
+            throw new BadRequestException(`Connect your ${provider.name} account first`)
+          }
+
+          if (connection.status === IntegrationConnectionStatusEnum.NEEDS_RECONNECT) {
+            throw new BadRequestException(
+              `Reconnect the ${provider.name} account or pick another one first`
+            )
+          }
+
+          return await this.withAccessToken(provider, connection, fn)
+        }
+
+        default:
+          return await fn({ type: 'none' })
+      }
+    } catch (err) {
+      // Their messages never include credentials
+      if (err instanceof IntegrationAuthError || err instanceof OAuth2TokenError) {
+        throw new BadRequestException(err.message)
+      }
+      throw err
+    }
+  }
+
+  private decryptApiKey(encrypted: string): string {
+    try {
+      return this.secrets.decrypt(encrypted)
+    } catch (_) {
+      throw new BadRequestException("The saved API key can't be read. Enter it again.")
+    }
+  }
+
+  /**
+   * Calls `fn` with a valid access token for the connection. If `fn` throws
+   * an AppError marked `unauthorized`, the service rejected a token that
+   * hadn't expired yet, e.g. because access was revoked: the token is
+   * refreshed and `fn` is called once more. If the provider refuses the
+   * refresh, the connection needs reconnecting, as when an expired token
+   * can't be refreshed.
+   */
+  async withAccessToken<T>(
+    provider: ConfiguredOAuth2Provider,
+    connection: IntegrationConnectionModel,
+    fn: (auth: AppRunAuth) => Promise<T>
+  ): Promise<T> {
+    const accessToken = await this.getConnectionAccessToken(provider, connection)
+
+    try {
+      return await fn({ type: 'oauth2', accessToken })
+    } catch (err) {
+      if (!(err instanceof AppError && err.unauthorized)) {
+        throw err
+      }
+
+      return fn({
+        type: 'oauth2',
+        accessToken: await this.getConnectionAccessToken(provider, connection, accessToken)
+      })
     }
   }
 
@@ -582,6 +695,15 @@ export class IntegrationAuthService {
    * needing reconnection.
    */
   async getAccessToken(app: AppDefinition, integration: IntegrationModel): Promise<string> {
+    const { provider, connection } = await this.findRunConnection(app, integration)
+    return this.getConnectionAccessToken(provider, connection)
+  }
+
+  // The integration's connection, if deliveries can use it
+  private async findRunConnection(
+    app: AppDefinition,
+    integration: IntegrationModel
+  ): Promise<{ provider: ConfiguredOAuth2Provider; connection: IntegrationConnectionModel }> {
     const provider = this.appService.findOAuth2Provider(app)
 
     if (!provider) {
@@ -603,35 +725,41 @@ export class IntegrationAuthService {
       )
     }
 
-    return this.getConnectionAccessToken(provider, connection)
+    return { provider, connection }
   }
 
   /**
    * A valid access token for the connection. Only one refresh runs per
    * connection: a job that finds the token expired while another job is
-   * refreshing it waits, then uses the new token.
+   * refreshing it waits, then uses the new token. `rejectedToken`, a token
+   * the app's service refused, is refreshed even if it hasn't expired.
    */
   async getConnectionAccessToken(
     provider: ConfiguredOAuth2Provider,
-    connection: IntegrationConnectionModel
+    connection: IntegrationConnectionModel,
+    rejectedToken?: string
   ): Promise<string> {
     const tokens = this.readTokens(connection)
 
-    if (tokens?.accessToken && !this.isExpired(tokens)) {
+    if (!rejectedToken && tokens?.accessToken && !this.isExpired(tokens)) {
       return tokens.accessToken
     }
 
     return this.redisService.withLock(
       `integration_connection_refresh:${connection.id}`,
       REFRESH_LOCK_TTL,
-      () => this.refresh(provider, connection.id),
+      () => this.refresh(provider, connection.id, rejectedToken),
       REFRESH_LOCK_RETRIES,
       REFRESH_LOCK_RETRY_DELAY
     )
   }
 
   // Runs under the connection's refresh lock
-  private async refresh(provider: ConfiguredOAuth2Provider, connectionId: string): Promise<string> {
+  private async refresh(
+    provider: ConfiguredOAuth2Provider,
+    connectionId: string,
+    rejectedToken?: string
+  ): Promise<string> {
     // Read again: the refresh this job waited for may have done it already
     const connection = await this.connectionService.findById(connectionId)
 
@@ -655,14 +783,16 @@ export class IntegrationAuthService {
       )
     }
 
-    if (tokens.accessToken && !this.isExpired(tokens)) {
+    if (tokens.accessToken && !this.isExpired(tokens) && tokens.accessToken !== rejectedToken) {
       return tokens.accessToken
     }
 
     if (!tokens.refreshToken) {
       return this.connectionNeedsReconnect(
         connection,
-        `The ${provider.name} access token has expired`
+        rejectedToken
+          ? `The ${provider.name} access token was rejected`
+          : `The ${provider.name} access token has expired`
       )
     }
 

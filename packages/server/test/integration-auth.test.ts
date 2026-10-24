@@ -43,6 +43,12 @@ const {
   DisconnectIntegrationConnectionResolver
 } = require('../src/resolver/integration/disconnect-integration-connection.resolver')
 const {
+  IntegrationSettingOptionsResolver
+} = require('../src/resolver/integration/integration-setting-options.resolver')
+const { AppError } = require('../src/apps/types')
+const { oauth2Providers } = require('../src/apps/oauth2-providers')
+const googlesheets = require('../src/apps/googlesheets').default
+const {
   IntegrationOAuthCallbackController,
   IntegrationOAuthController
 } = require('../src/controller/integration-oauth.controller')
@@ -1958,6 +1964,311 @@ async function testJobRetriesTransientRefreshFailures() {
   assert.strictEqual(job.discarded, false, 'Bull may try again')
 }
 
+// --- tokens the app's service rejects ---------------------------------------
+
+// Throws like an app whose service answered 401 to any token but `valid`
+function rejectUnless(valid: string, calls: string[]) {
+  return async (auth: any) => {
+    calls.push(auth.accessToken)
+
+    if (auth.accessToken !== valid) {
+      throw AppError.fromStatus(401, 'Fake rejected the access token')
+    }
+
+    return 'ok'
+  }
+}
+
+async function testRejectedTokenIsRefreshedOnce() {
+  const ctx = createAuth()
+  const { connectionId, integration } = await connect(ctx, {
+    accessToken: 'access-revoked-early',
+    refreshToken: 'refresh-1',
+    expiresAt: Date.now() + 3600_000
+  })
+  provider.requests = []
+  provider.handler = () => ({ status: 200, body: { access_token: 'access-new', expires_in: 3600 } })
+  const calls: string[] = []
+
+  assert.strictEqual(
+    await ctx.service.withRunAuth(oauthApp, integration, rejectUnless('access-new', calls)),
+    'ok'
+  )
+  assert.deepStrictEqual(calls, ['access-revoked-early', 'access-new'])
+  assert.strictEqual(provider.tokenRequests.length, 1, 'refreshed although it had not expired')
+  assert.strictEqual(storedTokens(ctx, connectionId).accessToken, 'access-new')
+
+  // Rejected again after a refresh: passed on, not refreshed in a loop
+  const again: string[] = []
+  await assert.rejects(
+    ctx.service.withRunAuth(
+      oauthApp,
+      ctx.integrations.get(integration.id),
+      rejectUnless('x', again)
+    ),
+    (error: any) => error instanceof AppError && error.unauthorized
+  )
+  assert.strictEqual(again.length, 2)
+
+  // Another job already refreshed the rejected token: its token is used
+  const shared = await connect(
+    ctx,
+    { accessToken: 'access-stale', refreshToken: 'r', expiresAt: Date.now() + 3600_000 },
+    { formId: 'form_5' },
+    { accountId: 'account-5' }
+  )
+  // As this job read it, before the other job's refresh
+  const stale = { ...shared.connection, tokens: { ...shared.connection.tokens } }
+  ctx.connections.get(shared.connectionId).tokens = encryptTokens({
+    accessToken: 'access-from-other-job',
+    refreshToken: 'r',
+    expiresAt: Date.now() + 3600_000
+  })
+  provider.requests = []
+  const reused: string[] = []
+  await ctx.service.withAccessToken(
+    ctx.appService.findOAuth2Provider(oauthApp),
+    stale,
+    rejectUnless('access-from-other-job', reused)
+  )
+  assert.deepStrictEqual(reused, ['access-stale', 'access-from-other-job'])
+  assert.strictEqual(provider.tokenRequests.length, 0)
+}
+
+async function testRejectedTokenWithRevokedGrantWaitsForReconnect() {
+  const ctx = createAuth()
+  const { connectionId, integrationId } = await connect(ctx, {
+    accessToken: 'access-revoked-early',
+    refreshToken: 'refresh-revoked',
+    expiresAt: Date.now() + 3600_000
+  })
+  provider.handler = () => ({ status: 400, body: { error: 'invalid_grant' } })
+  const app = { ...oauthApp, run: rejectUnless('never', []) }
+  const appService = createAppService([app])
+  const queue = new IntegrationQueue(
+    appService,
+    ctx.integrationService,
+    new IntegrationAuthService(
+      appService,
+      ctx.integrationService,
+      ctx.connectionService,
+      ctx.redisService
+    ),
+    { findById: async () => ({ id: 'submission_1' }) },
+    { findById: async () => ({ id: 'form_1' }) }
+  )
+  const job = createJob(integrationId)
+
+  await assert.rejects(queue.process(job), (error: any) => error instanceof IntegrationAuthError)
+  assert.strictEqual(ctx.connections.get(connectionId).status, CONNECTION_NEEDS_RECONNECT)
+  assert.strictEqual(ctx.integrations.get(integrationId).status, NEEDS_RECONNECT)
+  assert.deepStrictEqual(
+    ctx.held.map(input => input.submissionId),
+    ['submission_1']
+  )
+  assert.strictEqual(job.discarded, true)
+}
+
+// --- settings that use the account -------------------------------------------
+
+const loaderApp: AppDefinition = defineApp({
+  ...oauthApp,
+  id: 'loaderapp',
+  settings: [
+    { type: 'text', name: 'sheet', label: 'Sheet', required: true },
+    {
+      type: 'select',
+      name: 'tab',
+      label: 'Tab',
+      dependsOn: ['sheet'],
+      loadOptions: async ({ auth, config }: any) => {
+        if (auth.accessToken !== 'access-good') {
+          throw AppError.fromStatus(401, 'Fake rejected the access token')
+        }
+        return [{ label: `${config.sheet} tab`, value: 't1' }]
+      }
+    }
+  ],
+  validate: async (config: any, { auth, form }: any) => {
+    if (auth.accessToken !== 'access-good') {
+      throw AppError.fromStatus(401, 'Fake rejected the access token')
+    }
+    return { ...config, tab: config.tab ?? 't1', checkedFor: form.id }
+  }
+})
+
+function createLoaderCtx() {
+  const ctx = createAuth()
+  ctx.appService = createAppService([loaderApp])
+  ctx.service = new IntegrationAuthService(
+    ctx.appService,
+    ctx.integrationService,
+    ctx.connectionService,
+    ctx.redisService
+  )
+  return ctx
+}
+
+async function testLoaderGetsAFreshTokenAndTheFormValues() {
+  const ctx = createLoaderCtx()
+  const { connectionId } = await connect(
+    ctx,
+    { accessToken: 'access-expired', refreshToken: 'refresh-1', expiresAt: Date.now() - 1000 },
+    { appId: 'loaderapp' }
+  )
+  provider.handler = () => ({
+    status: 200,
+    body: { access_token: 'access-good', expires_in: 3600 }
+  })
+  const resolver = new IntegrationSettingOptionsResolver(
+    ctx.appService,
+    ctx.integrationService,
+    ctx.service
+  )
+  const load = (input: Record<string, any> = {}) =>
+    resolver.integrationSettingOptions(
+      {
+        formId: 'form_1',
+        appId: 'loaderapp',
+        setting: 'tab',
+        config: { sheet: 'Leads' },
+        ...input
+      },
+      FORM
+    )
+
+  assert.deepStrictEqual(await load(), [{ label: 'Leads tab', value: 't1' }])
+  assert.strictEqual(storedTokens(ctx, connectionId).accessToken, 'access-good')
+
+  // Only the team's accounts
+  const otherTeam = await ctx.connectionService.create({
+    teamId: 'team_2',
+    provider: 'fake',
+    accountId: 'account-9',
+    scopes: ['rows.read', 'rows.write'],
+    createdBy: 'user_9',
+    tokens: {}
+  })
+  await assertBadRequest(load({ connectionId: otherTeam }), /Connect your Fake account first/)
+  await assertBadRequest(load({ setting: 'sheet' }), /no options to load for sheet/)
+}
+
+async function testLoaderAuthErrorMarksTheConnection() {
+  const ctx = createLoaderCtx()
+  const { connectionId, integrationId } = await connect(
+    ctx,
+    // Unexpired, but access was revoked: the service rejects it
+    {
+      accessToken: 'access-revoked-early',
+      refreshToken: 'refresh-revoked',
+      expiresAt: Date.now() + 3600_000
+    },
+    { appId: 'loaderapp' }
+  )
+  provider.handler = () => ({ status: 400, body: { error: 'invalid_grant' } })
+  const resolver = new IntegrationSettingOptionsResolver(
+    ctx.appService,
+    ctx.integrationService,
+    ctx.service
+  )
+  const load = () =>
+    resolver.integrationSettingOptions(
+      { formId: 'form_1', appId: 'loaderapp', setting: 'tab', config: { sheet: 'Leads' } },
+      FORM
+    )
+
+  await assertBadRequest(load(), /invalid_grant.*Reconnect the account/)
+  assert.strictEqual(ctx.connections.get(connectionId).status, CONNECTION_NEEDS_RECONNECT)
+  assert.strictEqual(ctx.integrations.get(integrationId).status, NEEDS_RECONNECT)
+
+  // Then it asks for a reconnect without calling the provider
+  provider.requests = []
+  await assertBadRequest(load(), /Reconnect the Fake account or pick another one first/)
+  assert.strictEqual(provider.requests.length, 0)
+}
+
+async function testSavingValidatesWithThePickedAccount() {
+  const ctx = createLoaderCtx()
+  const { connectionId, integrationId } = await connect(
+    ctx,
+    { accessToken: 'access-good', refreshToken: 'refresh-1', expiresAt: Date.now() + 3600_000 },
+    { appId: 'loaderapp', config: {} }
+  )
+  const resolver = new UpdateIntegrationSettingsResolver(
+    ctx.appService,
+    ctx.integrationService,
+    ctx.service
+  )
+  const save = () =>
+    resolver.updateIntegrationSettings(
+      { formId: 'form_1', appId: 'loaderapp', config: { sheet: 'Leads' }, connectionId },
+      FORM
+    )
+
+  // The config validate returned is the one stored, and the one returned to
+  // the client, so it never keeps what was typed
+  const stored = { sheet: 'Leads', tab: 't1', checkedFor: 'form_1' }
+  assert.deepStrictEqual(await save(), stored)
+  assert.deepStrictEqual(ctx.integrations.get(integrationId).config, stored)
+
+  ctx.connections.get(connectionId).status = CONNECTION_NEEDS_RECONNECT
+  await assertBadRequest(save(), /Reconnect the Fake account or pick another one first/)
+}
+
+function testGoogleProviderAndSheetsApp() {
+  const google = oauth2Providers.google
+
+  assert.strictEqual(google.identityScopes.join(' '), 'openid email')
+  assert.deepStrictEqual(google.authorizeParams, {
+    access_type: 'offline',
+    prompt: 'consent',
+    include_granted_scopes: 'true'
+  })
+  assert.strictEqual(google.pkce, true)
+  assert.strictEqual(googlesheets.auth.provider, 'google')
+
+  // Hidden until the install sets the Google client credentials
+  const appService = new AppService()
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_ID
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_SECRET
+  assert.strictEqual(appService.isAvailable(googlesheets), false)
+
+  process.env.GOOGLE_INTEGRATION_CLIENT_ID = 'google-client'
+  process.env.GOOGLE_INTEGRATION_CLIENT_SECRET = 'google-secret'
+  assert.strictEqual(appService.isAvailable(googlesheets), true)
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_ID
+  delete process.env.GOOGLE_INTEGRATION_CLIENT_SECRET
+}
+
+async function testAppsListDescribesLoadedAndConditionalSettings() {
+  const app = defineApp({
+    ...loaderApp,
+    id: 'described',
+    settings: [
+      { type: 'switch', name: 'createNew', label: 'Create new' },
+      ...loaderApp.settings.map((setting: any) => ({
+        ...setting,
+        visibleWhen: { createNew: false }
+      }))
+    ]
+  })
+  const [listed] = await new AppsResolver(createAppService([app])).apps()
+
+  assert.deepStrictEqual(
+    listed.settings.map((setting: any) => [
+      setting.name,
+      setting.loadsOptions,
+      setting.dependsOn,
+      setting.visibleWhen
+    ]),
+    [
+      ['createNew', false, undefined, undefined],
+      ['sheet', false, undefined, { createNew: false }],
+      ['tab', true, ['sheet'], { createNew: false }]
+    ]
+  )
+}
+
 // --- callback controller ----------------------------------------------------
 
 const SESSION = { id: 'user_1', deviceId: 'device_1' }
@@ -2215,6 +2526,13 @@ async function run() {
     await testJobRefreshesAndPassesAuthToRun()
     await testJobStopsRetryingWhenReconnectIsNeeded()
     await testJobRetriesTransientRefreshFailures()
+    await testRejectedTokenIsRefreshedOnce()
+    await testRejectedTokenWithRevokedGrantWaitsForReconnect()
+    await testLoaderGetsAFreshTokenAndTheFormValues()
+    await testLoaderAuthErrorMarksTheConnection()
+    await testSavingValidatesWithThePickedAccount()
+    testGoogleProviderAndSheetsApp()
+    await testAppsListDescribesLoadedAndConditionalSettings()
     await testCallbackConnectsAndRedirectsBack()
     await testCallbackNeedsTheSameLiveSession()
     await testCallbackRejectsForeignOrForgedState()

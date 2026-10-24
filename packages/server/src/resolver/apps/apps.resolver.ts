@@ -15,7 +15,11 @@ export class AppsResolver {
     return this.appService.findAllAvailable().map(app => ({
       ...app,
       icon: APP_HOMEPAGE_URL + app.icon,
-      auth: this.toAuthType(app)
+      auth: this.toAuthType(app),
+      settings: app.settings.map(setting => ({
+        ...setting,
+        loadsOptions: setting.type === 'select' && !!setting.loadOptions
+      }))
     }))
   }
 

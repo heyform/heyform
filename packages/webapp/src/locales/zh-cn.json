@@ -1154,6 +1154,25 @@
               "label": "端点 URL"
             }
           }
+        },
+        "googlesheets": {
+          "description": "每次收到提交时，在 Google 表格电子表格中添加一行，每个问题对应一列。",
+          "settings": {
+            "createSpreadsheet": {
+              "label": "新建电子表格",
+              "description": "保存时，将在已连接的 Google 账号中创建一个以此表单命名的电子表格。"
+            },
+            "spreadsheet": {
+              "label": "电子表格 URL",
+              "description": "已连接账号可以编辑的电子表格的 URL 或 ID。",
+              "placeholder": "https://docs.google.com/spreadsheets/d/…"
+            },
+            "sheet": {
+              "label": "工作表",
+              "description": "第 1 行为列标题；每出现一个新问题，HeyForm 会添加一个标题。",
+              "placeholder": "第一个工作表"
+            }
+          }
         }
       }
     },

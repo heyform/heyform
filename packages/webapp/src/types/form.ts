@@ -15,6 +15,12 @@ export interface AppSettingType {
   placeholder?: string
   required: boolean
   options?: AppSettingOptionType[]
+  // select: options come from IntegrationService.settingOptions
+  loadsOptions?: boolean
+  // Settings whose values the loaded options depend on
+  dependsOn?: string[]
+  // Shown only while each named setting has the given value
+  visibleWhen?: Record<string, string | boolean>
   defaultValue?: string | boolean
 }
 

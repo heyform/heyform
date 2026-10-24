@@ -12,6 +12,7 @@ import {
 } from '@service'
 import { mapToObject } from '@utils'
 
+import { AppError } from '../apps/types'
 import { BaseQueue } from './base.queue'
 
 export interface IntegrationQueueJob {
@@ -23,6 +24,11 @@ export interface IntegrationQueueJob {
 
 // Returned when there was nothing to deliver, e.g. the integration was deleted
 export const SKIPPED_JOB = 'skipped'
+
+// An error the app says another try can't fix
+function isFinalAppError(error: unknown): boolean {
+  return error instanceof AppError && !error.retryable
+}
 
 @Processor('IntegrationQueue')
 export class IntegrationQueue extends BaseQueue {
@@ -57,16 +63,17 @@ export class IntegrationQueue extends BaseQueue {
             )
           }
 
-          // Inside the job, so an expired token is refreshed right before use
-          const auth = await this.integrationAuthService.getRunAuth(app, integration)
           const config = mapToObject(integration.config)
 
-          await app.run({
-            submission,
-            form,
-            config,
-            auth
-          })
+          // Inside the job, so an expired token is refreshed right before use
+          await this.integrationAuthService.withRunAuth(app, integration, auth =>
+            app.run({
+              submission,
+              form,
+              config,
+              auth
+            })
+          )
 
           // Not the app's result, which Bull would store in Redis
           return
@@ -88,6 +95,11 @@ export class IntegrationQueue extends BaseQueue {
             }
 
             // Retrying with the same credentials can't succeed
+            await job.discard()
+          }
+
+          // e.g. the spreadsheet was deleted
+          if (isFinalAppError(err)) {
             await job.discard()
           }
 
@@ -127,7 +139,10 @@ export class IntegrationQueue extends BaseQueue {
 
     // attemptsMade already includes this attempt
     await this.record(job, IntegrationRecordStatusEnum.FAILED, job.attemptsMade, {
-      willRetry: !(error instanceof IntegrationAuthError) && job.attemptsMade < maxAttempts,
+      willRetry:
+        !(error instanceof IntegrationAuthError) &&
+        !isFinalAppError(error) &&
+        job.attemptsMade < maxAttempts,
       error: error?.message || job.failedReason || 'Unknown error'
     })
   }

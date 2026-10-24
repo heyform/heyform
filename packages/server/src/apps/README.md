@@ -15,7 +15,9 @@ from `./types`. The definition drives both sides:
 3. Add its logo to `packages/webapp/public/static/` and set `icon` to `/static/<file>`.
 4. Optionally translate it in the webapp locales under `form.integrations.apps.<id>` (see below).
 
-The webhook (`webhook.ts`) is the smallest complete example:
+The webhook (`webhook.ts`) is the smallest complete example. Google Sheets (`googlesheets.ts`)
+shows OAuth2, options loaded from the service, a setting shown only for one choice, and a
+`validate` that uses the account and normalises what was entered.
 
 ```ts
 import { assertSafeOutboundRequest, assertSafeOutboundUrl } from '@utils'
@@ -48,37 +50,83 @@ export default defineApp({
 
 ## Definition
 
-| Field         | Description                                                                                                    |
-| ------------- | -------------------------------------------------------------------------------------------------------------- |
-| `id`          | Unique id, stored on each integration. Never change it once released.                                          |
-| `name`        | Display name.                                                                                                  |
-| `description` | One sentence shown in the integrations list and settings modal.                                                |
-| `icon`        | Path of the logo served by the server, e.g. `/static/webhook.png`.                                             |
-| `auth`        | How HeyForm authenticates with the app's service: `none` (default), `apiKey` or `oauth2`. See below.           |
-| `settings`    | Fields the form owner fills in. See below.                                                                     |
-| `queue`       | Optional retry and timeout options for the app's delivery jobs. See below.                                     |
-| `validate`    | Optional. Receives the config after the generic checks; throw a `BadRequestException` to reject it.            |
-| `run`         | Receives `{ config, submission, form, auth }` for each submission. Throwing fails the job, which Bull retries. |
+| Field         | Description                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------- |
+| `id`          | Unique id, stored on each integration. Never change it once released.                                |
+| `name`        | Display name.                                                                                        |
+| `description` | One sentence shown in the integrations list and settings modal.                                      |
+| `icon`        | Path of the logo served by the server, e.g. `/static/webhook.png`.                                   |
+| `auth`        | How HeyForm authenticates with the app's service: `none` (default), `apiKey` or `oauth2`. See below. |
+| `settings`    | Fields the form owner fills in. See below.                                                           |
+| `queue`       | Optional retry and timeout options for the app's delivery jobs. See below.                           |
+| `validate`    | Optional. Receives the config after the generic checks. See [Validating](#validating).               |
+| `run`         | Receives `{ config, submission, form, auth }` for each submission. See [Errors](#errors).            |
 
 ## Settings
 
 Every setting has `type`, `name` (its key in the config), `label`, and optionally `description`,
-`placeholder`, `required` and `defaultValue`.
+`placeholder`, `required`, `defaultValue` and `visibleWhen`.
 
-| `type`     | Renders as      | Stored value | Extra props                              |
-| ---------- | --------------- | ------------ | ---------------------------------------- |
-| `text`     | Input           | string       |                                          |
-| `url`      | Input           | string       | Must be an `http://` or `https://` URL.  |
-| `textarea` | Multi-line text | string       |                                          |
-| `select`   | Select          | string       | `options: { label, value }[]`, required. |
-| `switch`   | Switch          | boolean      | Missing values are stored as `false`.    |
+| `type`     | Renders as      | Stored value | Extra props                                                  |
+| ---------- | --------------- | ------------ | ------------------------------------------------------------ |
+| `text`     | Input           | string       |                                                              |
+| `url`      | Input           | string       | Must be an `http://` or `https://` URL.                      |
+| `textarea` | Multi-line text | string       |                                                              |
+| `select`   | Select          | string       | `options: { label, value }[]`, or `loadOptions` (see below). |
+| `switch`   | Switch          | boolean      | Missing values are stored as `false`.                        |
+
+`visibleWhen: { <name>: <value> }` shows a setting only while each named setting, declared before
+it, has that value. A hidden setting isn't required and isn't stored:
+
+```ts
+{ type: 'switch', name: 'createSpreadsheet', label: 'Create a new spreadsheet' },
+{ type: 'text', name: 'spreadsheet', label: 'Spreadsheet URL', required: true,
+  visibleWhen: { createSpreadsheet: false } }
+```
+
+### Loaded options
+
+A `select` can load its options from the app's service instead, e.g. the tabs of a spreadsheet:
+
+```ts
+{
+  type: 'select',
+  name: 'sheet',
+  label: 'Tab',
+  dependsOn: ['spreadsheet'],
+  loadOptions: async ({ config, auth }) => {
+    const tabs = await listTabs(auth.accessToken, config.spreadsheet)
+    return tabs.map(tab => ({ label: tab.title, value: String(tab.id) }))
+  }
+}
+```
+
+The webapp calls `loadOptions` through the `integrationSettingOptions` query when the settings
+open, and again when the account or a setting named in `dependsOn` changes (not while one of them
+is blank). It receives the values in the form as `config`, not yet validated, and `auth` for the
+key or account being picked, with a fresh access token as in `run`. An `AppError` it throws shows
+under the select. HeyForm keeps the first 500 options, drops those without a value (or one over
+500 characters) and shortens labels to 200 characters.
+
+The server can't check a saved value against options it loads, only that it's text, so check it
+in `validate`.
+
+### Validating
 
 When settings are saved, the server:
 
-1. rejects a missing or blank `required` value, after applying `defaultValue`;
-2. checks each value's type, URL format and that a select value is one of its `options`;
-3. drops any key that isn't a declared setting;
-4. calls the app's `validate` with the cleaned config, then stores that config.
+1. skips settings hidden by `visibleWhen`;
+2. rejects a missing or blank `required` value, after applying `defaultValue`;
+3. checks each value's type, URL format and that a select value is one of its fixed `options`;
+4. drops any key that isn't a declared, visible setting;
+5. calls the app's `validate(config, { form, auth })` with the cleaned config, then stores that
+   config, or the config `validate` returns, and sends the stored config back to the settings form.
+
+`auth` is the key or account being saved, as `run` would get it, so `validate` can check the
+config against the service and normalise it, e.g. reduce a pasted URL to an id, or create the
+resource and store its id. Throw an `AppError` (or a `BadRequestException`) to reject the config;
+its message shows in the settings form. If the account needs reconnecting, saving fails before
+`validate` runs.
 
 ## Auth
 
@@ -115,8 +163,8 @@ export default defineApp({
 
 ### OAuth2
 
-`provider` is the id of a provider in `oauth2-providers.ts`. None ships yet; an app naming a
-provider that isn't there is hidden, like one whose provider has no credentials. To add one, give
+`provider` is the id of a provider in `oauth2-providers.ts` (only `google` so far); an app naming
+a provider that isn't there is hidden, like one whose provider has no credentials. To add one, give
 its authorize, token and OpenID Connect userinfo URLs, the scopes that let the userinfo endpoint
 identify the account (`identityScopes`, e.g. `openid email`), and its revoke URL (RFC 7009) if it
 has one, then add it to `oauth2Providers`:
@@ -149,6 +197,18 @@ client per provider, once:
 Form owners then only click **Connect <provider> account** and sign in. Until both variables are
 set, apps using that provider are hidden.
 
+**Google.** In the [Google Cloud console](https://console.cloud.google.com/), in one project:
+
+1. enable the **Google Sheets API** (APIs & Services → Library);
+2. configure the **OAuth consent screen** and set its publishing status to **In production**. It
+   can stay unverified for your own users, who'll see an "unverified app" warning when they
+   connect. Or make it **Internal** if everyone is in your Google Workspace. In **Testing**, Google
+   expires refresh tokens after 7 days, so every connection would need reconnecting weekly;
+3. create an **OAuth client ID** of type **Web application**, with
+   `${APP_HOMEPAGE_URL}/api/integrations/oauth/callback` as an authorised redirect URI;
+4. set `GOOGLE_INTEGRATION_CLIENT_ID` and `GOOGLE_INTEGRATION_CLIENT_SECRET` to its client ID and
+   secret, and restart the server.
+
 **Connections belong to the workspace.** Connecting an account stores it once for the form's
 workspace (team), identified by the provider's account id (`sub`), with its email shown to the team.
 Connecting the same account again, from any form and by any member, updates that connection rather
@@ -165,7 +225,7 @@ whole grant, i.e. every token this server holds for that account, so the grant i
 another workspace on the server still has the same account connected. Deleting an integration doesn't touch the connection.
 
 When a job runs, HeyForm refreshes the connection's access token if it has expired (there's no
-scheduled refresh). One refresh runs at a time per connection (a Redis lock), and the others use
+scheduled refresh), and so does loading options or saving settings with the account. One refresh runs at a time per connection (a Redis lock), and the others use
 its token, so integrations sharing a connection don't race. If the provider rejects the refresh
 token (`invalid_grant`, e.g. access was revoked), the connection and every active integration using
 it are marked as needing reconnection and the job stops retrying. Network errors and provider
@@ -211,7 +271,28 @@ queue: {
 ```
 
 Credential errors that a retry can't fix (no API key saved, a revoked OAuth grant) fail the job
-without further attempts.
+without further attempts, as does an `AppError` that isn't retryable (see [Errors](#errors)).
+
+## Errors
+
+Throw an `AppError` from `run`, `validate` or `loadOptions` to say what went wrong and whether
+another try can help:
+
+```ts
+import { AppError } from './types'
+
+throw new AppError('The spreadsheet was not found', { retryable: false })
+
+// 401 → unauthorized; 408, 429 and 5xx → retryable; other 4xx → not retryable
+throw AppError.fromStatus(response.statusCode, `Example rejected the request`)
+```
+
+| Option         | Default | Effect                                                                                                                                                                                                                                                               |
+| -------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `retryable`    | `true`  | `false` fails the delivery without further attempts, e.g. for a deleted resource.                                                                                                                                                                                    |
+| `unauthorized` | `false` | The service rejected the access token before it expired, e.g. access was revoked. HeyForm refreshes the token and calls the app once more. If the provider refuses the refresh, the connection needs reconnecting and the submission waits, as for an expired token. |
+
+Any other error fails the attempt, and Bull retries it.
 
 ## Delivery log
 
@@ -245,6 +326,7 @@ definition, so translations are optional:
     "<name>": {
       "label": "...",
       "description": "...",
+      "placeholder": "...",
       "options": { "<value>": "..." }
     }
   }
@@ -252,3 +334,4 @@ definition, so translations are optional:
 ```
 
 Keep option values to letters, digits, `-` and `_`, since they become part of the translation key.
+Loaded options are shown as the app returns them.
