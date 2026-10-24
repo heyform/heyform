@@ -1,18 +1,18 @@
-import { IconDots } from '@tabler/icons-react'
+import { IconPlus } from '@tabler/icons-react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WorkspaceService } from '@/services'
-import { useParam, useRouter } from '@/utils'
+import { useParam } from '@/utils'
 
 import { Async, Avatar, Button, Repeat, Tooltip } from '@/components'
-import { useWorkspaceStore } from '@/store'
+import { useAppStore, useWorkspaceStore } from '@/store'
 
 export default function ProjectMembers() {
   const { t } = useTranslation()
 
-  const router = useRouter()
-  const { workspaceId, projectId } = useParam()
+  const { openModal } = useAppStore()
+  const { workspaceId } = useParam()
   const { project, members, setMembers } = useWorkspaceStore()
 
   const exists = useMemo(
@@ -51,20 +51,16 @@ export default function ProjectMembers() {
           ))}
         </Async>
 
-        <Tooltip label={t('project.members.headline')}>
-          <Button.Link
-            className="ring-foreground bg-foreground relative z-10"
+        <Tooltip label={t('project.members.addMember', { name: project?.name })}>
+          <Button.Ghost
+            className="hover:bg-foreground group rounded-full !p-0"
             size="md"
             iconOnly
-            aria-label={t('project.members.headline')}
-            onClick={() =>
-              router.push(`/workspace/${workspaceId}/project/${projectId}/members`, {
-                extend: false
-              })
-            }
+            aria-label={t('project.members.addMember', { name: project?.name })}
+            onClick={() => openModal('ProjectMembersModal')}
           >
-            <IconDots className="h-5 w-5" />
-          </Button.Link>
+            <IconPlus className="text-secondary group-hover:text-primary h-5 w-5" />
+          </Button.Ghost>
         </Tooltip>
       </div>
     </div>

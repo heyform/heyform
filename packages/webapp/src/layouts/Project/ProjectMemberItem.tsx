@@ -18,15 +18,15 @@ export const ProjectMemberItem: FC<ProjectMemberItemProps & DOMProps> = ({ membe
 
   return (
     <div className="py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-4">
           <Avatar
             className="flex-shrink-0"
             src={member.avatar}
             fallback={member.name}
             resize={{ width: 100, height: 100 }}
           />
-          <div className="text-sm">
+          <div className="min-w-0 break-words text-sm">
             <div className="font-medium">
               <span>{member.name}</span>
               {member.isYou && (
@@ -110,7 +110,12 @@ export const ProjectJoinedMemberItem: FC<ProjectMemberItemProps> = ({ member }) 
 
     if (member.isYou) {
       return (
-        <Button size="md" loading={leaveLoading} onClick={handleLeave}>
+        <Button
+          className="shrink-0 rounded-lg"
+          size="md"
+          loading={leaveLoading}
+          onClick={handleLeave}
+        >
           {t('project.members.leave')}
         </Button>
       )
@@ -119,7 +124,7 @@ export const ProjectJoinedMemberItem: FC<ProjectMemberItemProps> = ({ member }) 
     if (workspace?.isOwner) {
       return (
         <Button
-          className="bg-error text-primary-light hover:bg-error dark:text-primary"
+          className="bg-error text-primary-light hover:bg-error dark:text-primary shrink-0 rounded-lg"
           size="md"
           loading={removeLoading}
           onClick={handleRemove}
@@ -175,7 +180,7 @@ export const ProjectRemainingMemberItem: FC<ProjectMemberItemProps> = ({ member 
 
   return (
     <ProjectMemberItem member={member}>
-      <Button.Ghost size="md" loading={loading} onClick={run}>
+      <Button.Ghost className="shrink-0 rounded-lg" size="md" loading={loading} onClick={run}>
         {t('project.members.add')}
       </Button.Ghost>
     </ProjectMemberItem>
