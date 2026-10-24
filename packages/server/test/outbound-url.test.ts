@@ -222,7 +222,33 @@ async function testSafeOutboundRequestPinsValidatedDnsAddresses() {
   })
 }
 
+async function testDevelopmentFakeIpImages() {
+  const options = (address = '198.18.7.108') => ({
+    allowedHosts: ['secure.gravatar.com'],
+    allowDevelopmentFakeIp: true,
+    dnsLookup: (async () => [{ address, family: 4 }]) as any
+  })
+  const url = 'https://secure.gravatar.com/avatar/example'
+  await withNodeEnv('development', async () => {
+    const result = await assertSafeOutboundRequest(url, options())
+    assert.strictEqual(
+      (await lookupOne(result.lookup, 'secure.gravatar.com')).address,
+      '198.18.7.108'
+    )
+    await assert.rejects(
+      assertSafeOutboundRequest(url, { ...options(), allowDevelopmentFakeIp: false })
+    )
+    await assert.rejects(assertSafeOutboundRequest(url, options('192.168.1.1')))
+    await assert.rejects(assertSafeOutboundRequest(url, { ...options(), allowedHosts: undefined }))
+    await assert.rejects(assertSafeOutboundRequest('https://other.example.com/image', options()))
+  })
+  await withNodeEnv('production', async () => {
+    await assert.rejects(assertSafeOutboundRequest(url, options()))
+  })
+}
+
 async function run() {
+  await testDevelopmentFakeIpImages()
   testBlocksAlternateIPv6Encodings()
   testAllowsPublicMappedAddresses()
   testPreservesKnownRanges()

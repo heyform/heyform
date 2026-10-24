@@ -60,6 +60,7 @@ export class ImageController {
   async index(@Query() input: ImageResizingDto, @Res() res: Response) {
     const { lookup, url } = await assertSafeOutboundRequest(input.url, {
       allowedHosts: ALLOWED_IMAGE_HOSTS,
+      allowDevelopmentFakeIp: process.env.HEYFORM_ALLOW_FAKE_IP_IMAGES === 'true',
       allowedPrivateOrigins: FIRST_PARTY_IMAGE_ORIGINS
     })
 

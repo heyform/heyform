@@ -7,6 +7,7 @@ import isURL from 'validator/lib/isURL'
 
 interface SafeOutboundUrlOptions {
   allowedHosts?: string[]
+  allowDevelopmentFakeIp?: boolean
   allowedPrivateOrigins?: string[]
   dnsLookup?: typeof dns.lookup
   skipDnsLookup?: boolean
@@ -416,7 +417,14 @@ async function validateSafeOutboundUrl(
         row =>
           isPrivateAddress(row.address) &&
           !(isDevelopmentHost && isLoopbackAddress(row.address)) &&
-          !isAllowedPrivateOrigin
+          !isAllowedPrivateOrigin &&
+          !(
+            options.allowDevelopmentFakeIp &&
+            process.env.NODE_ENV === 'development' &&
+            options.allowedHosts?.length &&
+            isIPv4(row.address) &&
+            /^198\.(18|19)\./.test(row.address)
+          )
       )
     ) {
       throw new BadRequestException('Private network URLs are not allowed')
