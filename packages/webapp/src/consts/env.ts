@@ -50,6 +50,10 @@ export function isRegistrationDisabled() {
   return helper.isTrue(window.heyform?.appDisableRegistration)
 }
 
+export function isSubmissionIpDisabled() {
+  return helper.isTrue(window.heyform?.disableSubmissionIp)
+}
+
 export function getVerifyEmailResendCooldownSeconds() {
   const value = Number(window.heyform?.verifyEmailResendCooldownSeconds)
   return Number.isFinite(value) && value > 0 ? value : 60

@@ -168,6 +168,10 @@ export class SubmissionType {
 
   @Field()
   endAt: number
+
+  // Only set when the form displays IP addresses
+  @Field({ nullable: true })
+  ip?: string
 }
 
 @ObjectType()

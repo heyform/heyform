@@ -35,6 +35,7 @@ export interface FormSettings {
   enableIpLimit?: boolean
   ipLimitCount?: number
   ipLimitTime?: number
+  displayIpAddress?: boolean
   enableProgress?: boolean
 
   // Email notification

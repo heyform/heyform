@@ -107,6 +107,9 @@ export const GOOGLE_RECAPTCHA_SECRET: string = process.env.GOOGLE_RECAPTCHA_SECR
 // Akismet
 export const AKISMET_KEY: string = process.env.AKISMET_KEY
 
+// Don't save respondents' IP addresses with their submissions
+export const DISABLE_SUBMISSION_IP: boolean = helper.isTrue(process.env.DISABLE_SUBMISSION_IP)
+
 // Social login
 export const APPLE_LOGIN_TEAM_ID: string = process.env.APPLE_LOGIN_TEAM_ID
 export const APPLE_LOGIN_WEB_CLIENT_ID: string = process.env.APPLE_LOGIN_WEB_CLIENT_ID

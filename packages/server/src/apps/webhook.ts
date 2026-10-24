@@ -1,6 +1,7 @@
 import got from 'got'
 
-import { assertSafeOutboundRequest, assertSafeOutboundUrl } from '@utils'
+import type { FormModel, SubmissionModel } from '@model'
+import { assertSafeOutboundRequest, assertSafeOutboundUrl, isSubmissionIpVisible } from '@utils'
 
 import { defineApp } from './types'
 
@@ -30,6 +31,20 @@ export async function readLimitedWebhookResponse(
   }
 
   return Buffer.concat(chunks, totalBytes).toString('utf8')
+}
+
+// The JSON body posted for each submission
+export function webhookPayload(submission: SubmissionModel, form: FormModel) {
+  return {
+    id: submission.id,
+    formId: form.id,
+    formName: form.name,
+    fields: form.fields,
+    answers: submission.answers,
+    hiddenFields: submission.hiddenFields,
+    variables: submission.variables,
+    ...(isSubmissionIpVisible(form) && { ip: submission.ip })
+  }
 }
 
 export default defineApp({
@@ -67,15 +82,7 @@ export default defineApp({
         socket: 10_000,
         request: 15_000
       },
-      json: {
-        id: submission.id,
-        formId: form.id,
-        formName: form.name,
-        fields: form.fields,
-        answers: submission.answers,
-        hiddenFields: submission.hiddenFields,
-        variables: submission.variables
-      }
+      json: webhookPayload(submission, form)
     })
 
     return readLimitedWebhookResponse(response)

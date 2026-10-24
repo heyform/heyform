@@ -1179,6 +1179,10 @@
           "times": "回数",
           "inEvery": "毎"
         },
+        "displayIpAddress": {
+          "headline": "回答者の IP アドレスを表示",
+          "subHeadline": "提出リスト、CSV エクスポート、Webhook に各回答者の IP アドレスを表示します。"
+        },
         "quotaLimit": {
           "headline": "提出数の制限",
           "subHeadline": "これは、フォームで許可される特定の総提出数を設定することができます。",
@@ -1265,6 +1269,7 @@
         "website": "ウェブサイト",
         "inputTable": "入力テーブル",
         "submitDate": "提出日",
+        "ipAddress": "IP アドレス",
         "hiddenFields": "非表示フィールド",
         "contactInfo": "連絡先情報",
         "choices": "選択肢",

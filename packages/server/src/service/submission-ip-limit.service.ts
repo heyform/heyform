@@ -2,8 +2,18 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
+import { DISABLE_SUBMISSION_IP, FORM_ENCRYPTION_KEY } from '@environments'
 import { helper, timestamp } from '@heyform-inc/utils'
 import { FormModel, SubmissionIpLimitModel } from '@model'
+import { hmac } from '@utils'
+
+// When submission IPs mustn't be stored, count submissions against a keyed
+// hash of the address instead, so the limit still works. Returns the key in
+// use and the key the other setting would use.
+function limitKeys(ip: string): [string, string] {
+  const hashed = hmac(ip, FORM_ENCRYPTION_KEY, 'sha256')
+  return DISABLE_SUBMISSION_IP ? [hashed, ip] : [ip, hashed]
+}
 
 @Injectable()
 export class SubmissionIpLimitService {
@@ -20,15 +30,42 @@ export class SubmissionIpLimitService {
       expiredAt = timestamp() + form.settings.ipLimitTime!
     }
 
-    const limit = await this.submissionIpLimitModel.findOne({
+    const [key, otherKey] = limitKeys(ip)
+    let limit = await this.submissionIpLimitModel.findOne({
       formId: form.id,
-      ip
+      ip: key
     })
+
+    if (!limit) {
+      // A count kept before DISABLE_SUBMISSION_IP changed: move it to the
+      // current key, so switching doesn't reset the limit and, when turning
+      // it on, the raw address is replaced by its hash
+      limit = await this.submissionIpLimitModel.findOneAndUpdate(
+        {
+          formId: form.id,
+          ip: otherKey
+        },
+        {
+          ip: key
+        },
+        {
+          new: true
+        }
+      )
+    }
+
+    if (!limit) {
+      // Another submission may have just moved it
+      limit = await this.submissionIpLimitModel.findOne({
+        formId: form.id,
+        ip: key
+      })
+    }
 
     if (!limit) {
       await this.create({
         formId: form.id,
-        ip,
+        ip: key,
         count: 1,
         expiredAt
       })

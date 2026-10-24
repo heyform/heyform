@@ -1183,6 +1183,10 @@
           "times": "Zeiten",
           "inEvery": "in jeder"
         },
+        "displayIpAddress": {
+          "headline": "IP-Adressen der Teilnehmer anzeigen",
+          "subHeadline": "Zeigt die IP-Adresse jedes Teilnehmers in der Tabelle der Einsendungen, in CSV-Exporten und in Webhooks an."
+        },
         "quotaLimit": {
           "headline": "Begrenzen Sie die Anzahl der Einsendungen",
           "subHeadline": "Damit können Sie eine spezifische Gesamtanzahl von erlaubten Einsendungen für Ihr Formular festlegen.",
@@ -1269,6 +1273,7 @@
         "website": "Webseite",
         "inputTable": "Eingabetabelle",
         "submitDate": "Einreichungsdatum",
+        "ipAddress": "IP-Adresse",
         "hiddenFields": "Versteckte Felder",
         "contactInfo": "Kontaktinformationen",
         "choices": "Auswahlmöglichkeiten",
