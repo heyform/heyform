@@ -3,7 +3,7 @@ import { useRequest } from 'ahooks'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getIntegrationDescription } from './utils'
+import { getIntegrationAuth, getIntegrationDescription } from './utils'
 import { IntegrationService } from '@/services'
 import { useParam } from '@/utils'
 import { helper } from '@heyform-inc/utils'
@@ -69,7 +69,25 @@ const IntegrationItem: FC<IntegrationItemProps> = ({ app }) => {
     })
   }
 
+  const needsReconnect = app.integration?.status === INTEGRATION_STATUS_ENUM.NEEDS_RECONNECT
+
   const children = useMemo(() => {
+    if (needsReconnect) {
+      return (
+        <div className="flex items-center gap-x-1">
+          <Button size="sm" onClick={handleConnect}>
+            {t('form.integrations.auth.reconnect')}
+          </Button>
+
+          <Tooltip label={t('components.delete')}>
+            <Button.Link size="sm" loading={deleteLoading} iconOnly onClick={deleteRun}>
+              <IconTrash className="h-5 w-5" />
+            </Button.Link>
+          </Tooltip>
+        </div>
+      )
+    }
+
     switch (app.status) {
       case APP_STATUS_ENUM.ACTIVE:
         return (
@@ -97,7 +115,7 @@ const IntegrationItem: FC<IntegrationItemProps> = ({ app }) => {
           </Button>
         )
     }
-  }, [handleConnect, t, deleteLoading])
+  }, [handleConnect, t, deleteLoading, needsReconnect])
 
   return (
     <li className="hf-card border-input cursor-default rounded-lg border px-6 py-6 text-sm">
@@ -117,6 +135,13 @@ const IntegrationItem: FC<IntegrationItemProps> = ({ app }) => {
       </div>
       <div className="mt-2 font-medium">{app.name}</div>
       <div className="text-secondary mt-1">{getIntegrationDescription(t, app)}</div>
+      {needsReconnect && (
+        <div className="text-error mt-2">
+          {t('form.integrations.auth.needsReconnect', {
+            name: getIntegrationAuth(t, app).providerName
+          })}
+        </div>
+      )}
     </li>
   )
 }

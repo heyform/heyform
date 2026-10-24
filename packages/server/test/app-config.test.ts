@@ -187,6 +187,7 @@ async function testWebhookAcceptsPublicEndpoint() {
 function createResolver() {
   const saved: Array<{ formId: string; appId: string; updates: Record<string, any> }> = []
   const integrationService = {
+    findOne: async () => null,
     createOrUpdate: async (formId: string, appId: string, updates: Record<string, any>) => {
       saved.push({ formId, appId, updates })
       return 'integration_1'
@@ -194,7 +195,8 @@ function createResolver() {
   }
   const resolver = new UpdateIntegrationSettingsResolver(
     new AppService(),
-    integrationService as any
+    integrationService as any,
+    {} as any
   )
 
   return { resolver, saved }

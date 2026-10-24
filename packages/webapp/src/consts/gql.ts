@@ -761,6 +761,9 @@ export const FORM_INTEGRATIONS_GQL = gql`
       appId
       config
       status
+      connected
+      connectionId
+      apiKeyHint
     }
   }
 `
@@ -821,6 +824,13 @@ export const APPS_GQL = gql`
       name
       description
       icon
+      auth {
+        type
+        provider
+        providerName
+        label
+        description
+      }
       settings {
         type
         name
@@ -1086,8 +1096,50 @@ export const UPDATE_INTEGRATION_STATUS_GQL = gql`
   }
 `
 
+export const INTEGRATION_CONNECTIONS_GQL = gql`
+  query integrationConnections($input: IntegrationInput!) {
+    integrationConnections(input: $input) {
+      id
+      provider
+      providerName
+      accountEmail
+      accountName
+      connectedBy
+      status
+      statusReason
+      hasScopes
+    }
+  }
+`
+
+export const TEAM_INTEGRATION_CONNECTIONS_GQL = gql`
+  query teamIntegrationConnections($input: TeamDetailInput!) {
+    teamIntegrationConnections(input: $input) {
+      id
+      provider
+      providerName
+      accountEmail
+      accountName
+      connectedBy
+      status
+      statusReason
+      forms {
+        id
+        name
+      }
+      canDisconnect
+    }
+  }
+`
+
+export const DISCONNECT_INTEGRATION_CONNECTION_GQL = gql`
+  mutation disconnectIntegrationConnection($input: IntegrationConnectionInput!) {
+    disconnectIntegrationConnection(input: $input)
+  }
+`
+
 export const DELETE_INTEGRATION_SETTINGS_GQL = gql`
-  mutation deleteIntegrationSettings($input: ThirdPartyInput!) {
+  mutation deleteIntegrationSettings($input: IntegrationInput!) {
     deleteIntegrationSettings(input: $input)
   }
 `

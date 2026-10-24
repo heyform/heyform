@@ -21,6 +21,7 @@
     "test:e2e:docker": "node test/e2e/scripts/run-with-docker.js",
     "lint": "eslint \"src/**/*.ts\" --quiet --fix",
     "migrate:seed": "node ./scripts/migrate-seed.js",
+    "integrations:reencrypt": "ts-node --transpile-only -r tsconfig-paths/register src/cli/reencrypt-integration-secrets.ts",
     "prestart": "pnpm run migrate:seed",
     "prebuild": "rimraf dist"
   },

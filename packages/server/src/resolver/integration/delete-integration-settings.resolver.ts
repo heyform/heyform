@@ -14,6 +14,8 @@ export class DeleteIntegrationSettingsResolver {
     @Args('input')
     input: IntegrationInput
   ): Promise<boolean> {
+    // A connected account belongs to the team and stays connected; it's
+    // disconnected from the team's settings
     return this.integrationService.delete(input.formId, input.appId)
   }
 }

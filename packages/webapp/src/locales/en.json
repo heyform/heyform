@@ -659,6 +659,20 @@
         "next": "Next"
       }
     },
+    "connectedAccounts": {
+      "title": "Connected accounts",
+      "description": "Accounts connected for integrations. Everyone in the workspace can use them on any form.",
+      "empty": "No accounts are connected yet. Connect one from a form’s integrations.",
+      "connectedBy": "Connected by {{name}}",
+      "active": "Connected",
+      "needsReconnect": "Needs reconnecting",
+      "forms_one": "Used by {{count}} form: {{names}}",
+      "forms_other": "Used by {{count}} forms: {{names}}",
+      "unused": "Not used by any form",
+      "disconnect": "Disconnect",
+      "disconnectHeadline": "Disconnect {{account}}?",
+      "disconnectDescription": "HeyForm will stop using this account and ask {{provider}} to revoke its access. Integrations using it will pause, and their submissions will wait until someone picks another account or connects this one again."
+    },
     "exportData": {
       "title": "Export Data",
       "description": "Get an email with all your forms, settings in one file.",
@@ -1105,6 +1119,24 @@
         "database": {
           "headline": "Database"
         }
+      },
+      "auth": {
+        "apiKey": "API key",
+        "apiKeySaved": "A key is saved ({{hint}}). Leave this blank to keep it.",
+        "connectDescription": "Connect your {{name}} account so HeyForm can send submissions to it.",
+        "connectAccount": "Connect {{name}} account",
+        "reconnect": "Reconnect",
+        "reconnectAccount": "Reconnect {{name}} account",
+        "needsReconnect": "Your {{name}} account needs reconnecting. Deliveries are paused until then.",
+        "accessDenied": "Access to your {{name}} account wasn't granted.",
+        "connectFailed": "Couldn't connect your {{name}} account. Please try again.",
+        "account": "Account",
+        "accountLabel": "{{email}} (connected by {{name}})",
+        "accountNeedsReconnect": "{{label}} · needs reconnecting",
+        "accountMissingAccess": "{{label}} · doesn't allow {{app}} yet",
+        "connectAnother": "Connect another {{name}} account",
+        "accountShared": "Accounts are shared with everyone in this workspace.",
+        "accountsFailed": "Couldn't load the workspace's accounts."
       },
       "apps": {
         "webhook": {

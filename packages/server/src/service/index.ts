@@ -25,4 +25,7 @@ export { BrandKitService } from './brand-kit.service'
 export { ChangelogService } from './changelog.service'
 export { AppService } from './app.service'
 export { IntegrationService } from './integration.service'
+// Only injectable classes here: app.module registers every export as a provider
+export { IntegrationConnectionService } from './integration-connection.service'
+export { IntegrationAuthService } from './integration-auth.service'
 export { OpenAIService } from './open-ai.service'

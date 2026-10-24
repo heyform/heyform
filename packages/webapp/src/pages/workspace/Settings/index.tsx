@@ -4,6 +4,7 @@ import { AnchorNavigation } from '@/components'
 
 import BrandKitModal from './BrandKitModal'
 import WorkspaceBranding from './Branding'
+import WorkspaceConnectedAccounts from './ConnectedAccounts'
 import WorkspaceDeletion from './Deletion'
 import WorkspaceDeletionModal from './DeletionModal'
 import WorkspaceGeneral from './General'
@@ -23,6 +24,7 @@ export default function WorkspaceSettings() {
             <div className="flex-1 p-6">
               <WorkspaceGeneral />
               <WorkspaceBranding />
+              <WorkspaceConnectedAccounts />
               <WorkspaceDeletion />
             </div>
           </div>
