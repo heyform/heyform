@@ -102,3 +102,32 @@ export class UpdateIntegrationStatusInput extends IntegrationInput {
   @IsEnum(IntegrationStatusEnum)
   status: IntegrationStatusEnum
 }
+
+@ObjectType()
+export class IntegrationRecordType {
+  @Field()
+  id: string
+
+  @Field()
+  submissionId: string
+
+  // IntegrationRecordStatusEnum: 0 waiting for reconnection, 1 succeeded, 2 failed
+  @Field(type => Number)
+  status: number
+
+  @Field()
+  attempt: number
+
+  @Field()
+  maxAttempts: number
+
+  @Field()
+  willRetry: boolean
+
+  @Field({ nullable: true })
+  error?: string
+
+  // Unix seconds
+  @Field()
+  createdAt: number
+}

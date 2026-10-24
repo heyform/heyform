@@ -328,18 +328,24 @@ export class IntegrationAuthService {
 
   /**
    * After an account is connected (again): integrations using it that were
-   * waiting for a reconnect become active again.
+   * waiting for a reconnect become active, and every active one sends the
+   * submissions that waited.
    */
   async resumeConnection(connectionId: string): Promise<void> {
     const integrations = await this.integrationService.findAllByConnection(connectionId)
 
     for (const integration of integrations) {
-      if (integration.status === IntegrationStatusEnum.NEEDS_RECONNECT) {
-        await this.integrationService.update(integration.id, {
-          status: this.hasConfig(integration)
-            ? IntegrationStatusEnum.ACTIVE
-            : IntegrationStatusEnum.PENDING
-        })
+      let status = integration.status
+
+      if (status === IntegrationStatusEnum.NEEDS_RECONNECT) {
+        status = this.hasConfig(integration)
+          ? IntegrationStatusEnum.ACTIVE
+          : IntegrationStatusEnum.PENDING
+        await this.integrationService.update(integration.id, { status })
+      }
+
+      if (status === IntegrationStatusEnum.ACTIVE) {
+        await this.integrationService.resendWaiting(integration)
       }
     }
   }
@@ -560,7 +566,7 @@ export class IntegrationAuthService {
     } catch (_) {
       // e.g. INTEGRATION_ENCRYPTION_KEY changed without keeping the old one as
       // INTEGRATION_ENCRYPTION_KEY_PREVIOUS. Like unreadable OAuth2 tokens,
-      // the key has to be entered again; deliveries pause until then.
+      // the key has to be entered again; submissions wait until then.
       return this.needsReconnect(
         integration,
         `The saved API key can't be decrypted with ${ENCRYPTION_KEYS}`,

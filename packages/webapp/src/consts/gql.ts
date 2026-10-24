@@ -764,6 +764,7 @@ export const FORM_INTEGRATIONS_GQL = gql`
       connected
       connectionId
       apiKeyHint
+      waitingCount
     }
   }
 `
@@ -1087,6 +1088,21 @@ export const GOOGLE_SHEETS_FIELDS_GQL = gql`
 export const UPDATE_INTEGRATION_SETTINGS_GQL = gql`
   mutation updateIntegrationSettings($input: UpdateIntegrationInput!) {
     updateIntegrationSettings(input: $input)
+  }
+`
+
+export const INTEGRATION_RECORDS_GQL = gql`
+  query integrationRecords($input: IntegrationInput!) {
+    integrationRecords(input: $input) {
+      id
+      submissionId
+      status
+      attempt
+      maxAttempts
+      willRetry
+      error
+      createdAt
+    }
   }
 `
 

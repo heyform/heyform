@@ -20,6 +20,7 @@ const tests = [
   'webhook.test.ts',
   'app-config.test.ts',
   'integration-auth.test.ts',
+  'integration-records.test.ts',
   'integration-secrets.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')

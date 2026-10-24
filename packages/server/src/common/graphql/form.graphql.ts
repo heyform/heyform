@@ -1354,6 +1354,10 @@ export class FormIntegrationType {
   // Masked end of the saved API key, e.g. `••••a1b2`
   @Field({ nullable: true })
   apiKeyHint?: string
+
+  // Submissions waiting for the integration to be reconnected
+  @Field({ nullable: true })
+  waitingCount?: number
 }
 
 @InputType()

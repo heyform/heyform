@@ -51,6 +51,8 @@ export interface IntegrationType {
   connectionId?: string
   // Masked end of the saved API key
   apiKeyHint?: string
+  // Submissions waiting for the integration to be reconnected
+  waitingCount?: number
 }
 
 // An account the team has connected at an OAuth2 provider
@@ -69,6 +71,19 @@ export interface IntegrationConnectionType {
   // Forms whose integrations use it
   forms?: { id: string; name: string }[]
   canDisconnect?: boolean
+}
+
+// One delivery attempt of a submission to an integration
+export interface IntegrationRecordType {
+  id: string
+  submissionId: string
+  status: number
+  attempt: number
+  maxAttempts: number
+  willRetry: boolean
+  error?: string
+  // Unix seconds
+  createdAt: number
 }
 
 export interface FormFieldType extends FormField {

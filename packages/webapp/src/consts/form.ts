@@ -516,6 +516,13 @@ export enum INTEGRATION_CONNECTION_STATUS_ENUM {
   NEEDS_RECONNECT = 2
 }
 
+export enum INTEGRATION_RECORD_STATUS_ENUM {
+  // Kept until the integration is reconnected, then sent
+  WAITING = 0,
+  SUCCEEDED = 1,
+  FAILED = 2
+}
+
 export const FORM_THEMES = [
   {
     fontFamily: 'Public Sans',

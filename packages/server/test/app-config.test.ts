@@ -191,7 +191,8 @@ function createResolver() {
     createOrUpdate: async (formId: string, appId: string, updates: Record<string, any>) => {
       saved.push({ formId, appId, updates })
       return 'integration_1'
-    }
+    },
+    resendWaiting: async () => 0
   }
   const resolver = new UpdateIntegrationSettingsResolver(
     new AppService(),
