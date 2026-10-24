@@ -1,0 +1,27 @@
+networks:
+  redis:
+  mongo:
+
+services:
+  mongo:
+    image: percona/percona-server-mongodb:4.4
+    restart: always
+    volumes:
+      # Persist MongoDB data
+      - mongodb_data:/data/db
+    ports:
+      - '27017:27017'
+
+  redis:
+    image: redis
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      # Persist redis data
+      - redis_data:/data
+    ports:
+      - '6379:6379'
+
+volumes:
+  mongodb_data:
+  redis_data:
