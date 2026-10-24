@@ -1179,6 +1179,10 @@
           "times": "razy",
           "inEvery": "w każdym"
         },
+        "displayIpAddress": {
+          "headline": "Pokazuj adresy IP respondentów",
+          "subHeadline": "Pokazuje adres IP każdego respondenta w tabeli zgłoszeń, eksportach CSV i webhookach."
+        },
         "quotaLimit": {
           "headline": "Ogranicz liczbę zgłoszeń",
           "subHeadline": "Pozwala to ustawić określoną całkowitą liczbę dozwolonych zgłoszeń dla Twojego formularza.",
@@ -1265,6 +1269,7 @@
         "website": "Strona internetowa",
         "inputTable": "Tabela wejściowa",
         "submitDate": "Data zgłoszenia",
+        "ipAddress": "Adres IP",
         "hiddenFields": "Ukryte pola",
         "contactInfo": "Informacje kontaktowe",
         "choices": "Wybory",

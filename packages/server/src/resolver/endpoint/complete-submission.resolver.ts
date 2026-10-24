@@ -8,6 +8,7 @@ import {
 } from '@heyform-inc/shared-types-enums'
 import { BadRequestException, Headers, UseGuards } from '@nestjs/common'
 
+import { DISABLE_SUBMISSION_IP } from '@environments'
 import { CompleteSubmissionInput, CompleteSubmissionType } from '@graphql'
 import { EndpointAnonymousIdGuard } from '@guard'
 import { applyLogicToFields, fieldValuesToAnswers, flattenFields } from '@heyform-inc/answer-utils'
@@ -195,7 +196,7 @@ export class CompleteSubmissionResolver {
         variables,
         startAt,
         endAt,
-        ip: client.ip,
+        ip: DISABLE_SUBMISSION_IP ? undefined : client.ip,
         userAgent: client.userAgent,
         status
       },

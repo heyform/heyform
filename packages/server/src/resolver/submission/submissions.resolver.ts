@@ -1,8 +1,9 @@
-import { Auth, FormGuard, Team } from '@decorator'
+import { Auth, Form, FormGuard, Team } from '@decorator'
 import { SubmissionsInput, SubmissionsType } from '@graphql'
-import { TeamModel } from '@model'
+import { FormModel, TeamModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { SubmissionService } from '@service'
+import { isSubmissionIpVisible } from '@utils'
 
 @Resolver()
 @Auth()
@@ -13,6 +14,7 @@ export class SubmissionsResolver {
   @FormGuard()
   async submissions(
     @Team() team: TeamModel,
+    @Form() form: FormModel,
     @Args('input') input: SubmissionsInput
   ): Promise<SubmissionsType> {
     const total = await this.submissionService.count({
@@ -29,7 +31,8 @@ export class SubmissionsResolver {
         category: input.category,
         labelId: input.labelId,
         page: input.page,
-        limit: input.limit
+        limit: input.limit,
+        withIp: isSubmissionIpVisible(form)
       })
     }
 

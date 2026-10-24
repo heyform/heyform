@@ -36,6 +36,7 @@ import {
   TableState,
   Tooltip
 } from '@/components'
+import { isSubmissionIpDisabled } from '@/consts'
 import { useAppStore, useFormStore } from '@/store'
 import { SubmissionType } from '@/types'
 
@@ -105,6 +106,8 @@ export default function FormSubmissions() {
     }
   )
 
+  const showIpAddress = !isSubmissionIpDisabled() && !!form?.settings?.displayIpAddress
+
   const fields = useMemo(() => {
     const submitDateField = {
       id: FieldKindEnum.SUBMIT_DATE,
@@ -128,8 +131,25 @@ export default function FormSubmissions() {
       title: row.name
     }))
 
-    return [submitDateField, ...questionFields, ...variables, ...hiddenFields] as FormField[]
-  }, [form?.drafts, form?.hiddenFields, form?.variables, t])
+    // The server only sends IP addresses when the form displays them
+    const ipAddressField = showIpAddress
+      ? [
+          {
+            id: FieldKindEnum.IP_ADDRESS,
+            kind: FieldKindEnum.IP_ADDRESS,
+            title: t('form.builder.question.ipAddress')
+          }
+        ]
+      : []
+
+    return [
+      submitDateField,
+      ...questionFields,
+      ...variables,
+      ...hiddenFields,
+      ...ipAddressField
+    ] as FormField[]
+  }, [form?.drafts, form?.hiddenFields, form?.variables, showIpAddress, t])
 
   async function fetch({ current, pageSize }: TableFetchParams) {
     const { total, submissions } = await SubmissionService.submissions({
@@ -158,7 +178,17 @@ export default function FormSubmissions() {
           id: FieldKindEnum.SUBMIT_DATE,
           kind: FieldKindEnum.SUBMIT_DATE,
           value: row.endAt || 0
-        }
+        },
+
+        ...(row.ip
+          ? [
+              {
+                id: FieldKindEnum.IP_ADDRESS,
+                kind: FieldKindEnum.IP_ADDRESS,
+                value: row.ip
+              }
+            ]
+          : [])
       ] as Answer[]
     }))
 

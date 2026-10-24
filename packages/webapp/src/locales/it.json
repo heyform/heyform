@@ -1241,6 +1241,10 @@
           "times": "volte",
           "inEvery": "ogni"
         },
+        "displayIpAddress": {
+          "headline": "Mostra gli indirizzi IP dei partecipanti",
+          "subHeadline": "Mostra l'indirizzo IP di ogni partecipante nella tabella degli invii, nelle esportazioni CSV e nei webhook."
+        },
         "quotaLimit": {
           "headline": "Limita il numero di invii",
           "subHeadline": "Ti permette di impostare un numero massimo totale di invii consentiti per il modulo.",
@@ -1332,6 +1336,7 @@
         "website": "Sito web",
         "inputTable": "Tabella di input",
         "submitDate": "Data di invio",
+        "ipAddress": "Indirizzo IP",
         "hiddenFields": "Campi nascosti",
         "contactInfo": "Informazioni di contatto",
         "choices": "Scelte",

@@ -1312,6 +1312,10 @@
           "times": "times",
           "inEvery": "in every"
         },
+        "displayIpAddress": {
+          "headline": "Show respondents' IP addresses",
+          "subHeadline": "Show each respondent's IP address in the submissions table, CSV exports and webhooks."
+        },
         "quotaLimit": {
           "headline": "Limit the number of submissions",
           "subHeadline": "This allows you to set a specific total number of submissions allowed for your form.",
@@ -1403,6 +1407,7 @@
         "website": "Website",
         "inputTable": "Input table",
         "submitDate": "Submit date",
+        "ipAddress": "IP address",
         "hiddenFields": "Hidden fields",
         "contactInfo": "Contact info",
         "choices": "Choices",

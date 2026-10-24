@@ -21,6 +21,8 @@ interface FindSubmissionOptions {
   labelId?: string
   page?: number
   limit?: number
+  // Load the respondent's IP address too
+  withIp?: boolean
 }
 
 interface UpdateCategoryOptions {
@@ -64,7 +66,8 @@ export class SubmissionService {
     category,
     labelId,
     page = 1,
-    limit = 30
+    limit = 30,
+    withIp = false
   }: FindSubmissionOptions): Promise<SubmissionModel[]> {
     const conditions: Record<string, any> = {
       formId,
@@ -81,6 +84,7 @@ export class SubmissionService {
 
     return this.submissionModel
       .find(conditions)
+      .select(withIp ? {} : { ip: 0 })
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({
@@ -366,7 +370,7 @@ export class SubmissionService {
     return this.submissionModel.find(conditions)
   }
 
-  async findAllByForm(formId: string): Promise<SubmissionModel[]> {
+  async findAllByForm(formId: string, withIp = false): Promise<SubmissionModel[]> {
     let submissions = []
     const limit = 1000
     const submissionCount = await this.count({
@@ -377,7 +381,8 @@ export class SubmissionService {
       submissions = await this.findAll({
         formId,
         page: 1,
-        limit
+        limit,
+        withIp
       })
     } else {
       const promises = []
@@ -388,7 +393,8 @@ export class SubmissionService {
           this.findAll({
             formId,
             page: i,
-            limit
+            limit,
+            withIp
           })
         )
       }

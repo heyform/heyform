@@ -1246,6 +1246,10 @@
           "times": "veces",
           "inEvery": "cada"
         },
+        "displayIpAddress": {
+          "headline": "Mostrar las direcciones IP de los encuestados",
+          "subHeadline": "Muestra la dirección IP de cada encuestado en la tabla de respuestas, las exportaciones CSV y los webhooks."
+        },
         "quotaLimit": {
           "headline": "Limitar el número de respuestas",
           "subHeadline": "Esto te permite definir un número total específico de respuestas permitidas para tu formulario.",
@@ -1330,6 +1334,7 @@
         "website": "Sitio web",
         "inputTable": "Tabla de entrada",
         "submitDate": "Fecha de envío",
+        "ipAddress": "Dirección IP",
         "hiddenFields": "Campos ocultos",
         "contactInfo": "Información de contacto",
         "choices": "Opciones",

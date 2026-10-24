@@ -31,5 +31,6 @@ export interface SubmissionModel {
   variables?: Variable[]
   startAt?: number
   endAt?: number
+  ip?: string
   status: SubmissionStatusEnum
 }

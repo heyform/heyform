@@ -548,6 +548,10 @@ export class UpdateFormInput extends FormDetailInput {
 
   @Field({ nullable: true })
   @IsOptional()
+  displayIpAddress?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
   enableProgress?: boolean
 
   @Field({ nullable: true })
@@ -1000,6 +1004,9 @@ export class FormSettingType {
 
   @Field({ nullable: true })
   ipLimitTime?: number
+
+  @Field({ nullable: true })
+  displayIpAddress?: boolean
 
   @Field({ nullable: true })
   enableProgress?: boolean

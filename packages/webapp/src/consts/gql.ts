@@ -154,6 +154,7 @@ export const WORKSPACE_RECENT_FORMS_GQL = gql`
         enableIpLimit
         ipLimitCount
         ipLimitTime
+        displayIpAddress
         enableProgress
         enableQuestionList
         enableNavigationArrows
@@ -430,6 +431,7 @@ export const FORMS_GQL = gql`
         enableIpLimit
         ipLimitCount
         ipLimitTime
+        displayIpAddress
         enableProgress
         enableQuestionList
         enableNavigationArrows
@@ -520,6 +522,7 @@ export const FORM_SUMMARY_GQL = gql`
         enableIpLimit
         ipLimitCount
         ipLimitTime
+        displayIpAddress
         locale
         languages
         enableClosedMessage
@@ -567,6 +570,7 @@ export const FORM_DETAIL_GQL = gql`
         enableIpLimit
         ipLimitCount
         ipLimitTime
+        displayIpAddress
         enableProgress
         enableQuestionList
         enableNavigationArrows
@@ -872,6 +876,7 @@ export const SUBMISSIONS_GQL = gql`
         }
         variables
         endAt
+        ip
       }
     }
   }
