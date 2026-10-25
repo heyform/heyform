@@ -71,20 +71,25 @@ export function isEqual(arg1: unknown, arg2: unknown): boolean {
   return String(arg1) === String(arg2)
 }
 
+// An unanswered field has no text, so it must not match "undefined" or "null".
+function toText(arg: unknown): string {
+  return helper.isNil(arg) ? '' : String(arg)
+}
+
 export function isContains(arg1: unknown, arg2: unknown): boolean {
   if (helper.isArray(arg1)) {
     return arg1.includes(String(arg2))
   }
 
-  return String(arg1).includes(String(arg2))
+  return toText(arg1).includes(String(arg2))
 }
 
 export function isStartsWith(arg1: unknown, arg2: unknown): boolean {
-  return String(arg1).startsWith(String(arg2))
+  return toText(arg1).startsWith(String(arg2))
 }
 
 export function isEndsWith(arg1: unknown, arg2: unknown): boolean {
-  return String(arg1).endsWith(String(arg2))
+  return toText(arg1).endsWith(String(arg2))
 }
 
 export function isGreaterThan(arg1: unknown, arg2: unknown): boolean {

@@ -43,6 +43,27 @@ test('validate text condition', () => {
   }
 })
 
+test('validate text condition on an unanswered field', () => {
+  const field: FormField = {
+    id: 'id_short_text',
+    title: 'Short Text',
+    kind: FieldKindEnum.SHORT_TEXT
+  }
+
+  for (const values of [{}, { id_short_text: undefined }, { id_short_text: null }]) {
+    const check = (comparison: ComparisonEnum, expected: string) =>
+      validateCondition(field, { comparison, expected } as any, values as any)
+
+    expect(check(ComparisonEnum.CONTAINS, 'n')).toBe(false)
+    expect(check(ComparisonEnum.CONTAINS, 'null')).toBe(false)
+    expect(check(ComparisonEnum.DOES_NOT_CONTAIN, 'n')).toBe(true)
+    expect(check(ComparisonEnum.STARTS_WITH, 'un')).toBe(false)
+    expect(check(ComparisonEnum.STARTS_WITH, 'nu')).toBe(false)
+    expect(check(ComparisonEnum.ENDS_WITH, 'ed')).toBe(false)
+    expect(check(ComparisonEnum.ENDS_WITH, 'll')).toBe(false)
+  }
+})
+
 test('validate legal terms condition', () => {
   const field: FormField = {
     id: 'id_legal_terms',
