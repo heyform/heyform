@@ -90,3 +90,11 @@ test('should throw error if value length less then 10', () => {
     )
   }).toThrow('The number must be between 10 to undefined')
 })
+
+test('negative value should be verified if there is no min', () => {
+  const answers = fieldValuesToAnswers([field], {
+    NUMBER: -5
+  })
+
+  expect(answers[0].value).toBe(-5)
+})
