@@ -1,7 +1,7 @@
 import { Auth, FormGuard } from '@decorator'
 import { FormAnalyticInput, FormAnalyticResult, FormAnalyticType } from '@graphql'
 import { date, helper, parseJson } from '@heyform-inc/utils'
-import { FormAnalyticRangeEnum } from '@model'
+import { FormAnalyticRangeEnum, formAnalyticCacheKey } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { FormAnalyticService, RedisService } from '@service'
 
@@ -43,7 +43,7 @@ export class FormAnalyticResolver {
   @Query(returns => FormAnalyticType)
   @FormGuard()
   async formAnalytic(@Args('input') input: FormAnalyticInput): Promise<FormAnalyticType> {
-    const key = `form:${input.formId}:analytic:${input.range}`
+    const key = formAnalyticCacheKey(input.formId, input.range)
     const cache = await this.redisService.get(key)
 
     if (helper.isValid(cache)) {

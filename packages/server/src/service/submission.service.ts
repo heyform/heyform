@@ -10,7 +10,7 @@ import { Model } from 'mongoose'
 import { FormService } from './form.service'
 import { RedisService } from './redis.service'
 import { date, helper } from '@heyform-inc/utils'
-import { SubmissionModel } from '@model'
+import { SubmissionModel, clearFormAnalyticCache } from '@model'
 import { getUpdateQuery } from '@utils'
 
 const { isValid } = helper
@@ -267,6 +267,7 @@ export class SubmissionService {
 
   public async create(submission: SubmissionModel | any): Promise<string> {
     const result = await this.submissionModel.create(submission)
+    await clearFormAnalyticCache(this.redisService, submission.formId)
     return result.id
   }
 
