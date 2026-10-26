@@ -569,7 +569,7 @@ function validatePayment(rule: FieldsToValidateRules, value: AnswerValue) {
 
 function validateInt(value: any, min?: number, max?: number): boolean {
   const int = parseInt(value)
-  return (max ? int <= max : true) && (min === undefined || int >= min)
+  return (max ? int <= max : true) && (helper.isNil(min) || int >= min!)
 }
 
 function validateLength(value: AnswerValue, min?: number, max?: number): boolean {
