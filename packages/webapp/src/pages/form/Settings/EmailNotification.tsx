@@ -9,6 +9,12 @@ import {
   validateNotificationRecipients
 } from './notificationRecipients'
 
+const NOTIFICATION_OPTIONS = [
+  { name: 'notificationReplyToRespondent', key: 'replyToRespondent' },
+  { name: 'notificationSubjectRespondent', key: 'subjectRespondent' },
+  { name: 'notificationSkipOwner', key: 'skipOwner' }
+]
+
 export default function FormSettingsEmailNotification() {
   const { t } = useTranslation()
   const { tempSettings } = useFormStore()
@@ -30,30 +36,47 @@ export default function FormSettingsEmailNotification() {
           </Form.Item>
 
           {tempSettings?.enableEmailNotification && (
-            <Form.Item
-              className="mt-4"
-              name="_notificationRecipients"
-              label={t('form.settings.emailNotification.recipients.headline')}
-              description={t('form.settings.emailNotification.recipients.subHeadline', {
-                max: MAX_NOTIFICATION_RECIPIENTS
-              })}
-              rules={[
-                {
-                  validator: async (_, value?: string) => {
-                    const error = validateNotificationRecipients(parseNotificationRecipients(value))
+            <>
+              <Form.Item
+                className="mt-4"
+                name="_notificationRecipients"
+                label={t('form.settings.emailNotification.recipients.headline')}
+                description={t('form.settings.emailNotification.recipients.subHeadline', {
+                  max: MAX_NOTIFICATION_RECIPIENTS
+                })}
+                rules={[
+                  {
+                    validator: async (_, value?: string) => {
+                      const error = validateNotificationRecipients(
+                        parseNotificationRecipients(value)
+                      )
 
-                    if (error) {
-                      throw new Error(t(error.key, error.values))
+                      if (error) {
+                        throw new Error(t(error.key, error.values))
+                      }
                     }
                   }
-                }
-              ]}
-            >
-              <Input.TextArea
-                autoComplete="off"
-                placeholder={t('form.settings.emailNotification.recipients.placeholder')}
-              />
-            </Form.Item>
+                ]}
+              >
+                <Input.TextArea
+                  autoComplete="off"
+                  placeholder={t('form.settings.emailNotification.recipients.placeholder')}
+                />
+              </Form.Item>
+
+              {NOTIFICATION_OPTIONS.map(option => (
+                <Form.Item
+                  key={option.name}
+                  className="mt-4 [&_[data-slot=content]]:pt-1.5"
+                  name={option.name}
+                  label={t(`form.settings.emailNotification.${option.key}.headline`)}
+                  description={t(`form.settings.emailNotification.${option.key}.subHeadline`)}
+                  isInline
+                >
+                  <Switch />
+                </Form.Item>
+              ))}
+            </>
           )}
         </div>
       </div>
