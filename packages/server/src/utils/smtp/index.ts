@@ -17,6 +17,7 @@ export interface SmtpMessage {
   to: string
   subject: string
   html: string
+  replyTo?: string
 }
 
 export async function smtpSendMail(

@@ -611,6 +611,18 @@ export class UpdateFormInput extends FormDetailInput {
   @Field(type => [String], { nullable: true })
   @IsOptional()
   notificationRecipients?: string[]
+
+  @Field({ nullable: true })
+  @IsOptional()
+  notificationReplyToRespondent?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  notificationSubjectRespondent?: boolean
+
+  @Field({ nullable: true })
+  @IsOptional()
+  notificationSkipOwner?: boolean
 }
 
 @InputType()
@@ -1049,6 +1061,15 @@ export class FormSettingType {
 
   @Field(type => [String], { nullable: true })
   notificationRecipients?: string[]
+
+  @Field({ nullable: true })
+  notificationReplyToRespondent?: boolean
+
+  @Field({ nullable: true })
+  notificationSubjectRespondent?: boolean
+
+  @Field({ nullable: true })
+  notificationSkipOwner?: boolean
 
   @Field({ nullable: true })
   removeBranding?: boolean
