@@ -85,6 +85,9 @@ export interface Choice {
   // Quiz
   score?: number
   isExpected?: boolean
+
+  // Maximum number of responses for this choice, empty means unlimited
+  limit?: number
 }
 
 export interface Column {

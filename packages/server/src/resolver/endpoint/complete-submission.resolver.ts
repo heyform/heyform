@@ -28,6 +28,7 @@ import {
   GqlClient,
   assertFormIsAcceptingSubmissions,
   assertSafeSpecialFieldAnswers,
+  collectChoiceLimits,
   isSubmissionDiscarded,
   isTimeLimitUp,
   normalizeSubmissionHiddenFields,
@@ -207,6 +208,7 @@ export class CompleteSubmissionResolver {
       form.settings.quotaLimit! > 0
         ? form.settings.quotaLimit
         : undefined
+    const choiceLimits = collectChoiceLimits(flattenFields(form.fields, true), answers)
     const submissionId = await this.submissionService.createWithinQuota(
       {
         teamId: form.teamId,
@@ -222,7 +224,8 @@ export class CompleteSubmissionResolver {
         userAgent: client.userAgent,
         status
       },
-      quotaLimit
+      quotaLimit,
+      choiceLimits
     )
 
     // Payment
