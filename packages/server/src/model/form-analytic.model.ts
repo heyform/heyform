@@ -9,30 +9,75 @@ export enum FormAnalyticRangeEnum {
   YEAR = '1y'
 }
 
-// The formAnalytic query caches its result per range. Anything that changes the
-// numbers (a visit, a submission) clears every range for the form.
-export function formAnalyticCacheKey(formId: string, range: FormAnalyticRangeEnum): string {
-  return `form:${formId}:analytic:${range}`
+// The formAnalytic query caches its result per range, under a key that carries
+// the form's cache generation. Anything that changes the numbers (a visit, a
+// submission) bumps the generation instead of deleting keys, so a query that
+// read the old generation and finishes late writes to a key nobody reads again.
+const GENERATION_TTL_SECONDS = 24 * 60 * 60
+export const FORM_ANALYTIC_CACHE_CLEAR_TIMEOUT_MS = 500
+
+interface FormAnalyticCacheRedis {
+  get(key: string): Promise<string | null>
+  multi(commands: any[][]): Promise<unknown>
 }
 
-export function formAnalyticCacheKeys(formId: string): string[] {
-  return Object.values(FormAnalyticRangeEnum).map(range => formAnalyticCacheKey(formId, range))
+export function formAnalyticGenerationKey(formId: string): string {
+  return `form:${formId}:analytic:generation`
+}
+
+export function formAnalyticCacheKey(
+  formId: string,
+  range: FormAnalyticRangeEnum,
+  generation: string
+): string {
+  return `form:${formId}:analytic:${range}:${generation}`
+}
+
+export async function getFormAnalyticCacheGeneration(
+  redisService: Pick<FormAnalyticCacheRedis, 'get'>,
+  formId: string
+): Promise<string> {
+  return (await redisService.get(formAnalyticGenerationKey(formId))) ?? '0'
 }
 
 /**
- * Drop the cached formAnalytic results for a form, so the overview reflects a
- * visit or submission straight away instead of up to 10 minutes later. Best
- * effort: a cache miss only costs a recompute, so a Redis error must not fail
- * the visit or the submission that triggered it.
+ * Invalidate the cached formAnalytic results for a form, so the overview
+ * reflects a visit or submission straight away instead of up to 10 minutes
+ * later. Best effort and bounded: a stale overview costs less than a visit or
+ * submission that fails or hangs, so a Redis error is ignored and an
+ * unresponsive Redis is given up on after the timeout.
+ *
+ * The generation outlives every cached result (10 minutes), so when it expires
+ * and restarts at 0, no result cached under an old 0 is still alive.
  */
 export async function clearFormAnalyticCache(
-  redisService: { del(key: string): Promise<unknown> },
-  formId: string
+  redisService: Pick<FormAnalyticCacheRedis, 'multi'>,
+  formId: string,
+  timeoutMs = FORM_ANALYTIC_CACHE_CLEAR_TIMEOUT_MS
 ): Promise<void> {
+  const key = formAnalyticGenerationKey(formId)
+  const bump = Promise.resolve()
+    .then(() =>
+      redisService.multi([
+        ['incr', key],
+        ['expire', key, GENERATION_TTL_SECONDS]
+      ])
+    )
+    .then(
+      () => undefined,
+      () => undefined
+    )
+
+  let timer: NodeJS.Timeout | undefined
+  const timeout = new Promise<void>(resolve => {
+    timer = setTimeout(resolve, timeoutMs)
+    timer.unref?.()
+  })
+
   try {
-    await Promise.all(formAnalyticCacheKeys(formId).map(key => redisService.del(key)))
-  } catch {
-    // ignore, see above
+    await Promise.race([bump, timeout])
+  } finally {
+    clearTimeout(timer)
   }
 }
 
