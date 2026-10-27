@@ -11,7 +11,7 @@ import { FormService } from './form.service'
 import { RedisService } from './redis.service'
 import { date, helper } from '@heyform-inc/utils'
 import { SubmissionModel, clearFormAnalyticCache } from '@model'
-import { getUpdateQuery } from '@utils'
+import { ChoiceLimit, getUpdateQuery } from '@utils'
 
 const { isValid } = helper
 
@@ -271,23 +271,75 @@ export class SubmissionService {
     return result.id
   }
 
+  // Number of submissions that picked each limited choice, keyed by `${fieldId}:${choiceId}`.
+  // Spam is not counted, everything else is.
+  public async countByChoices(
+    formId: string,
+    choiceLimits: ChoiceLimit[]
+  ): Promise<Record<string, number>> {
+    const fieldIds = Array.from(new Set(choiceLimits.map(row => row.fieldId)))
+    const choiceIds = Array.from(new Set(choiceLimits.map(row => row.choiceId)))
+
+    const rows: Array<{ _id: { f: string; c: string }; count: number }> =
+      await this.submissionModel.aggregate([
+        {
+          $match: {
+            formId,
+            category: { $ne: SubmissionCategoryEnum.SPAM },
+            'answers.id': { $in: fieldIds }
+          }
+        },
+        { $unwind: '$answers' },
+        { $match: { 'answers.id': { $in: fieldIds } } },
+        { $unwind: '$answers.value.value' },
+        { $match: { 'answers.value.value': { $in: choiceIds } } },
+        {
+          $group: {
+            _id: { f: '$answers.id', c: '$answers.value.value' },
+            count: { $sum: 1 }
+          }
+        }
+      ])
+
+    return Object.fromEntries(rows.map(row => [`${row._id.f}:${row._id.c}`, row.count]))
+  }
+
   public async createWithinQuota(
     submission: SubmissionModel | any,
-    quotaLimit?: number
+    quotaLimit?: number,
+    choiceLimits: ChoiceLimit[] = []
   ): Promise<string> {
-    if (!Number.isSafeInteger(quotaLimit) || quotaLimit! < 1) {
+    const hasQuota = Number.isSafeInteger(quotaLimit) && quotaLimit! >= 1
+
+    if (!hasQuota && choiceLimits.length < 1) {
       return this.create(submission)
     }
 
     // Serialize the authoritative Mongo count and insert. Unlike a second counter, this cannot
-    // drift when submissions are deleted, imported, or a write fails after reserving a slot.
+    // drift when submissions are deleted, imported, moved out of spam, or a write fails after
+    // reserving a slot.
     return this.redisService.withLock(`submission-quota:${submission.formId}`, '30s', async () => {
-      const count = await this.countInForm(submission.formId)
+      if (hasQuota) {
+        const count = await this.countInForm(submission.formId)
 
-      if (count >= quotaLimit!) {
-        throw new BadRequestException(
-          'The submission quota exceeds, new submissions are no longer accepted'
+        if (count >= quotaLimit!) {
+          throw new BadRequestException(
+            'The submission quota exceeds, new submissions are no longer accepted'
+          )
+        }
+      }
+
+      if (choiceLimits.length > 0) {
+        const counts = await this.countByChoices(submission.formId, choiceLimits)
+        const full = choiceLimits.find(
+          row => (counts[`${row.fieldId}:${row.choiceId}`] ?? 0) >= row.limit
         )
+
+        if (full) {
+          throw new BadRequestException(
+            `The option "${full.label}" is full, please choose another one`
+          )
+        }
       }
 
       return this.create(submission)
