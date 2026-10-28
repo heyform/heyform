@@ -16,6 +16,7 @@ export class AppsResolver {
       ...app,
       icon: APP_HOMEPAGE_URL + app.icon,
       auth: this.toAuthType(app),
+      deliversSubmissions: !!app.run,
       settings: app.settings.map(setting => ({
         ...setting,
         loadsOptions: setting.type === 'select' && !!setting.loadOptions

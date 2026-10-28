@@ -3,7 +3,7 @@ import { FormDetailInput, FormType, PublicFormType } from '@graphql'
 import { date, helper } from '@heyform-inc/utils'
 import { FormModel, TeamModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
-import { FormService, SubmissionService } from '@service'
+import { FormService, IntegrationService, SubmissionService } from '@service'
 
 const DEFAULT_FORM_NAME = 'Untitled'
 
@@ -42,7 +42,10 @@ export class FormDetailResolver {
 
 @Resolver()
 export class PublicFormResolver {
-  constructor(private readonly formService: FormService) {}
+  constructor(
+    private readonly formService: FormService,
+    private readonly integrationService: IntegrationService
+  ) {}
 
   @Query(returns => PublicFormType)
   async publicForm(@Args('input') input: FormDetailInput): Promise<PublicFormType> {
@@ -60,19 +63,10 @@ export class PublicFormResolver {
       throw new Error('Form projectId is required')
     }
 
-    const integrations: Record<string, any> = {}
-
-    if (form.settings?.active) {
-      // const apps = await this.appService.findAllByUniqueIds(['googleanalytics', 'facebookpixel'])
-      // const result = await this.integrationService.findAllInFormByApps(
-      //   input.formId,
-      //   apps.map(app => app.id)
-      // )
-      // for (const row of result) {
-      //   const app = apps.find(app => app.id === row.appId)
-      //   integrations[app.uniqueId] = (row.attributes as any).get('trackingCode')
-      // }
-    }
+    // Page apps the form loads in the respondent's browser, e.g. analytics
+    const integrations = form.settings?.active
+      ? await this.integrationService.findPageConfigs(form.id)
+      : {}
 
     return {
       id: form.id,

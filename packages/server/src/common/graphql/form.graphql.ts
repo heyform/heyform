@@ -1248,8 +1248,9 @@ export class PublicFormType extends FormType {
   @Field(type => GraphQLJSONObject, { nullable: true })
   translations: FormModel['translations']
 
+  // What each active page app needs on the form page, keyed by app id
   @Field(type => GraphQLJSONObject, { nullable: true })
-  integrations?: Record<string, string>
+  integrations?: Record<string, Record<string, string>>
 }
 
 @ObjectType()

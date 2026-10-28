@@ -856,6 +856,7 @@ export const APPS_GQL = gql`
         visibleWhen
         defaultValue
       }
+      deliversSubmissions
     }
   }
 `

@@ -90,4 +90,8 @@ export class AppType {
 
   @Field(type => [AppSettingType], { nullable: true })
   settings?: AppSettingType[]
+
+  // False for apps that only run on the form page, which have no deliveries
+  @Field({ nullable: true })
+  deliversSubmissions?: boolean
 }
