@@ -411,7 +411,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
           align="start"
           {...contentProps}
           className={cn(
-            'bg-foreground ring-accent-light data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90 isolate z-10 max-h-[22rem] origin-top-left rounded-xl p-1 shadow-lg outline outline-1 outline-transparent ring-1 focus:outline-none sm:max-h-[20rem]',
+            'bg-foreground ring-accent-light data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-90 data-[state=open]:zoom-in-90 isolate z-10 max-h-[22rem] origin-top-left overflow-y-auto rounded-xl p-1 shadow-lg outline outline-1 outline-transparent ring-1 focus:outline-none sm:max-h-[20rem]',
             contentProps?.className
           )}
           data-slot="content"
