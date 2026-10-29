@@ -12,6 +12,7 @@
     "dev": "pnpm build:shared && run-p dev:webapp dev:server",
     "dev:webapp": "pnpm --filter ./packages/webapp dev",
     "dev:server": "pnpm --filter ./packages/server dev",
+    "dev:database": "docker compose -f docker-compose.development.yml up",
     "build:server": "pnpm build:shared && pnpm --filter ./packages/server build",
     "build:webapp": "pnpm build:shared && pnpm --filter ./packages/webapp build",
     "format": "prettier --write \"packages/**/*.{js,ts,tsx,css}\"",
