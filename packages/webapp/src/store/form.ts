@@ -28,6 +28,9 @@ interface TempSettings extends FormSettings {
   _ipLimitTime?: TypeNumberValue
   enableEmailNotification?: boolean
   notificationRecipients?: string[]
+  notificationReplyToRespondent?: boolean
+  notificationSubjectRespondent?: boolean
+  notificationSkipOwner?: boolean
   _notificationRecipients?: string
   captcha?: string
   enableRespondentNotification?: boolean

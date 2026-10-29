@@ -16,6 +16,7 @@ const tests = [
   'oidc-security.test.ts',
   'oidc-provisioning.test.ts',
   'notification-recipients.test.ts',
+  'notification-options.test.ts',
   'export-file.service.test.ts',
   'form-report.service.test.ts',
   'webhook.test.ts',

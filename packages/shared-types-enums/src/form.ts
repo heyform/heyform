@@ -41,6 +41,9 @@ export interface FormSettings {
   // Email notification
   enableEmailNotification?: boolean
   notificationRecipients?: string[]
+  notificationReplyToRespondent?: boolean
+  notificationSubjectRespondent?: boolean
+  notificationSkipOwner?: boolean
 
   // Translation
   locale?: string

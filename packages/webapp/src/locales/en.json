@@ -1356,6 +1356,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} is not a valid email address",
           "tooMany": "Add at most {{max}} recipients"
+        },
+        "replyToRespondent": {
+          "headline": "Reply to the respondent",
+          "subHeadline": "Replies to the notification email go to the address the respondent entered in their first valid email answer."
+        },
+        "subjectRespondent": {
+          "headline": "Respondent in the subject",
+          "subHeadline": "Append the respondent's name (first full name or short text answer) to the email subject."
+        },
+        "skipOwner": {
+          "headline": "Don't email me",
+          "subHeadline": "Skip your own copy when additional recipients are set. You still get the email if there are none."
         }
       },
       "protection": {

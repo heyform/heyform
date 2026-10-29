@@ -4,7 +4,7 @@ import { Job } from 'bull'
 import { APP_HOMEPAGE_URL } from '@environments'
 import { answersToHtml } from '@heyform-inc/answer-utils'
 import { FormService, MailService, SubmissionService, UserService } from '@service'
-import { readNotificationRecipients } from '@utils'
+import { readNotificationRecipients, readRespondentEmail, readRespondentName } from '@utils'
 
 import { BaseQueue } from './base.queue'
 
@@ -36,22 +36,34 @@ export class SubmissionNotificationQueue extends BaseQueue {
     const user = await this.userService.findById(form.memberId)
     const html = answersToHtml(submission.answers)
 
+    // The settings typings ship from the published shared-types package, hence the loose access.
+    const settings = (form.settings || {}) as Record<string, any>
+
     const options = {
       formName: form.name,
       submission: html,
-      link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/submissions`
+      link: `${APP_HOMEPAGE_URL}/workspace/${form.teamId}/project/${form.projectId}/form/${form.id}/submissions`,
+      // Opt-in per form: replies reach the respondent, and the subject names them
+      replyTo: settings.notificationReplyToRespondent
+        ? readRespondentEmail(submission.answers)
+        : undefined,
+      respondentName: settings.notificationSubjectRespondent
+        ? readRespondentName(submission.answers)
+        : undefined
     }
 
     // Extra recipients get the mail in the form's language; the owner keeps their own.
     const ownerEmail = user.email.trim().toLowerCase()
-    // The settings typings ship from the published shared-types package, hence the loose access.
-    const settings = (form.settings || {}) as Record<string, any>
     const recipients = readNotificationRecipients(settings.notificationRecipients).filter(
       email => email !== ownerEmail
     )
 
+    // Skipping the owner only applies when someone else is notified, so a
+    // submission is never left without a recipient.
+    const skipOwner = settings.notificationSkipOwner === true && recipients.length > 0
+
     const targets = [
-      { to: user.email, locale: user.lang },
+      ...(skipOwner ? [] : [{ to: user.email, locale: user.lang }]),
       ...recipients.map(to => ({ to, locale: settings.locale || user.lang }))
     ]
 
