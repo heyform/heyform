@@ -145,7 +145,7 @@ async function testNewOidcBindingRequiresVerifiedEmail() {
 
     await assert.rejects(
       async () => service.authCallback('oidc', 'code'),
-      /OIDC provider must return a verified email address/
+      /Social login provider must return a verified email address/
     )
     assert.strictEqual(createdUsers.length, 0)
     assert.strictEqual(socialAccounts.length, 0)
@@ -203,6 +203,7 @@ async function testOidcProvisioningOverrideDoesNotEnableOtherProviders() {
   })
   service.userInfo = async () => ({
     openId: 'google_subject_1',
+    emailVerified: true,
     user: { email: 'user@example.com', name: 'Example User', avatar: '' }
   })
 
