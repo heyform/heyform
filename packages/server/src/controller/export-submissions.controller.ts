@@ -28,7 +28,7 @@ export class ExportSubmissionsController {
       throw new BadRequestException('The form does not exist')
     }
 
-    const withIp = isSubmissionIpVisible(form)
+    const withIp = isSubmissionIpVisible(form as any)
     const submissions = await this.submissionService.findAllByForm(input.formId, withIp)
     if (submissions.length < 1) {
       throw new BadRequestException('The submissions does not exist')

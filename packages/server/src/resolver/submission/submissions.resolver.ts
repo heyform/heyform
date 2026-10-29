@@ -32,7 +32,7 @@ export class SubmissionsResolver {
         labelId: input.labelId,
         page: input.page,
         limit: input.limit,
-        withIp: isSubmissionIpVisible(form)
+        withIp: isSubmissionIpVisible(form as any)
       })
     }
 

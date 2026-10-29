@@ -43,7 +43,7 @@ export function webhookPayload(submission: SubmissionModel, form: FormModel) {
     answers: submission.answers,
     hiddenFields: submission.hiddenFields,
     variables: submission.variables,
-    ...(isSubmissionIpVisible(form) && { ip: submission.ip })
+    ...(isSubmissionIpVisible(form as any) && { ip: submission.ip })
   }
 }
 
