@@ -40,6 +40,8 @@ export interface AppType {
   auth?: AppAuthType
   settings?: AppSettingType[]
   status?: APP_STATUS_ENUM
+  // False for apps that only run on the form page, which have no deliveries
+  deliversSubmissions?: boolean
 }
 
 export interface IntegratedAppType extends AppType {

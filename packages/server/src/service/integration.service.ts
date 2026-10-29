@@ -13,7 +13,7 @@ import {
   IntegrationStatusEnum,
   MAX_WAITING_RECORDS
 } from '@model'
-import { Logger } from '@utils'
+import { Logger, mapToObject } from '@utils'
 
 import { AppDefinition } from '../apps/types'
 
@@ -116,6 +116,48 @@ export class IntegrationService {
         $in: appIds
       }
     })
+  }
+
+  /**
+   * What the public form page needs for each of the form's active page apps,
+   * keyed by app id. It's public, so only what each app's page() returns is
+   * included, never the config itself. An app whose page() throws is left
+   * out rather than breaking the form.
+   */
+  async findPageConfigs(formId: string): Promise<Record<string, Record<string, string>>> {
+    const pageAppIds = this.appService
+      .findAll()
+      .filter(app => app.page)
+      .map(app => app.id)
+
+    if (!pageAppIds.length) {
+      return {}
+    }
+
+    const integrations = await this.integrationModel.find({
+      formId,
+      appId: { $in: pageAppIds },
+      status: IntegrationStatusEnum.ACTIVE
+    })
+    const result: Record<string, Record<string, string>> = {}
+
+    for (const integration of integrations) {
+      const app = this.appService.findById(integration.appId)
+
+      if (!app?.page) {
+        continue
+      }
+
+      try {
+        result[app.id] = app.page(mapToObject(integration.config))
+      } catch (err: any) {
+        this.logger.error(
+          `Couldn't build the page config of integration ${integration.id}: ${err?.message}`
+        )
+      }
+    }
+
+    return result
   }
 
   async findOne(formId: string, appId: string): Promise<IntegrationModel | null> {
@@ -420,7 +462,8 @@ export class IntegrationService {
     for (const integration of integrations) {
       const app = this.appService.findById(integration.appId)
 
-      if (!app) {
+      // Apps that only run on the form page don't receive submissions
+      if (!app?.run) {
         continue
       }
 

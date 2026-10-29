@@ -15,6 +15,7 @@ import { FC, useEffect, useRef, useState } from 'react'
 
 import { EndpointService } from '../service/endpoint'
 import { recaptchaToken } from '../utils/captcha'
+import { loadPageApps, trackPageApps } from '../utils/page-apps'
 import { isStripeEnabled } from '../utils/payment'
 import { Uploader } from '../utils/uploader'
 import { helper } from '@heyform-inc/utils'
@@ -123,8 +124,11 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
     }
   }
 
+  const pageAppContext = { formId: form.id, formName: form.name }
+
   async function openForm() {
     sendMessageToParent('FORM_OPENED')
+    trackPageApps(form.integrations, 'FORM_OPENED', pageAppContext)
     openTokenRef.current = await EndpointService.openForm(form.id)
   }
 
@@ -189,6 +193,10 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
       }
 
       sendMessageToParent('FORM_SUBMITTED')
+
+      if (!partialSubmission) {
+        trackPageApps(form.integrations, 'FORM_SUBMITTED', pageAppContext)
+      }
     } catch (err: Any) {
       /**
        * Throw error to let Renderer knows that there was an error.
@@ -206,6 +214,7 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
     sendMessageToParent('FORM_LOADED')
 
     if (!form.suspended && form.settings?.active) {
+      loadPageApps(form.integrations, pageAppContext)
       openForm()
       initCaptcha().catch(console.error)
     }
