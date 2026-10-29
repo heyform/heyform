@@ -5,3 +5,14 @@ packages:
   - 'packages/utils'
   - 'packages/shared-types-enums'
   - 'packages/answer-utils'
+allowBuilds:
+  '@apollo/protobufjs': true
+  '@nestjs/core': true
+  '@parcel/watcher': true
+  '@swc/core': true
+  bcrypt: true
+  bufferutil: true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  utf-8-validate: true
