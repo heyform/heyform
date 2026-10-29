@@ -54,6 +54,7 @@ export class GoogleSocialLogin {
 
     return {
       openId: userInfo.id,
+      emailVerified: userInfo.verified_email === true,
       user: {
         email: userInfo.email.toLowerCase(),
         lang: formatLocale(userInfo.locale),

@@ -195,8 +195,8 @@ export class SocialLoginService {
       const isOidc = kind === OIDC_LOGIN_KIND
       const hasVerifiedEmail = Boolean(userInfo.user.email) && userInfo.emailVerified === true
 
-      if (isOidc && !hasVerifiedEmail) {
-        throw new BadRequestException('OIDC provider must return a verified email address')
+      if (!hasVerifiedEmail) {
+        throw new BadRequestException('Social login provider must return a verified email address')
       }
 
       // Check if user exists
@@ -206,7 +206,7 @@ export class SocialLoginService {
         if (existUser) {
           userId = existUser.id
 
-          if (isOidc && !existUser.isEmailVerified) {
+          if (!existUser.isEmailVerified) {
             await this.userService.update(existUser.id, {
               isEmailVerified: true
             })
@@ -220,10 +220,8 @@ export class SocialLoginService {
           throw new BadRequestException('Error: Registration is disabled')
         }
 
-        if (userInfo.user.email && (!isOidc || userInfo.emailVerified === true)) {
-          // @ts-ignore
-          userInfo.user.isEmailVerified = true
-        }
+        // @ts-ignore
+        userInfo.user.isEmailVerified = true
 
         // Create new user
         userId = await this.userService.create(userInfo.user)
