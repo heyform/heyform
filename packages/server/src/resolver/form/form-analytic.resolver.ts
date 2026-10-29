@@ -1,7 +1,7 @@
 import { Auth, FormGuard } from '@decorator'
 import { FormAnalyticInput, FormAnalyticResult, FormAnalyticType } from '@graphql'
 import { date, helper, parseJson } from '@heyform-inc/utils'
-import { FormAnalyticRangeEnum } from '@model'
+import { FormAnalyticRangeEnum, formAnalyticCacheKey, getFormAnalyticCacheGeneration } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { FormAnalyticService, RedisService } from '@service'
 
@@ -43,7 +43,10 @@ export class FormAnalyticResolver {
   @Query(returns => FormAnalyticType)
   @FormGuard()
   async formAnalytic(@Args('input') input: FormAnalyticInput): Promise<FormAnalyticType> {
-    const key = `form:${input.formId}:analytic:${input.range}`
+    // Read the generation before computing: if a visit or submission bumps it
+    // meanwhile, this result is cached under the old generation and never read.
+    const generation = await getFormAnalyticCacheGeneration(this.redisService, input.formId)
+    const key = formAnalyticCacheKey(input.formId, input.range, generation)
     const cache = await this.redisService.get(key)
 
     if (helper.isValid(cache)) {

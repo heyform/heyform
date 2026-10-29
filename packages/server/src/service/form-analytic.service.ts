@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
+import { RedisService } from './redis.service'
 import { SubmissionService } from './submission.service'
 import { date, helper } from '@heyform-inc/utils'
-import { FormAnalyticModel } from '@model'
+import { FormAnalyticModel, clearFormAnalyticCache } from '@model'
 
 interface FormAnalyticOptions {
   formId: string
@@ -24,7 +25,8 @@ export class FormAnalyticService {
   constructor(
     @InjectModel(FormAnalyticModel.name)
     private readonly formAnalyticModel: Model<FormAnalyticModel>,
-    private readonly submissionService: SubmissionService
+    private readonly submissionService: SubmissionService,
+    private readonly redisService: RedisService
   ) {}
 
   public async summary({ formId, startAt, endAt, isNext }: FormAnalyticOptions) {
@@ -101,6 +103,8 @@ export class FormAnalyticService {
         totalVisits: 1
       } as any)
     }
+
+    await clearFormAnalyticCache(this.redisService, formId)
   }
 
   private async findFormAnalyticInToday(formId: string): Promise<FormAnalyticModel> {

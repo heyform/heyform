@@ -28,7 +28,8 @@ const tests = [
   'integration-records.test.ts',
   'integration-secrets.test.ts',
   'googlesheets.test.ts',
-  'page-apps.test.ts'
+  'page-apps.test.ts',
+  'form-analytic-cache.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')
 
