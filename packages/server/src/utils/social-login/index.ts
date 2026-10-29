@@ -30,7 +30,7 @@ export async function appleUserInfo(
 ): Promise<UserInfo> {
   const client = new AppleSocialLogin(options as any)
   const token = await client.getToken(code)
-  return client.getUserInfo(token.id_token)
+  return await client.getUserInfo(token.id_token)
 }
 
 export async function googleUserInfo(
