@@ -13,21 +13,31 @@ import { SubmissionService } from '../src/service/submission.service'
 // A Redis that keeps values in memory and understands the commands the cache uses.
 function memoryRedis() {
   const values = new Map<string, string>()
+  const expiresAt = new Map<string, number>()
   const commands: any[][] = []
+  let now = 0
+
+  function get(key: string) {
+    if (now >= (expiresAt.get(key) ?? Infinity)) values.delete(key)
+    return values.get(key) ?? null
+  }
 
   return {
     values,
     commands,
-    get: async (key: string) => values.get(key) ?? null,
+    advanceTime: (seconds: number) => (now += seconds),
+    get: async (key: string) => get(key),
     set: async ({ key, value }: { key: string; value: string }) => {
       values.set(key, value)
+      expiresAt.set(key, now + 600)
       return 'OK'
     },
     multi: async (batch: any[][]) => {
       commands.push(...batch)
-      for (const [command, key] of batch) {
-        if (command === 'incr') {
-          values.set(key, String(Number(values.get(key) ?? 0) + 1))
+      for (const [command, key, value, , ttl] of batch) {
+        if (command === 'set') {
+          values.set(key, value)
+          expiresAt.set(key, now + ttl)
         }
       }
       return batch.map(() => [null, 1])
@@ -78,15 +88,46 @@ async function testVisitBumpsTheGeneration() {
 
   await visitService(redis).updateTotalVisits('form_1')
 
-  assert.strictEqual(redis.values.get(formAnalyticGenerationKey('form_1')), '1')
-  assert.ok(redis.commands.some(([command]) => command === 'expire'))
+  const generation = await redis.get(formAnalyticGenerationKey('form_1'))
+  assert.ok(generation)
+  await visitService(redis).updateTotalVisits('form_1')
+  assert.notStrictEqual(await redis.get(formAnalyticGenerationKey('form_1')), generation)
 }
 
 async function testSubmissionBumpsTheGeneration() {
   const redis = memoryRedis()
 
   assert.strictEqual(await submissionService(redis).create({ formId: 'form_1' }), 'submission_1')
-  assert.strictEqual(redis.values.get(formAnalyticGenerationKey('form_1')), '1')
+  assert.ok(await redis.get(formAnalyticGenerationKey('form_1')))
+}
+
+async function testExpiredGenerationDoesNotReuseLiveCachedResults() {
+  const redis = memoryRedis()
+  let submissions = 1
+  const resolver = new FormAnalyticResolver(
+    {
+      summary: async () => ({
+        avgTotalVisits: 1,
+        avgSubmissionCount: submissions,
+        avgAverageTime: 0
+      })
+    } as any,
+    redis as any
+  )
+  const input = { formId: 'form_1', range: FormAnalyticRangeEnum.WEEK }
+  await submissionService(redis).create({ formId: input.formId })
+  const generation = await redis.get(formAnalyticGenerationKey(input.formId))
+
+  // A dashboard query just before generation expiry creates a still-live cache entry.
+  redis.advanceTime(24 * 60 * 60 - 60)
+  assert.strictEqual((await resolver.formAnalytic(input as any)).submissionCount.value, 1)
+  redis.advanceTime(61)
+  assert.strictEqual(await redis.get(formAnalyticGenerationKey(input.formId)), null)
+  assert.ok(await redis.get(formAnalyticCacheKey(input.formId, input.range, generation!)))
+
+  submissions = 2
+  await submissionService(redis).create({ formId: input.formId })
+  assert.strictEqual((await resolver.formAnalytic(input as any)).submissionCount.value, 2)
 }
 
 async function testRedisErrorDoesNotFailTheSubmission() {
@@ -152,6 +193,7 @@ async function run() {
   testKeyFormat()
   await testVisitBumpsTheGeneration()
   await testSubmissionBumpsTheGeneration()
+  await testExpiredGenerationDoesNotReuseLiveCachedResults()
   await testRedisErrorDoesNotFailTheSubmission()
   await testUnresponsiveRedisDoesNotHoldTheSubmission()
   await testUnresponsiveRedisDoesNotHoldTheVisit()

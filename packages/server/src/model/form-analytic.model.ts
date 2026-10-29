@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { randomUUID } from 'crypto'
 import { Document } from 'mongoose'
 
 export enum FormAnalyticRangeEnum {
@@ -11,7 +12,7 @@ export enum FormAnalyticRangeEnum {
 
 // The formAnalytic query caches its result per range, under a key that carries
 // the form's cache generation. Anything that changes the numbers (a visit, a
-// submission) bumps the generation instead of deleting keys, so a query that
+// submission) replaces the generation instead of deleting keys, so a query that
 // read the old generation and finishes late writes to a key nobody reads again.
 const GENERATION_TTL_SECONDS = 24 * 60 * 60
 export const FORM_ANALYTIC_CACHE_CLEAR_TIMEOUT_MS = 500
@@ -47,8 +48,8 @@ export async function getFormAnalyticCacheGeneration(
  * submission that fails or hangs, so a Redis error is ignored and an
  * unresponsive Redis is given up on after the timeout.
  *
- * The generation outlives every cached result (10 minutes), so when it expires
- * and restarts at 0, no result cached under an old 0 is still alive.
+ * Each invalidation uses a unique generation, so expiring the generation cannot
+ * reuse a cached result written shortly before its expiry.
  */
 export async function clearFormAnalyticCache(
   redisService: Pick<FormAnalyticCacheRedis, 'multi'>,
@@ -57,12 +58,7 @@ export async function clearFormAnalyticCache(
 ): Promise<void> {
   const key = formAnalyticGenerationKey(formId)
   const bump = Promise.resolve()
-    .then(() =>
-      redisService.multi([
-        ['incr', key],
-        ['expire', key, GENERATION_TTL_SECONDS]
-      ])
-    )
+    .then(() => redisService.multi([['set', key, randomUUID(), 'EX', GENERATION_TTL_SECONDS]]))
     .then(
       () => undefined,
       () => undefined
