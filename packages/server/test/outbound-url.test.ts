@@ -27,7 +27,7 @@ async function withOutboundEnvironment<T>(
   fn: () => Promise<T>
 ): Promise<T> {
   const previousNodeEnv = process.env.NODE_ENV
-  const previousAllowPrivateOutbound = process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND
+  const previousAllowPrivateOutbound = process.env.ALLOW_PRIVATE_OUTBOUND
 
   if (nodeEnv === undefined) {
     delete process.env.NODE_ENV
@@ -36,9 +36,9 @@ async function withOutboundEnvironment<T>(
   }
 
   if (allowPrivateOutbound === undefined) {
-    delete process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND
+    delete process.env.ALLOW_PRIVATE_OUTBOUND
   } else {
-    process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND = allowPrivateOutbound
+    process.env.ALLOW_PRIVATE_OUTBOUND = allowPrivateOutbound
   }
 
   try {
@@ -51,9 +51,9 @@ async function withOutboundEnvironment<T>(
     }
 
     if (previousAllowPrivateOutbound === undefined) {
-      delete process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND
+      delete process.env.ALLOW_PRIVATE_OUTBOUND
     } else {
-      process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND = previousAllowPrivateOutbound
+      process.env.ALLOW_PRIVATE_OUTBOUND = previousAllowPrivateOutbound
     }
   }
 }
@@ -157,18 +157,24 @@ async function testLocalOutboundAccessFailsClosed() {
   }
 }
 
-async function testExplicitDevelopmentOutboundOptIn() {
-  await withOutboundEnvironment('development', 'true', async () => {
-    const loopback = await assertSafeOutboundUrl('http://127.0.0.1:6379/private', {
-      skipDnsLookup: true
-    })
-    const localhost = await assertSafeOutboundUrl('http://localhost:6379/private', {
-      skipDnsLookup: true
-    })
+async function testExplicitPrivateOutboundOptIn() {
+  for (const nodeEnv of [undefined, 'production', 'development']) {
+    await withOutboundEnvironment(nodeEnv, 'true', async () => {
+      const loopback = await assertSafeOutboundUrl('http://127.0.0.1:6379/private', {
+        skipDnsLookup: true
+      })
+      const localhost = await assertSafeOutboundUrl('http://localhost:6379/private', {
+        skipDnsLookup: true
+      })
+      const resolved = await assertSafeOutboundUrl('https://example.test/hook', {
+        dnsLookup: (async () => [{ address: '198.18.8.173', family: 4 }]) as any
+      })
 
-    assert.strictEqual(loopback.hostname, '127.0.0.1')
-    assert.strictEqual(localhost.hostname, 'localhost')
-  })
+      assert.strictEqual(loopback.hostname, '127.0.0.1')
+      assert.strictEqual(localhost.hostname, 'localhost')
+      assert.strictEqual(resolved.hostname, 'example.test')
+    })
+  }
 }
 
 async function lookupAll(lookup: any, hostname: string, family?: number): Promise<any[]> {
@@ -229,7 +235,7 @@ async function run() {
   await testAssertSafeOutboundUrlRejectsEncodedPrivate()
   await testRejectsTeredoDnsResolution()
   await testLocalOutboundAccessFailsClosed()
-  await testExplicitDevelopmentOutboundOptIn()
+  await testExplicitPrivateOutboundOptIn()
   await testSafeOutboundRequestPinsValidatedDnsAddresses()
 }
 

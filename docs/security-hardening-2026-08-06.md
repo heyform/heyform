@@ -80,9 +80,8 @@ The current branch already contains controls for the earlier published advisorie
 ## Deployment requirements
 
 1. Run production containers with `NODE_ENV=production`. The Docker runner now sets this value.
-2. Keep `HEYFORM_ALLOW_PRIVATE_OUTBOUND=false` (or unset) in production. Private/localhost
-   outbound access is permitted only when both `NODE_ENV=development` and this flag is exactly
-   `true`.
+2. Keep `ALLOW_PRIVATE_OUTBOUND=false` (or unset) in production. Private/localhost
+   outbound access is permitted in any `NODE_ENV` when this flag is exactly `true`.
 3. `TRUST_PROXY` defaults to `false`. If a known reverse proxy is the only network path to the
    application, set the exact Express trust-proxy value for that topology (for example `1` for
    exactly one enforced hop). Do not enable it while the application port remains directly

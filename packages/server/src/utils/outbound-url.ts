@@ -73,10 +73,8 @@ export function normalizeUrlOrigin(url: URL): string {
   return `${url.protocol.toLowerCase()}//${host}${url.port ? `:${url.port}` : ''}`
 }
 
-function isDevelopment(): boolean {
-  return (
-    process.env.NODE_ENV === 'development' && process.env.HEYFORM_ALLOW_PRIVATE_OUTBOUND === 'true'
-  )
+function isPrivateOutboundAllowed(): boolean {
+  return process.env.ALLOW_PRIVATE_OUTBOUND === 'true'
 }
 
 export function isIPv4(address: string): boolean {
@@ -272,7 +270,9 @@ export function isLocalHostname(hostname: string): boolean {
 export function isLocalDevelopmentHost(hostname: string): boolean {
   const normalized = normalizeHostname(hostname)
 
-  return isDevelopment() && (isLocalHostname(normalized) || isLoopbackAddress(normalized))
+  return (
+    isPrivateOutboundAllowed() && (isLocalHostname(normalized) || isLoopbackAddress(normalized))
+  )
 }
 
 export function isAllowedHostname(hostname: string, allowedHosts: string[]): boolean {
@@ -382,9 +382,10 @@ async function validateSafeOutboundUrl(
 
   const hostname = normalizeHostname(url.hostname)
   const isDevelopmentHost = isLocalDevelopmentHost(hostname)
-  const isAllowedPrivateOrigin = isAllowedUrlOrigin(url, options.allowedPrivateOrigins || [])
+  const isAllowedPrivateOrigin =
+    isPrivateOutboundAllowed() || isAllowedUrlOrigin(url, options.allowedPrivateOrigins || [])
 
-  if (isLocalHostname(hostname) && !isDevelopmentHost && !isAllowedPrivateOrigin) {
+  if (isLocalHostname(hostname) && !isAllowedPrivateOrigin) {
     throw new BadRequestException('Localhost URLs are not allowed')
   }
 
@@ -397,7 +398,7 @@ async function validateSafeOutboundUrl(
   }
 
   if (isIPv4(hostname) || isIPv6(hostname)) {
-    if (!isDevelopmentHost && !isAllowedPrivateOrigin && isPrivateAddress(hostname)) {
+    if (!isAllowedPrivateOrigin && isPrivateAddress(hostname)) {
       throw new BadRequestException('Private network URLs are not allowed')
     }
 
@@ -411,14 +412,7 @@ async function validateSafeOutboundUrl(
       verbatim: true
     } as any)) as unknown as LookupAddress[]
 
-    if (
-      addresses.some(
-        row =>
-          isPrivateAddress(row.address) &&
-          !(isDevelopmentHost && isLoopbackAddress(row.address)) &&
-          !isAllowedPrivateOrigin
-      )
-    ) {
+    if (!isAllowedPrivateOrigin && addresses.some(row => isPrivateAddress(row.address))) {
       throw new BadRequestException('Private network URLs are not allowed')
     }
 
