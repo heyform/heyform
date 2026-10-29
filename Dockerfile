@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_IMAGE=node:22.23.2-alpine3.23
+ARG NODE_IMAGE=node:22.23.4-alpine3.23
 
 FROM ${NODE_IMAGE} AS toolchain
 
