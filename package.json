@@ -17,7 +17,7 @@
     "build:webapp": "pnpm build:shared && pnpm --filter ./packages/webapp build",
     "format": "prettier --write \"packages/**/*.{js,ts,tsx,css}\"",
     "lint": "node scripts/run-oxlint.js packages",
-    "postinstall": "node scripts/build-shared.js && simple-git-hooks",
+    "postinstall": "simple-git-hooks",
     "build:shared": "pnpm --filter ./packages/utils build && pnpm --filter ./packages/shared-types-enums build && pnpm --filter ./packages/answer-utils build"
   },
   "simple-git-hooks": {
