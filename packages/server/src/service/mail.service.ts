@@ -29,6 +29,10 @@ interface SubmissionNotificationOptions {
   formName: string
   submission: string
   link: string
+  // Appended to the localized subject, e.g. "… — Jane Doe"
+  respondentName?: string
+  // Address replies are sent to, e.g. the respondent
+  replyTo?: string
 }
 
 interface TeamDeletionAlertOptions {
@@ -188,6 +192,7 @@ export class MailService {
     options: SubmissionNotificationOptions,
     locale?: string
   ) {
+    const { respondentName, replyTo, ...replacements } = options
     const submission = htmlUtils.purge(options.submission, {
       allowedAttributes: [],
       allowedBlockTags: SUBMISSION_HTML_TAGS,
@@ -198,11 +203,12 @@ export class MailService {
       'submission_notification',
       to,
       {
-        ...options,
+        ...replacements,
         submission: trustedHtml(submission)
       },
       undefined,
-      locale
+      locale,
+      { subjectSuffix: respondentName, replyTo }
     )
   }
 
@@ -288,7 +294,8 @@ export class MailService {
     to: string,
     replacements?: object,
     options?: JobOptions,
-    locale = DEFAULT_LOCALE
+    locale = DEFAULT_LOCALE,
+    headers: { subjectSuffix?: string; replyTo?: string } = {}
   ) {
     const result =
       this.emailTemplates[locale]?.[templateName] ||
@@ -314,6 +321,14 @@ export class MailService {
       })
     }
 
+    // Both values come from respondent input: keep them out of the header structure
+    const subjectSuffix = headers.subjectSuffix?.replace(/[\r\n]+/g, ' ').trim()
+    const replyTo = headers.replyTo?.trim()
+
+    if (subjectSuffix) {
+      subject = `${subject} — ${subjectSuffix}`
+    }
+
     await this.mailQueue.add(
       {
         queueName: 'MailQueue',
@@ -321,7 +336,8 @@ export class MailService {
           from: SMTP_FROM,
           to,
           subject,
-          html
+          html,
+          ...(replyTo && helper.isEmail(replyTo) ? { replyTo } : {})
         }
       },
       options

@@ -332,7 +332,7 @@ function createBullQueue() {
   return queue
 }
 
-const queuedApp = { id: 'webhook', queue: { attempts: 4 } }
+const queuedApp = { id: 'webhook', queue: { attempts: 4 }, run: async () => undefined }
 
 function createWaitingService(status = NEEDS_RECONNECT) {
   const recordModel = createRecordModel()

@@ -41,6 +41,9 @@ export interface FormSettings {
   // Email notification
   enableEmailNotification?: boolean
   notificationRecipients?: string[]
+  notificationReplyToRespondent?: boolean
+  notificationSubjectRespondent?: boolean
+  notificationSkipOwner?: boolean
 
   // Translation
   locale?: string
@@ -265,10 +268,8 @@ export interface FormModel {
   suspended?: boolean
   status: FormStatusEnum
   draft?: boolean
-  integrations: {
-    googleanalytics: string
-    facebookpixel: string
-  }
+  // What each active page app needs on the form page, keyed by app id
+  integrations?: Record<string, Record<string, string>>
   updatedAt: number
 }
 

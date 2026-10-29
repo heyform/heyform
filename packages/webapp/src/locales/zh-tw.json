@@ -1223,6 +1223,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} 不是有效的電子郵件地址",
           "tooMany": "最多可新增 {{max}} 位收件者"
+        },
+        "replyToRespondent": {
+          "headline": "回覆給填寫者",
+          "subHeadline": "對通知郵件的回覆將寄送到填寫者在第一個有效電子郵件回答中填寫的地址。"
+        },
+        "subjectRespondent": {
+          "headline": "在主旨中顯示填寫者",
+          "subHeadline": "將填寫者的姓名（第一個姓名或簡短文字回答）附加到郵件主旨。"
+        },
+        "skipOwner": {
+          "headline": "不寄送給我",
+          "subHeadline": "設定了其他收件人時，不再寄送副本給你。沒有其他收件人時仍會收到郵件。"
         }
       },
       "protection": {

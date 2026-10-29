@@ -1227,6 +1227,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} n'est pas une adresse e-mail valide",
           "tooMany": "Ajoutez {{max}} destinataires au maximum"
+        },
+        "replyToRespondent": {
+          "headline": "Répondre au participant",
+          "subHeadline": "Les réponses à l'e-mail de notification sont envoyées à l'adresse saisie par le participant dans sa première réponse e-mail valide."
+        },
+        "subjectRespondent": {
+          "headline": "Participant dans l'objet",
+          "subHeadline": "Ajoute le nom du participant (première réponse de type nom complet ou texte court) à l'objet de l'e-mail."
+        },
+        "skipOwner": {
+          "headline": "Ne pas m'envoyer d'e-mail",
+          "subHeadline": "Ignore votre propre copie lorsque des destinataires supplémentaires sont définis. Vous recevez toujours l'e-mail s'il n'y en a aucun."
         }
       },
       "protection": {

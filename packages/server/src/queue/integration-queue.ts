@@ -46,8 +46,10 @@ export class IntegrationQueue extends BaseQueue {
   async process(job: Job<IntegrationQueueJob>) {
     const { appId, integrationId, formId, submissionId } = job.data
     const app = this.appService.findById(appId)
+    const run = app?.run
 
-    if (app) {
+    // Apps that only run on the form page have nothing to deliver
+    if (app && run) {
       const [integration, submission, form] = await Promise.all([
         this.integrationService.findById(integrationId),
         this.submissionService.findById(submissionId),
@@ -67,7 +69,7 @@ export class IntegrationQueue extends BaseQueue {
 
           // Inside the job, so an expired token is refreshed right before use
           await this.integrationAuthService.withRunAuth(app, integration, auth =>
-            app.run({
+            run({
               submission,
               form,
               config,

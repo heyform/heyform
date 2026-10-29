@@ -219,7 +219,7 @@ const Settings: FC<{ app: IntegratedAppType }> = ({ app }) => {
           </>
         )}
 
-        {app.integration && (
+        {app.integration && app.deliversSubmissions !== false && (
           <IntegrationRecords
             formId={formId}
             appId={app.id}

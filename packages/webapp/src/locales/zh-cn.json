@@ -1353,6 +1353,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} 不是有效的电子邮件地址",
           "tooMany": "最多可添加 {{max}} 个收件人"
+        },
+        "replyToRespondent": {
+          "headline": "回复给填写者",
+          "subHeadline": "对通知邮件的回复将发送到填写者在第一个有效邮箱回答中填写的地址。"
+        },
+        "subjectRespondent": {
+          "headline": "在主题中显示填写者",
+          "subHeadline": "将填写者的姓名（第一个姓名或短文本回答）追加到邮件主题。"
+        },
+        "skipOwner": {
+          "headline": "不给我发送邮件",
+          "subHeadline": "设置了其他收件人时，不再向你发送副本。没有其他收件人时仍会收到邮件。"
         }
       },
       "protection": {

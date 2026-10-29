@@ -61,6 +61,9 @@ export default defineApp({
 | `queue`       | Optional retry and timeout options for the app's delivery jobs. See below.                           |
 | `validate`    | Optional. Receives the config after the generic checks. See [Validating](#validating).               |
 | `run`         | Receives `{ config, submission, form, auth }` for each submission. See [Errors](#errors).            |
+| `page`        | Optional. What the public form page needs to load the app. See [Page apps](#page-apps).              |
+
+An app needs `run`, `page` or both.
 
 ## Settings
 
@@ -256,6 +259,34 @@ runs, and again.
 A value that neither key decrypts marks its connection, or its API-key integration, as needing
 reconnection, with the reason, and its submissions wait until someone connects the account or
 enters the key again.
+
+## Page apps
+
+Some apps run in the respondent's browser on the public form page instead of on each submission,
+e.g. analytics. They define `page(config)` and usually no `run`:
+
+```ts
+export default defineApp({
+  id: 'privatusanalytics',
+  name: 'Privatus Analytics',
+  // ...
+  settings: [{ type: 'text', name: 'siteId', label: 'Site ID', required: true }],
+  validate: async config => ({ ...config, siteId: normalizeSiteId(config.siteId) }),
+  page: config => ({ siteId: normalizeSiteId(config.siteId) })
+})
+```
+
+While the form is active, `publicForm` returns what `page` builds from each active integration's
+config in `integrations`, keyed by app id. It's public, since anyone who opens the form can read
+it, so return only what the browser needs and never a secret. That's why a page app's `auth` must
+be `none`. An integration whose `page` throws is left out, and the form still loads.
+
+The webapp then loads each app that has a loader in `pages/form/Render/utils/page-apps.ts`. A
+loader's `load(config)` adds the app's script, and its optional `track(event)` is called when the
+form is opened (`FORM_OPENED`) and fully submitted (`FORM_SUBMITTED`). A loader that throws is
+logged and never stops the form. So adding a page app takes the server file and a loader.
+
+Apps without `run` get no delivery jobs and show no delivery log.
 
 ## Queue
 

@@ -1,4 +1,5 @@
-import { ServiceUnavailableException } from '@nestjs/common'
+import { ServiceUnavailableException, UnauthorizedException } from '@nestjs/common'
+import { createPublicKey } from 'crypto'
 import * as jwt from 'jsonwebtoken'
 
 import { formatLocale, generateUrl, request } from './utils'
@@ -31,6 +32,7 @@ export interface AppleSocialLoginOptions {
 const baseUrl = 'https://appleid.apple.com'
 const authUrl = `${baseUrl}/auth/authorize`
 const tokenUrl = `${baseUrl}/auth/token`
+const keysUrl = `${baseUrl}/auth/keys`
 
 export class AppleSocialLogin {
   private readonly options!: AppleSocialLoginOptions
@@ -70,15 +72,32 @@ export class AppleSocialLogin {
     return result.data
   }
 
-  public getUserInfo(idToken: string): UserInfo {
-    const result: any = jwt.decode(idToken)
+  public async getUserInfo(idToken: string): Promise<UserInfo> {
+    const decoded = jwt.decode(idToken, { complete: true }) as jwt.Jwt | null
 
-    if (!result) {
+    if (!decoded?.header?.kid) {
+      throw new UnauthorizedException('Invalid Apple ID token')
+    }
+
+    let result: any
+
+    try {
+      result = jwt.verify(idToken, await this.getPublicKey(decoded.header.kid), {
+        algorithms: ['RS256'],
+        issuer: baseUrl,
+        audience: this.options.webClientId
+      })
+    } catch {
+      throw new UnauthorizedException('Invalid Apple ID token')
+    }
+
+    if (!result?.sub || !result.email) {
       throw new ServiceUnavailableException()
     }
 
     return {
       openId: result.sub,
+      emailVerified: result.email_verified === true || result.email_verified === 'true',
       user: {
         email: result.email.toLowerCase(),
         name: result.email.split('@')[0],
@@ -86,6 +105,19 @@ export class AppleSocialLogin {
         lang: formatLocale()
       }
     }
+  }
+
+  private async getPublicKey(kid: string): Promise<string> {
+    const result = await request({ url: keysUrl })
+    const key = result.data?.keys?.find((k: any) => k.kid === kid)
+
+    if (!key) {
+      throw new UnauthorizedException('Invalid Apple ID token')
+    }
+
+    return createPublicKey({ key, format: 'jwk' })
+      .export({ type: 'spki', format: 'pem' })
+      .toString()
   }
 
   public generateSecret(): string {

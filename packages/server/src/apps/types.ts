@@ -171,7 +171,15 @@ export interface AppDefinition<A extends AppAuth = AppAuth> {
   // an AppError or a BadRequestException to reject it, or return the config
   // to store instead, e.g. with a pasted URL reduced to an id.
   validate?(config: AppConfig, ctx: AppValidateContext<A>): Promise<AppConfig | void>
-  run(ctx: AppRunContext<A>): Promise<unknown>
+  // Called on the integration queue for each submission. Optional for apps
+  // that only run on the form page.
+  run?(ctx: AppRunContext<A>): Promise<unknown>
+  // What the public form page needs to load the app in the respondent's
+  // browser, e.g. an analytics site ID, built from the saved config. Anyone
+  // who opens the form can read it, so it must never hold a secret. The
+  // webapp loads the app with the matching loader in
+  // `pages/form/Render/utils/page-apps.ts`.
+  page?(config: AppConfig): Record<string, string>
 }
 
 export type AppDefinitionInput<A extends AppAuth> = Omit<AppDefinition<A>, 'auth' | 'settings'> & {
@@ -220,6 +228,15 @@ function assertValidDefinition(app: AppDefinitionInput<AppAuth>) {
   assertValidSettings(app)
 
   const auth = app.auth
+
+  if (!app.run && !app.page) {
+    throw new Error(`App ${app.id}: needs run, page or both`)
+  }
+
+  // The page is public, so it can't depend on stored credentials
+  if (app.page && auth && auth.type !== 'none') {
+    throw new Error(`App ${app.id}: page apps can't use ${auth.type} auth`)
+  }
 
   if (auth?.type === 'oauth2' && (!auth.provider || !auth.scopes?.length)) {
     throw new Error(`App ${app.id}: oauth2 auth needs a provider and at least one scope`)

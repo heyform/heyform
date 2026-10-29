@@ -1223,6 +1223,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} nie jest prawidłowym adresem e-mail",
           "tooMany": "Dodaj maksymalnie {{max}} odbiorców"
+        },
+        "replyToRespondent": {
+          "headline": "Odpowiadaj respondentowi",
+          "subHeadline": "Odpowiedzi na wiadomość z powiadomieniem trafiają na adres podany przez respondenta w pierwszej prawidłowej odpowiedzi e-mail."
+        },
+        "subjectRespondent": {
+          "headline": "Respondent w temacie",
+          "subHeadline": "Dodaje imię i nazwisko respondenta (pierwsza odpowiedź typu imię i nazwisko lub krótki tekst) do tematu wiadomości."
+        },
+        "skipOwner": {
+          "headline": "Nie wysyłaj do mnie",
+          "subHeadline": "Pomija Twoją kopię, gdy ustawiono dodatkowych odbiorców. Jeśli ich nie ma, nadal otrzymasz wiadomość."
         }
       },
       "protection": {

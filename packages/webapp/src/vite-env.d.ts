@@ -16,6 +16,7 @@ declare global {
   interface Window {
     grecaptcha: any
     plausible: any
+    privatus: any
     DEVICE_INFO: any
     TrackdeskObject: any
     heyform: {

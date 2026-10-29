@@ -1227,6 +1227,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} ist keine gültige E-Mail-Adresse",
           "tooMany": "Füge höchstens {{max}} Empfänger hinzu"
+        },
+        "replyToRespondent": {
+          "headline": "An den Teilnehmer antworten",
+          "subHeadline": "Antworten auf die Benachrichtigung gehen an die E-Mail-Adresse, die der Teilnehmer in seiner ersten gültigen E-Mail-Antwort angegeben hat."
+        },
+        "subjectRespondent": {
+          "headline": "Teilnehmer im Betreff",
+          "subHeadline": "Hängt den Namen des Teilnehmers (erste Antwort auf Vollständiger Name oder Kurztext) an den Betreff an."
+        },
+        "skipOwner": {
+          "headline": "Mich nicht benachrichtigen",
+          "subHeadline": "Überspringt deine eigene Kopie, wenn weitere Empfänger festgelegt sind. Ohne weitere Empfänger erhältst du die E-Mail weiterhin."
         }
       },
       "protection": {

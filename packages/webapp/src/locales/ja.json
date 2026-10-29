@@ -1223,6 +1223,18 @@
           "placeholder": "name@example.com",
           "invalid": "{{email}} は有効なメールアドレスではありません",
           "tooMany": "受信者は最大 {{max}} 件まで追加できます"
+        },
+        "replyToRespondent": {
+          "headline": "回答者に返信",
+          "subHeadline": "通知メールへの返信は、回答者が最初の有効なメール回答に入力したアドレスに送信されます。"
+        },
+        "subjectRespondent": {
+          "headline": "件名に回答者を表示",
+          "subHeadline": "回答者の名前（最初の氏名または短いテキストの回答）をメールの件名に追加します。"
+        },
+        "skipOwner": {
+          "headline": "自分にはメールしない",
+          "subHeadline": "追加の受信者が設定されている場合、自分宛てのコピーを送信しません。受信者がいない場合は引き続きメールが届きます。"
         }
       },
       "protection": {

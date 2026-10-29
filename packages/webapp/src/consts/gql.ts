@@ -577,6 +577,9 @@ export const FORM_DETAIL_GQL = gql`
         openLinksInNewTab
         enableEmailNotification
         notificationRecipients
+        notificationReplyToRespondent
+        notificationSubjectRespondent
+        notificationSkipOwner
         locale
         languages
         enableClosedMessage
@@ -856,6 +859,7 @@ export const APPS_GQL = gql`
         visibleWhen
         defaultValue
       }
+      deliversSubmissions
     }
   }
 `
