@@ -6,16 +6,15 @@ import type {
   Logic,
   Variable
 } from '@heyform-inc/shared-types-enums'
-import { QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 import { useContext } from 'react'
 
 import {
   LRU,
   LRUMemoryStore,
+  calculateProgress,
   createStoreContext,
   createStoreReducer,
   isFile,
-  progressPercentage,
   replaceHTML,
   validateLogicField
 } from './utils'
@@ -135,6 +134,7 @@ export interface IState {
   settings?: FormSettings
   percentage: number
   questionCount: number
+  passedFieldIds: string[]
   scrollIndex?: number
   scrollTo?: ScrollDestination
   isScrollNextDisabled?: boolean
@@ -183,8 +183,7 @@ const actions: any = {
       newValues
     )
 
-    const questionCount = fields.filter(f => QUESTION_FIELD_KINDS.includes(f.kind)).length
-    const percentage = progressPercentage(Object.keys(newValues).length, questionCount)
+    const { questionCount, percentage } = calculateProgress(fields, newValues, state.passedFieldIds)
 
     const isTouched = validateLogicField(fields[state.scrollIndex!], state.jumpFieldIds, values)
     const isScrollNextDisabled = !isTouched || state.scrollIndex! >= fields.length - 1
@@ -285,9 +284,17 @@ const actions: any = {
       variables
     )
 
+    // Empty when moving backwards, and spans every question a question list jump skips over.
+    const passedFields = fields.slice(state.scrollIndex, scrollIndex)
+    const passedFieldIds = [...new Set([...state.passedFieldIds, ...passedFields.map(f => f.id)])]
+    const { questionCount, percentage } = calculateProgress(fields, values, passedFieldIds)
+
     return {
       ...state,
       fields,
+      passedFieldIds,
+      percentage,
+      questionCount,
       scrollIndex,
       scrollTo,
       isScrollNextDisabled: false,
@@ -309,6 +316,7 @@ export const StoreContext = createStoreContext<IState>({
   variables: {},
   percentage: 0,
   questionCount: 0,
+  passedFieldIds: [],
   locale: 'en',
   theme: {}
 })

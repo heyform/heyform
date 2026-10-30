@@ -66,7 +66,7 @@ export default {
   'Name on card': 'Karttaki isim',
   'Card number': 'Kart numarası',
   'Expiry date': 'Son kullanma tarihi',
-  '{{number}}% answered': '%{{number}} yanıtlandı',
+  '{{number}}% completed': '%{{number}} tamamlandı',
   'Please enter a valid mobile phone number': 'Lütfen geçerli bir cep telefonu numarası girin',
   'Please enter a valid email address': 'Lütfen geçerli bir e-posta adresi girin',
   'Please enter a valid url': 'Lütfen geçerli bir URL girin',

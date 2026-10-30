@@ -65,7 +65,7 @@ export default {
   'Name on card': 'Name on card',
   'Card number': 'Card number',
   'Expiry date': 'Expiry date',
-  '{{number}}% answered': '{{number}}% answered',
+  '{{number}}% completed': '{{number}}% completed',
   'Please enter a valid mobile phone number': 'Please enter a valid mobile phone number',
   'Please enter a valid email address': 'Please enter a valid email address',
   'Please enter a valid url': 'Please enter a valid url',

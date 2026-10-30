@@ -67,7 +67,7 @@ export default {
   'Name on card': 'Nombre en la tarjeta',
   'Card number': 'Número de tarjeta',
   'Expiry date': 'Fecha de vencimiento',
-  '{{number}}% answered': '{{number}}% completado',
+  '{{number}}% completed': '{{number}}% completado',
   'Please enter a valid mobile phone number': 'Por favor, ingresa un número de celular válido',
   'Please enter a valid email address': 'Por favor, ingresa una dirección de correo válida',
   'Please enter a valid url': 'Por favor, ingresa una URL válida',

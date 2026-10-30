@@ -66,7 +66,7 @@ export default {
   'Name on card': 'カード上の名前',
   'Card number': 'カード番号',
   'Expiry date': '有効期限',
-  '{{number}}% answered': '{{number}}%が回答済み',
+  '{{number}}% completed': '{{number}}%完了',
   'Please enter a valid mobile phone number': '有効な携帯電話番号を入力してください',
   'Please enter a valid email address': '有効なメールアドレスを入力してください',
   'Please enter a valid url': '有効なURLを入力してください',

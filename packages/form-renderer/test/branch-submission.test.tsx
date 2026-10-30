@@ -79,6 +79,7 @@ async function mount(
     theme: {},
     questionCount: 0,
     percentage: 0,
+    passedFieldIds: [],
     onSubmit
   }
 
@@ -121,6 +122,21 @@ async function mount(
             <button type="button" onClick={() => dispatch({ type: 'scrollPrevious' })}>
               Back
             </button>
+            <button type="button" data-next onClick={() => dispatch({ type: 'scrollNext' })}>
+              Next
+            </button>
+            <button
+              type="button"
+              data-last
+              onClick={() =>
+                dispatch({
+                  type: 'scrollToField',
+                  payload: { fieldId: state.fields[state.fields.length - 1].id }
+                })
+              }
+            >
+              Last
+            </button>
           </>
         )}
       </StoreContext.Provider>
@@ -153,8 +169,18 @@ async function back() {
   })
 }
 
+async function next() {
+  await act(async () => {
+    container.querySelector<HTMLButtonElement>('button[data-next]')!.click()
+  })
+}
+
 function currentQuestion() {
   return container.querySelector('output')?.getAttribute('data-question')
+}
+
+function currentPercentage() {
+  return container.querySelector('output')?.getAttribute('data-percentage')
 }
 
 test.each([false, true])(
@@ -319,3 +345,148 @@ test.each(['Producer', ''])(
     )
   }
 )
+
+test('progress counts only the questions on the route the answers chose', async () => {
+  await mount(
+    [question('q1'), question('skipped'), question('q3'), question('q4'), ending('end')],
+    [navigate('q1', 'q3')]
+  )
+
+  await answer('yes')
+  await submit()
+  expect(currentQuestion()).toBe('q3')
+  expect(currentPercentage()).toBe('33')
+
+  await answer('done')
+  await submit()
+  expect(currentQuestion()).toBe('q4')
+  expect(currentPercentage()).toBe('67')
+})
+
+test('progress drops answers left behind on a branch the respondent backed out of', async () => {
+  await mount(
+    [
+      question('q1', false, 'q3'),
+      question('branch-a'),
+      question('branch-b', false, 'q3'),
+      question('q3'),
+      question('q4'),
+      ending('end')
+    ],
+    [navigate('q1', 'branch-a')],
+    { q1: 'yes', 'branch-a': 'a', 'branch-b': 'b' }
+  )
+
+  await answer('no')
+  await submit()
+
+  expect(currentQuestion()).toBe('q3')
+  expect(currentPercentage()).toBe('33')
+})
+
+test('progress does not count a blank answer on a required question', async () => {
+  await mount([question('q1'), question('q2', true), question('q3'), ending('end')], [], {
+    q1: 'first',
+    q2: ''
+  })
+
+  await submit()
+
+  expect(currentQuestion()).toBe('q2')
+  expect(currentPercentage()).toBe('33')
+})
+
+test('progress counts an optional question the respondent moved past', async () => {
+  await mount([question('q1'), question('q2'), question('q3'), question('q4'), ending('end')], [])
+  expect(currentPercentage()).toBe('0')
+
+  await next()
+  expect(currentQuestion()).toBe('q2')
+  expect(currentPercentage()).toBe('25')
+
+  await next()
+  expect(currentQuestion()).toBe('q3')
+  expect(currentPercentage()).toBe('50')
+
+  // Going back to look at a question does not undo moving past it.
+  await back()
+  expect(currentQuestion()).toBe('q2')
+  expect(currentPercentage()).toBe('50')
+})
+
+test('progress counts every optional question a jump moves past', async () => {
+  await mount([question('q1'), question('q2'), question('q3'), question('q4'), ending('end')], [])
+
+  await act(async () => {
+    container.querySelector<HTMLButtonElement>('button[data-last]')!.click()
+  })
+
+  expect(currentQuestion()).toBe('q4')
+  expect(currentPercentage()).toBe('75')
+})
+
+test('progress does not count a required question the respondent moved past', async () => {
+  await mount([question('q1', true), question('q2'), ending('end')], [])
+
+  await next()
+
+  expect(currentQuestion()).toBe('q2')
+  expect(currentPercentage()).toBe('0')
+})
+
+test('progress forgets questions skipped on a branch the respondent backed out of', async () => {
+  await mount(
+    [
+      question('q1', false, 'q3'),
+      question('branch-a', false, 'q3'),
+      question('q3'),
+      question('q4'),
+      ending('end')
+    ],
+    [navigate('q1', 'branch-a')]
+  )
+
+  await answer('yes')
+  await submit()
+  expect(currentQuestion()).toBe('branch-a')
+
+  await next()
+  expect(currentQuestion()).toBe('q3')
+  expect(currentPercentage()).toBe('50')
+
+  await back()
+  await back()
+  await answer('no')
+  await submit()
+
+  expect(currentQuestion()).toBe('q3')
+  expect(currentPercentage()).toBe('33')
+})
+
+test('progress counts declining optional legal terms as an answer', async () => {
+  const terms: FormField = { id: 'terms', kind: FieldKindEnum.LEGAL_TERMS, title: 'terms' }
+
+  await mount([terms, question('q2'), ending('end')], [], { terms: false })
+
+  await submit()
+
+  expect(currentQuestion()).toBe('q2')
+  expect(currentPercentage()).toBe('50')
+})
+
+test('progress reaches 100% on a route through a group, which is not itself a question', async () => {
+  const group: FormField = { id: 'group', kind: FieldKindEnum.GROUP, title: 'group' }
+  const child = (id: string): FormField => ({ ...question(id), parent: group })
+
+  await mount([group, child('c1'), child('c2'), question('q3'), ending('end')], [], {
+    c1: 'a',
+    c2: 'b',
+    q3: 'c'
+  })
+
+  await submit()
+  await submit()
+
+  expect(currentQuestion()).toBe('c2')
+  expect(currentPercentage()).toBe('100')
+})

@@ -2,15 +2,14 @@ import {
   ActionEnum,
   FieldKindEnum,
   FormField,
-  OTHER_FIELD_KINDS,
-  QUESTION_FIELD_KINDS
+  OTHER_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 
-import { flattenFieldsWithGroups, parseFields, progressPercentage } from './utils'
+import { calculateProgress, flattenFieldsWithGroups, parseFields } from './utils'
 import { applyLogicToFields } from '@heyform-inc/answer-utils'
 import { helper, nanoid } from '@heyform-inc/utils'
 
@@ -70,8 +69,7 @@ function initStore(
     values
   )
 
-  const questionCount = fields.filter(f => QUESTION_FIELD_KINDS.includes(f.kind)).length
-  const percentage = progressPercentage(Object.keys(values).length, questionCount)
+  const { questionCount, percentage } = calculateProgress(fields, values)
 
   return {
     // Preventing hydration mismatch errors
@@ -90,6 +88,7 @@ function initStore(
     values,
     percentage,
     questionCount,
+    passedFieldIds: [],
     formId: form.id,
     scrollIndex: 0,
     scrollTo: 'next',
