@@ -7,6 +7,9 @@ import { createFieldNavigation, htmlUtils } from '@heyform-inc/answer-utils'
 import { Select } from '@/components'
 import { FormFieldType } from '@/types'
 
+// Radix Select doesn't allow an empty item value, so "Next in form order" uses this instead.
+const FORM_ORDER = '__form_order__'
+
 interface NextQuestionSelectProps {
   fields: FormFieldType[]
   currentField: FormFieldType
@@ -31,7 +34,7 @@ export function NextQuestionSelect({
     const navigation = createFieldNavigation(flattened)
 
     return [
-      { value: '', label: emptyLabel ?? t('form.builder.logic.nextQuestion.formOrder') },
+      { value: FORM_ORDER, label: emptyLabel ?? t('form.builder.logic.nextQuestion.formOrder') },
       ...flattened
         .filter(field => navigation.isValidNextFieldId(currentField.id, field.id))
         .map(field => ({
@@ -43,11 +46,11 @@ export function NextQuestionSelect({
   }, [fields, currentField.id, emptyLabel, t])
 
   return (
-    <Select.Native
+    <Select
       options={options}
-      value={value || ''}
+      value={value || FORM_ORDER}
       hasError={hasError}
-      onChange={onChange}
+      onChange={newValue => onChange?.(newValue === FORM_ORDER ? '' : newValue)}
       aria-label={t('form.builder.logic.nextQuestion.label')}
       className="w-full"
     />
