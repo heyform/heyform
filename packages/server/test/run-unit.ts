@@ -24,6 +24,7 @@ const tests = [
   'submission-ip.test.ts',
   'submission-ip-disabled.test.ts',
   'submission-ip-limit.test.ts',
+  'submission-discard.test.ts',
   'app-config.test.ts',
   'integration-auth.test.ts',
   'integration-records.test.ts',

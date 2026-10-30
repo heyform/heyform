@@ -28,6 +28,7 @@ import {
   GqlClient,
   assertFormIsAcceptingSubmissions,
   assertSafeSpecialFieldAnswers,
+  isSubmissionDiscarded,
   normalizeSubmissionHiddenFields,
   resolvePaymentConfiguration,
   selectSubmissionFields
@@ -112,6 +113,7 @@ export class CompleteSubmissionResolver {
     let answers: Answer[] = []
     let variables: Variable[] = []
     let variableValues: Record<string, any> = {}
+    let isDiscarded = false
 
     try {
       const flattenedFields = flattenFields(form.fields, true)
@@ -134,8 +136,19 @@ export class CompleteSubmissionResolver {
         ...variable,
         value: variableValues[variable.id]
       }))
+      isDiscarded = isSubmissionDiscarded(
+        form,
+        flattenedFields,
+        input.answers,
+        input.partialSubmission === true
+      )
     } catch (err) {
       throw new BadRequestException(err.response)
+    }
+
+    // The respondent still sees the ending, but nothing is stored or sent on
+    if (isDiscarded) {
+      return {}
     }
 
     let category = SubmissionCategoryEnum.INBOX

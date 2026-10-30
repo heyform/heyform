@@ -116,6 +116,11 @@ export function isSameDate(
   format = DEFAULT_DATE_FORMAT,
   allowTime = false
 ): boolean {
+  // Day.js reads undefined as now, which differs between the browser and the server
+  if (helper.isNil(value)) {
+    return false
+  }
+
   const valueFormat = getDateFormat(format, allowTime)
   const expectedFormat = getDateFormat(DEFAULT_DATE_FORMAT, allowTime)
 
@@ -128,6 +133,11 @@ export function isBeforeDate(
   format = DEFAULT_DATE_FORMAT,
   allowTime = false
 ): boolean {
+  // Day.js reads undefined as now, which differs between the browser and the server
+  if (helper.isNil(value)) {
+    return false
+  }
+
   const valueFormat = getDateFormat(format, allowTime)
   const expectedFormat = getDateFormat(DEFAULT_DATE_FORMAT, allowTime)
 
@@ -140,6 +150,11 @@ export function isAfterDate(
   format = DEFAULT_DATE_FORMAT,
   allowTime = false
 ): boolean {
+  // Day.js reads undefined as now, which differs between the browser and the server
+  if (helper.isNil(value)) {
+    return false
+  }
+
   const valueFormat = getDateFormat(format, allowTime)
   const expectedFormat = getDateFormat(DEFAULT_DATE_FORMAT, allowTime)
 

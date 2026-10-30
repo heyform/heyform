@@ -4,7 +4,12 @@ import {
   OTHER_FIELD_KINDS,
   QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
-import { IconCaretDownFilled, IconDotsVertical, IconPlus } from '@tabler/icons-react'
+import {
+  IconCaretDownFilled,
+  IconDatabaseOff,
+  IconDotsVertical,
+  IconPlus
+} from '@tabler/icons-react'
 import { FC, MouseEvent, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
@@ -63,6 +68,24 @@ export const QuestionIcon: FC<QuestionIconProps> = ({
         </span>
       )}
     </div>
+  )
+}
+
+export const DiscardingEndingIcon: FC<ComponentProps & { field: FormFieldType }> = ({
+  className,
+  field
+}) => {
+  const { t } = useTranslation()
+
+  if (field.kind !== FieldKindEnum.THANK_YOU || !field.properties?.discardSubmission) {
+    return null
+  }
+
+  return (
+    <IconDatabaseOff
+      className={cn('h-4 w-4 shrink-0', className)}
+      title={t('form.builder.settings.discardSubmission')}
+    />
   )
 }
 
@@ -261,6 +284,8 @@ const Question: FC<QuestionProps> = ({
           <div className="question-title text-secondary group-hover:text-primary group-data-[active=true]/root:text-primary ml-3 mr-1 line-clamp-2 flex-1 shrink basis-0 overflow-hidden break-words text-xs font-semibold">
             {htmlUtils.plain(field.title as string)}
           </div>
+
+          <DiscardingEndingIcon className="text-secondary mr-1" field={field} />
         </div>
 
         <div className="flex h-full items-center gap-x-1 px-2">

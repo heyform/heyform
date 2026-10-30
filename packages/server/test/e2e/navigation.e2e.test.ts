@@ -31,6 +31,17 @@ const SUBMISSION_ANSWERS_GQL = /* GraphQL */ `
   }
 `
 
+const PUBLIC_FORM_PROPERTIES_GQL = /* GraphQL */ `
+  query publicForm($input: FormDetailInput!) {
+    publicForm(input: $input) {
+      fields {
+        id
+        properties
+      }
+    }
+  }
+`
+
 export function build(baseUrl: string) {
   const { suite, test } = defineSuite('navigation')
   let owner: E2EClient
@@ -116,6 +127,84 @@ export function build(baseUrl: string) {
       input: { formId, category: 'inbox', page: 1, limit: 30 }
     })
     assert.strictEqual(submissions.total, 2)
+  })
+
+  test('an ending that discards responses survives publishing and saves nothing', async () => {
+    const teams = await owner.gqlOk<any[]>('teams', TEAMS_GQL)
+    const discardFormId = await owner.gqlOk<string>('createForm', CREATE_FORM_GQL, {
+      input: {
+        projectId: teams[0].projects[0].id,
+        name: uniqueName('Eligibility'),
+        kind: 1,
+        interactiveMode: 1
+      }
+    })
+    const detail = await owner.gqlOk<any>('formDetail', FORM_DETAIL_GQL, {
+      input: { formId: discardFormId }
+    })
+    const discardDrafts = [
+      { id: 'q1', kind: 'short_text', title: ['Eligible?'], validations: { required: true } },
+      { id: 'end', kind: 'thank_you', title: ['Thanks!'] },
+      {
+        id: 'later',
+        kind: 'thank_you',
+        title: ['Try again later'],
+        properties: { discardSubmission: true }
+      }
+    ]
+    const saved = await owner.gqlOk<any>('updateFormSchemas', UPDATE_FORM_SCHEMAS_GQL, {
+      input: { formId: discardFormId, version: detail.version, drafts: discardDrafts }
+    })
+    await owner.gqlOk('updateFormLogics', UPDATE_FORM_LOGICS_GQL, {
+      input: {
+        formId: discardFormId,
+        logics: [
+          {
+            fieldId: 'q1',
+            payloads: [
+              {
+                id: 'no',
+                condition: { comparison: 'is', expected: 'no' },
+                action: { kind: 'navigate', fieldId: 'later' }
+              }
+            ]
+          }
+        ]
+      }
+    })
+    await owner.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId: discardFormId, version: saved.version, drafts: discardDrafts }
+    })
+
+    const respondent = new E2EClient({ baseUrl })
+    const published = await respondent.gqlOk<any>('publicForm', PUBLIC_FORM_PROPERTIES_GQL, {
+      input: { formId: discardFormId }
+    })
+    assert.strictEqual(
+      published.fields.find((f: any) => f.id === 'later').properties.discardSubmission,
+      true
+    )
+
+    const submit = async (q1: string) => {
+      const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+        input: { formId: discardFormId }
+      })
+      return respondent.gqlOk<any>('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+        input: { formId: discardFormId, openToken, hiddenFields: [], answers: { q1 } }
+      })
+    }
+    const total = async () =>
+      (
+        await owner.gqlOk<any>('submissions', SUBMISSIONS_GQL, {
+          input: { formId: discardFormId, category: 'inbox', page: 1, limit: 30 }
+        })
+      ).total
+
+    await submit('no')
+    assert.strictEqual(await total(), 0)
+
+    await submit('yes')
+    assert.strictEqual(await total(), 1)
   })
 
   test('invalid destinations cannot be saved or published', async () => {
