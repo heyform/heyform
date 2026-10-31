@@ -337,6 +337,31 @@ test('file upload requires a usable http(s) upload reference', () => {
   ).toBe(undefined)
 })
 
+test('file upload accepts a chosen file that submit has not uploaded yet', () => {
+  const [optionalRule, requiredRule] = fieldsToValidateRules([
+    {
+      id: 'OPTIONAL_FILE_UPLOAD',
+      kind: FieldKindEnum.FILE_UPLOAD,
+      title: 'CV',
+      validations: { required: false }
+    },
+    {
+      id: 'REQUIRED_FILE_UPLOAD',
+      kind: FieldKindEnum.FILE_UPLOAD,
+      title: 'CV',
+      validations: { required: true }
+    }
+  ])
+  const file = new File(['cv'], 'cv.pdf', { type: 'application/pdf' })
+  const fileShape = { name: 'cv.pdf', size: 2, type: 'application/pdf' }
+
+  expect(validate(optionalRule, file)).toBe(undefined)
+  expect(validate(requiredRule, file)).toBe(undefined)
+  // Matched by tag, as the renderer's isFile does, not by instanceof.
+  expect(validate(requiredRule, { ...fileShape, [Symbol.toStringTag]: 'File' })).toBe(undefined)
+  expect(() => validate(optionalRule, fileShape)).toThrowError()
+})
+
 test('legal terms rejects non-boolean and requires acceptance', () => {
   const requiredRule = fieldsToValidateRules([
     {
