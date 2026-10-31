@@ -49,7 +49,8 @@ async function mount(field: FormField, alwaysShowNextButton = false) {
     locale: 'en',
     theme: {},
     questionCount: 0,
-    percentage: 0
+    percentage: 0,
+    passedFieldIds: []
   }
 
   function Respondent() {

@@ -65,7 +65,7 @@ export default {
   'Name on card': '卡上的姓名',
   'Card number': '卡號',
   'Expiry date': '到期日期',
-  '{{number}}% answered': '已回答{{number}}%',
+  '{{number}}% completed': '已完成{{number}}%',
   'Please enter a valid mobile phone number': '請輸入有效的手機號碼',
   'Please enter a valid email address': '請輸入有效的電子郵件地址',
   'Please enter a valid url': '請輸入有效的網址',
