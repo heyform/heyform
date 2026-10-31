@@ -1515,7 +1515,14 @@
             "letter": "Letter",
             "number": "Number"
           },
-          "verticalAlignment": "Vertical alignment"
+          "verticalAlignment": "Vertical alignment",
+          "limit": {
+            "title": "Response limit per option",
+            "description": "Leave empty for no limit. Once an option has reached its limit, new submissions can no longer choose it.",
+            "option": "Option {{index}}",
+            "increase": "Increase limit",
+            "decrease": "Decrease limit"
+          }
         }
       },
       "design": {

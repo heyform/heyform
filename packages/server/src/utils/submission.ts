@@ -1,5 +1,7 @@
 import {
   ActionEnum,
+  Answer,
+  CHOICES_FIELD_KINDS,
   FieldKindEnum,
   FormField,
   HiddenField,
@@ -156,6 +158,43 @@ export function selectSubmissionFields(
   }
 
   return fields.slice(0, terminalIndex + 1)
+}
+
+export interface ChoiceLimit {
+  fieldId: string
+  choiceId: string
+  label: string
+  limit: number
+}
+
+/**
+ * Limits of the choices a respondent picked. They are read from the form definition.
+ */
+export function collectChoiceLimits(fields: FormField[], answers: Answer[]): ChoiceLimit[] {
+  const result: ChoiceLimit[] = []
+
+  for (const answer of answers) {
+    const picked = answer.value?.value
+
+    if (!CHOICES_FIELD_KINDS.includes(answer.kind) || !Array.isArray(picked)) {
+      continue
+    }
+
+    const field = fields.find(row => row.id === answer.id)
+
+    for (const choice of field?.properties?.choices || []) {
+      if (picked.includes(choice.id) && Number.isSafeInteger(choice.limit) && choice.limit! >= 1) {
+        result.push({
+          fieldId: answer.id,
+          choiceId: choice.id,
+          label: choice.label,
+          limit: choice.limit!
+        })
+      }
+    }
+  }
+
+  return result
 }
 
 export function assertSafeSpecialFieldAnswers(

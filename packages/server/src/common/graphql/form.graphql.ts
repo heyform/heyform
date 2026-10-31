@@ -65,6 +65,9 @@ class ChoiceInput {
 
   @Field({ nullable: true })
   isExpected?: boolean
+
+  @Field({ nullable: true })
+  limit?: number
 }
 
 @InputType()
@@ -868,6 +871,9 @@ export class ChoiceType {
 
   @Field({ nullable: true })
   isExpected?: boolean
+
+  @Field({ nullable: true })
+  limit?: number
 }
 
 @ObjectType()
