@@ -319,3 +319,60 @@ test.each(['Producer', ''])(
     )
   }
 )
+
+function upload(required: boolean): FormField {
+  return { id: 'cv', kind: FieldKindEnum.FILE_UPLOAD, title: 'cv', validations: { required } }
+}
+
+// The renderer holds a chosen File as the answer; it is uploaded only after the route validates.
+function chosenFile() {
+  return new File(['cv'], 'cv.pdf', { type: 'application/pdf' })
+}
+
+test.each([
+  ['an optional', false],
+  ['a required', true]
+])('a chosen file on %s upload question does not send submit back to it', async (_, required) => {
+  const file = chosenFile()
+  const onSubmit = await mount([upload(required), question('last'), ending('end')], [], {
+    cv: file
+  })
+
+  await submit()
+  expect(currentQuestion()).toBe('last')
+
+  await answer('done')
+  await submit()
+
+  expect(onSubmit).toHaveBeenCalledWith({ cv: file, last: 'done' }, false, undefined)
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('end')
+})
+
+test('a chosen file on an upload question reached by a jump does not send submit back to it', async () => {
+  const file = chosenFile()
+  const onSubmit = await mount(
+    [
+      question('role', true),
+      question('other-role'),
+      upload(false),
+      question('last'),
+      ending('end')
+    ],
+    [navigate('role', 'cv', 'producer')],
+    { role: 'producer', cv: file }
+  )
+
+  await submit()
+  await submit()
+  expect(currentQuestion()).toBe('last')
+
+  await answer('done')
+  await submit()
+
+  expect(onSubmit).toHaveBeenCalledWith(
+    { role: 'producer', cv: file, last: 'done' },
+    false,
+    undefined
+  )
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('end')
+})
