@@ -454,12 +454,9 @@ export default function EmbedModal() {
     <>
       <Modal
         open={isOpen}
-        overlayProps={{
-          className: 'bg-transparent'
-        }}
         contentProps={{
           className:
-            'p-0 w-screen max-w-screen max-h-screen overflow-hidden h-screen bg-foreground focus:outline-none focus-visible:outline-none'
+            'p-0 w-full max-w-full max-h-[90vh] overflow-hidden h-[90vh] bg-foreground focus:outline-none focus-visible:outline-none sm:w-[90vw]'
         }}
         isCloseButtonShow={false}
         onOpenChange={onOpenChange}

@@ -324,12 +324,9 @@ export default function BrandKitModal() {
   return (
     <Modal
       open={isOpen}
-      overlayProps={{
-        className: 'bg-black/60 sm:bg-transparent'
-      }}
       contentProps={{
         className:
-          'p-0 w-screen max-w-screen max-h-[80vh] overflow-hidden h-screen bg-foreground focus:outline-none focus-visible:outline-none sm:bg-background sm:max-h-screen sm:!border-none sm:!rounded-none'
+          'p-0 w-full max-w-full max-h-[90vh] overflow-hidden h-[90vh] bg-foreground focus:outline-none focus-visible:outline-none sm:w-[90vw] sm:bg-background'
       }}
       isCloseButtonShow={false}
       onOpenChange={onOpenChange}
