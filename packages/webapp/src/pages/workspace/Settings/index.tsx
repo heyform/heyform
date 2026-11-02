@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
+import { AnchorNavigation } from '@/components'
+
 import BrandKitModal from './BrandKitModal'
 import WorkspaceBranding from './Branding'
 import WorkspaceConnectedAccounts from './ConnectedAccounts'
@@ -18,8 +20,31 @@ export default function WorkspaceSettings() {
 
           <hr className="border-accent-light my-6 w-full border-t" />
 
-          <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-            <div className="flex-1 p-6">
+          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-16 lg:space-y-0">
+            <aside className="-mx-3 lg:w-1/4">
+              <AnchorNavigation
+                menus={[
+                  {
+                    label: t('settings.general.title'),
+                    value: 'general'
+                  },
+                  {
+                    label: t('settings.branding.title'),
+                    value: 'branding'
+                  },
+                  {
+                    label: t('settings.connectedAccounts.title'),
+                    value: 'connected-accounts'
+                  },
+                  {
+                    label: t('settings.deletion.title'),
+                    value: 'deletion'
+                  }
+                ]}
+              />
+            </aside>
+
+            <div className="flex-1">
               <WorkspaceGeneral />
               <WorkspaceBranding />
               <WorkspaceConnectedAccounts />
