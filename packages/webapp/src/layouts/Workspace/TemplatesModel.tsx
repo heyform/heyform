@@ -313,7 +313,7 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
                   <li key={template.id} className="border-input overflow-hidden rounded-lg border">
                     <button
                       type="button"
-                      className="h-full w-full text-left"
+                      className="flex h-full w-full flex-col text-left"
                       onClick={() => setTemplate(template)}
                     >
                       <Image
