@@ -17,8 +17,7 @@ export default function ChangelogsModal() {
       open={isOpen}
       title={t('workspace.sidebar.whatsNew')}
       contentProps={{
-        className:
-          'outline-none h-[80vh] sm:h-screen sm:max-h-screen sm:duration-600 sm:rounded-r-none sm:border-r-0 sm:top-0 sm:left-[initial] sm:right-0 sm:translate-y-0 sm:translate-x-0 data-[state=open]:sm:!slide-in-from-top-0 data-[state=closed]:sm:!slide-out-to-top-0 data-[state=open]:sm:slide-in-from-right-[80%] data-[state=closed]:sm:zoom-out-100 data-[state=open]:sm:zoom-in-100 data-[state=closed]:sm:slide-out-to-right-[80%] data-[state=closed]:sm:slide-out-to-top-0 data-[state=open]:sm:slide-in-from-left-1/2'
+        className: 'outline-none'
       }}
       onOpenChange={onOpenChange}
     >
