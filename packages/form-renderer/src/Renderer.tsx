@@ -1,15 +1,10 @@
-import {
-  ActionEnum,
-  FieldKindEnum,
-  FormField,
-  OTHER_FIELD_KINDS
-} from '@heyform-inc/shared-types-enums'
+import { ActionEnum, FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect, useMemo, useReducer, useState } from 'react'
 
-import { calculateProgress, flattenFieldsWithGroups, parseFields } from './utils'
+import { calculateProgress, getRespondentFields } from './utils'
 import { applyLogicToFields } from '@heyform-inc/answer-utils'
 import { helper, nanoid } from '@heyform-inc/utils'
 
@@ -46,16 +41,11 @@ function initStore(
   allowPayment: boolean,
   ssr?: boolean
 ): IState {
-  const list = parseFields(form.fields, form.translations?.[locale])
-
-  const welcomeField = list.find(f => f.kind === FieldKindEnum.WELCOME)
-  const thankYouFields = list.filter(f => f.kind === FieldKindEnum.THANK_YOU)
-
-  let allFields = flattenFieldsWithGroups(list.filter(f => !OTHER_FIELD_KINDS.includes(f.kind)))
-
-  if (!allowPayment) {
-    allFields = allFields.filter(f => f.kind !== FieldKindEnum.PAYMENT)
-  }
+  const { welcomeField, thankYouFields, allFields } = getRespondentFields(
+    form.fields,
+    form.translations?.[locale],
+    allowPayment
+  )
 
   const jumpFieldIds = (form.logics || [])
     .filter(l => l.payloads.some(p => p.action.kind === ActionEnum.NAVIGATE))

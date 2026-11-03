@@ -1,13 +1,11 @@
 import {
   ActionEnum,
-  FORM_FIELD_KINDS,
   FieldKindEnum,
   FormField,
   HiddenField,
   HiddenFieldAnswer,
   Logic,
-  Property,
-  Variable
+  Property
 } from '@heyform-inc/shared-types-enums'
 import { BadRequestException } from '@nestjs/common'
 
@@ -18,7 +16,6 @@ import {
   S3_ENDPOINT,
   S3_PUBLIC_URL
 } from '@environments'
-import { resolveEnding } from '@heyform-inc/answer-utils'
 
 import { isAllowedUrlOrigin } from './outbound-url'
 
@@ -169,58 +166,8 @@ export function selectSubmissionFields(
   return fields.slice(0, terminalIndex + 1)
 }
 
-// Whether these answers lead to an ending that keeps its responses out of the form.
-// Forms without such an ending never evaluate it, so they can't fail or change here.
-export function isSubmissionDiscarded(
-  form: { fields?: FormField[]; logics?: Logic[]; variables?: Variable[] },
-  flattenedFields: FormField[],
-  values: Record<string, any>,
-  partialSubmission = false
-): boolean {
-  const hasDiscardingEnding = flattenedFields.some(
-    field => field.kind === FieldKindEnum.THANK_YOU && field.properties?.discardSubmission === true
-  )
-
-  if (!hasDiscardingEnding) {
-    return false
-  }
-
-  // Variable rules can read answers the browser changes before sending, such as an upload's
-  // URL, so the server could reach another ending than the one on screen. Current renderers
-  // never send a discarded response, so leave these forms to them: at worst this keeps one.
-  if (form.variables?.some(variable => variable.logics?.length)) {
-    return false
-  }
-
-  // Keep to the fields the renderer shows: it drops unknown kinds and groups with no questions,
-  // and decides only from top-level endings (it can't show one nested in a group)
-  const topLevelIds = new Set((form.fields || []).map(field => field.id))
-  const emptyGroupIds = new Set(
-    (form.fields || [])
-      .filter(
-        field =>
-          field.kind === FieldKindEnum.GROUP &&
-          !field.properties?.fields?.some(child => FORM_FIELD_KINDS.includes(child.kind))
-      )
-      .map(field => field.id)
-  )
-  const visibleFields = flattenedFields.filter(
-    field =>
-      FORM_FIELD_KINDS.includes(field.kind) &&
-      (field.kind !== FieldKindEnum.THANK_YOU || topLevelIds.has(field.id)) &&
-      !emptyGroupIds.has(field.id)
-  )
-  const endsDiscarding = (fields: FormField[]) =>
-    resolveEnding(fields, form.logics, form.variables, values, partialSubmission)?.properties
-      ?.discardSubmission === true
-
-  // The renderer may leave payment fields off the route, and that changes where it ends.
-  // Discard only if the route ends the same way either way, so a mismatch keeps the response.
-  return (
-    endsDiscarding(visibleFields) &&
-    endsDiscarding(visibleFields.filter(field => field.kind !== FieldKindEnum.PAYMENT))
-  )
-}
+// Lives next to resolveEnding so the renderer's tests can check both sides agree
+export { isSubmissionDiscarded } from '@heyform-inc/answer-utils'
 
 export function assertSafeSpecialFieldAnswers(
   fields: FormField[],

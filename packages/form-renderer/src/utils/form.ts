@@ -18,6 +18,29 @@ const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const HIDDEN_FIELD_REGEX = /<span[^>]+data-hiddenfield="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 
+// The fields a respondent can reach, as the renderer lays them out: every question and
+// statement with each group followed by its children (a group without any is dropped),
+// payment fields only when payments are on, and the top-level endings. initStore() and the
+// tests that compare the renderer with the server both build it here.
+export function getRespondentFields(
+  fields: IFormField[] | undefined,
+  translations?: Record<string, any>,
+  allowPayment = true
+) {
+  const list = parseFields(fields, translations)
+  const welcomeField = list.find(f => f.kind === FieldKindEnum.WELCOME)
+  const thankYouFields = list.filter(f => f.kind === FieldKindEnum.THANK_YOU)
+  let allFields = flattenFieldsWithGroups(
+    list.filter(f => f.kind !== FieldKindEnum.WELCOME && f.kind !== FieldKindEnum.THANK_YOU)
+  )
+
+  if (!allowPayment) {
+    allFields = allFields.filter(f => f.kind !== FieldKindEnum.PAYMENT)
+  }
+
+  return { welcomeField, thankYouFields, allFields }
+}
+
 // The fields resolveEnding() decides from. Only top-level endings can be shown (Blocks.tsx looks
 // the id up in thankYouFields) and the server leaves nested ones out too, so an ending inside a
 // group is dropped here instead of becoming the fallback ending ahead of the top-level ones.
