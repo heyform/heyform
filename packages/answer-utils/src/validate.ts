@@ -162,7 +162,8 @@ function validateText(rule: FieldsToValidateRules, value: AnswerValue) {
 }
 
 function validateNumber(rule: FieldsToValidateRules, value: AnswerValue) {
-  if (!helper.isNumeric(String(value))) {
+  // A number or numeric text. String(value) would let [3] through and store an array.
+  if (!helper.isNumeric(value)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -260,6 +261,16 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
     value.value = []
   }
 
+  // "Other" is typed text; anything else would be stored and rendered as-is
+  if (!helper.isNil(value?.other) && !helper.isString(value.other)) {
+    throw new ValidateError({
+      id: rule.id,
+      kind: rule.kind,
+      title: rule.title,
+      message: 'Other value must be text'
+    })
+  }
+
   // A blank "Other" is an answer only on questions that allow it.
   const isBlankOther = !!(rule.allowOther && rule.allowBlankOther && value?.other === '')
 
@@ -335,7 +346,12 @@ function validateMultipleChoice(rule: FieldsToValidateRules, value: AnswerValue)
 }
 
 function validateRating(rule: FieldsToValidateRules, value: AnswerValue) {
-  if (!validateInt(value, 1, rule.total!)) {
+  // parseInt() alone accepts "3abc", "0x3", "3.9" and [3]
+  if (
+    !helper.isNumeric(value) ||
+    !Number.isInteger(Number(value)) ||
+    !validateInt(value, 1, rule.total!)
+  ) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
@@ -445,7 +461,24 @@ function validateFile(rule: FieldsToValidateRules, value: AnswerValue) {
   }
 }
 
+// Every part of a compound answer is typed text (or left out)
+function validateTextParts(rule: FieldsToValidateRules, value: AnswerValue, keys: string[]) {
+  if (
+    !helper.isObject(value) ||
+    keys.some(key => !helper.isNil(value[key]) && !helper.isString(value[key]))
+  ) {
+    throw new ValidateError({
+      id: rule.id,
+      kind: rule.kind,
+      title: rule.title,
+      message: 'This field must contain text'
+    })
+  }
+}
+
 function validateFullName(rule: FieldsToValidateRules, value: AnswerValue) {
+  validateTextParts(rule, value, ['firstName', 'lastName'])
+
   if (helper.isEmpty(value.firstName)) {
     throw new ValidateError({
       id: rule.id,
@@ -466,6 +499,8 @@ function validateFullName(rule: FieldsToValidateRules, value: AnswerValue) {
 }
 
 function validateAddress(rule: FieldsToValidateRules, value: AnswerValue) {
+  validateTextParts(rule, value, ['address1', 'address2', 'city', 'state', 'zip', 'country'])
+
   if (helper.isEmpty(value.address1)) {
     throw new ValidateError({
       id: rule.id,
@@ -592,8 +627,19 @@ function validateLegalTerms(rule: FieldsToValidateRules, value: AnswerValue): vo
   }
 }
 
+function isTableCell(cell: unknown): boolean {
+  return (
+    helper.isNil(cell) || helper.isString(cell) || helper.isNumber(cell) || helper.isBoolean(cell)
+  )
+}
+
 function validateInputTable(rule: FieldsToValidateRules, value: AnswerValue): void {
-  if (!helper.isArray(value) || !value.every(row => helper.isPlainObject(row))) {
+  if (
+    !helper.isArray(value) ||
+    !value.every(
+      row => helper.isPlainObject(row) && Object.values(row).every(cell => isTableCell(cell))
+    )
+  ) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,

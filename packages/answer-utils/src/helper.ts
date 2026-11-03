@@ -13,6 +13,11 @@ export function isNumber(arg: any): boolean {
 }
 
 export function isMobilePhone(arg: any): boolean {
+  // libphonenumber throws on anything but a string
+  if (typeof arg !== 'string') {
+    return false
+  }
+
   const phoneNumber = parsePhoneNumberFromString(arg)
   return !!phoneNumber?.isValid()
 }
@@ -25,6 +30,11 @@ export function getDateFormat(format: string, allowTime?: boolean): string {
 }
 
 export function isDate(input: string, format = 'MM/DD/YYYY'): boolean {
+  // A date range's start/end comes straight from the request and may not be a string
+  if (typeof input !== 'string') {
+    return false
+  }
+
   const inputArr = input.match(REGEX_NUMBERS)
   const formatArr = format.match(REGEX_FORMAT)
 
