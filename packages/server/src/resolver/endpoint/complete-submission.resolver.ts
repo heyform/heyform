@@ -29,6 +29,7 @@ import {
   assertFormIsAcceptingSubmissions,
   assertSafeSpecialFieldAnswers,
   isSubmissionDiscarded,
+  isTimeLimitUp,
   normalizeSubmissionHiddenFields,
   resolvePaymentConfiguration,
   selectSubmissionFields
@@ -88,13 +89,19 @@ export class CompleteSubmissionResolver {
 
     // Start submit time
     const openToken = this.endpointService.decryptToken(input.openToken)
+    const isPartialSubmission = input.partialSubmission === true
 
     const startAt = this.endpointService.assertOpenToken(
       openToken,
       input.formId,
       form.settings,
-      now
+      now,
+      { allowTimeUpGrace: isPartialSubmission }
     )
+
+    // The time limit's own submission (Header.tsx): store what was answered on the route,
+    // without the required questions the respondent had no time left for
+    const isTimeUp = isPartialSubmission && isTimeLimitUp(form.settings, startAt, now)
 
     // Bot prevention check
     if (form.settings?.captchaKind !== CaptchaKindEnum.NONE) {
@@ -118,22 +125,22 @@ export class CompleteSubmissionResolver {
       const fields = selectSubmissionFields(
         logicResult.fields,
         form.logics,
-        input.partialSubmission === true
+        isPartialSubmission,
+        isTimeUp
       )
       assertSafeSpecialFieldAnswers(fields, input.answers)
       variableValues = logicResult.variables
 
-      answers = fieldValuesToAnswers(fields, input.answers)
+      answers = isTimeUp
+        ? fieldValuesToAnswers(fields, input.answers, true).filter(answer =>
+            helper.isValid(answer.value)
+          )
+        : fieldValuesToAnswers(fields, input.answers)
       variables = form.variables?.map(variable => ({
         ...variable,
         value: variableValues[variable.id]
       }))
-      isDiscarded = isSubmissionDiscarded(
-        form,
-        flattenedFields,
-        input.answers,
-        input.partialSubmission === true
-      )
+      isDiscarded = isSubmissionDiscarded(form, flattenedFields, input.answers, isPartialSubmission)
     } catch (err) {
       throw new BadRequestException(err.response)
     }

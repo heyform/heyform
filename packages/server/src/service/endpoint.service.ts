@@ -51,9 +51,10 @@ export class EndpointService {
     token: Record<string, any>,
     formId: string,
     settings: FormSettings,
-    now: number
+    now: number,
+    options?: Parameters<typeof assertOpenToken>[4]
   ): number {
-    return assertOpenToken(token, formId, settings, now)
+    return assertOpenToken(token, formId, settings, now, options)
   }
 
   assertFormPasswordToken(
