@@ -1,4 +1,0 @@
-.tools/
-states/
-# TLC writes a trace module for every violated invariant (expected-fail configs)
-*_TTrace_*

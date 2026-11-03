@@ -26,6 +26,7 @@ const tests = [
   'submission-ip-limit.test.ts',
   'submission-discard.test.ts',
   'submission-time-limit.test.ts',
+  'form-flow-outcomes.test.ts',
   'app-config.test.ts',
   'integration-auth.test.ts',
   'integration-records.test.ts',
