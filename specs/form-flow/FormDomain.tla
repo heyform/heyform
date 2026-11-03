@@ -224,7 +224,9 @@ DateOrd(s) == IF DateIn(s) THEN CHOOSE i \in 1..Len(DateSeq) : DateSeq[i] = s EL
 FieldDomainUnder(k, fid) ==
   CASE k \in {"short_text", "long_text", "email", "url", "phone_number",
               "country", "date", "signature"} -> {Text(s) : s \in TextVals}
-    [] k = "number" -> {Num(n) : n \in NumVals}
+    \* Any number the environment can send (NumVals alone left out attack numbers such
+    \* as Num(7), which made Answer_TypeSafe fail on the model rather than the code)
+    [] k = "number" -> {v \in SentValues \cup {Num(n) : n \in NumVals} : v.tag = "num"}
     [] k \in {"rating", "opinion_scale"} -> {Num(n) : n \in 1..Total[fid]}
     [] k = "yes_no" -> {Single(c) : c \in Choices[fid]}
     [] k \in CHOICE_KINDS ->
@@ -249,7 +251,10 @@ TypeSafe(kinds, fid)    == TypeSafeUnder(kinds[fid], fid)
 
 \* ---------------------------------------------------------------------------
 \* validate() - the server gate.  Faithful to packages/answer-utils/src/validate.ts
-\* including its coercions (isNumeric(String(v)), parseInt, no tag checks).
+\* including its coercions (a number may be numeric text).  The value universe has no
+\* arrays and no nested objects, so the per-part type checks (choice "Other", full name,
+\* address, table cells) are covered by the fuzz test in
+\* packages/webapp/test/submission-cell-fuzz.test.tsx rather than here.
 \* ---------------------------------------------------------------------------
 MultiOk(fid, v) ==
   LET sel        == v.sel
@@ -272,7 +277,11 @@ TypeOkUnder(k, fid, v) ==
          v.tag = "text" /\ (StartsWith(v.text, "http") \/ StartsWith(v.text, "https"))
     [] k = "phone_number" -> v.tag = "text" /\ IsDigits(v.text)
     [] k = "number" -> IsNumericVal(v)                  \* isNumeric(String(value))
-    [] k \in {"rating", "opinion_scale"} -> IntOf(v) \in 1..Total[fid]
+    \* validateRating: numeric, a whole number, then validateInt's range.  (parseInt alone
+    \* let "3abc" through; see MCTypeHole.)
+    [] k \in {"rating", "opinion_scale"} ->
+         IF Form.ratingParseIntOnly THEN IntOf(v) \in 1..Total[fid]
+         ELSE IsNumericVal(v) /\ NumberOf(v) \in 1..Total[fid]
     [] k = "yes_no" -> v.tag = "single" /\ v.choice \in Choices[fid]
     [] k \in CHOICE_KINDS -> v.tag = "multi" /\ MultiOk(fid, v)
     [] k = "legal_terms" -> v.tag = "bool"

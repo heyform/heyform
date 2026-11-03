@@ -4,8 +4,9 @@
 #   ./run.sh              # full suite, expectations enforced
 #   WORKERS=1 ./run.sh    # fewer workers (MCTerm must stay single-worker)
 #
-# Configs whose invariants are expected to fail document the two storage-type
-# holes that were found; the script fails if they start passing.
+# Configs expected to fail either document an open issue or are a *Legacy/*Broken
+# variant that reproduces a fixed bug, proving the invariant that guards it is not
+# vacuous. The script fails if any verdict changes.
 set -uo pipefail
 cd "$(dirname "$0")"
 
@@ -31,7 +32,7 @@ check() { # check <config> <expect: pass|fail> <spec module> [extra tlc args]
   local out
   mkdir -p "states/$cfg"
   out=$(java -XX:+UseParallelGC -cp "$JAR" tlc2.TLC -config "$cfg.cfg" \
-          -metadir "states/$cfg" -workers "$WORKERS" "$@" "$spec" 2>&1)
+          -metadir "states/$cfg" -noGenerateSpecTE -workers "$WORKERS" "$@" "$spec" 2>&1)
   local rc=$?
   local ok=no
   if [ $rc -eq 0 ] && grep -q "No error has been found" <<<"$out"; then ok=pass; fi
@@ -52,7 +53,8 @@ check MCAttack          pass MCModel.tla
 check MCTerm            pass MCModel.tla -workers 1
 check MCDrift           pass MCModel.tla
 check MCStrict          fail MCModel.tla
-check MCTypeHole        fail MCModel.tla
+check MCTypeHole        pass MCModel.tla
+check MCTypeHoleLegacy  fail MCModel.tla
 check MCDriftLogic      fail MCModel.tla
 check MCDriftCalc       fail MCModel.tla
 check MCDriftUnguarded  fail MCModel.tla
@@ -60,12 +62,16 @@ check MCBroken          fail MCModel.tla
 check MCBrokenRule      fail MCModel.tla
 
 # endings that keep their responses out of the form (Discard.tla, PR #387)
-check MCDiscard           pass MCDiscard.tla
-check MCDiscardVar        pass MCDiscard.tla
-check MCDiscardGroup      pass MCDiscard.tla
-check MCDiscardGroupBroken fail MCDiscard.tla
-check MCDiscardShown      fail MCDiscard.tla
-check MCDiscardCountdown  fail MCDiscard.tla
+check MCDiscard                pass MCDiscard.tla
+check MCDiscardLegacy          fail MCDiscard.tla
+check MCDiscardVar             pass MCDiscard.tla
+check MCDiscardGroup           pass MCDiscard.tla
+check MCDiscardGroupBroken     fail MCDiscard.tla
+check MCDiscardShown           pass MCDiscard.tla
+check MCDiscardShownLegacy     fail MCDiscard.tla
+check MCDiscardCountdown       pass MCDiscard.tla
+check MCDiscardCountdownLegacy fail MCDiscard.tla
+check MCCountdownRejected      fail MCDiscard.tla
 
 rm -rf states
 echo

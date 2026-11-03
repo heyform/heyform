@@ -31,13 +31,23 @@ TopLevel      == Form.topLevel        \* field sits at the top level of the docu
 EmptyGroup    == Form.emptyGroup      \* group with no form fields inside
 VarHasRules   == Form.varHasRules     \* some variable carries logic
 ServerDropsEmptyGroups == Form.serverDropsEmptyGroups
+\* TRUE: both sides decide from top-level endings only (getEndingRouteFields and the
+\* filter in isSubmissionDiscarded).  FALSE: the code as #387 shipped it, where the
+\* renderer passed [...allFields, ...thankYouFields] and allFields keeps nested endings.
+TopLevelEndingsOnly    == Form.topLevelEndingsOnly
+\* TRUE: the time limit shows the ending its route resolves (Header.tsx).  FALSE: #387,
+\* which passed it only when the route discarded.
+CountdownShowsEnding   == Form.countdownShowsEnding
 
 \* ---------------------------------------------------------------------------
-\* The two projections (Renderer.tsx initStore / isSubmissionDiscarded)
+\* The two projections (Renderer.tsx initStore + Form.tsx / isSubmissionDiscarded)
 \*
-\* ClientSees: allFields = flattenFieldsWithGroups(parseFields(fields) without
-\* welcome/thank-you), minus payment fields when Stripe is off, plus the
-\* top-level endings.
+\* The renderer's allFields = flattenFieldsWithGroups(parseFields(fields) without
+\* welcome/thank-you), minus payment fields when Stripe is off.  The top-level filter
+\* only removes top-level endings, so an ending nested in a group stays in allFields at
+\* its group's position; resolveEnding() is then called with allFields followed by the
+\* top-level endings.  The *order* matters: resolveEnding() falls back to the first
+\* ending of the list it is given.
 \* ---------------------------------------------------------------------------
 ClientSees(omitPay, f) ==
   /\ Kind[f] \in FORM_KINDS
@@ -45,11 +55,23 @@ ClientSees(omitPay, f) ==
   /\ (Kind[f] # "payment" \/ ~omitPay)
   /\ (Kind[f] # "group" \/ ~EmptyGroup[f])
 
+TopLevelEnding(f) == Kind[f] = "thank_you" /\ TopLevel[f]
+
+\* allFields, in document order (nested endings included, top-level endings not)
+ClientAllFields(omitPay) ==
+  SelectSeq(Order, LAMBDA f : ClientSees(omitPay, f) /\ ~TopLevelEnding(f))
+
+ClientOrder(omitPay) ==
+  LET all == IF TopLevelEndingsOnly
+             THEN SelectSeq(ClientAllFields(omitPay), LAMBDA f : Kind[f] # "thank_you")
+             ELSE ClientAllFields(omitPay)
+  IN all \o SelectSeq(Order, LAMBDA f : TopLevelEnding(f))
+
 ServerSees(f) ==
   /\ Kind[f] \in FORM_KINDS
   /\ (Kind[f] # "group" \/ ~ServerDropsEmptyGroups \/ ~EmptyGroup[f])
+  /\ (Kind[f] # "thank_you" \/ TopLevel[f] \/ ~TopLevelEndingsOnly)
 
-ClientOrder(omitPay) == SelectSeq(Order, LAMBDA f : ClientSees(omitPay, f))
 ServerOrder             == SelectSeq(Order, LAMBDA f : ServerSees(f))
 ServerNoPayOrder        == SelectSeq(ServerOrder, LAMBDA f : Kind[f] # "payment")
 
@@ -131,7 +153,8 @@ DisplayableEnding(f) == Kind[f] = "thank_you" /\ TopLevel[f]
 
 ShownEnding(submitPath, vals, isPartial) ==
   LET resolved == ClientEnding(vals, isPartial)
-      passed == IF submitPath = "countdown" /\ ~IsDiscard(ClientOrder(omitPayment), vals, isPartial)
+      passed == IF submitPath = "countdown" /\ ~CountdownShowsEnding
+                   /\ ~IsDiscard(ClientOrder(omitPayment), vals, isPartial)
                 THEN "none"
                 ELSE resolved
   IN IF passed \in {f \in EndingSet(ClientOrder(omitPayment)) : DisplayableEnding(f)}
@@ -141,14 +164,24 @@ ShownEnding(submitPath, vals, isPartial) ==
 \* ===========================================================================
 \* completeSubmission: validate, decide, store - in that order
 \* ===========================================================================
-ServerRoute(vals, isPartial) ==
-  LET o == ResolveOrder(ServerOrder) IN
-  SliceByLogics(o, Replay(o, Kind, vals), vals, isPartial)
+\* The route completeSubmission validates: applyLogicToFields over
+\* flattenFields(form.fields, true) in document order (the walk stops at the first
+\* ending it reaches), then selectSubmissionFields.  A partial submission must stop at a
+\* jump field the answers did not resolve; one that has none is rejected
+\* ("Invalid partial submission").
+ServerWalk(vals) == Replay(Order, Kind, vals)
+
+PartialHasTerminal(vals) ==
+  \E i \in 1..Len(ServerWalk(vals)) :
+    ServerWalk(vals)[i] \in JumpFields /\ ~TouchedOf(Order, ServerWalk(vals)[i], vals)
+
+ServerRoute(vals, isPartial) == SliceByLogics(Order, ServerWalk(vals), vals, isPartial)
 
 AllAnswersValid(vals, isPartial) ==
   LET sub == ServerRoute(vals, isPartial) IN
-  \A i \in 1..Len(sub) :
-    Kind[sub[i]] \notin QUESTION_KINDS \/ Accept(Kind, sub[i], vals[sub[i]])
+  /\ (isPartial => PartialHasTerminal(vals))
+  /\ \A i \in 1..Len(sub) :
+       Kind[sub[i]] \notin QUESTION_KINDS \/ Accept(Kind, sub[i], vals[sub[i]])
 
 Outcome(vals, isPartial) ==
   IF ~AllAnswersValid(vals, isPartial) THEN "rejected"
@@ -165,6 +198,8 @@ Init ==
   /\ partial \in BOOLEAN
   /\ omitPayment \in BOOLEAN
   /\ path \in SubmitPaths
+  \* Header.tsx always submits the time limit as a partial submission
+  /\ (path = "countdown" => partial)
 
 Next == UNCHANGED Vars
 
@@ -196,5 +231,33 @@ ShownSavingWhenSaved ==
      \/ DiscardEnding[ShownEnding(path, values, partial)] = FALSE)
 
 HasDiscardingEnding == \E f \in Ids : Kind[f] = "thank_you" /\ DiscardEnding[f]
+
+\* The other direction of NoDataLoss: the renderer and the server resolve the *same*
+\* ending from the same answers (the server's projection without payment fields when
+\* Stripe is off).  NoDataLoss alone cannot catch a renderer that discards a response
+\* the server would keep, because the renderer then never sends it.
+EndingsAgree ==
+  ~VarHasRules =>
+    ClientEnding(values, partial)
+      = EndingFor(IF omitPayment THEN ServerNoPayOrder ELSE ServerOrder, values, partial)
+
+\* So the renderer only drops a response the server would have dropped too.
+ClientDiscardIsServerDiscard ==
+  ~VarHasRules /\ ClientDiscard(values, partial) =>
+    IsDiscard(IF omitPayment THEN ServerNoPayOrder ELSE ServerOrder, values, partial)
+
+\* Pre-existing (not #387): when the time runs out, Header.tsx sends what was answered as
+\* a partial submission, but the server only accepts a partial submission that stops at
+\* a jump field the answers did not resolve.  So on a route whose jump questions are all
+\* answered (or a form without jumps) the response is rejected although every answer in
+\* it is valid.  Expected to fail; see MCCountdownRejected.cfg.
+AnsweredAreValid(vals) ==
+  \A i \in 1..Len(ServerWalk(vals)) :
+    LET q == ServerWalk(vals)[i] IN
+    Kind[q] \notin QUESTION_KINDS \/ AcceptAs(Kind, q, FALSE, vals[q])
+
+CountdownIsAccepted ==
+  path = "countdown" /\ ~ClientDiscard(values, partial) /\ AnsweredAreValid(values) =>
+    Outcome(values, partial) # "rejected"
 
 ================================================================================

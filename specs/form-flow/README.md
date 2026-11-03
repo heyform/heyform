@@ -38,18 +38,28 @@ Three questions the model answers:
   `multi`/`pair`/`obj`/`rows`），环境可以提交**任意**形状的值；`kind` 是**变量**，
   `ChangeFieldKind` 可以在任何时刻（含已产生历史提交之后）改字段类型。TLC 穷举的
   是「恶意输入 × 任意改类型」的组合，而不是只测合法输入。
-- 结论：**提交与渲染在穷举范围内没有崩溃路径**；改类型之后，表格仍然安全，因为它
-  按「字段当前类型」分发、并用 `answer.kind !== field.kind` 挡住历史答案 ——
-  `MCDrift` 通过，去掉这道守卫的 `MCDriftUnguarded` 立刻失败（证明守卫是必要的）。
-- 四个已确认的问题：① 选填字段留空存成 `""`；② `rating` 的 `parseInt` 让 `"3abc"`
-  通过；③ 改类型后残留的 logic 规则变成死规则（jump 静默失效，或被重新解释）；
-  ④ 改类型后 calculate 的引用不再是数字（变量静默停止更新）。
-- PR #387（ending 可「不保存回复」）单独建模在 `Discard.tla`：渲染端与服务端各自用
-  `resolveEnding()` 判断，两边看到的是**不同的字段投影**（客户端在未接 Stripe 时丢掉
-  payment 字段；服务端丢掉空 group）。穷举所有答案 × 两条提交路径 × 两种支付配置
-  （131,072 状态）证明「服务端绝不会丢弃渲染端已保存的回复」；同时用反例证明空 group
-  过滤是必需的（去掉即丢数据），并找出 3 个 PR 问题（IP 限额被消耗、嵌套 ending
-  无法显示、倒计时路径显示通用结束页）。详见「PR #387」一节。
+- 模型的局限：值的**内部**被抽象成 `complete`/`partial`/`empty` 这样的标签，看不到
+  嵌套对象（例如 `other: {a: 1}`、表格单元格是对象）。这一类由
+  `packages/webapp/test/submission-cell-fuzz.test.tsx` 的模糊测试覆盖：随机 JSON 经过
+  真实的 `fieldValuesToAnswers`，再用 `SubmissionCell`（表格 + 详情）和导出函数渲染。
+  它找到并已修复了 5 处崩溃（见「Fuzz test」一节）。
+- 结论：改类型之后表格仍然安全，因为它按「字段当前类型」分发、并用
+  `answer.kind !== field.kind` 挡住历史答案 —— `MCDrift` 通过，去掉这道守卫的
+  `MCDriftUnguarded` 立刻失败（证明守卫是必要的）。
+- 已确认的问题：① 选填字段留空存成 `""`（未改，表格有守卫）；② `rating` 的
+  `parseInt` 让 `"3abc"` 通过（**已修复**，`MCTypeHole` 现在通过，`MCTypeHoleLegacy`
+  复现旧行为）；③ 改类型后残留的 logic 规则变成死规则；④ 改类型后 calculate 的引用
+  不再是数字（③④ 未改，需要 builder 侧的设计）。
+- PR #387（ending 可「不保存回复」）建模在 `Discard.tla`，并已合并到本分支。穷举所有
+  答案 × 两条提交路径 × 两种支付配置（98,304 状态）证明「服务端绝不会丢弃渲染端已保存
+  的回复」，并新增反方向的 `EndingsAgree`：两端从同样的答案得到**同一个** ending。
+  旧模型按文档顺序排列客户端字段，漏掉了一个真实 bug：渲染端把 group 里的 ending
+  排在顶层 ending 前面，没有显式跳转的路线会回落到它（丢弃回复），而服务端回落到第一
+  个顶层 ending（保存）。该 bug 与「嵌套 ending 无法显示」「倒计时显示通用结束页」
+  「被丢弃的提交仍消耗 IP 限额」均**已修复**，每个都有 `*Legacy` 配置复现修复前的行为。
+- 另一个早已存在的问题（非 #387 引入，未修改）：倒计时结束时以 partial 方式提交，而
+  服务端只接受「停在未解决的跳转字段」的 partial 提交，所以没有跳转逻辑、或跳转问题都
+  已作答的表单，超时提交会被拒绝（`MCCountdownRejected`）。
 
 ## Files
 
@@ -58,8 +68,8 @@ Three questions the model answers:
 | `FormDomain.tla` | Stateless model: value shapes, per-kind domains, `validate()`, `validateCondition()`, `calculateAction()`, `createFieldNavigation()`, the server replay, and the `Check_*(kinds)` form checks. |
 | `FormFlow.tla` | State machine (`Answer` / `Leave` / `ChangeFieldKind` / `Submit`), the safety invariants and the liveness property. |
 | `Discard.tla` | PR #387: `resolveEnding()` and `isSubmissionDiscarded()` for both projections of the form, and the screen the respondent is shown. |
-| `MCDiscard.tla` | The forms used by the `MCDiscard*` configs. |
-| `MCModel.tla` | The concrete forms under test: `FlowForm`, `AttackForm`, `SmallForm`, `DriftForm` (+ `DriftLogicForm`, `DriftCalcForm`), `BrokenForm`. |
+| `MCDiscard.tla` | The forms used by the `MCDiscard*` configs, including `DiscardLegacyForm` / `DiscardCountdownLegacyForm`, which reproduce the code as #387 shipped it. |
+| `MCModel.tla` | The concrete forms under test: `FlowForm`, `AttackForm` (+ `AttackParseIntForm`, the rating check before the fix), `SmallForm`, `DriftForm` (+ `DriftLogicForm`, `DriftCalcForm`), `BrokenForm`. |
 | `*.cfg` | One TLC run per concern, see [Results](#results). |
 | `run.sh` | Runs every config and asserts the expected verdict. |
 
@@ -84,6 +94,7 @@ record (see `MCModel.tla`) and one `.cfg`:
 | `mutableKinds` | kinds such a field may be switched to |
 | `varKind`, `varInit`, `varTexts` | variables: id -> `"number"`/`"string"`, initial value, string domain |
 | `textVals`, `numVals`, `dateSeq`, `choiceSets`, `otherTexts`, `objShapes`, `rowShapes`, `choiceIds`, `otherChoice` | the finite value universe |
+| `ratingParseIntOnly` | `TRUE` checks a rating with `parseInt()` alone, as before the fix |
 | `envMode` | `"honest"` (only the field on screen) or `"hostile"` (any field, any time) |
 | `sentAll`, `attackVals` | what the environment may submit (`sentAll` = the whole universe) |
 
@@ -117,30 +128,40 @@ record (see `MCModel.tla`) and one `.cfg`:
 | `DiscardedIsValidated` | answers are validated before the discard return | `completeSubmission` order |
 | `ShownIsResolved` | the screen the respondent sees is the ending the decision used | `setIsSubmitted` + `Blocks.tsx` |
 | `ShownSavingWhenSaved` | a stored response never ends on a discarding screen | `Blocks.tsx` fallback |
+| `EndingsAgree` | the renderer and the server resolve the same ending from the same answers (without variable rules) | `resolveEnding` on both projections |
+| `ClientDiscardIsServerDiscard` | the renderer only drops a response the server would drop too | ditto |
+| `CountdownIsAccepted` | a time-limit submission whose answers are valid is not rejected | `Header.tsx` + `selectSubmissionFields` |
 
 ## Results
 
-`./run.sh` (TLC 2.19, 4 workers except `MCTerm`), distinct states explored:
+`./run.sh` (TLC 2.19, 4 workers except `MCTerm`, about 8 minutes), distinct states
+explored for the configs that pass. A failing config stops at its first
+counterexample.
 
 | Config | Form / client | Verdict | States |
 | --- | --- | --- | --- |
 | `MCFlow` | `FlowForm`, honest | **pass** — all safety + config invariants | 348,536 |
-| `MCAttack` | `AttackForm`, hostile | **pass** — no bad stored shape | 941,192 |
+| `MCAttack` | `AttackForm`, hostile | **pass** — no bad stored shape (`Answer_TypeSafe`) | 941,192 |
 | `MCTerm` | `SmallForm`, honest | **pass** — `Termination` | 514 |
 | `MCDrift` | `DriftForm`, honest, kinds editable | **pass** — drift cannot break the table | 42,472 |
-| `MCStrict` | `AttackForm`, hostile | **fail** — finding 1 | 369,813 |
-| `MCTypeHole` | `AttackForm`, hostile | **fail** — finding 2 | 479,479 |
-| `MCDriftLogic` | `DriftLogicForm` | **fail** — finding 3 | 19 |
-| `MCDriftCalc` | `DriftCalcForm` | **fail** — finding 4 | 15 |
-| `MCDriftUnguarded` | `DriftForm` | **fail** — the guard is load-bearing | 4,155 |
+| `MCStrict` | `AttackForm`, hostile | **fail** — finding 1 (open) | — |
+| `MCTypeHole` | `AttackForm`, hostile | **pass** — finding 2 fixed | 941,192 |
+| `MCTypeHoleLegacy` | `AttackParseIntForm` | **fail** — `"3abc"` stored for a rating before the fix | — |
+| `MCDriftLogic` | `DriftLogicForm` | **fail** — finding 3 (open) | — |
+| `MCDriftCalc` | `DriftCalcForm` | **fail** — finding 4 (open) | — |
+| `MCDriftUnguarded` | `DriftForm` | **fail** — the guard is load-bearing | — |
 | `MCBroken` | broken jump target | **fail** — `Config_NextTargets` | — |
 | `MCBrokenRule` | dead `contains` rule on a yes/no field | **fail** — `Config_RulesReachable` | — |
-| `MCDiscard` | PR #387 form, all answers | **pass** — no data loss | 131,072 |
-| `MCDiscardVar` | PR #387 form with variable rules | **pass** — server keeps | 131,072 |
-| `MCDiscardGroup` | empty group on the route | **pass** — filter keeps both sides in step | 1,944 |
-| `MCDiscardGroupBroken` | same, filter removed | **fail** — server discards a saved response | 1,944 |
-| `MCDiscardShown` | nested ending | **fail** — resolved ending is not shown | — |
-| `MCDiscardCountdown` | time limit | **fail** — saved route shows the generic screen | — |
+| `MCDiscard` | PR #387 form, all answers | **pass** — no data loss, both sides agree | 98,304 |
+| `MCDiscardLegacy` | same, as #387 shipped | **fail** — the renderer falls back to a nested ending | — |
+| `MCDiscardVar` | PR #387 form with variable rules | **pass** — server keeps | 98,304 |
+| `MCDiscardGroup` | empty group on the route | **pass** — filter keeps both sides in step | 1,458 |
+| `MCDiscardGroupBroken` | same, filter removed | **fail** — server discards a saved response | — |
+| `MCDiscardShown` | PR #387 form, both paths | **pass** — the resolved ending is shown | 98,304 |
+| `MCDiscardShownLegacy` | as #387 shipped | **fail** — a nested ending cannot be shown | — |
+| `MCDiscardCountdown` | time limit | **pass** — the saved route shows its ending | 32,768 |
+| `MCDiscardCountdownLegacy` | time limit, as #387 shipped | **fail** — generic screen | — |
+| `MCCountdownRejected` | time limit | **fail** — pre-existing, open (see below) | — |
 
 `FlowForm` covers: a welcome screen, a text jump, a `yes_no` question branching by
 answer, an optional number with a `total += q4` calculate rule and a numeric
@@ -193,12 +214,43 @@ function validateInt(value: any, min?: number, max?: number): boolean {
 only when `helper.isNumeric(value)` holds, so the cell is blank rather than
 crashing — but the stored data is wrong and any export will carry it.
 
-Fix: `Number.isInteger(Number(value))` (or coerce after validating) in
-`validateInt`/`validateNumber`.
+**Fixed.** `validateRating` now needs `helper.isNumeric(value)` and a whole number
+before the range check, and `validateNumber` checks `helper.isNumeric(value)`
+instead of `isNumeric(String(value))` (which let `[3]` through and stored an array).
+`MCTypeHole` passes; `MCTypeHoleLegacy` keeps the old check and still fails on
+exactly `a3 = "3abc"`.
 
-Both findings are also reachable for `number` fields answered with numeric text
-(`isNumeric(String(value))`): the model allows it on purpose (`TypeSafe`
-includes numeric text) because `validateNumber` documents that coercion.
+The original `MCTypeHole` counterexample was in fact a model artifact: the
+`number` domain was `NumVals = {0, 1, 5}` while the attacker could send `Num(7)`,
+so `Answer_TypeSafe` failed on a number field before it ever reached the rating.
+The domain now holds every number the environment can send, which is also why
+`MCAttack` can now include `Answer_TypeSafe`.
+
+Numeric text stays allowed for `number`, `rating` and `opinion_scale` (`TypeSafe`
+includes it) because `validateNumber` documents that coercion.
+
+### Fuzz test: value internals the model cannot see
+
+The model abstracts a value's insides to a tag (`Obj("complete")`, `Rows("ragged")`),
+so it cannot see nested values. `packages/webapp/test/submission-cell-fuzz.test.tsx`
+covers them: seeded random JSON (plus near-valid shapes per kind) goes through the
+real `fieldValuesToAnswers`, a JSON round trip, the resolver's special-field and
+payment handling, and is then rendered by `SubmissionCell` as a table cell and in
+the detail view, and run through `answersToPlain` / `Html` / `Json` / `ApiObject`.
+A third pass renders arbitrary stored values under any kind (old submissions, or
+a field whose kind changed) without validation. It runs a short pass with the unit
+tests; `FUZZ_SEED` / `FUZZ_ITER` run longer ones (20 seeds × 2,000 iterations pass).
+
+What it found, all fixed:
+
+| Value | Was | Now |
+| --- | --- | --- |
+| multiple choice `{value: [], other: {a: 1}}` | stored; **crashed the table** and the detail view | rejected; the cell renders only text |
+| input table `[{col1: {a: 1}}]` | stored; crashed the detail view | rejected; cells render only plain values |
+| address `{address1: {a: 1}, …}` | stored; crashed the detail view | rejected; parts render only text |
+| choice answer whose `value` is not an array; payment `amount` like `"+1"` | crashed the cell (old data only) | rendered safely |
+| number / rating `[3]`, rating `"3abc"` | stored | rejected |
+| date range `{}`, phone number `[null]` | `TypeError` (400 with no message) | `ValidateError` |
 
 ### 3. Changing a field's kind leaves its logic rules behind
 
@@ -278,48 +330,72 @@ such an ending, nothing is stored, nothing is queued and nothing is charged.
 
 | Spec | Code |
 | --- | --- |
-| `EndingFor(order, values, partial)` | `resolveEnding()` — walk `[...questions, ...endings]` with `applyLogicToFields`, slice a partial submission with `sliceFieldsByLogics`, then ask the last field's logic / `nextFieldId` / fall back to the first ending |
+| `EndingFor(order, values, partial)` | `resolveEnding()` — walk `[...questions, ...endings]` with `applyLogicToFields`, slice a partial submission with `sliceFieldsByLogics`, then ask the last field's logic / `nextFieldId` / fall back to the first ending **of the list it is given** |
 | `TouchedOf` / `SliceFrom` | the `isTouched` mutation in `applyLogicToFields` and `sliceFieldsByLogics` |
-| `ClientDiscard` | `Form.tsx` / `Header.tsx`: `resolveEnding([...allFields, ...thankYouFields], …)` |
+| `ClientOrder` / `ClientDiscard` | `Renderer.tsx` `initStore` + `Form.tsx` / `Header.tsx`: `resolveEnding(getEndingRouteFields(allFields, thankYouFields), …)` |
 | `ServerDiscard` | `isSubmissionDiscarded()`: a discarding ending must exist, no variable may carry logic, and *both* the full projection and the one without payment fields must end there |
+| `ServerRoute` / `AllAnswersValid` | `completeSubmission`: `applyLogicToFields` over `flattenFields(form.fields, true)` in document order, then `selectSubmissionFields` (a partial submission without an unresolved jump field is rejected) |
 | `ShownEnding(path, …)` | `setIsSubmitted({thankYouFieldId})` + `Blocks.tsx` looking the id up in `state.thankYouFields` |
 
-The two sides see different fields — that is the whole risk. `ClientSees`
-drops welcome screens and (when Stripe is off) payment fields; `ServerSees`
-keeps every form field but drops empty groups. `MCDiscard` enumerates **all**
-answer maps (4 values over 7 fields), both submission paths and both payment
-setups: 131,072 states, no data loss.
+The two sides see different fields, in a different order — that is the whole
+risk. The renderer's `allFields` drops welcome screens, empty groups and (when
+Stripe is off) payment fields, and keeps an ending nested in a group at its
+group's position; the top-level endings are appended after it. The server keeps
+every form field in document order but drops empty groups. Two flags select the
+code under test: `topLevelEndingsOnly` (both sides decide from top-level endings
+only, the fix) and `countdownShowsEnding` (the time limit shows the resolved
+ending, the fix); `DiscardLegacyForm` turns both off.
+
+`MCDiscard` enumerates **all** answer maps (4 values over 7 fields), both
+submission paths (the time limit is always partial, as in `Header.tsx`) and both
+payment setups: 98,304 states.
 
 ### Results
 
 - `MCDiscard` / `MCDiscardVar` / `MCDiscardGroup` **pass**: the server never
-  discards a response the renderer would have saved, over every answer map.
-  With variable rules the server keeps everything, so it cannot lose anything.
+  discards a response the renderer would have saved (`NoDataLoss`), and the two
+  sides resolve the same ending (`EndingsAgree`), so the renderer never drops a
+  response the server would keep (`ClientDiscardIsServerDiscard`).
+- `MCDiscardLegacy` **fails** on the code as #387 shipped it: with `q1 = "x"`,
+  `q2 = ""` (no jump to an ending) the renderer falls back to `nested`, which
+  discards, and the server falls back to `ok`. The first version of this model
+  passed that form because it kept the renderer's fields in document order, and
+  `NoDataLoss` only checks one direction.
 - `MCDiscardGroupBroken` **fails**: delete the empty-group filter from
   `isSubmissionDiscarded` and the server follows a group the renderer dropped,
   reaches the discarding ending and throws away a response the respondent saw
   as saved. The filter is load-bearing, not defensive.
-- `MCDiscardShown` / `MCDiscardCountdown` **fail**: see the review below.
+- `MCDiscardShown` / `MCDiscardCountdown` **pass** and their `*Legacy` variants
+  fail, for findings 2 and 3 below.
 
 ### Review of the PR
 
-Checked against the code on `pr-387` (`ac07545`) and by running
-`resolveEnding` / `isSubmissionDiscarded` over generated forms and answers.
+Checked against the code on `pr-387` (`ac07545`), which is merged into this branch
+with the fixes below.
 
-| # | Severity | Finding |
-| --- | --- | --- |
-| 1 | **bug** | A discarded submission still consumes the form's **IP limit**: `submissionIpLimitService.checkIp()` runs (and increments the counter) before the discard check in `completeSubmission`. On a form with `enableIpLimit` and a screening ending, screened-out visitors use up the allowance, and the next visitor on that IP gets "new submissions are no longer accepted" without a single stored response. The quota limit (`createWithinQuota`) is correctly skipped. |
-| 2 | **bug** | An ending **nested in a group** is resolved by `resolveEnding` (both sides agree, so nothing is mis-saved) but cannot be displayed: `state.thankYouFields` only holds top-level endings, so `Blocks.tsx` falls back to the generic "Thanks for completing this form" screen. For a *discarding* nested ending the respondent is told they completed a form that was not saved. `Form.tsx` did not do this before the PR — it could only resolve top-level endings — so this is a regression for that form shape. Reachable by dragging a Thank You into a group (the nested `ReactSortable` accepts `put: ['root', 'nested']`, and `updateNestFields` does not filter kinds); the Add menu prevents it. |
-| 3 | **bug (minor)** | On the **time-limit path** `Header.tsx` passes `thankYouFieldId` only when it discards, so a submission that *is* saved shows the generic screen instead of the ending its route reaches — the resolved `ending` is thrown away one line after being computed. Pre-existing, but the PR has the value in hand and its new `countdown-submission.test.tsx` asserts `data-ending === 'none'`, locking the wrong behaviour in. |
-| 4 | nit | `isSubmissionDiscarded` calls `resolveEnding` twice and `resolveEnding` walks + clones the field list twice, so every submission on a form with a discarding ending costs 4 `applyLogicToFields` walks and 4 clones of every field. Forms without such an ending are unaffected (early return). |
-| 5 | nit | `getNavigateFieldId` re-implements destination checking as "is the target a thank-you field", without `createFieldNavigation`'s forward-only / jumpable-source rules. A stale `nextFieldId` on a group or pointing backwards would be honoured here and ignored by the real navigation. Unreachable in practice (`removeInvalidNextFieldIds` prunes those on save) and harmless while both sides call `resolveEnding`, but it is a second definition of the same rule. |
-| 6 | note | The date fix (`isSameDate`/`isBeforeDate`/`isAfterDate` return false for a nil value instead of dayjs reading "now") changes routing for **every** form, not just this feature: a rule like "is before today" on an unanswered date stops firing. Correct, but it deserves a changelog line. |
-| 7 | note | The two conservative divergences are deliberate and documented in the PR body: forms with variable rules, and routes where payment fields change the ending, are kept by the server even if a stale tab posts them. The model confirms they can only *keep* a response, never drop one (`MCDiscardVar`). |
+| # | Severity | Finding | Status |
+| --- | --- | --- | --- |
+| 1 | **bug** | A discarded submission still consumed the form's **IP limit**: `submissionIpLimitService.checkIp()` runs (and increments the counter) before the discard check in `completeSubmission`, so screened-out visitors used up the allowance. | **Fixed**: `checkIp()` runs after the discard return. `submission-discard.test.ts` checks both routes. |
+| 2 | **bug** | An ending **nested in a group** became the renderer's **fallback**: `allFields` keeps it, and it comes before the top-level endings in the list given to `resolveEnding`. Every route without an explicit jump then resolved to it — discarding the response if it discards, and showing the generic screen because `state.thankYouFields` only holds top-level endings — while the server fell back to the first top-level ending. Before #387 the default was the first top-level ending. Only reachable through stored data: endings sit outside every `ReactSortable` in the builder, so they cannot be dragged into a group. | **Fixed**: both sides decide from top-level endings only (`getEndingRouteFields`, and the filter in `isSubmissionDiscarded`). Tests in `ending-route-fields.test.ts`, `branch-submission.test.tsx` and `submission-discard.test.ts`. |
+| 3 | **bug (minor)** | On the **time-limit path** `Header.tsx` passed `thankYouFieldId` only when it discarded, so a saved submission showed the generic screen instead of the ending its route reaches, and `countdown-submission.test.tsx` asserted `'none'`. | **Fixed**: it always passes the resolved ending; the test asserts `'saved'`. |
+| 4 | nit | `isSubmissionDiscarded` calls `resolveEnding` twice and `resolveEnding` walks + clones the field list twice, so every submission on a form with a discarding ending costs 4 `applyLogicToFields` walks and 4 clones of every field. Forms without such an ending are unaffected (early return). | Left as is |
+| 5 | nit | `getNavigateFieldId` re-implements destination checking as "is the target a thank-you field", without `createFieldNavigation`'s forward-only / jumpable-source rules. Unreachable in practice (`removeInvalidNextFieldIds` prunes stale targets on save) and harmless while both sides call `resolveEnding`. | Left as is |
+| 6 | note | The date fix (`isSameDate`/`isBeforeDate`/`isAfterDate` return false for a nil value instead of dayjs reading "now") changes routing for **every** form: a rule like "is before today" on an unanswered date stops firing. Correct, but it deserves a changelog line. | — |
+| 7 | note | The two conservative divergences are deliberate: forms with variable rules, and routes where payment fields change the ending, are kept by the server even if a stale tab posts them. The model confirms they can only *keep* a response (`MCDiscardVar`). | — |
 
-Verified as sound (and now machine-checked): the server's decision is a subset
-of the renderer's over all answers (`MCDiscard`), discarded submissions are
-validated first (`DiscardedIsValidated`), required questions on the route are
-checked before the ending is resolved, and the embed stays open.
+### Open, pre-existing: the time limit can submit a response the server rejects
+
+`Header.tsx` submits what was answered as a **partial** submission when the time
+runs out. `selectSubmissionFields` only accepts a partial submission that stops at
+a jump field the answers did not resolve (it throws `Invalid partial submission`
+otherwise, so a client cannot use "partial" to skip required questions). So on a
+form with a time limit and no jump logic, or once every jump question on the
+route is answered, the server rejects a response whose answers are all valid.
+`MCCountdownRejected` shows it on `DiscardForm`, and the resolver rejects
+`{q1: 'half an answer'}` with `partialSubmission: true` on a form without logic.
+This is on `next` already and not part of #387; fixing it means deciding when the
+server may accept a partial submission without that proof (for example once the
+open token shows the time limit has passed), so it is left open here.
 
 ## Out of scope / extension points
 
@@ -328,11 +404,9 @@ checked before the ending is resolved, and the embed stays open.
   `ChangeProperties(fid, choices, total)` and check that stored choice answers
   stay a subset of the *current* options, and that `InputTableItem` cells
   resolve against the current columns.
-- **Partial submissions.** `selectSubmissionFields` cuts the field list at the
-  first navigate field whose last rule did not fire (`isTouched`). Modelling it
-  needs the `isTouched` mutation in `applyLogicToFields`; the shape is
-  `PartialCutSound`: the cut keeps at least one field and all required fields
-  before it are answered.
+- **Partial submissions in `FormFlow.tla`.** `Discard.tla` models
+  `selectSubmissionFields` (`ServerRoute`); `FormFlow.tla` still only submits
+  complete walks.
 - **Group fields.** `flattenFields(fields, true)` keeps the group itself in the
   walk; the model treats `group` like a statement (never answered), which is
   what `fieldsToValidateRules` does.
@@ -340,8 +414,9 @@ checked before the ending is resolved, and the embed stays open.
   `resolvePaymentConfiguration(...)`, so a respondent cannot choose the amount.
   The model only checks the stored shape (`Obj("complete")`); the amount
   invariant would be `paymentAnswer.value.amount = round(price * 100)`.
-- **Time.** There is no clock in the model: form expiration, time limits and
-  `submit_date` are orthogonal to flow and typing.
+- **Time.** There is no clock in the model: form expiration and `submit_date` are
+  orthogonal to flow and typing. The time limit is modelled only as the path that
+  submits (`path = "countdown"`, always partial).
 
 ## Running
 

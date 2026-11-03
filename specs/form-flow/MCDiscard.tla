@@ -7,7 +7,8 @@ EXTENDS Discard
 \* ---------------------------------------------------------------------------
 \* q1 --jump--> later (discarding)      pay: payment field
 \* q2 --jump--> nested                  ok: saving ending, later: discarding
-\* nested: a discarding ending inside a group (the renderer cannot show it)
+\* nested: a discarding ending inside a group (only reachable through stored data; the
+\*         builder keeps endings out of groups, and the renderer cannot show it)
 \* ---------------------------------------------------------------------------
 DiscardForm ==
   [ ids |-> {"q1", "pay", "q2", "ok", "later", "g", "nested"},
@@ -46,6 +47,7 @@ DiscardForm ==
     rowShapes |-> {"full", "empty"},
     choiceIds |-> {},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "honest",
     sentAll |-> FALSE,
     attackVals |-> {Nil, Text(""), Text("no"), Text("x")},
@@ -55,7 +57,9 @@ DiscardForm ==
                   later |-> TRUE, g |-> TRUE, nested |-> FALSE],
     emptyGroup |-> [f \in {"q1", "pay", "q2", "ok", "later", "g", "nested"} |-> FALSE],
     varHasRules |-> FALSE,
-    serverDropsEmptyGroups |-> TRUE ]
+    serverDropsEmptyGroups |-> TRUE,
+    topLevelEndingsOnly |-> TRUE,
+    countdownShowsEnding |-> TRUE ]
 
 \* Same form, but a variable carries logic: the server leaves the decision to the
 \* renderer and keeps every response.
@@ -93,6 +97,7 @@ DiscardGroupForm ==
     rowShapes |-> {"full", "empty"},
     choiceIds |-> {},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "honest",
     sentAll |-> FALSE,
     attackVals |-> {Nil, Text(""), Text("no")},
@@ -102,8 +107,18 @@ DiscardGroupForm ==
     emptyGroup |-> [q1 |-> FALSE, q2 |-> FALSE, empty |-> TRUE, ok |-> FALSE,
                     later |-> FALSE],
     varHasRules |-> FALSE,
-    serverDropsEmptyGroups |-> TRUE ]
+    serverDropsEmptyGroups |-> TRUE,
+    topLevelEndingsOnly |-> TRUE,
+    countdownShowsEnding |-> TRUE ]
 
 \* The same form without the server's empty-group filter.
 DiscardGroupUnfilteredForm == [DiscardGroupForm EXCEPT !.serverDropsEmptyGroups = FALSE]
+
+\* DiscardForm under the code as #387 shipped it: nested endings stay in the renderer's
+\* list ahead of the top-level ones, and the time limit hides a saving route's ending.
+DiscardLegacyForm ==
+  [DiscardForm EXCEPT !.topLevelEndingsOnly = FALSE, !.countdownShowsEnding = FALSE]
+
+\* Only the time-limit screen as #387 shipped it.
+DiscardCountdownLegacyForm == [DiscardForm EXCEPT !.countdownShowsEnding = FALSE]
 ================================================================================

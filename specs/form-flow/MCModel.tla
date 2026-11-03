@@ -71,6 +71,7 @@ FlowForm ==
     rowShapes |-> {"full", "empty", "ragged"},
     choiceIds |-> {"y", "n", "c1", "c2"},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "honest",
     sentAll |-> FALSE,
     attackVals |->
@@ -115,6 +116,7 @@ AttackForm ==
     rowShapes |-> {"full", "empty", "ragged"},
     choiceIds |-> {},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "hostile",
     sentAll |-> FALSE,
     attackVals |->
@@ -163,6 +165,7 @@ SmallForm ==
     rowShapes |-> {"full", "empty"},
     choiceIds |-> {"y", "n"},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "honest",
     sentAll |-> FALSE,
     attackVals |-> {Nil, Text(""), Text("skip"), Single("y"), Single("n"), Num(3)} ]
@@ -213,10 +216,14 @@ DriftForm ==
     rowShapes |-> {"full", "empty"},
     choiceIds |-> {"y", "n"},
     otherChoice |-> "__other__",
+    ratingParseIntOnly |-> FALSE,
     envMode |-> "honest",
     sentAll |-> FALSE,
     attackVals |-> {Nil, Text(""), Text("skip"), Single("y"), Single("n"),
                     Num(3), Num(7)} ]
+
+\* AttackForm under validateInt's parseInt() alone, as before the fix.
+AttackParseIntForm == [AttackForm EXCEPT !.ratingParseIntOnly = TRUE]
 
 \* DriftForm with only the jump-carrying questions mutable: switching one of
 \* them to a number leaves its "is <text/choice>" rules impossible to satisfy.
