@@ -21,6 +21,8 @@ import { helper, type } from '@heyform-inc/utils'
 import { CHAR_A_KEY_CODE } from '../consts'
 import type { AnyMap, IFormField, IPartialFormField } from '../typings'
 
+export { getNavigateFieldId, sliceFieldsByLogics } from '@heyform-inc/answer-utils'
+
 const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const HIDDEN_FIELD_REGEX = /<span[^>]+data-hiddenfield="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
@@ -177,16 +179,6 @@ export function flattenFieldsWithGroups(fields: IFormField[]): IFormField[] {
   return result
 }
 
-export function sliceFieldsByLogics(fields: IFormField[], jumpFieldIds: string[]): IFormField[] {
-  const index = fields.findIndex(f => jumpFieldIds.includes(f.id) && !f.isTouched)
-
-  if (index > -1) {
-    return fields.slice(0, index + 1)
-  }
-
-  return fields
-}
-
 function getPartialField(field: IFormField): IPartialFormField {
   return {
     id: field.id,
@@ -271,67 +263,6 @@ export function questionNumber(number?: number | string, parentNumber?: number |
 
 export function removeHeading(title?: string) {
   return (title || '').replace(/<h\d>/gi, '<span>').replace(/<\/h\d>/gi, '</span>')
-}
-
-export function getNavigateFieldId(
-  field: FormField,
-  thankYouFields: FormField[] = [],
-  logics: Logic[] = [],
-  variables: Variable[] = [],
-  fieldValues: Record<string, any> = {},
-  variableValues: Record<string, any> = {}
-) {
-  if (helper.isEmpty(thankYouFields)) {
-    return
-  }
-
-  const logic = logics.find(l => l.fieldId === field.id)
-
-  if (logic) {
-    const { payloads } = logic
-    const result = payloads.filter(p => p.action.kind === ActionEnum.NAVIGATE)
-
-    for (const payload of result) {
-      const { condition, action } = payload
-      const isValidated = validateCondition(field, condition, fieldValues)
-
-      if (isValidated) {
-        const { fieldId } = action as NavigateAction
-        const index = thankYouFields.findIndex(f => f.id === fieldId)
-
-        if (index > -1) {
-          return fieldId
-        }
-      }
-    }
-  }
-
-  // Check variables
-  for (const variable of variables) {
-    if (helper.isValidArray(variable.logics)) {
-      for (const { condition, action } of variable.logics) {
-        const _field: any = {
-          id: variable.id,
-          kind: variable.kind === 'number' ? FieldKindEnum.NUMBER : FieldKindEnum.SHORT_TEXT
-        }
-
-        const isValidated = validateCondition(_field, condition, variableValues)
-
-        if (isValidated) {
-          const { fieldId } = action as NavigateAction
-          const index = thankYouFields.findIndex(f => f.id === fieldId)
-
-          if (index > -1) {
-            return fieldId
-          }
-        }
-      }
-    }
-  }
-
-  if (field.nextFieldId && thankYouFields.some(f => f.id === field.nextFieldId)) {
-    return field.nextFieldId
-  }
 }
 
 export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {

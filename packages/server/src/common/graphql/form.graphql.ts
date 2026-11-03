@@ -198,6 +198,10 @@ class SharedPropertyInput {
   @Field({ nullable: true })
   @IsOptional()
   redirectDelay?: number
+
+  @Field({ nullable: true })
+  @IsOptional()
+  discardSubmission?: boolean
 }
 
 @InputType()

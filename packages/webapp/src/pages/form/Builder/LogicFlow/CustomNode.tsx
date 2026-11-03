@@ -9,7 +9,7 @@ import { htmlUtils } from '@heyform-inc/answer-utils'
 
 import { FormFieldType } from '@/types'
 
-import { QuestionIcon } from '../LeftSidebar/QuestionList'
+import { DiscardingEndingIcon, QuestionIcon } from '../LeftSidebar/QuestionList'
 
 interface CustomNodeProps extends Node {
   data: {
@@ -65,6 +65,7 @@ const CustomNodeComponent: FC<CustomNodeProps> = ({
       <div className="flow-custom-node-content">
         <QuestionIcon kind={field.kind} index={field.index} parentIndex={field.parent?.index} />
         <div className="flow-custom-node-title">{htmlUtils.plain(field.title as string)}</div>
+        <DiscardingEndingIcon className="text-secondary" field={field} />
         {hasBranchingError && (
           <IconAlertTriangle
             className="text-error h-5 w-5 shrink-0"

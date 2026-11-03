@@ -58,7 +58,8 @@ function navigate(fieldId: string, targetId: string, expected = 'yes'): Logic {
 async function mount(
   fields: FormField[],
   logics: Logic[],
-  values: Record<string, AnswerValue> = {}
+  values: Record<string, AnswerValue> = {},
+  query: Record<string, any> = {}
 ) {
   const onSubmit = vi.fn(async () => {})
   const thankYouFields = fields.filter(field => field.kind === FieldKindEnum.THANK_YOU)
@@ -74,7 +75,7 @@ async function mount(
     ...applyLogicToFields(fields, logics, [], values),
     scrollIndex: 0,
     isScrollNextDisabled: false,
-    query: {},
+    query,
     locale: 'en',
     theme: {},
     questionCount: 0,
@@ -546,4 +547,98 @@ test('a chosen file on an upload question reached by a jump does not send submit
     undefined
   )
   expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('end')
+})
+function discardingEnding(id: string): FormField {
+  return { ...ending(id), properties: { discardSubmission: true } }
+}
+
+test('a route that ends on a discarding ending shows it without submitting', async () => {
+  const onSubmit = await mount(
+    [question('q1'), ending('end'), discardingEnding('not-eligible')],
+    [navigate('q1', 'not-eligible', 'no')]
+  )
+
+  await answer('no')
+  await submit()
+
+  expect(onSubmit).not.toHaveBeenCalled()
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('not-eligible')
+})
+
+test('a form with a discarding ending still submits routes that end elsewhere', async () => {
+  const onSubmit = await mount(
+    [question('q1'), ending('end'), discardingEnding('not-eligible')],
+    [navigate('q1', 'not-eligible', 'no')]
+  )
+
+  await answer('yes')
+  await submit()
+
+  expect(onSubmit).toHaveBeenCalledWith({ q1: 'yes' }, false, undefined)
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('end')
+})
+
+test('a discarding first ending catches routes that fall through to it', async () => {
+  const onSubmit = await mount(
+    [question('q1'), discardingEnding('not-eligible'), ending('end')],
+    [navigate('q1', 'end', 'yes')]
+  )
+
+  await answer('no')
+  await submit()
+
+  expect(onSubmit).not.toHaveBeenCalled()
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('not-eligible')
+})
+
+test('a required question skipped on a discarding route still blocks the ending', async () => {
+  const onSubmit = await mount(
+    [question('q1', true), question('q2'), discardingEnding('not-eligible')],
+    []
+  )
+
+  await next()
+  expect(currentQuestion()).toBe('q2')
+
+  await submit()
+
+  expect(onSubmit).not.toHaveBeenCalled()
+  expect(currentQuestion()).toBe('q1')
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBeNull()
+})
+
+test('a discarding ending keeps the embed open so the respondent can read it', async () => {
+  const postMessage = vi.spyOn(window.parent, 'postMessage').mockImplementation(() => {})
+  await mount(
+    [question('q1'), ending('end'), discardingEnding('not-eligible')],
+    [navigate('q1', 'not-eligible', 'no')],
+    {},
+    { hideAfterSubmit: true }
+  )
+
+  await answer('no')
+  await submit()
+
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('not-eligible')
+  expect(postMessage).not.toHaveBeenCalled()
+  postMessage.mockRestore()
+})
+
+test('any other ending still closes the embed after submitting', async () => {
+  const postMessage = vi.spyOn(window.parent, 'postMessage').mockImplementation(() => {})
+  await mount(
+    [question('q1'), ending('end'), discardingEnding('not-eligible')],
+    [navigate('q1', 'not-eligible', 'no')],
+    {},
+    { hideAfterSubmit: true }
+  )
+
+  await answer('yes')
+  await submit()
+
+  expect(postMessage).toHaveBeenCalledWith(
+    expect.objectContaining({ eventName: 'HIDE_EMBED_MODAL' }),
+    '*'
+  )
+  postMessage.mockRestore()
 })

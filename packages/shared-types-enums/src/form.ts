@@ -175,6 +175,8 @@ export interface Property {
   redirectUrl?: string
   redirectOnCompletion?: boolean
   redirectDelay?: number
+  // Responses that reach this ending are not saved
+  discardSubmission?: boolean
 }
 
 export interface Validation {

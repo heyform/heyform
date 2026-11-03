@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useCallback } from 'react'
 
 import { sendMessageToParent } from '../utils'
+import { resolveEnding } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
 import { Countdown } from '../components/Countdown'
@@ -12,17 +13,30 @@ export const Header: FC = () => {
   const { state, dispatch } = useStore()
 
   async function handleCountdownEnd() {
-    // Submit form
-    await state.onSubmit?.(state.values, true)
+    const ending = resolveEnding(
+      [...state.allFields, ...state.thankYouFields],
+      state.logics,
+      state.parameters,
+      state.values,
+      true
+    )
+    const isDiscarded = !!ending?.properties?.discardSubmission
 
-    if (helper.isTrue(state.query.hideAfterSubmit)) {
-      sendMessageToParent('HIDE_EMBED_MODAL')
+    // An ending that keeps its responses out of the form still has something to tell the
+    // respondent, so it neither submits nor closes the embed
+    if (!isDiscarded) {
+      await state.onSubmit?.(state.values, true)
+
+      if (helper.isTrue(state.query.hideAfterSubmit)) {
+        sendMessageToParent('HIDE_EMBED_MODAL')
+      }
     }
 
     dispatch({
       type: 'setIsSubmitted',
       payload: {
-        isSubmitted: true
+        isSubmitted: true,
+        thankYouFieldId: isDiscarded ? ending!.id : undefined
       }
     })
   }
