@@ -145,8 +145,9 @@ export class CompleteSubmissionResolver {
       throw new BadRequestException(err.response)
     }
 
-    // The respondent still sees the ending, but nothing is stored or sent on
-    if (isDiscarded) {
+    // The respondent still sees the ending, but nothing is stored or sent on. Likewise when
+    // the time ran out before anything valid was answered: there is no response to keep.
+    if (isDiscarded || (isTimeUp && answers.length < 1)) {
       return {}
     }
 
