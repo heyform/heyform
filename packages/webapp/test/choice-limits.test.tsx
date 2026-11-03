@@ -84,12 +84,6 @@ async function type(input: HTMLInputElement, value: string) {
   })
 }
 
-async function press(label: string, index = 0) {
-  const buttons = Array.from(container.querySelectorAll(`button[aria-label="${label}"]`))
-
-  await act(async () => (buttons[index] as HTMLButtonElement).click())
-}
-
 test('every choice gets a field showing the Unlimited placeholder, with a fallback label', async () => {
   await mount()
 
@@ -112,44 +106,18 @@ test('typing a limit stores it, clearing it removes it and shows the placeholder
   expect(inputs()[0].placeholder).toBe('Unlimited')
 })
 
-test('only whole numbers of at least 1 are kept', async () => {
+test('the field is a plain number input and decimals are rounded down', async () => {
   await mount()
 
-  await type(inputs()[0], 'abc')
-  expect(limitOf(0)).toBeUndefined()
-  expect(inputs()[0].value).toBe('')
-
-  await type(inputs()[0], '0')
-  expect(limitOf(0)).toBeUndefined()
+  expect(inputs()[0].type).toBe('number')
 
   await type(inputs()[0], '12')
   expect(limitOf(0)).toBe(12)
 
-  await type(inputs()[0], '12a')
-  expect(limitOf(0)).toBe(12)
-  expect(inputs()[0].value).toBe('12')
-})
-
-test('the arrows increase and decrease the limit, and going below 1 removes it', async () => {
-  await mount()
-
-  await press('Increase limit')
-  expect(limitOf(0)).toBe(1)
-
-  await press('Increase limit')
+  // A decimal is rounded down, so the field never shows a limit that isn't stored
+  await type(inputs()[0], '2.5')
   expect(limitOf(0)).toBe(2)
-
-  await press('Decrease limit')
-  expect(limitOf(0)).toBe(1)
-
-  await press('Decrease limit')
-  expect(limitOf(0)).toBeUndefined()
-  expect(inputs()[0].value).toBe('')
-  expect(inputs()[0].placeholder).toBe('Unlimited')
-
-  // Decreasing an unlimited choice keeps it unlimited
-  await press('Decrease limit')
-  expect(limitOf(0)).toBeUndefined()
+  expect(inputs()[0].value).toBe('2')
 })
 
 test('an existing limit is shown and the other choice stays untouched', async () => {
@@ -158,7 +126,7 @@ test('an existing limit is shown and the other choice stays untouched', async ()
   expect(inputs()[0].value).toBe('3')
   expect(inputs()[1].value).toBe('')
 
-  await press('Increase limit', 1)
+  await type(inputs()[1], '4')
   expect(limitOf(0)).toBe(3)
-  expect(limitOf(1)).toBe(1)
+  expect(limitOf(1)).toBe(4)
 })

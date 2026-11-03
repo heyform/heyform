@@ -1383,9 +1383,7 @@
           "limit": {
             "title": "Limite de réponses par option",
             "description": "Laissez vide pour ne pas limiter. Quand une option atteint sa limite, les nouvelles réponses ne peuvent plus la choisir.",
-            "option": "Option {{index}}",
-            "increase": "Augmenter la limite",
-            "decrease": "Diminuer la limite"
+            "option": "Option {{index}}"
           }
         }
       },

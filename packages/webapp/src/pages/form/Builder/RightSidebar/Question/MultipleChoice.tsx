@@ -1,6 +1,5 @@
 import { ChoiceBadgeEnum, Validation } from '@heyform-inc/shared-types-enums'
-import { IconChevronDown, IconChevronUp } from '@tabler/icons-react'
-import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { helper } from '@heyform-inc/utils'
@@ -200,70 +199,16 @@ const BranchingLockedSwitch: FC<{
   return <Switch value={value} onChange={onChange} />
 }
 
-interface LimitInputProps {
-  value?: number
-  onChange: (value?: number) => void
-}
-
-// A whole number of at least 1, empty meaning unlimited.
-const LimitInput: FC<LimitInputProps> = ({ value, onChange }) => {
-  const { t } = useTranslation()
-
-  function handleInput(event: ChangeEvent<HTMLInputElement>) {
-    const limit = parseInt(event.target.value.replace(/\D/g, ''), 10)
-
-    onChange(Number.isSafeInteger(limit) && limit >= 1 ? limit : undefined)
-  }
-
-  function handleIncrease() {
-    onChange((value ?? 0) + 1)
-  }
-
-  function handleDecrease() {
-    onChange(value && value > 1 ? value - 1 : undefined)
-  }
-
-  return (
-    <div className="relative w-28">
-      <input
-        className="placeholder:text-secondary border-input focus:border-input block w-full appearance-none rounded-lg border bg-transparent py-2.5 pl-3.5 pr-8 text-base/[1.4rem] ring-0 focus:shadow-none focus:outline-none focus:ring-0 sm:py-2 sm:pl-3 sm:text-sm/[1.4rem]"
-        type="text"
-        inputMode="numeric"
-        maxLength={9}
-        value={value ?? ''}
-        placeholder={String(t('form.builder.settings.multipleChoice.unlimited'))}
-        onChange={handleInput}
-      />
-      <div className="absolute bottom-0 right-2 top-0 flex flex-col justify-center">
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label={String(t('form.builder.settings.multipleChoice.limit.increase'))}
-          className="text-secondary hover:bg-accent-light focus:text-primary flex h-3 w-4 items-center justify-center rounded-sm"
-          onClick={handleIncrease}
-        >
-          <IconChevronUp className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label={String(t('form.builder.settings.multipleChoice.limit.decrease'))}
-          className="text-secondary hover:bg-accent-light focus:text-primary flex h-3 w-4 items-center justify-center rounded-sm"
-          onClick={handleDecrease}
-        >
-          <IconChevronDown className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
-  )
-}
-
 const ChoiceLimits: FC<RequiredSettingsProps> = ({ field }) => {
   const { t } = useTranslation()
   const { dispatch } = useStoreContext()
 
   const handleChange = useCallback(
-    (choiceId: string, limit?: number) => {
+    (choiceId: string, value: number | string) => {
+      // A whole number of at least 1, empty meaning unlimited
+      const number = Math.floor(Number(value))
+      const limit = Number.isSafeInteger(number) && number >= 1 ? number : undefined
+
       dispatch({
         type: 'updateField',
         payload: {
@@ -299,7 +244,14 @@ const ChoiceLimits: FC<RequiredSettingsProps> = ({ field }) => {
             {choice.label ||
               String(t('form.builder.settings.multipleChoice.limit.option', { index: index + 1 }))}
           </span>
-          <LimitInput value={choice.limit} onChange={limit => handleChange(choice.id, limit)} />
+          <Input
+            className="w-28"
+            type="number"
+            min={1}
+            value={choice.limit ?? ''}
+            placeholder={String(t('form.builder.settings.multipleChoice.unlimited'))}
+            onChange={value => handleChange(choice.id, value)}
+          />
         </div>
       ))}
     </div>
