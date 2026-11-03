@@ -7,6 +7,7 @@ import * as assert from 'assert'
 
 import { CompleteSubmissionResolver } from '../src/resolver/endpoint/complete-submission.resolver'
 import { SubmissionService } from '../src/service/submission.service'
+import { assertOpenToken } from '../src/utils/endpoint'
 import { collectChoiceLimits } from '../src/utils/submission'
 
 const FIELD_ID = 'field_1'
@@ -336,9 +337,103 @@ async function testRejectedChoiceDoesNotUseUpTheIpLimit() {
   assert.deepStrictEqual(calls, { ip: 2, release: 1 })
 }
 
+// A partial submission (sent when the time runs out) is checked and counted like any other
+async function testPartialSubmissionsRespectAndUseTheLimits() {
+  const form = {
+    id: 'form_1',
+    teamId: 'team_1',
+    name: 'Timed workshops',
+    suspended: false,
+    fields: [
+      {
+        id: FIELD_ID,
+        title: 'Workshop',
+        kind: FieldKindEnum.MULTIPLE_CHOICE,
+        validations: {},
+        properties: {
+          allowMultiple: false,
+          choices: [
+            { id: 'a', label: 'Option a', limit: 1 },
+            { id: 'b', label: 'Option b', limit: 1 }
+          ]
+        }
+      },
+      {
+        id: 'name',
+        title: 'Name',
+        kind: FieldKindEnum.SHORT_TEXT,
+        validations: { required: true }
+      },
+      { id: 'end', title: 'Thanks', kind: FieldKindEnum.THANK_YOU }
+    ],
+    hiddenFields: [],
+    logics: [],
+    variables: [],
+    settings: {
+      active: true,
+      allowArchive: true,
+      captchaKind: CaptchaKindEnum.NONE,
+      enableTimeLimit: true,
+      timeLimit: 60
+    }
+  }
+  // a already has its only place taken, b has one left
+  const submissions = [submissionOf('a')]
+  const { service } = createService(submissions)
+  // Seconds between the server issuing the open token and the submission
+  let openedAgo = 0
+  const resolver = new CompleteSubmissionResolver(
+    {
+      decryptToken: () => ({
+        formId: form.id,
+        timestamp: Math.floor(Date.now() / 1_000) - openedAgo
+      }),
+      // The real check, so the time limit's own submission is the one being sent
+      assertOpenToken
+    } as any,
+    { findById: async () => structuredClone(form) } as any,
+    service,
+    { checkIp: async () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    {} as any
+  )
+  const submit = (answers: Record<string, any>, partialSubmission?: boolean) =>
+    resolver.completeSubmission(
+      { ip: '203.0.113.10', deviceId: 'device_1', lang: 'en', userAgent: {} } as any,
+      'anonymous_1',
+      {
+        formId: form.id,
+        answers,
+        hiddenFields: [],
+        openToken: 'encrypted-token',
+        partialSubmission
+      } as any
+    )
+
+  // The time ran out before the required name was answered
+  openedAgo = 63
+
+  await assert.rejects(() => submit({ [FIELD_ID]: { value: ['a'] } }, true), /"Option a" is full/)
+  assert.strictEqual(submissions.length, 1)
+
+  await submit({ [FIELD_ID]: { value: ['b'] } }, true)
+  assert.strictEqual(submissions.length, 2)
+
+  // The partial submission took the last place of b
+  openedAgo = 10
+
+  await assert.rejects(
+    () => submit({ [FIELD_ID]: { value: ['b'] }, name: 'Ada' }),
+    /"Option b" is full/
+  )
+  assert.strictEqual(submissions.length, 2)
+}
+
 async function run() {
   testCollectChoiceLimits()
   await testRejectedChoiceDoesNotUseUpTheIpLimit()
+  await testPartialSubmissionsRespectAndUseTheLimits()
   await testConcurrentCreatesCannotExceedChoiceLimit()
   await testOtherChoicesStayOpenWhenOneChoiceIsFull()
   await testSpamIsNotCountedUntilItIsRestored()
