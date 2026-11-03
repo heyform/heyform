@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useCallback } from 'react'
 
-import { sendMessageToParent } from '../utils'
+import { getEndingRouteFields, sendMessageToParent } from '../utils'
 import { resolveEnding } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 
@@ -14,7 +14,7 @@ export const Header: FC = () => {
 
   async function handleCountdownEnd() {
     const ending = resolveEnding(
-      [...state.allFields, ...state.thankYouFields],
+      getEndingRouteFields(state.allFields, state.thankYouFields),
       state.logics,
       state.parameters,
       state.values,
@@ -36,7 +36,8 @@ export const Header: FC = () => {
       type: 'setIsSubmitted',
       payload: {
         isSubmitted: true,
-        thankYouFieldId: isDiscarded ? ending!.id : undefined
+        // Show the ending the route leads to whether or not the response was saved
+        thankYouFieldId: ending?.id
       }
     })
   }

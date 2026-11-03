@@ -51,7 +51,7 @@ const form = {
 }
 
 function setup(formOverride: Record<string, any> = form) {
-  const calls = { spam: 0, create: 0, payment: 0, report: 0, integration: 0 }
+  const calls = { spam: 0, create: 0, payment: 0, report: 0, integration: 0, ip: 0 }
   const resolver = new CompleteSubmissionResolver(
     {
       decryptToken: () => ({ formId: 'form_1', timestamp: now }),
@@ -69,7 +69,11 @@ function setup(formOverride: Record<string, any> = form) {
         return 'submission_1'
       }
     } as any,
-    { checkIp: async () => undefined } as any,
+    {
+      checkIp: async () => {
+        calls.ip++
+      }
+    } as any,
     { addQueue: () => calls.report++ } as any,
     { addQueue: () => calls.integration++ } as any,
     {
@@ -101,7 +105,14 @@ async function testDiscardingEndingStoresAndSendsNothing() {
   const { calls, submit } = setup()
 
   assert.deepStrictEqual(await submit({ q1: 'no' }), {})
-  assert.deepStrictEqual(calls, { spam: 0, create: 0, payment: 0, report: 0, integration: 0 })
+  assert.deepStrictEqual(calls, {
+    spam: 0,
+    create: 0,
+    payment: 0,
+    report: 0,
+    integration: 0,
+    ip: 0
+  })
 }
 
 async function testOtherRoutesAreStillSaved() {
@@ -254,6 +265,64 @@ async function testEmptyGroupsAreLeftOffTheRoute() {
   assert.strictEqual(calls.create, 1)
 }
 
+// checkIp() increments the per-IP counter, so a screened-out visitor must not use it up.
+async function testDiscardedSubmissionsDoNotUseTheIpLimit() {
+  const limited = {
+    ...form,
+    settings: { ...form.settings, enableIpLimit: true, ipLimitCount: 1 }
+  }
+  const discarded = setup(limited)
+
+  await discarded.submit({ q1: 'no' })
+
+  assert.strictEqual(discarded.calls.create, 0)
+  assert.strictEqual(discarded.calls.ip, 0)
+
+  const saved = setup(limited)
+
+  await saved.submit({ q1: 'yes' })
+
+  assert.strictEqual(saved.calls.create, 1)
+  assert.strictEqual(saved.calls.ip, 1)
+}
+
+// The renderer only resolves top-level endings, so the server must not fall back to (or jump
+// to) an ending nested in a group either.
+async function testEndingsNestedInGroupsAreIgnored() {
+  const nested = {
+    id: 'nested',
+    title: 'Nested',
+    kind: FieldKindEnum.THANK_YOU,
+    properties: { discardSubmission: true }
+  }
+  const { calls, submit } = setup({
+    ...form,
+    fields: [
+      form.fields[0],
+      { id: 'g', title: 'G', kind: FieldKindEnum.GROUP, properties: { fields: [nested] } },
+      form.fields[2],
+      form.fields[3]
+    ],
+    logics: [
+      {
+        fieldId: 'q1',
+        payloads: [
+          {
+            id: 'p1',
+            condition: { comparison: ComparisonEnum.IS, expected: 'nested' },
+            action: { kind: ActionEnum.NAVIGATE, fieldId: 'nested' }
+          }
+        ]
+      }
+    ]
+  })
+
+  await submit({ q1: 'yes' })
+  await submit({ q1: 'nested' })
+
+  assert.strictEqual(calls.create, 2)
+}
+
 async function main() {
   await testDiscardingEndingStoresAndSendsNothing()
   await testOtherRoutesAreStillSaved()
@@ -264,6 +333,8 @@ async function main() {
   await testPaymentFieldLaterInTheFormStillDiscards()
   await testFormsWithVariableRulesAreLeftToTheRenderer()
   await testEmptyGroupsAreLeftOffTheRoute()
+  await testDiscardedSubmissionsDoNotUseTheIpLimit()
+  await testEndingsNestedInGroupsAreIgnored()
 }
 
 main().catch(err => {

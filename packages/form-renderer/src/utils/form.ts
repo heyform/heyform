@@ -1,21 +1,12 @@
 import {
-  ActionEnum,
   ChoiceBadgeEnum,
   FORM_FIELD_KINDS,
   FieldKindEnum,
   FormField,
-  Logic,
-  NavigateAction,
-  QUESTION_FIELD_KINDS,
-  Variable
+  QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 
-import {
-  htmlUtils,
-  parsePlainAnswer,
-  validateCondition,
-  validateRequiredField
-} from '@heyform-inc/answer-utils'
+import { htmlUtils, parsePlainAnswer, validateRequiredField } from '@heyform-inc/answer-utils'
 import { helper, type } from '@heyform-inc/utils'
 
 import { CHAR_A_KEY_CODE } from '../consts'
@@ -26,6 +17,13 @@ export { getNavigateFieldId, sliceFieldsByLogics } from '@heyform-inc/answer-uti
 const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const HIDDEN_FIELD_REGEX = /<span[^>]+data-hiddenfield="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
+
+// The fields resolveEnding() decides from. Only top-level endings can be shown (Blocks.tsx looks
+// the id up in thankYouFields) and the server leaves nested ones out too, so an ending inside a
+// group is dropped here instead of becoming the fallback ending ahead of the top-level ones.
+export function getEndingRouteFields(allFields: IFormField[], thankYouFields: IFormField[]) {
+  return [...allFields.filter(f => f.kind !== FieldKindEnum.THANK_YOU), ...thankYouFields]
+}
 
 export function isNotNil(arg: any): boolean {
   return !helper.isNil(arg)

@@ -8,6 +8,7 @@ import RCForm, { Field, useForm } from 'rc-field-form'
 import { FC, ReactNode, useEffect, useMemo, useState } from 'react'
 
 import {
+  getEndingRouteFields,
   sendMessageToParent,
   sliceFieldsByLogics,
   useEnterKey,
@@ -153,7 +154,7 @@ export const Form: FC<FormProps> = ({
         }
 
         const ending = resolveEnding(
-          [...state.allFields, ...state.thankYouFields],
+          getEndingRouteFields(state.allFields, state.thankYouFields),
           state.logics,
           state.parameters,
           values,

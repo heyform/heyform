@@ -110,11 +110,11 @@ test('running out of time on a discarding route shows the ending without submitt
   expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('later')
 })
 
-test('running out of time on any other route still sends what was answered', async () => {
+test('running out of time on any other route sends what was answered and shows its ending', async () => {
   const onSubmit = await expire([question, ending('saved'), ending('later', true)])
 
   expect(onSubmit).toHaveBeenCalledWith({}, true)
-  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('none')
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('saved')
 })
 
 test('running out of time on a discarding route keeps the embed open', async () => {

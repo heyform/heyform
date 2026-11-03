@@ -62,11 +62,15 @@ async function mount(
   query: Record<string, any> = {}
 ) {
   const onSubmit = vi.fn(async () => {})
-  const thankYouFields = fields.filter(field => field.kind === FieldKindEnum.THANK_YOU)
+  // Like Renderer.tsx initStore: only top-level endings are thankYouFields, and an ending
+  // nested in a group stays in allFields with its group.
+  const isTopLevelEnding = (field: FormField) =>
+    field.kind === FieldKindEnum.THANK_YOU && !(field as any).parent
+  const thankYouFields = fields.filter(isTopLevelEnding)
   const initialState: IState = {
     instanceId: 'test',
     formId: 'branch-test',
-    allFields: fields.filter(field => field.kind !== FieldKindEnum.THANK_YOU),
+    allFields: fields.filter(field => !isTopLevelEnding(field)),
     thankYouFields,
     hiddenFields: [],
     jumpFieldIds: logics.map(logic => logic.fieldId),
@@ -589,6 +593,21 @@ test('a discarding first ending catches routes that fall through to it', async (
 
   expect(onSubmit).not.toHaveBeenCalled()
   expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('not-eligible')
+})
+
+test('a jump to an ending nested in a group falls back to the first top-level ending', async () => {
+  const group: FormField = { id: 'group', kind: FieldKindEnum.GROUP, title: 'group' }
+  const nested = { ...discardingEnding('nested'), parent: group } as FormField
+  const onSubmit = await mount(
+    [question('q1'), group, nested, ending('end')],
+    [navigate('q1', 'nested', 'no')]
+  )
+
+  await answer('no')
+  await submit()
+
+  expect(onSubmit).toHaveBeenCalledWith({ q1: 'no' }, false, undefined)
+  expect(container.querySelector('output')?.getAttribute('data-ending')).toBe('end')
 })
 
 test('a required question skipped on a discarding route still blocks the ending', async () => {

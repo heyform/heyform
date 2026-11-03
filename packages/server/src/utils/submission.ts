@@ -184,10 +184,12 @@ export function isSubmissionDiscarded(
     return false
   }
 
-  // Keep to the fields the renderer shows: it drops unknown kinds and groups with no questions
+  // Keep to the fields the renderer shows: it drops unknown kinds and groups with no questions,
+  // and decides only from top-level endings (it can't show one nested in a group)
   const visibleFields = flattenedFields.filter(
     field =>
       FORM_FIELD_KINDS.includes(field.kind) &&
+      (field.kind !== FieldKindEnum.THANK_YOU || !!form.fields?.some(f => f.id === field.id)) &&
       !form.fields?.some(
         parent =>
           parent.id === field.id &&

@@ -74,14 +74,6 @@ export class CompleteSubmissionResolver {
       throw new BadRequestException('The form does not have content')
     }
 
-    if (
-      form.settings.enableIpLimit &&
-      helper.isValid(form.settings.ipLimitCount) &&
-      form.settings.ipLimitCount > 0
-    ) {
-      await this.submissionIpLimitService.checkIp(form, client.ip)
-    }
-
     // Check password
     if (form.settings.requirePassword) {
       const passwordToken = this.endpointService.decryptToken(input.passwordToken)
@@ -149,6 +141,15 @@ export class CompleteSubmissionResolver {
     // The respondent still sees the ending, but nothing is stored or sent on
     if (isDiscarded) {
       return {}
+    }
+
+    // checkIp() counts the submission, so it runs only once the response is going to be stored
+    if (
+      form.settings.enableIpLimit &&
+      helper.isValid(form.settings.ipLimitCount) &&
+      form.settings.ipLimitCount > 0
+    ) {
+      await this.submissionIpLimitService.checkIp(form, client.ip)
     }
 
     let category = SubmissionCategoryEnum.INBOX
