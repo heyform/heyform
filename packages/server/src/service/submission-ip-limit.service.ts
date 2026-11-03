@@ -96,6 +96,20 @@ export class SubmissionIpLimitService {
     }
   }
 
+  // Gives back the submission checkIp() counted, for when it was not stored after all
+  async releaseIp(form: FormModel, ip: string): Promise<void> {
+    const [key] = limitKeys(ip)
+
+    await this.submissionIpLimitModel.updateOne(
+      {
+        formId: form.id,
+        ip: key,
+        count: { $gt: 0 }
+      },
+      { $inc: { count: -1 } }
+    )
+  }
+
   public async findAll(): Promise<SubmissionIpLimitModel[]> {
     return this.submissionIpLimitModel.find({
       expiredAt: {

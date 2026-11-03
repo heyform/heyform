@@ -1,6 +1,11 @@
-import { FieldKindEnum, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
+import {
+  CaptchaKindEnum,
+  FieldKindEnum,
+  SubmissionCategoryEnum
+} from '@heyform-inc/shared-types-enums'
 import * as assert from 'assert'
 
+import { CompleteSubmissionResolver } from '../src/resolver/endpoint/complete-submission.resolver'
 import { SubmissionService } from '../src/service/submission.service'
 import { collectChoiceLimits } from '../src/utils/submission'
 
@@ -252,8 +257,88 @@ function testCollectChoiceLimits() {
   )
 }
 
+// checkIp() counts the submission, so a respondent told that an option is full must get the
+// attempt back and still be able to pick another one.
+async function testRejectedChoiceDoesNotUseUpTheIpLimit() {
+  const now = Math.floor(Date.now() / 1_000)
+  const form = {
+    id: 'form_1',
+    teamId: 'team_1',
+    name: 'Workshops',
+    suspended: false,
+    fields: [
+      {
+        id: FIELD_ID,
+        title: 'Workshop',
+        kind: FieldKindEnum.MULTIPLE_CHOICE,
+        validations: {},
+        properties: {
+          allowMultiple: false,
+          choices: [
+            { id: 'a', label: 'Option a', limit: 1 },
+            { id: 'b', label: 'Option b' }
+          ]
+        }
+      },
+      { id: 'end', title: 'Thanks', kind: FieldKindEnum.THANK_YOU }
+    ],
+    hiddenFields: [],
+    logics: [],
+    variables: [],
+    settings: {
+      active: true,
+      allowArchive: true,
+      captchaKind: CaptchaKindEnum.NONE,
+      enableIpLimit: true,
+      ipLimitCount: 1
+    }
+  }
+  const submissions = [submissionOf('a')]
+  const calls = { ip: 0, release: 0 }
+  const { service } = createService(submissions)
+  const resolver = new CompleteSubmissionResolver(
+    {
+      decryptToken: () => ({ formId: form.id, timestamp: now }),
+      assertOpenToken: () => now
+    } as any,
+    { findById: async () => structuredClone(form) } as any,
+    service,
+    {
+      checkIp: async () => {
+        calls.ip++
+      },
+      releaseIp: async () => {
+        calls.release++
+      }
+    } as any,
+    { addQueue: () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    {} as any
+  )
+  const submit = (choiceId: string) =>
+    resolver.completeSubmission(
+      { ip: '203.0.113.10', deviceId: 'device_1', lang: 'en', userAgent: {} } as any,
+      'anonymous_1',
+      {
+        formId: form.id,
+        answers: { [FIELD_ID]: { value: [choiceId] } },
+        hiddenFields: [],
+        openToken: 'encrypted-token'
+      } as any
+    )
+
+  await assert.rejects(() => submit('a'), /"Option a" is full/)
+  assert.deepStrictEqual(calls, { ip: 1, release: 1 })
+
+  // A stored submission keeps its count
+  await submit('b')
+  assert.strictEqual(submissions.length, 2)
+  assert.deepStrictEqual(calls, { ip: 2, release: 1 })
+}
+
 async function run() {
   testCollectChoiceLimits()
+  await testRejectedChoiceDoesNotUseUpTheIpLimit()
   await testConcurrentCreatesCannotExceedChoiceLimit()
   await testOtherChoicesStayOpenWhenOneChoiceIsFull()
   await testSpamIsNotCountedUntilItIsRestored()

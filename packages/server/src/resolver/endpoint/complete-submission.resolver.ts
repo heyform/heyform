@@ -152,12 +152,13 @@ export class CompleteSubmissionResolver {
       return {}
     }
 
-    // checkIp() counts the submission, so it runs only once the response is going to be stored
-    if (
+    const isIpLimited =
       form.settings.enableIpLimit &&
       helper.isValid(form.settings.ipLimitCount) &&
       form.settings.ipLimitCount > 0
-    ) {
+
+    // checkIp() counts the submission, so it runs only once the response is going to be stored
+    if (isIpLimited) {
       await this.submissionIpLimitService.checkIp(form, client.ip)
     }
 
@@ -209,24 +210,36 @@ export class CompleteSubmissionResolver {
         ? form.settings.quotaLimit
         : undefined
     const choiceLimits = collectChoiceLimits(flattenFields(form.fields, true), answers)
-    const submissionId = await this.submissionService.createWithinQuota(
-      {
-        teamId: form.teamId,
-        formId: form.id,
-        category,
-        title: form.name,
-        answers,
-        hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
-        variables,
-        startAt,
-        endAt,
-        ip: DISABLE_SUBMISSION_IP ? undefined : client.ip,
-        userAgent: client.userAgent,
-        status
-      },
-      quotaLimit,
-      choiceLimits
-    )
+    let submissionId: string
+
+    try {
+      submissionId = await this.submissionService.createWithinQuota(
+        {
+          teamId: form.teamId,
+          formId: form.id,
+          category,
+          title: form.name,
+          answers,
+          hiddenFields: normalizeSubmissionHiddenFields(form.hiddenFields, input.hiddenFields),
+          variables,
+          startAt,
+          endAt,
+          ip: DISABLE_SUBMISSION_IP ? undefined : client.ip,
+          userAgent: client.userAgent,
+          status
+        },
+        quotaLimit,
+        choiceLimits
+      )
+    } catch (err) {
+      // Nothing was stored, so the attempt must not use up the IP limit: a respondent told
+      // that an option is full can still pick another one
+      if (isIpLimited) {
+        await this.submissionIpLimitService.releaseIp(form, client.ip)
+      }
+
+      throw err
+    }
 
     // Payment
     const result: CompleteSubmissionType = {}
