@@ -31,3 +31,10 @@ test('invalid date', () => {
     expect(isDate(date, format)).toBe(false)
   })
 })
+
+test('a format full of unclosed brackets is checked in linear time', () => {
+  const started = Date.now()
+
+  expect(isDate('2024-01-31', '['.repeat(50_000))).toBe(false)
+  expect(Date.now() - started).toBeLessThan(500)
+})

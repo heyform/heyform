@@ -22,7 +22,9 @@ export function isMobilePhone(arg: any): boolean {
   return !!phoneNumber?.isValid()
 }
 
-const REGEX_FORMAT = /\[([^\]]+)]|Y{4}|M{2}|D{2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g
+// A bracketed literal can't contain "[", so a format full of unclosed "[" is scanned once
+// instead of once per bracket (polynomial backtracking)
+const REGEX_FORMAT = /\[([^\][]+)]|Y{4}|M{2}|D{2}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g
 const REGEX_NUMBERS = /(\d){1,4}/g
 
 export function getDateFormat(format: string, allowTime?: boolean): string {
