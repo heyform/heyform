@@ -136,10 +136,14 @@ interface EvaluatedFormField extends FormField {
   isTouched?: boolean
 }
 
+// A partial submission must stop at a jump field the answers did not resolve, so a client
+// can't call a submission partial to skip required questions. The time limit's own
+// submission (allowUnresolved) is the exception: the respondent ran out of time.
 export function selectSubmissionFields(
   fields: EvaluatedFormField[],
   logics: Logic[] = [],
-  partialSubmission = false
+  partialSubmission = false,
+  allowUnresolved = false
 ): FormField[] {
   if (!partialSubmission) {
     return fields
@@ -155,6 +159,10 @@ export function selectSubmissionFields(
   )
 
   if (terminalIndex < 0) {
+    if (allowUnresolved) {
+      return fields
+    }
+
     throw new BadRequestException('Invalid partial submission')
   }
 
@@ -186,16 +194,21 @@ export function isSubmissionDiscarded(
 
   // Keep to the fields the renderer shows: it drops unknown kinds and groups with no questions,
   // and decides only from top-level endings (it can't show one nested in a group)
+  const topLevelIds = new Set((form.fields || []).map(field => field.id))
+  const emptyGroupIds = new Set(
+    (form.fields || [])
+      .filter(
+        field =>
+          field.kind === FieldKindEnum.GROUP &&
+          !field.properties?.fields?.some(child => FORM_FIELD_KINDS.includes(child.kind))
+      )
+      .map(field => field.id)
+  )
   const visibleFields = flattenedFields.filter(
     field =>
       FORM_FIELD_KINDS.includes(field.kind) &&
-      (field.kind !== FieldKindEnum.THANK_YOU || !!form.fields?.some(f => f.id === field.id)) &&
-      !form.fields?.some(
-        parent =>
-          parent.id === field.id &&
-          parent.kind === FieldKindEnum.GROUP &&
-          !parent.properties?.fields?.some(child => FORM_FIELD_KINDS.includes(child.kind))
-      )
+      (field.kind !== FieldKindEnum.THANK_YOU || topLevelIds.has(field.id)) &&
+      !emptyGroupIds.has(field.id)
   )
   const endsDiscarding = (fields: FormField[]) =>
     resolveEnding(fields, form.logics, form.variables, values, partialSubmission)?.properties

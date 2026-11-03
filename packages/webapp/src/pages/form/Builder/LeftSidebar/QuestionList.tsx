@@ -82,10 +82,14 @@ export const DiscardingEndingIcon: FC<ComponentProps & { field: FormFieldType }>
   }
 
   return (
-    <IconDatabaseOff
-      className={cn('h-4 w-4 shrink-0', className)}
-      title={t('form.builder.settings.discardSubmission')}
-    />
+    <Tooltip label={t('form.builder.settings.discardSubmission')}>
+      <span className="inline-flex shrink-0">
+        <IconDatabaseOff
+          className={cn('h-4 w-4', className)}
+          aria-label={t('form.builder.settings.discardSubmission')}
+        />
+      </span>
+    </Tooltip>
   )
 }
 

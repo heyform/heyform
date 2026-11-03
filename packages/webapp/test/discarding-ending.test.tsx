@@ -80,6 +80,9 @@ test('there is no warning on a later ending, or while the switch is off', async 
 test('only an ending with the switch on gets the icon', async () => {
   await act(async () => root.render(<DiscardingEndingIcon field={{ ...second, ...on } as any} />))
   expect(container.querySelector('svg')).not.toBeNull()
+  // A labelled icon inside the app's tooltip, not an SVG <title>
+  expect(container.querySelector('svg title')).toBeNull()
+  expect(container.querySelector('svg')?.getAttribute('aria-label')).toBeTruthy()
 
   await act(async () => root.render(<DiscardingEndingIcon field={second as any} />))
   expect(container.querySelector('svg')).toBeNull()
