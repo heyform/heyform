@@ -34,6 +34,11 @@ assert.deepStrictEqual(field.layout, { mediaType: 'image', brightness: 100 })
 const properties = field.properties as any
 assert.strictEqual(properties.html, undefined)
 assert.strictEqual(properties.invented, undefined)
+assert.strictEqual(
+  (normalizeAIFields([{ kind: 'thank_you', properties: { discardSubmission: true } }])[0] as any)
+    .properties?.discardSubmission,
+  undefined
+)
 assert.deepStrictEqual(properties.choices[0], { id: 'choice', label: 'Yes' })
 assert.strictEqual(properties.choices[1].label, 'No')
 assert.strictEqual(properties.choices[1].id.length, 12)

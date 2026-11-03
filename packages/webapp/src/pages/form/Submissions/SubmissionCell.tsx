@@ -38,6 +38,14 @@ interface SubmissionCellProps extends SubmissionHeaderCellProps {
 
 const ICON_CONFIGS = [...ALL_FIELD_CONFIGS, ...CUSTOM_FIELDS_CONFIGS]
 
+// Stored answers can predate validation, so only plain values are rendered: React throws on an
+// object child, which would take the whole table down.
+function toText(value: unknown): string | undefined {
+  if (helper.isString(value) || helper.isNumber(value) || helper.isBoolean(value)) {
+    return String(value)
+  }
+}
+
 const AddressItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
   const { t } = useTranslation()
 
@@ -51,7 +59,7 @@ const AddressItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) =>
     answer.value.city,
     answer.value.state,
     answer.value.zip
-  ]
+  ].map(toText)
 
   if (isTableCell) {
     return <span className="text-nowrap">{value.filter(helper.isValid).join(', ')}</span>
@@ -103,7 +111,7 @@ const DateRangeItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) 
         truncate: isTableCell
       })}
     >
-      {[answer.value.start, answer.value.end].filter(Boolean).join(' - ')}
+      {[answer.value.start, answer.value.end].map(toText).filter(Boolean).join(' - ')}
     </div>
   )
 }
@@ -153,7 +161,7 @@ const FullNameItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) =
         truncate: isTableCell
       })}
     >
-      {[answer.value.firstName, answer.value.lastName].filter(Boolean).join(' ')}
+      {[answer.value.firstName, answer.value.lastName].map(toText).filter(Boolean).join(' ')}
     </div>
   )
 }
@@ -172,7 +180,7 @@ const InputTableItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
   const result = answer.value
     .map((row: AnyMap) => {
       if (helper.isObject(row)) {
-        return columns.map(c => row[c.id])
+        return columns.map(c => toText(row[c.id]) ?? '')
       }
     })
     .filter(Boolean) as string[][]
@@ -236,14 +244,16 @@ const MultipleChoiceItem: FC<SubmissionCellProps> = ({ answer, field, isTableCel
     return null
   }
 
-  const result = choices.filter(c => answer.value.value?.includes(c.id))
+  const selected: unknown[] = helper.isArray(answer.value.value) ? answer.value.value : []
+  const result = choices.filter(c => selected.includes(c.id))
 
   if (hasOther) {
     result.push({
       id: OTHER_CHOICE_ID,
-      label: helper.isValid(answer.value.other)
-        ? answer.value.other
-        : String(t('form.builder.compose.otherChoice'))
+      label:
+        helper.isString(answer.value.other) && helper.isValid(answer.value.other)
+          ? answer.value.other
+          : String(t('form.builder.compose.otherChoice'))
     })
   }
 
@@ -337,8 +347,10 @@ const PaymentItem: FC<SubmissionCellProps> = ({ answer, field }) => {
     return null
   }
 
-  const amount = answer.value.amount || 0
-  const amountString = CURRENCY_SYMBOLS[answer.value.currency] + Big(amount).div(100).toFixed(2)
+  // Big() throws on anything that isn't a finite number (including "+1")
+  const amount = Number.isFinite(Number(answer.value.amount)) ? Number(answer.value.amount) : 0
+  const amountString =
+    (CURRENCY_SYMBOLS[answer.value.currency] ?? '') + Big(amount).div(100).toFixed(2)
   const isCompleted = helper.isValid(answer.value.paymentIntentId)
   const receiptUrl = isTrustedStripeReceiptUrl(answer.value.receiptUrl)
     ? answer.value.receiptUrl

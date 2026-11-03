@@ -521,3 +521,18 @@ test('validate number condition', () => {
     expect(validateCondition(field, comparison, comparison.values)).toBe(true)
   }
 })
+
+test('an unanswered date is never treated as today', () => {
+  const field: FormField = {
+    id: 'id_date',
+    title: 'Date',
+    kind: FieldKindEnum.DATE
+  }
+  const check = (comparison: ComparisonEnum, expected: string) =>
+    validateCondition(field, { comparison, expected }, { id_date: undefined } as any)
+
+  expect(check(ComparisonEnum.IS_BEFORE, '2999-01-01')).toBe(false)
+  expect(check(ComparisonEnum.IS_AFTER, '1990-01-01')).toBe(false)
+  expect(check(ComparisonEnum.IS, '2999-01-01')).toBe(false)
+  expect(check(ComparisonEnum.IS_NOT, '2999-01-01')).toBe(true)
+})

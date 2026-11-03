@@ -49,6 +49,7 @@ function identifiedItems(schema: z.ZodObject) {
 }
 
 // Keep these schemas aligned with FormFieldInput and its nested GraphQL input types.
+// discardSubmission stays out on purpose: only an author may choose not to save responses.
 const propertiesSchema = z.preprocess(
   object,
   z

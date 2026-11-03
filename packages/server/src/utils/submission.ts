@@ -133,10 +133,14 @@ interface EvaluatedFormField extends FormField {
   isTouched?: boolean
 }
 
+// A partial submission must stop at a jump field the answers did not resolve, so a client
+// can't call a submission partial to skip required questions. The time limit's own
+// submission (allowUnresolved) is the exception: the respondent ran out of time.
 export function selectSubmissionFields(
   fields: EvaluatedFormField[],
   logics: Logic[] = [],
-  partialSubmission = false
+  partialSubmission = false,
+  allowUnresolved = false
 ): FormField[] {
   if (!partialSubmission) {
     return fields
@@ -152,11 +156,18 @@ export function selectSubmissionFields(
   )
 
   if (terminalIndex < 0) {
+    if (allowUnresolved) {
+      return fields
+    }
+
     throw new BadRequestException('Invalid partial submission')
   }
 
   return fields.slice(0, terminalIndex + 1)
 }
+
+// Lives next to resolveEnding so the renderer's tests can check both sides agree
+export { isSubmissionDiscarded } from '@heyform-inc/answer-utils'
 
 export function assertSafeSpecialFieldAnswers(
   fields: FormField[],

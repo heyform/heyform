@@ -6,9 +6,11 @@ import { EndpointService } from '../src/service/endpoint.service'
 import { ip } from '../src/utils/decorators/ip'
 import {
   OPEN_FORM_TOKEN_MAX_AGE_SECONDS,
+  TIME_LIMIT_GRACE_SECONDS,
   assertFormIsAcceptingSubmissions,
   assertFormPasswordToken,
-  assertOpenToken
+  assertOpenToken,
+  isTimeLimitUp
 } from '../src/utils/endpoint'
 import { literalSearchRegex } from '../src/utils/search'
 import {
@@ -138,6 +140,42 @@ function testPartialSubmissionsAreSelectedFromServerLogic() {
     ['first', 'branch']
   )
   assert.throws(() => selectSubmissionFields(fields as any, [], true), /Invalid partial submission/)
+  // Only the time limit's own submission may stop without an unresolved jump field
+  assert.deepStrictEqual(
+    selectSubmissionFields(fields as any, [], true, true).map(field => field.id),
+    ['first', 'branch', 'required_later']
+  )
+}
+
+// The countdown starts after the open token is issued, so its submission arrives late; only a
+// partial submission gets the grace window, and only for so long.
+function testTimeLimitSubmissionsGetAGraceWindow() {
+  const settings = { enableTimeLimit: true, timeLimit: 60 }
+  const token = { formId: 'form_1', timestamp: 1_000 }
+
+  assert.strictEqual(isTimeLimitUp(settings, 1_000, 1_059), false)
+  assert.strictEqual(isTimeLimitUp(settings, 1_000, 1_060), true)
+  assert.strictEqual(isTimeLimitUp({}, 1_000, 9_999), false)
+  assert.strictEqual(isTimeLimitUp({ enableTimeLimit: true, timeLimit: 0 }, 1_000, 9_999), false)
+
+  assert.strictEqual(
+    assertOpenToken(token, 'form_1', settings, 1_061, { allowTimeUpGrace: true }),
+    1_000
+  )
+  assert.strictEqual(
+    assertOpenToken(token, 'form_1', settings, 1_060 + TIME_LIMIT_GRACE_SECONDS, {
+      allowTimeUpGrace: true
+    }),
+    1_000
+  )
+  assert.throws(
+    () =>
+      assertOpenToken(token, 'form_1', settings, 1_061 + TIME_LIMIT_GRACE_SECONDS, {
+        allowTimeUpGrace: true
+      }),
+    /time limit has expired/
+  )
+  assert.throws(() => assertOpenToken(token, 'form_1', settings, 1_061), /time limit has expired/)
 }
 
 function testPaymentConfigurationIsServerControlled() {
@@ -316,6 +354,7 @@ async function run() {
   testFormAvailabilityAndOpenTokenExpiry()
   testFormPasswordTokensAreBoundAndExpire()
   testPartialSubmissionsAreSelectedFromServerLogic()
+  testTimeLimitSubmissionsGetAGraceWindow()
   testPaymentConfigurationIsServerControlled()
   testSpecialFieldValuesFailClosedOnTheServer()
   testSearchIsLiteralAndIpUsesExpressTrustPolicy()

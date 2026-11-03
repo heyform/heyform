@@ -1,29 +1,52 @@
 import {
-  ActionEnum,
   ChoiceBadgeEnum,
   FORM_FIELD_KINDS,
   FieldKindEnum,
   FormField,
-  Logic,
-  NavigateAction,
-  QUESTION_FIELD_KINDS,
-  Variable
+  QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 
-import {
-  htmlUtils,
-  parsePlainAnswer,
-  validateCondition,
-  validateRequiredField
-} from '@heyform-inc/answer-utils'
+import { htmlUtils, parsePlainAnswer, validateRequiredField } from '@heyform-inc/answer-utils'
 import { helper, type } from '@heyform-inc/utils'
 
 import { CHAR_A_KEY_CODE } from '../consts'
 import type { AnyMap, IFormField, IPartialFormField } from '../typings'
 
+export { getNavigateFieldId, sliceFieldsByLogics } from '@heyform-inc/answer-utils'
+
 const MENTION_REGEX = /<span[^>]+data-mention="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const HIDDEN_FIELD_REGEX = /<span[^>]+data-hiddenfield="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
 const VARIABLE_REGEX = /<span[^>]+data-variable="([^"]+)"([^>]+)?>[^<]+<\/span>/gi
+
+// The fields a respondent can reach, as the renderer lays them out: every question and
+// statement with each group followed by its children (a group without any is dropped),
+// payment fields only when payments are on, and the top-level endings. initStore() and the
+// tests that compare the renderer with the server both build it here.
+export function getRespondentFields(
+  fields: IFormField[] | undefined,
+  translations?: Record<string, any>,
+  allowPayment = true
+) {
+  const list = parseFields(fields, translations)
+  const welcomeField = list.find(f => f.kind === FieldKindEnum.WELCOME)
+  const thankYouFields = list.filter(f => f.kind === FieldKindEnum.THANK_YOU)
+  let allFields = flattenFieldsWithGroups(
+    list.filter(f => f.kind !== FieldKindEnum.WELCOME && f.kind !== FieldKindEnum.THANK_YOU)
+  )
+
+  if (!allowPayment) {
+    allFields = allFields.filter(f => f.kind !== FieldKindEnum.PAYMENT)
+  }
+
+  return { welcomeField, thankYouFields, allFields }
+}
+
+// The fields resolveEnding() decides from. Only top-level endings can be shown (Blocks.tsx looks
+// the id up in thankYouFields) and the server leaves nested ones out too, so an ending inside a
+// group is dropped here instead of becoming the fallback ending ahead of the top-level ones.
+export function getEndingRouteFields(allFields: IFormField[], thankYouFields: IFormField[]) {
+  return [...allFields.filter(f => f.kind !== FieldKindEnum.THANK_YOU), ...thankYouFields]
+}
 
 export function isNotNil(arg: any): boolean {
   return !helper.isNil(arg)
@@ -177,16 +200,6 @@ export function flattenFieldsWithGroups(fields: IFormField[]): IFormField[] {
   return result
 }
 
-export function sliceFieldsByLogics(fields: IFormField[], jumpFieldIds: string[]): IFormField[] {
-  const index = fields.findIndex(f => jumpFieldIds.includes(f.id) && !f.isTouched)
-
-  if (index > -1) {
-    return fields.slice(0, index + 1)
-  }
-
-  return fields
-}
-
 function getPartialField(field: IFormField): IPartialFormField {
   return {
     id: field.id,
@@ -271,67 +284,6 @@ export function questionNumber(number?: number | string, parentNumber?: number |
 
 export function removeHeading(title?: string) {
   return (title || '').replace(/<h\d>/gi, '<span>').replace(/<\/h\d>/gi, '</span>')
-}
-
-export function getNavigateFieldId(
-  field: FormField,
-  thankYouFields: FormField[] = [],
-  logics: Logic[] = [],
-  variables: Variable[] = [],
-  fieldValues: Record<string, any> = {},
-  variableValues: Record<string, any> = {}
-) {
-  if (helper.isEmpty(thankYouFields)) {
-    return
-  }
-
-  const logic = logics.find(l => l.fieldId === field.id)
-
-  if (logic) {
-    const { payloads } = logic
-    const result = payloads.filter(p => p.action.kind === ActionEnum.NAVIGATE)
-
-    for (const payload of result) {
-      const { condition, action } = payload
-      const isValidated = validateCondition(field, condition, fieldValues)
-
-      if (isValidated) {
-        const { fieldId } = action as NavigateAction
-        const index = thankYouFields.findIndex(f => f.id === fieldId)
-
-        if (index > -1) {
-          return fieldId
-        }
-      }
-    }
-  }
-
-  // Check variables
-  for (const variable of variables) {
-    if (helper.isValidArray(variable.logics)) {
-      for (const { condition, action } of variable.logics) {
-        const _field: any = {
-          id: variable.id,
-          kind: variable.kind === 'number' ? FieldKindEnum.NUMBER : FieldKindEnum.SHORT_TEXT
-        }
-
-        const isValidated = validateCondition(_field, condition, variableValues)
-
-        if (isValidated) {
-          const { fieldId } = action as NavigateAction
-          const index = thankYouFields.findIndex(f => f.id === fieldId)
-
-          if (index > -1) {
-            return fieldId
-          }
-        }
-      }
-    }
-  }
-
-  if (field.nextFieldId && thankYouFields.some(f => f.id === field.nextFieldId)) {
-    return field.nextFieldId
-  }
 }
 
 export function getChoiceKeyName(badge: ChoiceBadgeEnum, index: number) {
