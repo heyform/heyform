@@ -24,6 +24,10 @@ export function answersToHtml(answers: Answer[]): string {
 function parseHtmlAnswer(answer: Answer): string {
   let value = ''
 
+  if (answer.value === '' || answer.value == null) {
+    return value
+  }
+
   if (QUESTION_FIELD_KINDS.includes(answer.kind)) {
     switch (answer.kind) {
       case FieldKindEnum.FILE_UPLOAD:
