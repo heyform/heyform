@@ -40,8 +40,9 @@ function createFakeModel(submissions: StoredSubmission[]) {
       return { id: `submission_${submissions.length}` }
     },
     aggregate: async (pipeline: any[]) => {
-      const { formId, category, 'answers.id': fieldMatch } = stage(pipeline, '$match')
-      const choiceIds: string[] = pipeline[4].$match['answers.value.value'].$in
+      const { formId, category, answers } = stage(pipeline, '$match')
+      const fieldIds: string[] = answers.$elemMatch.id.$in
+      const choiceIds: string[] = answers.$elemMatch['value.value'].$in
       const counts = new Map<string, number>()
 
       for (const submission of submissions) {
@@ -50,7 +51,7 @@ function createFakeModel(submissions: StoredSubmission[]) {
         }
 
         for (const answer of submission.answers) {
-          if (!fieldMatch.$in.includes(answer.id)) {
+          if (!fieldIds.includes(answer.id)) {
             continue
           }
 

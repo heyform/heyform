@@ -286,7 +286,8 @@ export class SubmissionService {
           $match: {
             formId,
             category: { $ne: SubmissionCategoryEnum.SPAM },
-            'answers.id': { $in: fieldIds }
+            // Uses the { formId, answers.id, answers.value.value } index
+            answers: { $elemMatch: { id: { $in: fieldIds }, 'value.value': { $in: choiceIds } } }
           }
         },
         { $unwind: '$answers' },
