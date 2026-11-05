@@ -5,6 +5,7 @@ import '@environments'
 import { build as buildAuthFlows } from './auth-flows.e2e.test'
 import { build as buildAuth } from './auth.e2e.test'
 import { build as buildCatalog } from './catalog.e2e.test'
+import { build as buildChoiceLimits } from './choice-limits.e2e.test'
 import { build as buildHealth } from './health.e2e.test'
 import { runSuites } from './helpers/runner'
 import { waitForReady } from './helpers/wait'
@@ -50,6 +51,7 @@ async function main() {
     buildStatefulEdges(baseUrl),
     buildTeamFlow(baseUrl),
     buildPermissionMatrix(baseUrl),
+    buildChoiceLimits(baseUrl),
     // Rate-limit suite intentionally last — it burns per-user attempt counters.
     buildRateLimit(baseUrl)
   ]

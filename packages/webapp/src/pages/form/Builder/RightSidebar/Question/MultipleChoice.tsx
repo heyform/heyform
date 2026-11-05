@@ -199,6 +199,65 @@ const BranchingLockedSwitch: FC<{
   return <Switch value={value} onChange={onChange} />
 }
 
+const ChoiceLimits: FC<RequiredSettingsProps> = ({ field }) => {
+  const { t } = useTranslation()
+  const { dispatch } = useStoreContext()
+
+  const handleChange = useCallback(
+    (choiceId: string, value: number | string) => {
+      // A whole number of at least 1, empty meaning unlimited
+      const number = Math.floor(Number(value))
+      const limit = Number.isSafeInteger(number) && number >= 1 ? number : undefined
+
+      dispatch({
+        type: 'updateField',
+        payload: {
+          id: field.id,
+          updates: {
+            properties: {
+              ...field.properties,
+              choices: field.properties?.choices?.map(choice =>
+                choice.id === choiceId ? { ...choice, limit } : choice
+              )
+            }
+          }
+        }
+      })
+    },
+    [dispatch, field.id, field.properties]
+  )
+
+  return (
+    <div className="space-y-2">
+      <div className="space-y-0.5">
+        <label className="text-sm/6" htmlFor="#">
+          {t('form.builder.settings.multipleChoice.limit.title')}
+        </label>
+        <p className="text-secondary text-xs/5">
+          {t('form.builder.settings.multipleChoice.limit.description')}
+        </p>
+      </div>
+
+      {field.properties?.choices?.map((choice, index) => (
+        <div key={choice.id} className="flex items-center justify-between gap-x-3">
+          <span className="min-w-0 flex-1 truncate text-sm/6">
+            {choice.label ||
+              String(t('form.builder.settings.multipleChoice.limit.option', { index: index + 1 }))}
+          </span>
+          <Input
+            className="w-28"
+            type="number"
+            min={1}
+            value={choice.limit ?? ''}
+            placeholder={String(t('form.builder.settings.multipleChoice.unlimited'))}
+            onChange={value => handleChange(choice.id, value)}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function MultipleChoiceSettings({ field }: RequiredSettingsProps) {
   const { t } = useTranslation()
   const { dispatch } = useStoreContext()
@@ -321,6 +380,8 @@ export default function MultipleChoiceSettings({ field }: RequiredSettingsProps)
           onChange={value => handleChange('badge', value)}
         />
       </div>
+
+      {helper.isValidArray(field.properties?.choices) && <ChoiceLimits field={field} />}
     </>
   )
 }
