@@ -349,8 +349,10 @@ const PaymentItem: FC<SubmissionCellProps> = ({ answer, field }) => {
 
   // Big() throws on anything that isn't a finite number (including "+1")
   const amount = Number.isFinite(Number(answer.value.amount)) ? Number(answer.value.amount) : 0
+  const currency = String(answer.value.currency ?? field.properties?.currency ?? '').toUpperCase()
   const amountString =
-    (CURRENCY_SYMBOLS[answer.value.currency] ?? '') + Big(amount).div(100).toFixed(2)
+    (CURRENCY_SYMBOLS[currency] ?? (currency ? `${currency} ` : '')) +
+    Big(amount).div(100).toFixed(2)
   const isCompleted = helper.isValid(answer.value.paymentIntentId)
   const receiptUrl = isTrustedStripeReceiptUrl(answer.value.receiptUrl)
     ? answer.value.receiptUrl
