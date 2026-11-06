@@ -538,6 +538,10 @@ button.button-icon-only {
 // Blocks
 .heyform-render-root {
   @apply h-screen w-screen overflow-hidden;
+
+  &::empty {
+    @apply flex items-center justify-center;
+  }
 }
 
 .heyform-root,
