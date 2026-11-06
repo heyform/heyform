@@ -22,6 +22,7 @@ import { helper } from '@heyform-inc/utils'
 
 import { GOOGLE_RECAPTCHA_KEY } from '@/consts/env'
 
+import { Loader } from './Loader'
 import { PasswordCheck } from './PasswordCheck'
 
 interface RendererProps {
@@ -37,6 +38,36 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
   const openTokenRef = useRef<string>('')
   const passwordTokenRef = useRef<string>('')
   const [isPasswordChecked, setIsPasswordChecked] = useState(false)
+
+  const stripeEnabled = isStripeEnabled(form)
+  const [stripeReady, setStripeReady] = useState(() => typeof (window as Any).Stripe === 'function')
+  const [stripeError, setStripeError] = useState<Error>()
+
+  useEffect(() => {
+    if (!stripeEnabled || typeof (window as Any).Stripe === 'function') {
+      setStripeReady(true)
+      return
+    }
+
+    let cancelled = false
+    setStripeReady(false)
+    setStripeError(undefined)
+
+    loadExternalScript('stripe-sdk', 'https://js.stripe.com/v3/')
+      .then(() => {
+        if (typeof (window as Any).Stripe !== 'function') {
+          throw new Error('Stripe failed to initialize')
+        }
+        if (!cancelled) setStripeReady(true)
+      })
+      .catch(error => {
+        if (!cancelled) setStripeError(error)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [stripeEnabled])
 
   function loadExternalScript(id: string, src: string): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -224,6 +255,14 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
     return <PasswordCheck form={form} onFinish={handlePasswordFinish} />
   }
 
+  if (stripeEnabled && stripeError) {
+    throw stripeError
+  }
+
+  if (stripeEnabled && (!stripeReady || typeof (window as Any).Stripe !== 'function')) {
+    return <Loader />
+  }
+
   const theme = getTheme(form.themeSettings?.theme)
   const fontURL = getWebFontURL(theme.fontFamily)
 
@@ -231,8 +270,6 @@ export const Renderer: FC<RendererProps> = ({ form, query, locale, contactId }) 
     <>
       {helper.isValid(fontURL) && <link href={fontURL} rel="stylesheet" />}
       <style>{getThemeStyle(theme, query)}</style>
-
-      {isStripeEnabled(form) && <script id="stripe" src="https://js.stripe.com/v3/" />}
 
       <FormRenderer
         form={form as Any}
