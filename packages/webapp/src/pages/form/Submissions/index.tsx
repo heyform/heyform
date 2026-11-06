@@ -343,7 +343,7 @@ export default function FormSubmissions() {
             ref={tableRef}
             classNames={{
               container: cn(
-                'scrollbar overflow-auto rounded-md border border-accent text-sm',
+                'scrollbar overflow-auto rounded-md border border-[rgba(var(--hf-dashboard-border))] text-sm',
                 isMaximized ? 'h-[calc(100vh-9rem)]' : 'h-[calc(100vh-23.45rem)]'
               ),
               table:
@@ -353,7 +353,7 @@ export default function FormSubmissions() {
             columns={columns}
             loader={
               <Repeat count={20}>
-                <div className="border-accent flex h-10 items-center gap-x-8 border-b px-4">
+                <div className="flex h-10 items-center gap-x-8 border-b border-[rgba(var(--hf-dashboard-border))] px-4">
                   <div className="skeleton h-4 w-4 rounded-md" />
                   <div className="skeleton h-4 w-20 rounded-md" />
                   <div className="skeleton h-4 w-60 rounded-md" />

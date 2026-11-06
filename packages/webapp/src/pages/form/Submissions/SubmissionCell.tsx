@@ -200,7 +200,7 @@ const InputTableItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
     <div className="scrollbar overflow-x-auto">
       <table className="min-w-full text-left text-sm">
         <thead className="text-secondary">
-          <tr className="border-accent border-b">
+          <tr className="border-b border-[rgba(var(--hf-dashboard-border))]">
             {columns.map(c => (
               <th key={c.id} className="text-nowrap py-2 text-left font-normal">
                 {c.label}
@@ -212,7 +212,7 @@ const InputTableItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell })
           {result.map((row, index) => (
             <tr
               key={index}
-              className="border-accent hover:bg-primary/[2.5%] border-b last:border-b-0"
+              className="hover:bg-primary/[2.5%] border-b border-[rgba(var(--hf-dashboard-border))] last:border-b-0"
             >
               {row.map((cell, index) => (
                 <td key={index} className="h-10 text-nowrap py-2 text-left">
@@ -360,12 +360,12 @@ const PaymentItem: FC<SubmissionCellProps> = ({ answer, field }) => {
     <div className="flex items-center">
       <div className="flex flex-1 items-center overflow-hidden truncate">
         {isCompleted ? (
-          <div className="flex h-6 items-center rounded bg-green-100 pl-1 pr-2 text-sm text-green-800">
+          <div className="flex h-6 items-center rounded bg-green-100 pl-1 pr-2 text-sm text-green-800 dark:bg-green-500/15 dark:text-green-400">
             <IconCheck className="h-4 w-4" />
             <span className="ml-1">Succeeded</span>
           </div>
         ) : (
-          <div className="text-primary flex h-6 items-center rounded bg-gray-100 pl-1 pr-2 text-sm">
+          <div className="text-primary flex h-6 items-center rounded bg-gray-100 pl-1 pr-2 text-sm dark:bg-white/10">
             <IconClock className="h-4 w-4" />
             <span className="ml-1">Incomplete</span>
           </div>
