@@ -1,4 +1,5 @@
 import { Auth, FormGuard, Team } from '@decorator'
+import { STRIPE_PUBLISHABLE_KEY } from '@environments'
 import { FormDetailInput, FormType, PublicFormType } from '@graphql'
 import { date, helper } from '@heyform-inc/utils'
 import { FormModel, TeamModel } from '@model'
@@ -90,7 +91,10 @@ export class PublicFormResolver {
       suspended: form.suspended || false,
       isDraft: form.isDraft || false,
       status: form.status,
-      stripeAccount: form.stripeAccount,
+      stripe: {
+        ...form.stripeAccount,
+        publishableKey: STRIPE_PUBLISHABLE_KEY
+      },
       version: form.version || 1,
       canPublish: form.canPublish || false,
       customReport: form.customReport || {

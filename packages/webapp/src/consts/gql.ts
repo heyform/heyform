@@ -1502,9 +1502,9 @@ export const PUBLIC_FORM_GQL = gql`
       description
       interactiveMode
       kind
-      stripeAccount {
+      stripe {
         accountId
-        email
+        publishableKey
       }
       settings {
         captchaKind

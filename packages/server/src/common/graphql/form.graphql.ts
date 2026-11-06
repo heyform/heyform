@@ -1214,8 +1214,6 @@ export class FormType {
   @Field(type => FormSettingType, { nullable: true })
   settings?: FormSettings
 
-  //
-
   @Field(type => [FormFieldType], { nullable: true })
   drafts?: FormField[]
 
@@ -1272,6 +1270,15 @@ export class FormType {
 }
 
 @ObjectType()
+class PublicStripeAccountType {
+  @Field()
+  accountId: string
+
+  @Field()
+  publishableKey: string
+}
+
+@ObjectType()
 export class PublicFormType extends FormType {
   @Field(type => [FormFieldType], { nullable: true })
   fields: FormField[]
@@ -1282,6 +1289,9 @@ export class PublicFormType extends FormType {
   // What each active page app needs on the form page, keyed by app id
   @Field(type => GraphQLJSONObject, { nullable: true })
   integrations?: Record<string, Record<string, string>>
+
+  @Field(type => PublicStripeAccountType, { nullable: true })
+  stripe?: PublicStripeAccountType
 }
 
 @ObjectType()

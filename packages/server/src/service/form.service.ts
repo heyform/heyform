@@ -375,7 +375,8 @@ export class FormService {
       'hiddenFields',
       'logics',
       'variables',
-      'themeSettings'
+      'themeSettings',
+      'stripeAccount'
     ])
 
     //!!! Do not disclose form password to the front end
