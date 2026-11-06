@@ -1,12 +1,12 @@
 import { FormRenderer, insertWebFont } from '@heyform-inc/form-renderer'
-import { IconChevronLeft, IconUpload } from '@tabler/icons-react'
+import { IconChevronLeft } from '@tabler/icons-react'
 import { useRequest } from 'ahooks'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { insertThemeStyle } from '@/pages/form/Builder/utils'
 import { FormService } from '@/services'
-import { cn, scrollIntoViewIfNeeded, useParam, useRouter } from '@/utils'
+import { cn, useParam, useRouter } from '@/utils'
 import { slugify } from '@heyform-inc/utils'
 
 import { Async, Button, EmptyState, Image, Loader, Tabs, useToast } from '@/components'
@@ -157,7 +157,7 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
   const [templateGroups, setTemplateGroups] = useState<TemplateGroupType[]>([])
   const [template, setTemplate] = useState<TemplateType>()
 
-  const { loading: importLoading, run: importForm } = useRequest(
+  const { run: importForm } = useRequest(
     async (formJson: string) => {
       try {
         const result = await FormService.importFromJSON(projectId, formJson)
@@ -229,10 +229,8 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
   }
 
   function handleScrollIntoView(id: string) {
-    scrollIntoViewIfNeeded(
-      document.getElementById('create-form-modal')!,
-      document.getElementById(id)!
-    )
+    // Native scrollIntoView respects scroll-margin, keeping the section clear of the sticky header
+    document.getElementById(id)?.scrollIntoView({ block: 'start' })
   }
 
   if (template) {
@@ -241,7 +239,7 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
 
   return (
     <div className="min-h-[calc(90vh-3.125rem)] w-[90vw]">
-      <div className="flex flex-wrap items-center justify-between gap-4 pr-8">
+      <div className="bg-foreground sticky -top-6 -mx-6 -mt-6 px-6 pb-3 pt-6">
         <button
           type="button"
           className="-ml-[0.15rem] inline-flex items-center gap-1 text-sm/6"
@@ -258,19 +256,10 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
           onChange={handleFileChange}
           aria-label={t('form.template.importJson')}
         />
-        <Button.Ghost
-          size="sm"
-          loading={importLoading}
-          onClick={() => fileInputRef.current?.click()}
-          className="rounded-lg"
-        >
-          <IconUpload className="h-4 w-4" />
-          {t('form.template.importJson', 'Import from JSON')}
-        </Button.Ghost>
       </div>
 
       {templateGroups.length > 0 && (
-        <div className="border-accent-light mb-5 mt-6 flex flex-wrap items-center gap-2 border-b pb-5">
+        <div className="border-accent-light mb-5 mt-3 flex flex-wrap items-center gap-2 border-b pb-5">
           {templateGroups.map(row => (
             <Button.Ghost
               className="rounded-lg"
@@ -304,9 +293,9 @@ export default function TemplatesModel({ onBack }: TemplatesModelProps) {
           </div>
         }
       >
-        <div className="[&>div:first-of-type]:pt-0">
+        <div className="[&>div:first-of-type]:scroll-mt-[4.5rem] [&>div:first-of-type]:pt-0">
           {templateGroups.map(row => (
-            <div key={row.id} id={row.id} className="pt-10">
+            <div key={row.id} id={row.id} className="scroll-mt-8 pt-10">
               <h3 className="text-primary text-balance text-sm/6 font-semibold">{row.category}</h3>
               <ul className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                 {row.templates.map(template => (
