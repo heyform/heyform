@@ -94,6 +94,11 @@ export class UserDetailType {
   @Field()
   isSocialAccount: boolean
 
+  // The identity provider owns the name (OIDC_SYNC_NAME). Only userDetail resolves it; other
+  // queries returning this type, like projectMembers, leave it null.
+  @Field({ nullable: true })
+  isNameManaged?: boolean
+
   @Field({ nullable: true })
   isDeletionScheduled?: boolean
 

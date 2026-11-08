@@ -12,6 +12,8 @@ export interface UserInfo {
   issuer?: string
   subject?: string
   emailVerified?: boolean
+  // The provider's own `name` claim, without the fallbacks used for `user.name`
+  providerName?: string
   user: {
     email?: string
     name: string

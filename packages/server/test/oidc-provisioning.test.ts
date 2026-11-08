@@ -11,7 +11,9 @@ const SocialLoginTypeEnum = {
 
 let environment = {
   APP_DISABLE_REGISTRATION: false,
-  OIDC_ALLOW_PROVISIONING: false
+  DISABLE_LOGIN_WITH_OIDC: false,
+  OIDC_ALLOW_PROVISIONING: false,
+  OIDC_SYNC_NAME: false
 }
 
 class TestBadRequestException extends Error {}
@@ -36,7 +38,12 @@ Module._load = function (request: string, parent: any, isMain: boolean) {
           value === undefined ||
           value === null ||
           value === '' ||
-          (Array.isArray(value) && value.length === 0)
+          (Array.isArray(value) && value.length === 0),
+        isValid: (value: unknown) =>
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          !(typeof value === 'object' && Object.keys(value as object).length === 0)
       }
     }
   }
@@ -47,7 +54,6 @@ Module._load = function (request: string, parent: any, isMain: boolean) {
       APPLE_LOGIN_TEAM_ID: '',
       APPLE_LOGIN_WEB_CLIENT_ID: '',
       APP_HOMEPAGE_URL: 'https://forms.example.com',
-      DISABLE_LOGIN_WITH_OIDC: false,
       GOOGLE_LOGIN_CLIENT_ID: '',
       GOOGLE_LOGIN_CLIENT_SECRET: '',
       OIDC_CLIENT_ID: 'heyform',
@@ -81,15 +87,20 @@ Module._load = function (request: string, parent: any, isMain: boolean) {
 
 interface HarnessOptions {
   appDisableRegistration?: boolean
+  disableLoginWithOidc?: boolean
   oidcAllowProvisioning?: boolean
+  oidcSyncName?: boolean
   existingSocialUserId?: string
   existingUser?: Record<string, unknown> | null
+  users?: Array<Record<string, any>>
 }
 
 function createHarness(options: HarnessOptions = {}) {
   environment = {
     APP_DISABLE_REGISTRATION: options.appDisableRegistration ?? false,
-    OIDC_ALLOW_PROVISIONING: options.oidcAllowProvisioning ?? false
+    DISABLE_LOGIN_WITH_OIDC: options.disableLoginWithOidc ?? false,
+    OIDC_ALLOW_PROVISIONING: options.oidcAllowProvisioning ?? false,
+    OIDC_SYNC_NAME: options.oidcSyncName ?? false
   }
 
   const servicePath = require.resolve('../src/service/social-login.service')
@@ -98,9 +109,13 @@ function createHarness(options: HarnessOptions = {}) {
   const socialAccounts: Array<Record<string, unknown>> = []
   const createdUsers: Array<Record<string, unknown>> = []
   const userUpdates: Array<{ id: string; updates: Record<string, unknown> }> = []
+  const socialQueries: Array<Record<string, unknown>> = []
+  const users = options.users ?? []
   const socialModel = {
-    findOne: async () =>
-      options.existingSocialUserId ? { userId: options.existingSocialUserId } : null,
+    findOne: async (query: Record<string, unknown>) => {
+      socialQueries.push({ ...query })
+      return options.existingSocialUserId ? { userId: options.existingSocialUserId } : null
+    },
     create: async (data: Record<string, unknown>) => {
       socialAccounts.push({ ...data })
       return { id: 'social_account_1' }
@@ -108,7 +123,11 @@ function createHarness(options: HarnessOptions = {}) {
     deleteOne: async () => ({ deletedCount: 0 })
   }
   const userService = {
-    findByEmail: async () => options.existingUser ?? null,
+    findById: async (id: string) => users.find(user => user.id === id) ?? null,
+    findByEmail: async (email: string) =>
+      options.users
+        ? (users.find(user => user.email === email) ?? null)
+        : (options.existingUser ?? null),
     update: async (id: string, updates: Record<string, unknown>) => {
       userUpdates.push({ id, updates: { ...updates } })
       return true
@@ -120,18 +139,19 @@ function createHarness(options: HarnessOptions = {}) {
   }
   const service = new SocialLoginService(socialModel as any, userService as any)
 
-  return { service, socialAccounts, createdUsers, userUpdates }
+  return { service, socialAccounts, socialQueries, createdUsers, userUpdates }
 }
 
-function oidcUserInfo(email?: string, emailVerified = false) {
+function oidcUserInfo(email?: string, emailVerified = false, providerName?: string) {
   return {
     openId: 'https://identity.example.com#subject_1',
     issuer: 'https://identity.example.com',
     subject: 'subject_1',
     emailVerified,
+    providerName,
     user: {
       email,
-      name: 'Example User',
+      name: providerName ?? 'Example User',
       avatar: '',
       lang: 'en'
     }
@@ -222,12 +242,122 @@ async function testPreviouslyBoundSubjectDoesNotDependOnMutableEmailClaims() {
   assert.strictEqual(socialAccounts.length, 0)
 }
 
+const linkedUser = () => ({ id: 'linked_user_1', name: 'Old Name', email: 'old@example.com' })
+
+async function testNameIsNotSyncedByDefault() {
+  const { service, userUpdates } = createHarness({
+    existingSocialUserId: 'linked_user_1',
+    users: [linkedUser()]
+  })
+  service.userInfo = async () => oidcUserInfo('new@example.com', true, 'New Name')
+
+  assert.strictEqual(await service.authCallback('oidc', 'code'), 'linked_user_1')
+  assert.deepStrictEqual(userUpdates, [])
+}
+
+async function testSyncRefreshesTheNameAtEachLogin() {
+  const { service, userUpdates } = createHarness({
+    oidcSyncName: true,
+    existingSocialUserId: 'linked_user_1',
+    users: [linkedUser()]
+  })
+  service.userInfo = async () => oidcUserInfo('new@example.com', true, 'New Name')
+
+  assert.strictEqual(await service.authCallback('oidc', 'code'), 'linked_user_1')
+  // Only the name: the email is left as it is
+  assert.deepStrictEqual(userUpdates, [{ id: 'linked_user_1', updates: { name: 'New Name' } }])
+}
+
+async function testSyncSkipsFallbackAndUnchangedNames() {
+  // No `name` claim: the fallback (email prefix, subject) must not replace a real name
+  const noName = createHarness({
+    oidcSyncName: true,
+    existingSocialUserId: 'linked_user_1',
+    users: [linkedUser()]
+  })
+  noName.service.userInfo = async () => oidcUserInfo('old@example.com', true)
+  await noName.service.authCallback('oidc', 'code')
+  assert.deepStrictEqual(noName.userUpdates, [])
+
+  const unchanged = createHarness({
+    oidcSyncName: true,
+    existingSocialUserId: 'linked_user_1',
+    users: [linkedUser()]
+  })
+  unchanged.service.userInfo = async () => oidcUserInfo('old@example.com', true, 'Old Name')
+  await unchanged.service.authCallback('oidc', 'code')
+  assert.deepStrictEqual(unchanged.userUpdates, [])
+}
+
+async function testSyncAppliesWhenLinkingAnExistingUserButNotToNewOnes() {
+  const existing = { id: 'existing_user_1', name: 'Old Name', email: 'user@example.com' }
+  const linked = createHarness({
+    oidcSyncName: true,
+    existingUser: existing,
+    users: [existing]
+  })
+  linked.service.userInfo = async () => oidcUserInfo('user@example.com', true, 'New Name')
+  assert.strictEqual(await linked.service.authCallback('oidc', 'code'), 'existing_user_1')
+  assert.deepStrictEqual(linked.userUpdates, [
+    { id: 'existing_user_1', updates: { isEmailVerified: true } },
+    { id: 'existing_user_1', updates: { name: 'New Name' } }
+  ])
+
+  const created = createHarness({ oidcSyncName: true, users: [] })
+  created.service.userInfo = async () => oidcUserInfo('user@example.com', true, 'New Name')
+  assert.strictEqual(await created.service.authCallback('oidc', 'code'), 'new_user_1')
+  assert.deepStrictEqual(created.userUpdates, [])
+}
+
+async function testSyncIsOnlyForOidcLogins() {
+  const { service, userUpdates } = createHarness({
+    oidcSyncName: true,
+    existingSocialUserId: 'linked_user_1',
+    users: [linkedUser()]
+  })
+  service.userInfo = async () => ({
+    openId: 'google_subject_1',
+    emailVerified: true,
+    providerName: 'New Name',
+    user: { email: 'old@example.com', name: 'New Name', avatar: '' }
+  })
+
+  await service.authCallback(SocialLoginTypeEnum.GOOGLE, 'code')
+  assert.deepStrictEqual(userUpdates, [])
+}
+
+async function testNameIsManagedOnlyForOidcAccountsWhileSyncIsOn() {
+  const off = createHarness({ existingSocialUserId: 'linked_user_1' })
+  assert.strictEqual(await off.service.isNameManaged('linked_user_1'), false)
+  assert.deepStrictEqual(off.socialQueries, [])
+
+  const oidcDisabled = createHarness({
+    oidcSyncName: true,
+    disableLoginWithOidc: true,
+    existingSocialUserId: 'linked_user_1'
+  })
+  assert.strictEqual(await oidcDisabled.service.isNameManaged('linked_user_1'), false)
+
+  const noAccount = createHarness({ oidcSyncName: true })
+  assert.strictEqual(await noAccount.service.isNameManaged('user_1'), false)
+
+  const on = createHarness({ oidcSyncName: true, existingSocialUserId: 'linked_user_1' })
+  assert.strictEqual(await on.service.isNameManaged('linked_user_1'), true)
+  assert.deepStrictEqual(on.socialQueries, [{ kind: 'oidc', userId: 'linked_user_1' }])
+}
+
 async function run() {
   await testNewOidcBindingRequiresVerifiedEmail()
   await testVerifiedEmailCanBindAnExistingUser()
   await testProvisioningRequiresTheOidcOverrideWhenRegistrationIsDisabled()
   await testOidcProvisioningOverrideDoesNotEnableOtherProviders()
   await testPreviouslyBoundSubjectDoesNotDependOnMutableEmailClaims()
+  await testNameIsNotSyncedByDefault()
+  await testSyncRefreshesTheNameAtEachLogin()
+  await testSyncSkipsFallbackAndUnchangedNames()
+  await testSyncAppliesWhenLinkingAnExistingUserButNotToNewOnes()
+  await testSyncIsOnlyForOidcLogins()
+  await testNameIsManagedOnlyForOidcAccountsWhileSyncIsOn()
 }
 
 if (require.main === module) {

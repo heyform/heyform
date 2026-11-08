@@ -16,6 +16,7 @@ const tests = [
   'oauth-state.test.ts',
   'oidc-security.test.ts',
   'oidc-provisioning.test.ts',
+  'user-name-managed.test.ts',
   'notification-recipients.test.ts',
   'notification-options.test.ts',
   'export-file.service.test.ts',

@@ -102,8 +102,9 @@ export class OidcSocialLogin {
     const emailClaims = typeof userInfo.email === 'string' ? userInfo : idClaims
     const email =
       typeof emailClaims?.email === 'string' ? emailClaims.email.trim().toLowerCase() : undefined
+    const providerName = this.firstString(claims.name)?.trim()
     const name = this.firstString(
-      claims.name,
+      providerName,
       claims.preferred_username,
       email?.split('@')[0],
       subject
@@ -118,6 +119,7 @@ export class OidcSocialLogin {
       issuer,
       subject,
       emailVerified: emailClaims?.email_verified === true,
+      providerName,
       user: {
         email,
         name,

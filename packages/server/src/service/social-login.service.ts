@@ -18,7 +18,8 @@ import {
   OIDC_CLIENT_AUTH_METHOD,
   OIDC_CLIENT_ID,
   OIDC_CLIENT_SECRET,
-  OIDC_ISSUER
+  OIDC_ISSUER,
+  OIDC_SYNC_NAME
 } from '@environments'
 import { helper } from '@heyform-inc/utils'
 import { UserSocialAccountModel } from '@model'
@@ -169,6 +170,21 @@ export class SocialLoginService {
     })
   }
 
+  // Whether the identity provider owns this user's name (OIDC_SYNC_NAME). Once OIDC login is
+  // switched off, nothing would refresh it, so it's editable again.
+  async isNameManaged(userId: string): Promise<boolean> {
+    if (!OIDC_SYNC_NAME || DISABLE_LOGIN_WITH_OIDC) {
+      return false
+    }
+
+    const account = await this.userSocialAccountModel.findOne({
+      kind: OIDC_LOGIN_KIND,
+      userId
+    })
+
+    return helper.isValid(account)
+  }
+
   async authCallback(
     kind: SocialLoginKind,
     code: string,
@@ -182,6 +198,7 @@ export class SocialLoginService {
 
     // Check if user social account exists
     let userId: string | undefined
+    let isNewUser = false
 
     if (kind === SocialLoginTypeEnum.GOOGLE_ONE_TAP) {
       kind = SocialLoginTypeEnum.GOOGLE
@@ -225,6 +242,7 @@ export class SocialLoginService {
 
         // Create new user
         userId = await this.userService.create(userInfo.user)
+        isNewUser = true
       }
 
       await this.create({
@@ -234,6 +252,22 @@ export class SocialLoginService {
       })
     }
 
+    if (kind === OIDC_LOGIN_KIND && OIDC_SYNC_NAME && !isNewUser) {
+      await this.syncOidcName(userId!, userInfo.providerName)
+    }
+
     return userId
+  }
+
+  private async syncOidcName(userId: string, providerName?: string): Promise<void> {
+    if (!providerName) {
+      return
+    }
+
+    const user = await this.userService.findById(userId)
+
+    if (user && user.name !== providerName) {
+      await this.userService.update(userId, { name: providerName })
+    }
   }
 }

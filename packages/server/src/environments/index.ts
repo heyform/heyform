@@ -137,6 +137,9 @@ export const OIDC_DISPLAY_ICON_URL: string = process.env.OIDC_DISPLAY_ICON_URL |
 export const OIDC_CLIENT_AUTH_METHOD = (process.env.OIDC_CLIENT_AUTH_METHOD ||
   'client_secret_basic') as 'client_secret_basic' | 'client_secret_post'
 export const OIDC_ALLOW_PROVISIONING: boolean = helper.isTrue(process.env.OIDC_ALLOW_PROVISIONING)
+// Let the identity provider own the name of users who sign in with OIDC: it's refreshed from
+// the `name` claim at each OIDC sign-in, and those users can't edit it in HeyForm.
+export const OIDC_SYNC_NAME: boolean = helper.isTrue(process.env.OIDC_SYNC_NAME)
 export const DISABLE_LOGIN_WITH_OIDC =
   helper.isEmpty(OIDC_CLIENT_ID) ||
   helper.isEmpty(OIDC_CLIENT_SECRET) ||
