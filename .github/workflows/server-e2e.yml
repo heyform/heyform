@@ -63,6 +63,7 @@ jobs:
       # Test-only secrets — never use these outside CI.
       SESSION_KEY: ci-session-key-32-chars-aaaaaaaa
       FORM_ENCRYPTION_KEY: ci-form-encryption-key-32-chars-aa
+      STRIPE_CONNECT_SECRET_KEY: whsec_ci_e2e
       MONGO_URI: mongodb://127.0.0.1:27017/heyform_e2e
       REDIS_HOST: 127.0.0.1
       REDIS_PORT: '6379'

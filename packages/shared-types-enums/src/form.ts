@@ -315,6 +315,8 @@ export interface ServerSidePaymentValue {
   currency: string
   applicationFeeAmount: number
   clientSecret: string
+  // The PaymentIntent created for this answer, until the webhook confirms it
+  pendingPaymentIntentId?: string
   // Save from webhook
   paymentIntentId: string
   billingDetails: {

@@ -245,7 +245,7 @@ export class CompleteSubmissionResolver {
     const result: CompleteSubmissionType = {}
 
     if (helper.isValid(paymentAnswer) && helper.isValid(form.stripeAccount)) {
-      result.clientSecret = await this.paymentService.createPaymentIntent({
+      const paymentIntent = await this.paymentService.createPaymentIntent({
         amount: paymentAnswer.value.amount,
         currency: paymentAnswer.value.currency,
         stripeAccountId: form.stripeAccount.accountId,
@@ -254,6 +254,22 @@ export class CompleteSubmissionResolver {
           fieldId: paymentAnswer.id
         }
       })
+
+      // The webhook only accepts this PaymentIntent for the answer. `paymentIntentId` is set when
+      // the payment succeeds, since it's what marks the answer as paid.
+      const updated = await this.submissionService.updateAnswer(submissionId, {
+        ...paymentAnswer,
+        value: {
+          ...paymentAnswer.value,
+          pendingPaymentIntentId: paymentIntent.id
+        }
+      })
+
+      if (!updated) {
+        throw new BadRequestException('Failed to initialize payment')
+      }
+
+      result.clientSecret = paymentIntent.clientSecret
     }
 
     // Form report Queue

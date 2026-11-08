@@ -118,7 +118,8 @@ async function submit(
         calls.create++
         stored = submission
         return 'submission_1'
-      }
+      },
+      updateAnswer: async () => true
     } as any,
     {
       checkIp: async () => {
@@ -130,7 +131,7 @@ async function submit(
     {
       createPaymentIntent: async () => {
         calls.payment++
-        return 'secret'
+        return { id: 'pi_1', clientSecret: 'secret' }
       }
     } as any
   )

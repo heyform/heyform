@@ -490,7 +490,8 @@ export class SubmissionService {
         $set: getUpdateQuery(updates, 'answers.$', false)
       }
     )
-    return result.acknowledged
+    // Acknowledged even when nothing matched, e.g. the submission was deleted meanwhile
+    return result.matchedCount > 0
   }
 
   async analytic(formId: string, startAt: number, endAt: number) {

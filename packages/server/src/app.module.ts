@@ -81,9 +81,11 @@ class ResolverModule {}
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
     consumer
+      // Stripe signs the exact bytes it sends, so webhooks need the unparsed body. Nest 10's
+      // middleware matcher doesn't match `payment/(.*)`, which left req.body undefined.
       .apply(RawBodyMiddleware)
       .forRoutes({
-        path: 'payment/(.*)',
+        path: '/payment/*',
         method: RequestMethod.POST
       })
       .apply(FormBodyMiddleware)

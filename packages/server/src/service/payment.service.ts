@@ -52,7 +52,9 @@ export class PaymentService {
     }
   }
 
-  async createPaymentIntent(options: PaymentIntentOptions): Promise<string> {
+  async createPaymentIntent(
+    options: PaymentIntentOptions
+  ): Promise<{ id: string; clientSecret: string }> {
     const result = await this.stripe.paymentIntents.create(
       {
         amount: options.amount,
@@ -64,7 +66,20 @@ export class PaymentService {
       }
     )
 
-    return result.client_secret
+    return {
+      id: result.id,
+      clientSecret: result.client_secret
+    }
+  }
+
+  async retrieveCharge(chargeId: string, stripeAccountId: string): Promise<Stripe.Charge> {
+    return this.stripe.charges.retrieve(
+      chargeId,
+      {},
+      {
+        stripeAccount: stripeAccountId
+      }
+    )
   }
 
   constructEvent(payload: Buffer, signature: string, secret: string): Stripe.Event {
