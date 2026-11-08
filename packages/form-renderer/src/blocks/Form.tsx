@@ -169,7 +169,8 @@ export const Form: FC<FormProps> = ({
           const submitResult = await state.onSubmit?.(values, isPartialSubmission, state.stripe)
           pseudonymId = submitResult ? submitResult.pseudonymId : undefined
 
-          if (helper.isTrue(state.query.hideAfterSubmit)) {
+          // Keep the embed open while it shows a response ID, so the respondent can note it down
+          if (helper.isTrue(state.query.hideAfterSubmit) && !pseudonymId) {
             sendMessageToParent('HIDE_EMBED_MODAL')
           }
         }

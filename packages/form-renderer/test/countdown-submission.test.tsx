@@ -13,7 +13,7 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import { applyLogicToFields } from '@heyform-inc/answer-utils'
 
 import { initI18n } from '../src/i18n'
-import { type IState, StoreContext, StoreReducer } from '../src/store'
+import { type IState, type ISubmitResult, StoreContext, StoreReducer } from '../src/store'
 import { Header } from '../src/views/Header'
 
 vi.mock('../src/components/Countdown', () => ({
@@ -64,8 +64,12 @@ const logics: Logic[] = [
   }
 ]
 
-async function expire(fields: FormField[], query: Record<string, any> = {}) {
-  const onSubmit = vi.fn(async () => {})
+async function expire(
+  fields: FormField[],
+  query: Record<string, any> = {},
+  submitResult?: ISubmitResult
+) {
+  const onSubmit = vi.fn(async () => submitResult)
   const thankYouFields = fields.filter(field => field.kind === FieldKindEnum.THANK_YOU)
   const initialState: IState = {
     instanceId: 'test',
@@ -92,7 +96,14 @@ async function expire(fields: FormField[], query: Record<string, any> = {}) {
 
     return (
       <StoreContext.Provider value={{ state, dispatch }}>
-        {state.isSubmitted ? <output data-ending={state.thankYouFieldId ?? 'none'} /> : <Header />}
+        {state.isSubmitted ? (
+          <output
+            data-ending={state.thankYouFieldId ?? 'none'}
+            data-pseudonym-id={state.pseudonymId}
+          />
+        ) : (
+          <Header />
+        )}
       </StoreContext.Provider>
     )
   }
@@ -122,6 +133,20 @@ test('running out of time on a discarding route keeps the embed open', async () 
 
   await expire([question, ending('later', true), ending('saved')], { hideAfterSubmit: true })
 
+  expect(postMessage).not.toHaveBeenCalled()
+  postMessage.mockRestore()
+})
+
+test('running out of time with a response ID keeps the embed open to show it', async () => {
+  const postMessage = vi.spyOn(window.parent, 'postMessage').mockImplementation(() => {})
+
+  await expire(
+    [question, ending('saved'), ending('later', true)],
+    { hideAfterSubmit: true },
+    { pseudonymId: '7KQ2-9MX4' }
+  )
+
+  expect(container.querySelector('output')?.getAttribute('data-pseudonym-id')).toBe('7KQ2-9MX4')
   expect(postMessage).not.toHaveBeenCalled()
   postMessage.mockRestore()
 })
