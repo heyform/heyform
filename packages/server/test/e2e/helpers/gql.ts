@@ -451,6 +451,7 @@ export const COMPLETE_SUBMISSION_GQL = /* GraphQL */ `
   mutation completeSubmission($input: CompleteSubmissionInput!) {
     completeSubmission(input: $input) {
       clientSecret
+      pseudonymId
     }
   }
 `
@@ -462,6 +463,7 @@ export const SUBMISSIONS_GQL = /* GraphQL */ `
       total
       submissions {
         id
+        pseudonymId
         category
         endAt
       }
