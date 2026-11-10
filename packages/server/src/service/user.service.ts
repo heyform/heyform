@@ -23,11 +23,11 @@ export class UserService implements OnModuleInit {
 
   constructor(@InjectModel(UserModel.name) private readonly userModel: Model<UserModel>) {}
 
-  onModuleInit() {
-    // Mongoose builds the indexes at startup without waiting, and drops the error when one
-    // fails. The unique email index fails on a database where two accounts already share an
-    // address, so say which accounts they are.
-    this.userModel
+  async onModuleInit() {
+    // Mongoose builds the indexes at startup and drops the error when one fails. Wait for the
+    // build, since MongoDB accepts duplicate writes while it runs and then abandons the index.
+    // The build fails on a database where accounts already share an address, so say which.
+    await this.userModel
       .init()
       .catch(error => this.reportIndexError(error))
       .catch(error => this.logger.error(`Couldn't check the users indexes: ${error?.message}`))

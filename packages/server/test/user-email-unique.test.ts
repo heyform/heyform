@@ -11,8 +11,6 @@ const duplicateEmail = () => ({
   keyValue: { email: 'user@heyform.net' }
 })
 
-const settle = () => new Promise(resolve => setImmediate(resolve))
-
 function testDuplicateEmailErrorsAreRecognised() {
   assert.strictEqual(isDuplicateEmailError(duplicateEmail()), true)
   assert.strictEqual(isDuplicateEmailError({ code: 11000, keyPattern: { customerId: 1 } }), false)
@@ -42,8 +40,7 @@ async function testStartupNamesTheAccountsThatShareAnEmail() {
     throw duplicateEmail()
   }, [{ ids: ['user_1', 'user_2'] }, { ids: ['user_3', 'user_4', 'user_5'] }])
 
-  service.onModuleInit()
-  await settle()
+  await service.onModuleInit()
 
   assert.strictEqual(errors.length, 1)
   assert.match(errors[0], /unique email index on usermodels wasn't built/)
@@ -53,8 +50,7 @@ async function testStartupNamesTheAccountsThatShareAnEmail() {
 async function testStartupStaysQuietWhenTheIndexBuilds() {
   const { service, errors, pipelines } = userServiceWith(async () => undefined)
 
-  service.onModuleInit()
-  await settle()
+  await service.onModuleInit()
 
   assert.deepStrictEqual(errors, [])
   assert.deepStrictEqual(pipelines, [])
@@ -65,8 +61,7 @@ async function testStartupReportsOtherIndexErrors() {
     throw new Error('not authorized')
   })
 
-  service.onModuleInit()
-  await settle()
+  await service.onModuleInit()
 
   assert.deepStrictEqual(errors, ["Couldn't build the users indexes: not authorized"])
   assert.deepStrictEqual(pipelines, [])
