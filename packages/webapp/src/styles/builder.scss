@@ -1549,3 +1549,44 @@ button.connect-stripe {
     }
   }
 }
+
+.builder-sidebar[data-collapsed='true'] {
+  > div:first-child button,
+  [data-panel] > .flex.items-center button {
+    margin-right: 0;
+  }
+
+  > div:first-child {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  > div:first-child > div:first-child,
+  .question-title,
+  [data-slot='index'],
+  .question-item-body > div:last-child,
+  .question-handle > span {
+    display: none;
+  }
+  .question-handle {
+    justify-content: center;
+    padding-left: 0;
+  }
+  [data-slot='question-icon'] {
+    width: 1.75rem;
+    justify-content: center;
+  }
+  .question-group,
+  .question-children {
+    padding: 0;
+    border: 0;
+  }
+  [data-panel] > .flex.items-center {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [data-panel] > .flex.items-center > div:first-child {
+    display: none;
+  }
+}

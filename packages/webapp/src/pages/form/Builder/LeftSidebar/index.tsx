@@ -1,15 +1,17 @@
 import { Content, Description, Overlay, Portal, Root, Title } from '@radix-ui/react-dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import { ReactNode } from 'react'
 
 import { useModal } from '@/store'
 
+import SidebarToggle from '../SidebarToggle'
 import QuestionList from './QuestionList'
 import SidebarHeader from './SidebarHeader'
 
-const BuilderLeftSidebarComponent = () => {
+const BuilderLeftSidebarComponent = ({ action }: { action?: ReactNode }) => {
   return (
     <>
-      <SidebarHeader />
+      <SidebarHeader action={action} />
       <QuestionList />
     </>
   )
@@ -36,10 +38,21 @@ export const BuilderLeftSidebarModal = () => {
   )
 }
 
-export default function BuilderLeftSidebar() {
+export default function BuilderLeftSidebar({
+  collapsed,
+  onToggle
+}: {
+  collapsed: boolean
+  onToggle: () => void
+}) {
   return (
-    <div className="builder-sidebar bg-foreground lg:ring-primary/5 flex h-full w-[16rem] flex-col max-lg:hidden lg:rounded-lg lg:shadow-sm lg:ring-1">
-      <BuilderLeftSidebarComponent />
+    <div
+      data-collapsed={collapsed}
+      className="builder-sidebar bg-foreground lg:ring-primary/5 relative flex h-full w-[16rem] shrink-0 flex-col data-[collapsed=true]:w-16 max-lg:hidden lg:rounded-lg lg:shadow-sm lg:ring-1"
+    >
+      <BuilderLeftSidebarComponent
+        action={!collapsed && <SidebarToggle side="left" expanded onClick={onToggle} />}
+      />
     </div>
   )
 }

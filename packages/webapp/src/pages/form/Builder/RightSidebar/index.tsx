@@ -3,12 +3,19 @@ import { useTranslation } from 'react-i18next'
 
 import { Tabs } from '@/components'
 
+import SidebarToggle from '../SidebarToggle'
 import { useStoreContext } from '../store'
 import Design from './Design'
 import { Logic } from './Logic'
 import Question from './Question'
 
-export default function BuilderRightSidebar() {
+export default function BuilderRightSidebar({
+  hidden,
+  onToggle
+}: {
+  hidden: boolean
+  onToggle: () => void
+}) {
   const { t } = useTranslation()
   const { dispatch } = useStoreContext()
 
@@ -43,9 +50,17 @@ export default function BuilderRightSidebar() {
   }
 
   return (
-    <div className="lg:bg-foreground lg:ring-primary/5 h-full w-[20rem] max-lg:hidden lg:rounded-lg lg:shadow-sm lg:ring-1">
+    <div
+      hidden={hidden}
+      className="lg:bg-foreground lg:ring-primary/5 h-full w-[20rem] shrink-0 max-lg:hidden lg:rounded-lg lg:shadow-sm lg:ring-1"
+    >
       <Tabs
         className="[&_[data-slot=content]]:scrollbar flex h-full flex-col [&_[data-slot=content]]:flex-1"
+        action={
+          <div className="-mt-3">
+            <SidebarToggle side="right" expanded onClick={onToggle} />
+          </div>
+        }
         tabs={tabs}
         defaultTab="question"
         onChange={handleChange}

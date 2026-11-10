@@ -1,4 +1,4 @@
-import { FC, useMemo, useReducer } from 'react'
+import { FC, useMemo, useReducer, useState } from 'react'
 
 import { initFields } from './utils'
 import { FormService } from '@/services'
@@ -20,6 +20,7 @@ import LogicModal from './LogicModal'
 import BuilderNavBar from './NavBar'
 import PreviewModal from './PreviewModal'
 import BuilderRightSidebar from './RightSidebar'
+import SidebarToggle from './SidebarToggle'
 import BuilderSync from './Sync'
 import VariableModal from './VariableModal'
 import { IState, StoreContext, storeReducer } from './store'
@@ -46,6 +47,8 @@ export const Builder: FC<IBuilderProps> = ({ form }) => {
     hiddenFields: form.hiddenFields || [],
     ...initFields(form.drafts, form.draftLogics ?? form.logics)
   }
+  const [leftCollapsed, setLeftCollapsed] = useState(false)
+  const [rightHidden, setRightHidden] = useState(false)
   const [state, dispatch] = useReducer(storeReducer, initialState)
   const store = useMemo(() => ({ state, dispatch }), [state])
 
@@ -56,15 +59,36 @@ export const Builder: FC<IBuilderProps> = ({ form }) => {
         <BuilderNavBar />
 
         <main className="flex h-[calc(100vh-3.5rem)] flex-1 sm:gap-2 sm:px-2 sm:pb-2">
-          {state.activeTabName === 'logic' ? (
-            <LogicFlow />
-          ) : (
-            <>
-              <BuilderLeftSidebar />
-              <BuilderCompose />
-            </>
+          {state.activeTabName !== 'logic' && (
+            <BuilderLeftSidebar
+              collapsed={leftCollapsed}
+              onToggle={() => setLeftCollapsed(v => !v)}
+            />
           )}
-          <BuilderRightSidebar />
+          <div className="relative isolate flex min-w-0 flex-1">
+            {leftCollapsed && state.activeTabName !== 'logic' && (
+              <div className="absolute left-2 top-2 z-10 max-lg:hidden">
+                <SidebarToggle
+                  side="left"
+                  expanded={false}
+                  onClick={() => setLeftCollapsed(false)}
+                />
+              </div>
+            )}
+            {rightHidden && (
+              <div className="absolute right-2 top-2 z-10 max-lg:hidden">
+                <SidebarToggle
+                  side="right"
+                  expanded={false}
+                  onClick={() => setRightHidden(false)}
+                />
+              </div>
+            )}
+            <div className="relative z-0 flex min-w-0 flex-1">
+              {state.activeTabName === 'logic' ? <LogicFlow /> : <BuilderCompose />}
+            </div>
+          </div>
+          <BuilderRightSidebar hidden={rightHidden} onToggle={() => setRightHidden(v => !v)} />
         </main>
       </div>
 
