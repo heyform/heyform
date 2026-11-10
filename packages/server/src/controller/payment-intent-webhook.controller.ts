@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Headers, Post, Req } from '@nestjs/com
 
 import { STRIPE_CONNECT_SECRET_KEY } from '@environments'
 import { helper } from '@heyform-inc/utils'
-import { PaymentService, SubmissionService } from '@service'
+import { FormService, PaymentService, SubmissionService } from '@service'
 import { Logger } from '@utils'
 
 @Controller()
@@ -11,7 +11,8 @@ export class PaymentIntentWebhookController {
 
   constructor(
     private readonly paymentService: PaymentService,
-    private readonly submissionService: SubmissionService
+    private readonly submissionService: SubmissionService,
+    private readonly formService: FormService
   ) {}
 
   @Post('/payment/intent/webhook')
@@ -65,7 +66,10 @@ export class PaymentIntentWebhookController {
     }
 
     // The respondent paid an intent this answer no longer waits for, e.g. an earlier attempt
-    if (answer.value?.pendingPaymentIntentId !== paymentIntentId) {
+    if (
+      answer.value?.pendingPaymentIntentId !== paymentIntentId &&
+      !(await this._isLegacyPayment(submission.formId, answer.value, object, stripeAccountId))
+    ) {
       return this._skip(paymentIntentId, `field ${fieldId} is not waiting for it`)
     }
 
@@ -85,6 +89,30 @@ export class PaymentIntentWebhookController {
         receiptUrl: charge?.receipt_url
       }
     })
+  }
+
+  // An answer submitted before `pendingPaymentIntentId` existed names no intent. Accept a payment
+  // for it only from the form owner's Stripe account and for the amount the answer asked for.
+  private async _isLegacyPayment(
+    formId: string,
+    value: any,
+    object: any,
+    stripeAccountId?: string
+  ): Promise<boolean> {
+    if (helper.isEmpty(value) || value.pendingPaymentIntentId || value.paymentIntentId) {
+      return false
+    }
+
+    if (
+      object.amount !== value.amount ||
+      String(object.currency).toLowerCase() !== String(value.currency).toLowerCase()
+    ) {
+      return false
+    }
+
+    const form = await this.formService.findById(formId)
+
+    return helper.isValid(stripeAccountId) && form?.stripeAccount?.accountId === stripeAccountId
   }
 
   // Stripe API versions before 2022-11-15 embed the charges; later ones only name the latest

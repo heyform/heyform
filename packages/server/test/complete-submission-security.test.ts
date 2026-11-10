@@ -168,7 +168,8 @@ async function testPaymentWebhookDoesNotRequireOrPersistClientSecret() {
       updateAnswer: async (_submissionId: string, answer: Record<string, any>) => {
         updatedAnswer = answer
       }
-    } as any
+    } as any,
+    {} as any
   )
 
   await controller.webhook('valid_signature', { body: Buffer.from('{}') })

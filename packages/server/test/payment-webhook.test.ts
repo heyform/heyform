@@ -8,6 +8,7 @@ interface Options {
   answerValue?: Record<string, any>
   constructEvent?: () => any
   submission?: Record<string, any> | null
+  formAccountId?: string
 }
 
 // The PaymentIntent object as API versions from 2022-11-15 send it: no `charges`, only the
@@ -19,6 +20,8 @@ function succeededEvent(paymentIntentId = 'pi_1') {
     data: {
       object: {
         id: paymentIntentId,
+        amount: 4999,
+        currency: 'usd',
         latest_charge: 'ch_1',
         metadata: { submissionId: 'submission_1', fieldId: 'payment_1' }
       }
@@ -30,7 +33,8 @@ function setup({
   event = succeededEvent(),
   answerValue,
   constructEvent,
-  submission
+  submission,
+  formAccountId = 'acct_owner'
 }: Options = {}) {
   const updates: Record<string, any>[] = []
   const chargeLookups: string[][] = []
@@ -50,6 +54,7 @@ function setup({
         submission === null
           ? null
           : {
+              formId: 'form_1',
               answers: [
                 {
                   id: 'payment_1',
@@ -66,6 +71,9 @@ function setup({
         updates.push(answer)
         return true
       }
+    } as any,
+    {
+      findById: async () => ({ stripeAccount: { accountId: formAccountId } })
     } as any
   )
 
@@ -100,8 +108,28 @@ async function testIgnoresPaymentIntentNotCreatedForAnswer() {
   assert.deepStrictEqual(chargeLookups, [])
 }
 
-async function testIgnoresAnswerWithoutPendingPaymentIntent() {
-  const { updates, send } = setup({ answerValue: { amount: 4999, currency: 'usd' } })
+// Answers submitted before the deploy name no intent, so they're matched by account and amount
+async function testRecordsLegacyAnswerPaidOnTheFormOwnersAccount() {
+  const { updates, send } = setup({ answerValue: { amount: 4999, currency: 'USD' } })
+
+  await send()
+
+  assert.strictEqual(updates.length, 1)
+  assert.strictEqual(updates[0].value.paymentIntentId, 'pi_1')
+}
+
+async function testIgnoresLegacyAnswerPaidOnAnotherAccount() {
+  const { updates, send } = setup({
+    answerValue: { amount: 4999, currency: 'usd' },
+    formAccountId: 'acct_other'
+  })
+
+  assert.strictEqual(await send(), 'success')
+  assert.strictEqual(updates.length, 0)
+}
+
+async function testIgnoresLegacyAnswerPaidADifferentAmount() {
+  const { updates, send } = setup({ answerValue: { amount: 100, currency: 'usd' } })
 
   assert.strictEqual(await send(), 'success')
   assert.strictEqual(updates.length, 0)
@@ -160,7 +188,9 @@ async function testIgnoresOtherEvents() {
 async function run() {
   await testRecordsPaymentFromLatestCharge()
   await testIgnoresPaymentIntentNotCreatedForAnswer()
-  await testIgnoresAnswerWithoutPendingPaymentIntent()
+  await testRecordsLegacyAnswerPaidOnTheFormOwnersAccount()
+  await testIgnoresLegacyAnswerPaidOnAnotherAccount()
+  await testIgnoresLegacyAnswerPaidADifferentAmount()
   await testIgnoresEventWithoutSubmissionMetadata()
   await testIgnoresEventForAMissingSubmission()
   await testRepeatedEventSucceedsWithoutUpdating()
