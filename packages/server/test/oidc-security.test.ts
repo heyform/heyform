@@ -168,6 +168,7 @@ async function testCallbackValidatesTheOriginalTransaction() {
     issuer,
     subject: 'subject_1',
     emailVerified: true,
+    providerName: 'Example User',
     user: {
       email: 'user@example.com',
       name: 'Example User',
@@ -199,6 +200,39 @@ async function testEmailVerificationCannotCrossClaimSources() {
   )
 }
 
+async function testProviderNameIsOnlyTheNameClaim() {
+  resetClaims()
+  idTokenClaims = {
+    sub: 'subject_1',
+    email: 'user@example.com',
+    email_verified: true,
+    name: '  ',
+    preferred_username: 'euser'
+  }
+
+  const result = await createClient().getUserInfo(
+    { code: 'authorization_code', state: 'state_1' },
+    'state_1',
+    { codeVerifier: 'pkce_verifier', nonce: 'oidc_nonce' }
+  )
+
+  assert.strictEqual(result.user.name, 'euser')
+  assert.strictEqual(
+    result.providerName,
+    undefined,
+    'profile sync must not copy fallback names over a name the provider never sent'
+  )
+
+  idTokenClaims = { ...idTokenClaims, name: '  Example User ' }
+  const named = await createClient().getUserInfo(
+    { code: 'authorization_code', state: 'state_1' },
+    'state_1',
+    { codeVerifier: 'pkce_verifier', nonce: 'oidc_nonce' }
+  )
+  assert.strictEqual(named.providerName, 'Example User')
+  assert.strictEqual(named.user.name, 'Example User')
+}
+
 async function testRejectsMissingCodeAndSubject() {
   resetClaims()
   const client = createClient()
@@ -228,6 +262,7 @@ async function run() {
   await testAuthorizationRequestBindsStatePkceAndNonce()
   await testCallbackValidatesTheOriginalTransaction()
   await testEmailVerificationCannotCrossClaimSources()
+  await testProviderNameIsOnlyTheNameClaim()
   await testRejectsMissingCodeAndSubject()
 }
 

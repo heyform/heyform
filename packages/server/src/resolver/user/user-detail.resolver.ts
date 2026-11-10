@@ -24,6 +24,7 @@ export class UserDetailResolver {
       lang: user.lang,
       isEmailVerified: user.isEmailVerified,
       isSocialAccount: isValid(result),
+      isNameManaged: await this.socialLoginService.isNameManaged(user.id),
       isDeletionScheduled: user.isDeletionScheduled,
       deletionScheduledAt: user.deletionScheduledAt
     }

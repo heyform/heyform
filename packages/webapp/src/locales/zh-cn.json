@@ -1657,6 +1657,7 @@
       "subHeadline": "默认使用 Gravatar 作为您的 HeyForm 头像，您可以在这里上传自定义头像。"
     },
     "name": "您的姓名",
+    "managedBy": "由 {{provider}} 管理，在那里修改后，下次登录时生效。",
     "email": {
       "headline": "更改电子邮件地址",
       "subHeadline": "我们将发送一个6位数的验证码到您的电子邮件。",

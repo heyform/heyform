@@ -952,6 +952,7 @@ export const USER_DETAILS_GQL = gql`
       lang
       isEmailVerified
       isSocialAccount
+      isNameManaged
       isDeletionScheduled
       deletionScheduledAt
     }

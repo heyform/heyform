@@ -1666,6 +1666,7 @@
       "subHeadline": "Gravatar is used by default as your HeyForm avatar, you can upload your custom avatar here."
     },
     "name": "Your name",
+    "managedBy": "Managed by {{provider}}. Changes there show up the next time you sign in.",
     "email": {
       "headline": "Email address",
       "subHeadline": "We will send you an email with a 6-digit verification code.",

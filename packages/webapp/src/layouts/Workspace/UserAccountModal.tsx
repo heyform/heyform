@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { UserService } from '@/services'
 
 import { Button, ImageFormPicker, Input, Modal, usePrompt } from '@/components'
+import { OIDC_DISPLAY_NAME } from '@/consts'
 import { useAppStore, useModal, useUserStore } from '@/store'
 
 const UserAccount = () => {
@@ -149,7 +150,16 @@ const UserAccount = () => {
             <h3 className="text-sm font-medium leading-6">{t('user.name')}</h3>
           </div>
           <div className="md:w-80">
-            <Input id="name" value={user?.name} onChange={handleNameChange} />
+            {user?.isNameManaged ? (
+              <div className="space-y-1">
+                <div className="text-sm/6">{user?.name}</div>
+                <p className="text-secondary text-sm/5 sm:text-xs/5">
+                  {t('user.managedBy', { provider: OIDC_DISPLAY_NAME })}
+                </p>
+              </div>
+            ) : (
+              <Input id="name" value={user?.name} onChange={handleNameChange} />
+            )}
           </div>
         </div>
       </section>
