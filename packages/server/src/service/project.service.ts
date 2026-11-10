@@ -24,6 +24,18 @@ export class ProjectService {
       })
   }
 
+  // The project a member who joins the workspace lands in: the one created with the team. Newest
+  // first is what every other listing wants, so this asks the other way round.
+  async findDefaultInTeam(teamId: string): Promise<ProjectModel | null> {
+    return this.projectModel
+      .findOne({
+        teamId
+      })
+      .sort({
+        createdAt: 1
+      })
+  }
+
   async findOne(conditions: any) {
     return this.projectModel.findOne(conditions)
   }

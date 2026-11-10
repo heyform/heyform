@@ -4,7 +4,7 @@ import { Auth, User } from '@decorator'
 import { JoinTeamInput } from '@graphql'
 import { TeamRoleEnum, UserModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { MailService, TeamService, UserService } from '@service'
+import { MailService, ProjectService, TeamService, UserService } from '@service'
 
 @Resolver()
 @Auth()
@@ -12,7 +12,8 @@ export class JoinTeamResolver {
   constructor(
     private readonly teamService: TeamService,
     private readonly userService: UserService,
-    private readonly mailService: MailService
+    private readonly mailService: MailService,
+    private readonly projectService: ProjectService
   ) {}
 
   @Mutation(returns => Boolean)
@@ -44,6 +45,23 @@ export class JoinTeamResolver {
       memberId: user.id,
       role: TeamRoleEnum.COLLABORATOR
     })
+
+    // A member of the workspace who belongs to no project can see none of its forms, so a joiner
+    // starts in the project the workspace was created with. Removing or leaving the workspace
+    // already deletes the project memberships.
+    const project = await this.projectService.findDefaultInTeam(input.teamId)
+
+    if (project) {
+      // A project can already name this member before they join the workspace
+      const projectMember = await this.projectService.findMemberById(project.id, user.id)
+
+      if (!projectMember) {
+        await this.projectService.createMember({
+          projectId: project.id,
+          memberId: user.id
+        })
+      }
+    }
 
     const teamOwner = await this.userService.findById(team.ownerId)
 
