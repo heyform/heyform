@@ -1377,6 +1377,10 @@
       "sidebar": {
         "questions": "Perguntas",
         "addQuestion": "Adicionar pergunta",
+        "collapseQuestions": "Recolher perguntas",
+        "expandQuestions": "Expandir perguntas",
+        "hideSettings": "Ocultar painel de configurações",
+        "showSettings": "Mostrar painel de configurações",
         "endings": "Finais",
         "addEndingTip": "Adicione um novo final. Você pode criar vários finais e definir regras para determinar qual deles as pessoas verão."
       },

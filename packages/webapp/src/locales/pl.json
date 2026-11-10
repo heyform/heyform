@@ -1306,6 +1306,10 @@
       "sidebar": {
         "questions": "Pytania",
         "addQuestion": "Dodaj pytanie",
+        "collapseQuestions": "Zwiń pytania",
+        "expandQuestions": "Rozwiń pytania",
+        "hideSettings": "Ukryj panel ustawień",
+        "showSettings": "Pokaż panel ustawień",
         "endings": "Zakończenia",
         "addEndingTip": "Dodaj nowe zakończenie. Możesz stworzyć wiele zakończeń i wdrożyć logikę, aby określić, które z nich zobaczą ludzie."
       },

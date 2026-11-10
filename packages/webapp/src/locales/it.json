@@ -1377,6 +1377,10 @@
       "sidebar": {
         "questions": "Domande",
         "addQuestion": "Aggiungi domanda",
+        "collapseQuestions": "Comprimi domande",
+        "expandQuestions": "Espandi domande",
+        "hideSettings": "Nascondi pannello impostazioni",
+        "showSettings": "Mostra pannello impostazioni",
         "endings": "Finali",
         "addEndingTip": "Aggiungi un nuovo finale. Puoi creare più finali e implementare la logica per determinare quale verrà visualizzato."
       },

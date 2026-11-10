@@ -1306,6 +1306,10 @@
       "sidebar": {
         "questions": "質問",
         "addQuestion": "質問を追加",
+        "collapseQuestions": "質問を折りたたむ",
+        "expandQuestions": "質問を展開",
+        "hideSettings": "設定パネルを非表示",
+        "showSettings": "設定パネルを表示",
         "endings": "エンディング",
         "addEndingTip": "新しいエンディングを追加します。複数のエンディングを作成し、どれを見るかを決定するロジックを実装できます。"
       },

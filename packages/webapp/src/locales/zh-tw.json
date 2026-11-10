@@ -1306,6 +1306,10 @@
       "sidebar": {
         "questions": "問題",
         "addQuestion": "添加問題",
+        "collapseQuestions": "收合問題列表",
+        "expandQuestions": "展開問題列表",
+        "hideSettings": "隱藏設定面板",
+        "showSettings": "顯示設定面板",
         "endings": "結局",
         "addEndingTip": "新增一個新的結局。您可以創建多個結局並實施邏輯來決定人們會看到哪一個。"
       },

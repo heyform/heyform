@@ -1448,6 +1448,10 @@
       "sidebar": {
         "questions": "Questions",
         "addQuestion": "Add question",
+        "collapseQuestions": "Collapse questions",
+        "expandQuestions": "Expand questions",
+        "hideSettings": "Hide settings panel",
+        "showSettings": "Show settings panel",
         "endings": "Endings",
         "addEndingTip": "Add a new ending. You can create multiple endings and implement logic to determine which one people will see."
       },

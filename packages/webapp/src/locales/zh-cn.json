@@ -1445,6 +1445,10 @@
       "sidebar": {
         "questions": "问题",
         "addQuestion": "添加问题",
+        "collapseQuestions": "收起问题列表",
+        "expandQuestions": "展开问题列表",
+        "hideSettings": "隐藏设置面板",
+        "showSettings": "显示设置面板",
         "endings": "结局",
         "addEndingTip": "添加一个新的结局。您可以创建多个结局，并实现逻辑来确定人们将看到哪个结局。"
       },

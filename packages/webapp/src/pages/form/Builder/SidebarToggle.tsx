@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import LeftIcon from '@/assets/sidebar-floating-left.svg?react'
 import RightIcon from '@/assets/sidebar-floating-right.svg?react'
 import { Button } from '@/components'
@@ -11,8 +13,13 @@ export default function SidebarToggle({
   expanded: boolean
   onClick: () => void
 }) {
+  const { t } = useTranslation()
+
   const Icon = side === 'left' ? LeftIcon : RightIcon
-  const label = `${expanded ? 'Collapse' : 'Expand'} ${side === 'left' ? 'questions' : 'settings panel'}`
+  const label =
+    side === 'left'
+      ? t(`form.builder.sidebar.${expanded ? 'collapseQuestions' : 'expandQuestions'}`)
+      : t(`form.builder.sidebar.${expanded ? 'hideSettings' : 'showSettings'}`)
 
   return (
     <Button.Link

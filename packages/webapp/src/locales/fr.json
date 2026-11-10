@@ -1310,6 +1310,10 @@
       "sidebar": {
         "questions": "Questions",
         "addQuestion": "Ajouter une question",
+        "collapseQuestions": "Réduire les questions",
+        "expandQuestions": "Développer les questions",
+        "hideSettings": "Masquer le panneau des paramètres",
+        "showSettings": "Afficher le panneau des paramètres",
         "endings": "Fins",
         "addEndingTip": "Ajoutez une nouvelle fin. Vous pouvez créer plusieurs fins et implémenter une logique pour déterminer laquelle les gens verront."
       },

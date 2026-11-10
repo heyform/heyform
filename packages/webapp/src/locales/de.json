@@ -1310,6 +1310,10 @@
       "sidebar": {
         "questions": "Fragen",
         "addQuestion": "Frage hinzufügen",
+        "collapseQuestions": "Fragen einklappen",
+        "expandQuestions": "Fragen ausklappen",
+        "hideSettings": "Einstellungsbereich ausblenden",
+        "showSettings": "Einstellungsbereich einblenden",
         "endings": "Endungen",
         "addEndingTip": "Fügen Sie ein neues Ende hinzu. Sie können mehrere Enden erstellen und eine Logik implementieren, um zu bestimmen, welches die Leute sehen werden."
       },
