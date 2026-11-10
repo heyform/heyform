@@ -163,10 +163,14 @@ export const Form: FC<FormProps> = ({
 
         // An ending that keeps its responses out of the form still has something to tell the
         // respondent, so it neither submits nor closes the embed
-        if (!ending?.properties?.discardSubmission) {
-          await state.onSubmit?.(values, isPartialSubmission, state.stripe)
+        let pseudonymId: string | undefined
 
-          if (helper.isTrue(state.query.hideAfterSubmit)) {
+        if (!ending?.properties?.discardSubmission) {
+          const submitResult = await state.onSubmit?.(values, isPartialSubmission, state.stripe)
+          pseudonymId = submitResult ? submitResult.pseudonymId : undefined
+
+          // Keep the embed open while it shows a response ID, so the respondent can note it down
+          if (helper.isTrue(state.query.hideAfterSubmit) && !pseudonymId) {
             sendMessageToParent('HIDE_EMBED_MODAL')
           }
         }
@@ -177,7 +181,8 @@ export const Form: FC<FormProps> = ({
           type: 'setIsSubmitted',
           payload: {
             isSubmitted: true,
-            thankYouFieldId: ending?.id
+            thankYouFieldId: ending?.id,
+            pseudonymId
           }
         })
 

@@ -54,6 +54,8 @@ const SUBMISSION_CATEGORIES = [
   }
 ]
 
+const PSEUDONYM_ID_FIELD_ID = 'pseudonym_id'
+
 export default function FormSubmissions() {
   const { t } = useTranslation()
 
@@ -108,7 +110,18 @@ export default function FormSubmissions() {
 
   const showIpAddress = !isSubmissionIpDisabled() && !!form?.settings?.displayIpAddress
 
+  const showPseudonymId = !!form?.settings?.generatePseudonymId
+
   const fields = useMemo(() => {
+    const pseudonymIdField = showPseudonymId
+      ? [
+          {
+            id: PSEUDONYM_ID_FIELD_ID,
+            kind: FieldKindEnum.SHORT_TEXT,
+            title: t('form.settings.general.pseudonymId.column')
+          }
+        ]
+      : []
     const submitDateField = {
       id: FieldKindEnum.SUBMIT_DATE,
       kind: FieldKindEnum.SUBMIT_DATE,
@@ -143,13 +156,14 @@ export default function FormSubmissions() {
       : []
 
     return [
+      ...pseudonymIdField,
       submitDateField,
       ...questionFields,
       ...variables,
       ...hiddenFields,
       ...ipAddressField
     ] as FormField[]
-  }, [form?.drafts, form?.hiddenFields, form?.variables, showIpAddress, t])
+  }, [form?.drafts, form?.hiddenFields, form?.variables, showIpAddress, showPseudonymId, t])
 
   async function fetch({ current, pageSize }: TableFetchParams) {
     const { total, submissions } = await SubmissionService.submissions({
@@ -163,6 +177,16 @@ export default function FormSubmissions() {
       ...row,
       answers: [
         ...row.answers,
+
+        ...(row.pseudonymId
+          ? [
+              {
+                id: PSEUDONYM_ID_FIELD_ID,
+                kind: FieldKindEnum.SHORT_TEXT,
+                value: row.pseudonymId
+              }
+            ]
+          : []),
 
         ...(row.variables || []).map(v => ({
           ...v,

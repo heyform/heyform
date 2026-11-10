@@ -46,6 +46,7 @@ export default {
   'Start date is not valid': 'Başlangıç tarihi geçerli değil',
   'End date is not valid': 'Bitiş tarihi geçerli değil',
   'End date must be after start date': 'Bitiş tarihi başlangıç tarihinden sonra olmalıdır',
+  'Response ID': 'Yanıt kimliği',
   'Thank you!': 'Teşekkürler!',
   'Thanks for completing this form. Now create your own form.':
     'Bu formu doldurduğunuz için teşekkürler. Şimdi kendi formunuzu oluşturun.',

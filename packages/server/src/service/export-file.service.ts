@@ -13,6 +13,7 @@ import { helper, unixDate } from '@heyform-inc/utils'
 import { SubmissionModel } from '@model'
 
 const FIELD_ID_KEY = '#'
+const PSEUDONYM_ID_KEY = 'Pseudonym ID'
 const START_DATE_KEY = 'Start Date (UTC)'
 const SUBMIT_DATE_KEY = 'Submit Date (UTC)'
 const IP_ADDRESS_KEY = 'IP Address'
@@ -99,11 +100,22 @@ export class ExportFileService {
         )
       }))
 
+    // Only forms that generate pseudonym IDs get the column, so other exports keep their layout
+    const withPseudonymId = submissions.some(submission => helper.isValid(submission.pseudonymId))
+
     const fields: FieldInfo<SubmissionModel>[] = [
       {
         label: FIELD_ID_KEY,
         value: submission => submission.id
       },
+      ...(withPseudonymId
+        ? [
+            {
+              label: PSEUDONYM_ID_KEY,
+              value: (submission: SubmissionModel) => submission.pseudonymId || ''
+            }
+          ]
+        : []),
       ...selectedFormFields.map(field => ({
         label: field.title,
         value: (submission: SubmissionModel) => {

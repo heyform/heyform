@@ -16,7 +16,7 @@ import { OTHER_CHOICE_ID, applyLogicToFields } from '@heyform-inc/answer-utils'
 
 import { Form } from '../src/blocks/Form'
 import { initI18n } from '../src/i18n'
-import { type IState, StoreContext, StoreReducer } from '../src/store'
+import { type IState, type ISubmitResult, StoreContext, StoreReducer } from '../src/store'
 
 let container: HTMLDivElement
 let root: Root
@@ -59,9 +59,10 @@ async function mount(
   fields: FormField[],
   logics: Logic[],
   values: Record<string, AnswerValue> = {},
-  query: Record<string, any> = {}
+  query: Record<string, any> = {},
+  submitResult?: ISubmitResult
 ) {
-  const onSubmit = vi.fn(async () => {})
+  const onSubmit = vi.fn(async () => submitResult)
   // Like Renderer.tsx initStore: only top-level endings are thankYouFields, and an ending
   // nested in a group stays in allFields with its group.
   const isTopLevelEnding = (field: FormField) =>
@@ -97,7 +98,7 @@ async function mount(
     return (
       <StoreContext.Provider value={{ state, dispatch }}>
         {state.isSubmitted ? (
-          <output data-ending={state.thankYouFieldId} />
+          <output data-ending={state.thankYouFieldId} data-pseudonym-id={state.pseudonymId} />
         ) : (
           <>
             <output
@@ -656,6 +657,27 @@ test('any other ending still closes the embed after submitting', async () => {
   await submit()
 
   expect(postMessage).toHaveBeenCalledWith(
+    expect.objectContaining({ eventName: 'HIDE_EMBED_MODAL' }),
+    '*'
+  )
+  postMessage.mockRestore()
+})
+
+test('a response ID keeps the embed open so the respondent can note it down', async () => {
+  const postMessage = vi.spyOn(window.parent, 'postMessage').mockImplementation(() => {})
+  await mount(
+    [question('q1'), ending('end')],
+    [],
+    {},
+    { hideAfterSubmit: true },
+    { pseudonymId: '7KQ2-9MX4' }
+  )
+
+  await answer('yes')
+  await submit()
+
+  expect(container.querySelector('output')?.getAttribute('data-pseudonym-id')).toBe('7KQ2-9MX4')
+  expect(postMessage).not.toHaveBeenCalledWith(
     expect.objectContaining({ eventName: 'HIDE_EMBED_MODAL' }),
     '*'
   )

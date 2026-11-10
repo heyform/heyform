@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import type { FC } from 'react'
 import { useEffect } from 'react'
 
-import { isURL } from '../utils'
+import { isURL, useTranslation } from '../utils'
 
 import { useStore } from '../store'
 import { WelcomeBranding } from '../views/Branding'
@@ -11,6 +11,7 @@ import { Block } from './Block'
 
 export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restProps }) => {
   const { state } = useStore()
+  const { t } = useTranslation()
 
   useEffect(() => {
     let redirectUrl = field.properties?.redirectUrl
@@ -35,7 +36,15 @@ export const ThankYou: FC<BlockProps> = ({ field, className, children, ...restPr
         field={field}
         isScrollable={false}
         {...restProps}
-      />
+      >
+        {state.pseudonymId && (
+          <div className="heyform-pseudonym-id">
+            <span>{t('Response ID')}:</span>
+            <strong>{state.pseudonymId}</strong>
+          </div>
+        )}
+        {children}
+      </Block>
       <WelcomeBranding />
     </>
   )

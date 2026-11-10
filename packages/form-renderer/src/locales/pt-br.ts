@@ -46,6 +46,7 @@ export default {
   'Start date is not valid': 'A data de início não é válida',
   'End date is not valid': 'A data de término não é válida',
   'End date must be after start date': 'A data de término deve ser após a data de início',
+  'Response ID': 'ID da resposta',
   'Thank you!': 'Obrigado!',
   'Thanks for completing this form. Now create your own form.':
     'Obrigado por preencher este formulário. Agora crie seu próprio formulário.',

@@ -24,10 +24,14 @@ export const Header: FC = () => {
 
     // An ending that keeps its responses out of the form still has something to tell the
     // respondent, so it neither submits nor closes the embed
-    if (!isDiscarded) {
-      await state.onSubmit?.(state.values, true)
+    let pseudonymId: string | undefined
 
-      if (helper.isTrue(state.query.hideAfterSubmit)) {
+    if (!isDiscarded) {
+      const submitResult = await state.onSubmit?.(state.values, true)
+      pseudonymId = submitResult ? submitResult.pseudonymId : undefined
+
+      // Keep the embed open while it shows a response ID, so the respondent can note it down
+      if (helper.isTrue(state.query.hideAfterSubmit) && !pseudonymId) {
         sendMessageToParent('HIDE_EMBED_MODAL')
       }
     }
@@ -37,7 +41,8 @@ export const Header: FC = () => {
       payload: {
         isSubmitted: true,
         // Show the ending the route leads to whether or not the response was saved
-        thankYouFieldId: ending?.id
+        thankYouFieldId: ending?.id,
+        pseudonymId
       }
     })
   }
