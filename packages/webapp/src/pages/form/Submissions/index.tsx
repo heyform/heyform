@@ -7,6 +7,7 @@ import {
 } from '@heyform-inc/shared-types-enums'
 import {
   IconAdjustmentsHorizontal,
+  IconArchive,
   IconCheck,
   IconDownload,
   IconMaximize,
@@ -51,6 +52,10 @@ const SUBMISSION_CATEGORIES = [
   {
     label: 'form.submissions.spam',
     value: 'spam'
+  },
+  {
+    label: 'form.submissions.archive',
+    value: 'archive'
   }
 ]
 
@@ -70,6 +75,7 @@ export default function FormSubmissions() {
   const [hiddenFieldIds, setHiddenFieldIds] = useState<string[]>([])
   const [isMaximized, { toggle }] = useBoolean(false)
 
+  // Inbox moves to Spam; Spam and Archive move back to the Inbox
   const targetCategory = useMemo(
     () =>
       category === SubmissionCategoryEnum.INBOX
@@ -92,11 +98,11 @@ export default function FormSubmissions() {
   )
 
   const { loading: moveLoading, run: moveRun } = useRequest(
-    async () => {
+    async (target: SubmissionCategoryEnum) => {
       await SubmissionService.updateCategory({
         formId,
         submissionIds: selectedRowKeys,
-        category: targetCategory
+        category: target
       })
       await tableRef.current?.refresh()
 
@@ -104,9 +110,20 @@ export default function FormSubmissions() {
     },
     {
       manual: true,
-      refreshDeps: [formId, selectedRowKeys, targetCategory]
+      refreshDeps: [formId, selectedRowKeys]
     }
   )
+
+  const moveLabel = t('form.submissions.moveTo', {
+    name: t(`form.submissions.${targetCategory}`)
+  })
+  const archiveLabel = t('form.submissions.moveTo', { name: t('form.submissions.archive') })
+
+  function handleCategoryChange(value: string) {
+    // Selected rows belong to the folder being left
+    setSelectedRowKeys([])
+    setCategory(value)
+  }
 
   const showIpAddress = !isSubmissionIpDisabled() && !!form?.settings?.displayIpAddress
 
@@ -303,20 +320,36 @@ export default function FormSubmissions() {
                 sideOffset: 8
               }}
               multiLanguage
-              onChange={setCategory}
+              onChange={handleCategoryChange}
             />
 
             {selectedRowKeys.length > 0 && (
               <>
-                <Tooltip
-                  label={t('form.submissions.moveTo', {
-                    name: t(`form.submissions.${targetCategory}`)
-                  })}
-                >
-                  <Button.Ghost size="md" loading={moveLoading} iconOnly onClick={moveRun}>
+                <Tooltip label={moveLabel}>
+                  <Button.Ghost
+                    size="md"
+                    loading={moveLoading}
+                    iconOnly
+                    aria-label={moveLabel}
+                    onClick={() => moveRun(targetCategory)}
+                  >
                     <IconMove className="h-5 w-5" />
                   </Button.Ghost>
                 </Tooltip>
+
+                {category === SubmissionCategoryEnum.INBOX && (
+                  <Tooltip label={archiveLabel}>
+                    <Button.Ghost
+                      size="md"
+                      loading={moveLoading}
+                      iconOnly
+                      aria-label={archiveLabel}
+                      onClick={() => moveRun(SubmissionCategoryEnum.ARCHIVE)}
+                    >
+                      <IconArchive className="h-5 w-5" />
+                    </Button.Ghost>
+                  </Tooltip>
+                )}
 
                 <Tooltip label={t('components.delete')}>
                   <Button.Ghost size="md" loading={deleteLoading} iconOnly onClick={deleteRun}>
