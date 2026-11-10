@@ -93,10 +93,6 @@ export class FormReportService {
       let otherCount = 0
 
       for (const answer of answers) {
-        if (helper.isNil(answer.value)) {
-          continue
-        }
-
         switch (field.kind as any) {
           case FieldKindEnum.YES_NO:
           case FieldKindEnum.MULTIPLE_CHOICE:

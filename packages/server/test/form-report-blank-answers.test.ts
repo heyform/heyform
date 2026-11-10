@@ -12,7 +12,14 @@ const fields: any[] = [
   { id: 'rating', kind: FieldKindEnum.RATING, title: 'Rating', properties: { total: 5 } },
   { id: 'scale', kind: FieldKindEnum.OPINION_SCALE, title: 'Scale', properties: { total: 10 } },
   { id: 'comment', kind: FieldKindEnum.SHORT_TEXT, title: 'Comment' },
-  { id: 'role', kind: FieldKindEnum.MULTIPLE_CHOICE, title: 'Role', properties: { choices } }
+  {
+    id: 'role',
+    kind: FieldKindEnum.MULTIPLE_CHOICE,
+    title: 'Role',
+    properties: { allowOther: true, allowBlankOther: true, choices }
+  },
+  { id: 'number', kind: FieldKindEnum.NUMBER, title: 'Number' },
+  { id: 'terms', kind: FieldKindEnum.LEGAL_TERMS, title: 'Terms' }
 ]
 
 // Answers are stored the way completeSubmission stores them: a skipped optional question
@@ -72,8 +79,22 @@ async function testCountsEveryAnswerWhenNoneIsSkipped() {
   assert.strictEqual(report.role.count, 2)
 }
 
+async function testCountsBlankOtherZeroAndFalse() {
+  const report = await generate([
+    // Chose "Other" without typing, which this question allows
+    { role: { value: [], other: '' }, number: 0, terms: false },
+    { role: { value: ['motion'] }, number: 3, terms: true },
+    {}
+  ])
+
+  assert.strictEqual(report.role.count, 2)
+  assert.strictEqual(report.number.count, 2)
+  assert.strictEqual(report.terms.count, 2)
+}
+
 async function run() {
   await testIgnoresSkippedAnswers()
+  await testCountsBlankOtherZeroAndFalse()
   await testCountsEveryAnswerWhenNoneIsSkipped()
 }
 
