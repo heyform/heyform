@@ -409,10 +409,12 @@ function validateDateRange(rule: FieldsToValidateRules, value: AnswerValue) {
     })
   }
 
-  const start = dayjs(value.start, rule.format!)
-  const end = dayjs(value.end, rule.format!)
+  // rule.format already includes the time token when the field allows it.
+  // customParseFormat is loaded by ./helper, which this module imports.
+  const start = dayjs(value.start, rule.format!, true)
+  const end = dayjs(value.end, rule.format!, true)
 
-  if (end.isBefore(start)) {
+  if (start.isValid() && end.isValid() && end.isBefore(start)) {
     throw new ValidateError({
       id: rule.id,
       kind: rule.kind,
