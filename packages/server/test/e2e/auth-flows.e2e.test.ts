@@ -3,6 +3,7 @@ import assert from 'assert'
 import { E2EClient } from './helpers/client'
 import { signUpUser } from './helpers/fixtures'
 import {
+  CHANGE_EMAIL_CODE_GQL,
   CREATE_TEAM_GQL,
   JOIN_TEAM_GQL,
   LOGIN_GQL,
@@ -11,10 +12,11 @@ import {
   SEND_RESET_EMAIL_GQL,
   TEAMS_GQL,
   TEAM_MEMBERS_GQL,
+  UPDATE_EMAIL_GQL,
   UPDATE_USER_PASSWORD_GQL,
   USER_DETAIL_GQL
 } from './helpers/gql'
-import { strongPassword, uniqueName } from './helpers/random'
+import { strongPassword, uniqueEmail, uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
 import { readLatestVerificationCode } from './helpers/verification'
 
@@ -127,6 +129,35 @@ export function build(baseUrl: string) {
   })
 
   // ── Membership-revocation edge ───────────────────────────────────────────
+  // ── updateEmail ──────────────────────────────────────────────────────────
+  test('updateEmail gives an address to only one of two accounts changing to it at once', async () => {
+    const email = uniqueEmail().toLowerCase()
+    const users = [await signUpUser(baseUrl), await signUpUser(baseUrl)]
+
+    // Both ask for a code while the address is free, so both pass updateEmail's own check
+    const codes: string[] = []
+
+    for (const user of users) {
+      await user.client.gqlOk('changeEmailCode', CHANGE_EMAIL_CODE_GQL, { input: { email } })
+      codes.push(await readLatestVerificationCode(`verify_email:${user.id}:${email}`))
+    }
+
+    const results = await Promise.all(
+      users.map((user, index) =>
+        user.client.gql('updateEmail', UPDATE_EMAIL_GQL, {
+          input: { email, code: codes[index], currentPassword: user.password }
+        })
+      )
+    )
+
+    const changed = results.filter(result => result.errors.length === 0)
+    const rejected = results.filter(result => result.errors.length > 0)
+
+    assert.strictEqual(changed.length, 1, 'exactly one account should get the address')
+    assert.strictEqual(rejected.length, 1)
+    assert.match(rejected[0].errors[0].message, /already exists/i)
+  })
+
   test('removed team member loses team scope but keeps own session', async () => {
     const owner = await signUpUser(baseUrl, { name: uniqueName('RemOwner') })
     const guest = await signUpUser(baseUrl, { name: uniqueName('RemGuest') })

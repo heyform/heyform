@@ -76,7 +76,10 @@ Module._load = function (request: string, parent: any, isMain: boolean) {
     }
   }
   if (request === './user.service' && parent?.filename?.endsWith('social-login.service.ts')) {
-    return { UserService: class {} }
+    return {
+      UserService: class {},
+      isDuplicateEmailError: (error: any) => error?.code === 11000 && error?.keyPattern?.email
+    }
   }
   if (request === 'mongoose') {
     return {}
@@ -93,6 +96,9 @@ interface HarnessOptions {
   existingSocialUserId?: string
   existingUser?: Record<string, unknown> | null
   users?: Array<Record<string, any>>
+  // A user that another request creates with the same email between the check and the create
+  racingUser?: Record<string, any>
+  createError?: unknown
 }
 
 function createHarness(options: HarnessOptions = {}) {
@@ -133,6 +139,13 @@ function createHarness(options: HarnessOptions = {}) {
       return true
     },
     create: async (user: Record<string, unknown>) => {
+      if (options.racingUser) {
+        users.push(options.racingUser)
+        throw { code: 11000, keyPattern: { email: 1 }, keyValue: { email: user.email } }
+      }
+      if (options.createError) {
+        throw options.createError
+      }
       createdUsers.push({ ...user })
       return 'new_user_1'
     }
@@ -189,6 +202,37 @@ async function testVerifiedEmailCanBindAnExistingUser() {
       userId: 'existing_user_1'
     }
   ])
+}
+
+async function testEmailTakenDuringProvisioningLinksThatAccount() {
+  const { service, socialAccounts, createdUsers, userUpdates } = createHarness({
+    users: [],
+    racingUser: { id: 'racing_user_1', email: 'user@example.com', isEmailVerified: false }
+  })
+  service.userInfo = async () => oidcUserInfo('user@example.com', true)
+
+  assert.strictEqual(await service.authCallback('oidc', 'code'), 'racing_user_1')
+  assert.strictEqual(createdUsers.length, 0)
+  assert.deepStrictEqual(userUpdates, [{ id: 'racing_user_1', updates: { isEmailVerified: true } }])
+  assert.deepStrictEqual(socialAccounts, [
+    {
+      kind: 'oidc',
+      openId: 'https://identity.example.com#subject_1',
+      userId: 'racing_user_1'
+    }
+  ])
+}
+
+async function testOtherCreateErrorsAreNotTreatedAsATakenEmail() {
+  const createError = { code: 11000, keyPattern: { customerId: 1 } }
+  const { service, socialAccounts } = createHarness({ users: [], createError })
+  service.userInfo = async () => oidcUserInfo('user@example.com', true)
+
+  await assert.rejects(
+    async () => service.authCallback('oidc', 'code'),
+    error => error === createError
+  )
+  assert.strictEqual(socialAccounts.length, 0)
 }
 
 async function testProvisioningRequiresTheOidcOverrideWhenRegistrationIsDisabled() {
@@ -349,6 +393,8 @@ async function testNameIsManagedOnlyForOidcAccountsWhileSyncIsOn() {
 async function run() {
   await testNewOidcBindingRequiresVerifiedEmail()
   await testVerifiedEmailCanBindAnExistingUser()
+  await testEmailTakenDuringProvisioningLinksThatAccount()
+  await testOtherCreateErrorsAreNotTreatedAsATakenEmail()
   await testProvisioningRequiresTheOidcOverrideWhenRegistrationIsDisabled()
   await testOidcProvisioningOverrideDoesNotEnableOtherProviders()
   await testPreviouslyBoundSubjectDoesNotDependOnMutableEmailClaims()

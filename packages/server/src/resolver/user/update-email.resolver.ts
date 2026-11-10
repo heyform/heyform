@@ -4,8 +4,10 @@ import { Auth, User } from '@decorator'
 import { UpdateEmailInput } from '@graphql'
 import { UserModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { AuthService, UserService } from '@service'
+import { AuthService, UserService, isDuplicateEmailError } from '@service'
 import { comparePassword } from '@utils'
+
+const EMAIL_TAKEN = 'The email address is already exists'
 
 @Resolver()
 @Auth()
@@ -23,7 +25,7 @@ export class UpdateEmailResolver {
     const existsUser = await this.userService.findByEmail(input.email)
 
     if (existsUser) {
-      throw new BadRequestException('The email address is already exists')
+      throw new BadRequestException(EMAIL_TAKEN)
     }
 
     const attemptsKey = `limit:change_email:${user.id}`
@@ -39,10 +41,21 @@ export class UpdateEmailResolver {
       await this.authService.checkVerificationCode(key, input.code)
     })
 
-    const result = await this.userService.update(user.id, {
-      email: input.email,
-      isEmailVerified: true
-    })
+    let result: boolean
+
+    try {
+      result = await this.userService.update(user.id, {
+        email: input.email,
+        isEmailVerified: true
+      })
+    } catch (error) {
+      // Another account took the address after the check above
+      if (isDuplicateEmailError(error)) {
+        throw new BadRequestException(EMAIL_TAKEN)
+      }
+
+      throw error
+    }
 
     if (result) {
       await this.authService.invalidateSessions(user.id)
