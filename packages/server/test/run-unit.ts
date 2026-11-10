@@ -35,6 +35,7 @@ const tests = [
   'googlesheets.test.ts',
   'page-apps.test.ts',
   'form-analytic-cache.test.ts',
+  'form-team-scope.test.ts',
   'submission-choice-limit.test.ts',
   'complete-submission-security.test.ts',
   'payment-webhook.test.ts',

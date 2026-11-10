@@ -65,13 +65,16 @@ export class FormService {
     limit = 10,
     status = FormStatusEnum.NORMAL
   ): Promise<FormModel[]> {
-    const conditions: Record<string, any> = {
-      teamId,
-      status
+    // A member of the workspace who belongs to no project may see none of its forms. Matching on an
+    // empty `$in` would otherwise drop the filter and return every form in the team.
+    if (helper.isEmpty(projectIds)) {
+      return []
     }
 
-    if (helper.isValidArray(projectIds)) {
-      conditions.projectId = {
+    const conditions: Record<string, any> = {
+      teamId,
+      status,
+      projectId: {
         $in: projectIds
       }
     }
@@ -85,15 +88,17 @@ export class FormService {
   }
 
   async searchInTeam(teamId: string, projectIds: string[], keyword: string): Promise<FormModel[]> {
-    const conditions: Record<string, any> = {
-      teamId,
-      name: literalSearchRegex(keyword)
+    // Same as findRecentInTeam: an empty project list must match nothing, not everything.
+    if (helper.isEmpty(projectIds)) {
+      return []
     }
 
-    if (helper.isValidArray(projectIds)) {
-      conditions.projectId = {
+    const conditions: Record<string, any> = {
+      teamId,
+      projectId: {
         $in: projectIds
-      }
+      },
+      name: literalSearchRegex(keyword)
     }
 
     return this.formModel.find(conditions).sort({
