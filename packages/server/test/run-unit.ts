@@ -21,6 +21,7 @@ const tests = [
   'notification-options.test.ts',
   'export-file.service.test.ts',
   'form-report.service.test.ts',
+  'form-report-blank-answers.test.ts',
   'webhook.test.ts',
   'submission-ip.test.ts',
   'submission-ip-disabled.test.ts',
