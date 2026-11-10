@@ -46,22 +46,7 @@ export class JoinTeamResolver {
       role: TeamRoleEnum.COLLABORATOR
     })
 
-    // A member of the workspace who belongs to no project can see none of its forms, so a joiner
-    // starts in the project the workspace was created with. Removing or leaving the workspace
-    // already deletes the project memberships.
-    const project = await this.projectService.findDefaultInTeam(input.teamId)
-
-    if (project) {
-      // A project can already name this member before they join the workspace
-      const projectMember = await this.projectService.findMemberById(project.id, user.id)
-
-      if (!projectMember) {
-        await this.projectService.createMember({
-          projectId: project.id,
-          memberId: user.id
-        })
-      }
-    }
+    await this.projectService.addMemberToDefaultProject(input.teamId, user.id)
 
     const teamOwner = await this.userService.findById(team.ownerId)
 

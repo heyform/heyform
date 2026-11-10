@@ -12,6 +12,7 @@ async function testPasswordRegistrationPolicy() {
   let lookups = 0
   let creations = 0
   let sessions = 0
+  const defaultProjectJoins: string[][] = []
   const resolver = new SignUpResolver(
     {
       createUserActivity: () => undefined,
@@ -38,6 +39,11 @@ async function testPasswordRegistrationPolicy() {
         return { id: 'team-1', ownerId: 'owner' }
       },
       createMember: async () => undefined
+    } as any,
+    {
+      addMemberToDefaultProject: async (teamId: string, memberId: string) => {
+        defaultProjectJoins.push([teamId, memberId])
+      }
     } as any
   )
   const client = { deviceId: 'device-1', lang: 'en' } as any
@@ -68,6 +74,8 @@ async function testPasswordRegistrationPolicy() {
     assert.strictEqual(await resolver.signUp(client, response, { ...input, ...invitation }), true)
     assert.strictEqual(creations, 2)
     assert.strictEqual(sessions, 2)
+    // Only the invited sign-up joins the workspace, and it starts in the default project
+    assert.deepStrictEqual(defaultProjectJoins, [['team-1', 'new-user']])
   } finally {
     environments.DISABLE_LOGIN_WITH_PASSWORD = originalPasswordFlag
     environments.APP_DISABLE_REGISTRATION = originalRegistrationFlag

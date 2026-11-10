@@ -3,6 +3,7 @@ import assert from 'assert'
 
 import { TeamRoleEnum } from '../src/model'
 import { JoinTeamResolver } from '../src/resolver/team/join-team.resolver'
+import { ProjectService } from '../src/service/project.service'
 
 const user = { id: 'user_1', name: 'Joiner', email: 'joiner@example.com' }
 const team = { id: 'team_1', name: 'Workspace', ownerId: 'owner_1' }
@@ -39,6 +40,7 @@ function setup({
     { findById: async () => ({ email: 'owner@example.com' }) } as any,
     { joinWorkspaceAlert: () => undefined } as any,
     {
+      addMemberToDefaultProject: ProjectService.prototype.addMemberToDefaultProject,
       findDefaultInTeam: async () => projectOverride,
       findMemberById: async () => (alreadyInProject ? { memberId: user.id } : null),
       createMember: async (member: Record<string, any>) => {

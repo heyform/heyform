@@ -13,7 +13,7 @@ import { DeviceIdGuard } from '@guard'
 import { helper } from '@heyform-inc/utils'
 import { TeamModel, TeamRoleEnum, UserActivityKindEnum } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { AuthService, MailService, TeamService, UserService } from '@service'
+import { AuthService, MailService, ProjectService, TeamService, UserService } from '@service'
 import { ClientInfo, GqlClient, gravatar, passwordHash } from '@utils'
 import { isDisposableEmail } from '@utils'
 
@@ -24,7 +24,8 @@ export class SignUpResolver {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly mailService: MailService,
-    private readonly teamService: TeamService
+    private readonly teamService: TeamService,
+    private readonly projectService: ProjectService
   ) {}
 
   @Mutation(returns => Boolean)
@@ -75,6 +76,9 @@ export class SignUpResolver {
         await this.userService.delete(userId)
         throw error
       }
+
+      // After the rollback above, so a failure here can't leave a workspace member with no user
+      await this.projectService.addMemberToDefaultProject(invitation.id, userId)
 
       const teamOwner = await this.userService.findById(invitation.ownerId)
 
