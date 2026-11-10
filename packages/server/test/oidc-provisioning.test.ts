@@ -72,14 +72,12 @@ Module._load = function (request: string, parent: any, isMain: boolean) {
       appleLoginUrl: () => '',
       appleUserInfo: async () => undefined,
       googleLoginUrl: () => '',
-      googleUserInfo: async () => undefined
+      googleUserInfo: async () => undefined,
+      isDuplicateEmailError: (error: any) => error?.code === 11000 && error?.keyPattern?.email
     }
   }
   if (request === './user.service' && parent?.filename?.endsWith('social-login.service.ts')) {
-    return {
-      UserService: class {},
-      isDuplicateEmailError: (error: any) => error?.code === 11000 && error?.keyPattern?.email
-    }
+    return { UserService: class {} }
   }
   if (request === 'mongoose') {
     return {}

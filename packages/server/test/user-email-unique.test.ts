@@ -2,8 +2,8 @@ import assert from 'assert'
 
 import { SignUpResolver } from '../src/resolver/auth/sign-up.resolver'
 import { UpdateEmailResolver } from '../src/resolver/user/update-email.resolver'
-import { UserService, isDuplicateEmailError } from '../src/service/user.service'
-import { passwordHash } from '../src/utils'
+import { UserService } from '../src/service/user.service'
+import { isDuplicateEmailError, passwordHash } from '../src/utils'
 
 const duplicateEmail = () => ({
   code: 11000,

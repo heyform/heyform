@@ -4,18 +4,7 @@ import { Model } from 'mongoose'
 
 import { timestamp } from '@heyform-inc/utils'
 import { UserModel } from '@model'
-import { Logger } from '@utils'
-
-// Whether a write failed because another account already has the email address
-export function isDuplicateEmailError(error: unknown): boolean {
-  if (!error || typeof error !== 'object') {
-    return false
-  }
-
-  const { code, keyPattern } = error as { code?: number; keyPattern?: Record<string, unknown> }
-
-  return code === 11000 && keyPattern?.email !== undefined
-}
+import { Logger, isDuplicateEmailError } from '@utils'
 
 @Injectable()
 export class UserService implements OnModuleInit {

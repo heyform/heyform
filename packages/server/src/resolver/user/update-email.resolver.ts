@@ -4,8 +4,8 @@ import { Auth, User } from '@decorator'
 import { UpdateEmailInput } from '@graphql'
 import { UserModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { AuthService, UserService, isDuplicateEmailError } from '@service'
-import { comparePassword } from '@utils'
+import { AuthService, UserService } from '@service'
+import { comparePassword, isDuplicateEmailError } from '@utils'
 
 const EMAIL_TAKEN = 'The email address is already exists'
 

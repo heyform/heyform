@@ -13,15 +13,8 @@ import { DeviceIdGuard } from '@guard'
 import { helper } from '@heyform-inc/utils'
 import { TeamModel, TeamRoleEnum, UserActivityKindEnum } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import {
-  AuthService,
-  MailService,
-  ProjectService,
-  TeamService,
-  UserService,
-  isDuplicateEmailError
-} from '@service'
-import { ClientInfo, GqlClient, gravatar, passwordHash } from '@utils'
+import { AuthService, MailService, ProjectService, TeamService, UserService } from '@service'
+import { ClientInfo, GqlClient, gravatar, isDuplicateEmailError, passwordHash } from '@utils'
 import { isDisposableEmail } from '@utils'
 
 const EMAIL_TAKEN = 'The email address already exist'

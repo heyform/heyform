@@ -22,3 +22,14 @@ export function getUpdateQuery(
 
   return query
 }
+
+// Whether a write failed because another account already has the email address
+export function isDuplicateEmailError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false
+  }
+
+  const { code, keyPattern } = error as { code?: number; keyPattern?: Record<string, unknown> }
+
+  return code === 11000 && keyPattern?.email !== undefined
+}

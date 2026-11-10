@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
-import { UserService, isDuplicateEmailError } from './user.service'
+import { UserService } from './user.service'
 import {
   APPLE_LOGIN_KEY_ID,
   APPLE_LOGIN_PRIVATE_KEY_PATH,
@@ -31,7 +31,8 @@ import {
   appleLoginUrl,
   appleUserInfo,
   googleLoginUrl,
-  googleUserInfo
+  googleUserInfo,
+  isDuplicateEmailError
 } from '@utils'
 
 export type SocialLoginKind = SocialLoginTypeEnum | typeof OIDC_LOGIN_KIND
