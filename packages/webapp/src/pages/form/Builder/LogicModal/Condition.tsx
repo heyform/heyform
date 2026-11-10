@@ -168,7 +168,14 @@ const BoolCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
   )
 }
 
-const DateCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpectedChange }) => {
+// The condition's date is compared as `YYYY-MM-DD[ HH:mm]`, so it's typed in that shape. A number
+// input can't hold a date, and any other shape only matches through the lenient fallback.
+const DateCondition: FC<DefaultProps & { allowTime?: boolean }> = ({
+  value,
+  allowTime,
+  onComparisonChange,
+  onExpectedChange
+}) => {
   return (
     <>
       <Select
@@ -180,9 +187,8 @@ const DateCondition: FC<DefaultProps> = ({ value, onComparisonChange, onExpected
       />
       <Input
         className="flex-1"
-        type="number"
         value={(value as Any).expected}
-        placeholder="Value"
+        placeholder={allowTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD'}
         onChange={onExpectedChange}
       />
     </>
@@ -285,6 +291,7 @@ export default function Condition({ field, value: rawValue, onChange }: Conditio
         return (
           <DateCondition
             value={value}
+            allowTime={field.properties?.allowTime}
             onComparisonChange={handleComparisonChange}
             onExpectedChange={handleExpectedChange}
           />
