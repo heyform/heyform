@@ -15,7 +15,7 @@ import {
   IconTrash
 } from '@tabler/icons-react'
 import { useBoolean, useRequest } from 'ahooks'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SubmissionService } from '@/services'
@@ -73,7 +73,10 @@ export default function FormSubmissions() {
   const [category, setCategory] = useState<string>(SubmissionCategoryEnum.INBOX)
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([])
   const [hiddenFieldIds, setHiddenFieldIds] = useState<string[]>([])
+  const [hasPseudonymIds, setHasPseudonymIds] = useState(false)
   const [isMaximized, { toggle }] = useBoolean(false)
+
+  useEffect(() => setHasPseudonymIds(false), [formId])
 
   // Inbox moves to Spam; Spam and Archive move back to the Inbox
   const targetCategory = useMemo(
@@ -127,7 +130,8 @@ export default function FormSubmissions() {
 
   const showIpAddress = !isSubmissionIpDisabled() && !!form?.settings?.displayIpAddress
 
-  const showPseudonymId = !!form?.settings?.generatePseudonymId
+  // IDs stay visible after the setting is turned off, like in the CSV export
+  const showPseudonymId = !!form?.settings?.generatePseudonymId || hasPseudonymIds
 
   const fields = useMemo(() => {
     const pseudonymIdField = showPseudonymId
@@ -189,6 +193,10 @@ export default function FormSubmissions() {
       page: current,
       limit: pageSize
     })
+
+    if (submissions.some(row => row.pseudonymId)) {
+      setHasPseudonymIds(true)
+    }
 
     const list = submissions.map(row => ({
       ...row,
