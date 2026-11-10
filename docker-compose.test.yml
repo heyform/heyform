@@ -28,6 +28,8 @@ services:
       APP_HOMEPAGE_URL: ${APP_HOMEPAGE_URL:-http://localhost:9157}
       SESSION_KEY: ${SESSION_KEY:?SESSION_KEY is required}
       FORM_ENCRYPTION_KEY: ${FORM_ENCRYPTION_KEY:?FORM_ENCRYPTION_KEY is required}
+      # Resolved like the e2e signer's secret, so both sides agree
+      STRIPE_CONNECT_SECRET_KEY: ${STRIPE_CONNECT_SECRET_KEY:-${STRIPE_WEBHOOK_SECRET_KEY:-whsec_e2e}}
       MONGO_URI: mongodb://mongo:27017/heyform
       REDIS_HOST: keydb
       REDIS_PORT: 6379

@@ -35,6 +35,8 @@ const tests = [
   'page-apps.test.ts',
   'form-analytic-cache.test.ts',
   'submission-choice-limit.test.ts',
+  'complete-submission-security.test.ts',
+  'payment-webhook.test.ts',
   'public-form-stripe.test.ts'
 ]
 const serverRoot = path.resolve(__dirname, '..')

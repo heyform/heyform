@@ -49,12 +49,13 @@ function setup(openedAgo: number, formOverride: Record<string, any> = form) {
       createWithinQuota: async (submission: any) => {
         stored.push(submission)
         return 'submission_1'
-      }
+      },
+      updateAnswer: async () => true
     } as any,
     { checkIp: async () => undefined } as any,
     { addQueue: () => undefined } as any,
     { addQueue: () => undefined } as any,
-    { createPaymentIntent: async () => 'client_secret_1' } as any
+    { createPaymentIntent: async () => ({ id: 'pi_1', clientSecret: 'client_secret_1' }) } as any
   )
 
   return {

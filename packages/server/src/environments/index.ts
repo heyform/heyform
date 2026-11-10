@@ -152,6 +152,10 @@ export const STRIPE_PUBLISHABLE_KEY: string = process.env.STRIPE_PUBLISHABLE_KEY
 export const STRIPE_SECRET_KEY: string = process.env.STRIPE_SECRET_KEY
 export const STRIPE_CONNECT_CLIENT_ID: string = process.env.STRIPE_CONNECT_CLIENT_ID
 export const STRIPE_WEBHOOK_SECRET_KEY: string = process.env.STRIPE_WEBHOOK_SECRET_KEY
+// Signing secret of the webhook endpoint that listens to connected accounts. Payments are
+// created on the form owner's account, so their events only reach that endpoint.
+export const STRIPE_CONNECT_SECRET_KEY: string =
+  process.env.STRIPE_CONNECT_SECRET_KEY || STRIPE_WEBHOOK_SECRET_KEY
 
 // Bull
 export const BULL_JOB_ATTEMPTS: number = +process.env.BULL_JOB_ATTEMPTS || 3

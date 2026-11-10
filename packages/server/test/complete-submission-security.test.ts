@@ -67,7 +67,7 @@ async function testPaymentUsesPublishedFormConfiguration() {
   const paymentService = {
     createPaymentIntent: async (options: Record<string, any>) => {
       paymentIntent = options
-      return 'client_secret_1'
+      return { id: 'pi_1', clientSecret: 'client_secret_1' }
     }
   }
   const resolver = new CompleteSubmissionResolver(
@@ -117,7 +117,12 @@ async function testPaymentUsesPublishedFormConfiguration() {
   assert.strictEqual(storedSubmission?.answers[1].value.amount, 1000)
   assert.strictEqual(storedSubmission?.answers[1].value.currency, 'eur')
   assert.strictEqual(storedSubmission?.answers[0].value.clientSecret, undefined)
-  assert.strictEqual(updatedAnswer, undefined)
+  // Only the PaymentIntent created here is accepted by the webhook, and the answer isn't paid yet
+  assert.strictEqual(updatedAnswer?.id, 'payment_1')
+  assert.strictEqual(updatedAnswer?.value.pendingPaymentIntentId, 'pi_1')
+  assert.strictEqual(updatedAnswer?.value.paymentIntentId, undefined)
+  assert.strictEqual(updatedAnswer?.value.amount, 4999)
+  assert.strictEqual(updatedAnswer?.value.clientSecret, undefined)
 }
 
 async function testPaymentWebhookDoesNotRequireOrPersistClientSecret() {
@@ -154,7 +159,8 @@ async function testPaymentWebhookDoesNotRequireOrPersistClientSecret() {
             value: {
               amount: 4999,
               currency: 'usd',
-              clientSecret: 'legacy_stored_secret'
+              clientSecret: 'legacy_stored_secret',
+              pendingPaymentIntentId: 'pi_1'
             }
           }
         ]
@@ -168,8 +174,67 @@ async function testPaymentWebhookDoesNotRequireOrPersistClientSecret() {
   await controller.webhook('valid_signature', { body: Buffer.from('{}') })
 
   assert.strictEqual(updatedAnswer?.value.clientSecret, undefined)
+  assert.strictEqual(updatedAnswer?.value.pendingPaymentIntentId, undefined)
   assert.strictEqual(updatedAnswer?.value.paymentIntentId, 'pi_1')
   assert.strictEqual(updatedAnswer?.value.billingDetails.name, 'Respondent')
+}
+
+async function testPaymentIsNotOfferedWhenItsAnswerCannotBeUpdated() {
+  const now = Math.floor(Date.now() / 1_000)
+  const form = {
+    id: 'form_1',
+    teamId: 'team_1',
+    name: 'Payment form',
+    suspended: false,
+    fields: [
+      {
+        id: 'payment_1',
+        title: 'Pay',
+        kind: FieldKindEnum.PAYMENT,
+        validations: { required: true },
+        properties: { currency: 'USD', price: { type: 'number', value: 10 } }
+      }
+    ],
+    hiddenFields: [],
+    logics: [],
+    variables: [],
+    settings: { active: true, allowArchive: true, captchaKind: CaptchaKindEnum.NONE },
+    stripeAccount: { accountId: 'acct_1' }
+  }
+  const resolver = new CompleteSubmissionResolver(
+    {
+      decryptToken: () => ({ formId: 'form_1', timestamp: now }),
+      assertOpenToken: () => now,
+      verifySpam: async () => false
+    } as any,
+    { findById: async () => form } as any,
+    {
+      createWithinQuota: async () => 'submission_1',
+      // The submission was deleted while the PaymentIntent was being created
+      updateAnswer: async () => false,
+      countInForm: async () => 0
+    } as any,
+    { checkIp: async () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    { addQueue: () => undefined } as any,
+    { createPaymentIntent: async () => ({ id: 'pi_1', clientSecret: 'client_secret_1' }) } as any
+  )
+
+  // Without a pending PaymentIntent on the answer, the webhook would reject the payment, so the
+  // respondent mustn't be handed a client secret to pay with
+  await assert.rejects(
+    resolver.completeSubmission(
+      { ip: '203.0.113.10', deviceId: 'device_1', lang: 'en', userAgent: {} as any },
+      'anonymous_1',
+      {
+        formId: 'form_1',
+        answers: { payment_1: { amount: 1000, currency: 'usd', billingDetails: { name: 'R' } } },
+        hiddenFields: [],
+        openToken: 'encrypted-token'
+      }
+    ),
+    /Failed to initialize payment/
+  )
 }
 
 async function testPseudonymIdIsStoredAndReturned() {
@@ -239,6 +304,7 @@ async function testPseudonymIdIsStoredAndReturned() {
 
 async function run() {
   await testPaymentUsesPublishedFormConfiguration()
+  await testPaymentIsNotOfferedWhenItsAnswerCannotBeUpdated()
   await testPaymentWebhookDoesNotRequireOrPersistClientSecret()
   await testPseudonymIdIsStoredAndReturned()
 }

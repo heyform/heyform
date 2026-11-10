@@ -67,7 +67,8 @@ function setup(formOverride: Record<string, any> = form) {
       createWithinQuota: async () => {
         calls.create++
         return 'submission_1'
-      }
+      },
+      updateAnswer: async () => true
     } as any,
     {
       checkIp: async () => {
@@ -79,7 +80,7 @@ function setup(formOverride: Record<string, any> = form) {
     {
       createPaymentIntent: async () => {
         calls.payment++
-        return 'client_secret_1'
+        return { id: 'pi_1', clientSecret: 'client_secret_1' }
       }
     } as any
   )
