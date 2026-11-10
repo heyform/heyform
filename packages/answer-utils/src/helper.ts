@@ -1,14 +1,10 @@
 import { Property } from '@heyform-inc/shared-types-enums'
-import dayjs, { Dayjs } from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 import { helper } from '@heyform-inc/utils'
 
 import { OTHER_CHOICE_LABEL } from './consts'
-
-// Without this plugin dayjs ignores the format and falls back to Date.parse.
-dayjs.extend(customParseFormat)
+import dayjs, { Dayjs } from './dayjs'
 
 export { htmlToText } from '@heyform-inc/utils'
 
@@ -138,6 +134,26 @@ function parseStrictDate(value: unknown, format: string): Dayjs | undefined {
   return parsed.isValid() ? parsed : undefined
 }
 
+// The answer is produced by the date picker, so it is always in the field's format. The condition's
+// own date is typed by the form owner, who may have used another shape such as `2026-4-3`, and
+// Date.parse used to accept those. Read anything that isn't exactly `YYYY-MM-DD[ HH:mm]`
+// leniently, so a condition saved before the format was enforced keeps matching.
+function parseExpectedDate(value: unknown, format: string): Dayjs | undefined {
+  const strict = parseStrictDate(value, format)
+
+  if (strict) {
+    return strict
+  }
+
+  if (typeof value !== 'string') {
+    return undefined
+  }
+
+  const lenient = dayjs(value)
+
+  return lenient.isValid() ? lenient : undefined
+}
+
 function compareDates(
   value: string,
   expected: string,
@@ -151,7 +167,7 @@ function compareDates(
   }
 
   const answer = parseStrictDate(value, getDateFormat(format, allowTime))
-  const target = parseStrictDate(expected, getDateFormat(DEFAULT_DATE_FORMAT, allowTime))
+  const target = parseExpectedDate(expected, getDateFormat(DEFAULT_DATE_FORMAT, allowTime))
 
   if (!answer || !target) {
     return false

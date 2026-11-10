@@ -1,8 +1,8 @@
 import { AnswerValue, FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
-import dayjs from 'dayjs'
 
 import { helper, type } from '@heyform-inc/utils'
 
+import dayjs from './dayjs'
 import { FieldsToValidateRules, fieldsToValidateRules } from './fields-to-validate-rules'
 import { isDate, isMobilePhone } from './helper'
 
@@ -410,7 +410,6 @@ function validateDateRange(rule: FieldsToValidateRules, value: AnswerValue) {
   }
 
   // rule.format already includes the time token when the field allows it.
-  // customParseFormat is loaded by ./helper, which this module imports.
   const start = dayjs(value.start, rule.format!, true)
   const end = dayjs(value.end, rule.format!, true)
 

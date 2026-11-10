@@ -149,3 +149,30 @@ test('a DD/MM/YYYY date range with time is ordered by the field format', () => {
     'End date must be after start date'
   )
 })
+
+test('a condition date saved in another shape still matches', () => {
+  const field = dateField('DD/MM/YYYY')
+
+  // Form owners typed these before the condition's date was parsed strictly
+  expect(matches(field, ComparisonEnum.IS, '2026-4-3', '03/04/2026')).toBe(true)
+  expect(matches(field, ComparisonEnum.IS, '2026/04/03', '03/04/2026')).toBe(true)
+  expect(matches(field, ComparisonEnum.IS_AFTER, '2026-1-1', '25/12/2026')).toBe(true)
+  expect(matches(field, ComparisonEnum.IS_BEFORE, '2026-1-1', '03/04/2026')).toBe(false)
+})
+
+test('a condition date that is not a date matches nothing', () => {
+  const field = dateField('DD/MM/YYYY')
+
+  expect(matches(field, ComparisonEnum.IS, 'not-a-date', '03/04/2026')).toBe(false)
+  expect(matches(field, ComparisonEnum.IS_BEFORE, 'not-a-date', '03/04/2026')).toBe(false)
+  expect(matches(field, ComparisonEnum.IS_AFTER, 'not-a-date', '03/04/2026')).toBe(false)
+  expect(matches(field, ComparisonEnum.IS_NOT, 'not-a-date', '03/04/2026')).toBe(true)
+})
+
+test('a lenient condition date does not make the answer lenient', () => {
+  const field = dateField('DD/MM/YYYY')
+
+  // 31 February is still rejected on the answer side
+  expect(matches(field, ComparisonEnum.IS, '2026-3-2', '31/02/2026')).toBe(false)
+  expect(matches(field, ComparisonEnum.IS_AFTER, '2026-3-2', '31/02/2026')).toBe(false)
+})
