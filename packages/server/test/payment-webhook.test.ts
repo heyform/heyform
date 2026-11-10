@@ -7,6 +7,7 @@ interface Options {
   event?: Record<string, any>
   answerValue?: Record<string, any>
   constructEvent?: () => any
+  submission?: Record<string, any> | null
 }
 
 // The PaymentIntent object as API versions from 2022-11-15 send it: no `charges`, only the
@@ -25,7 +26,12 @@ function succeededEvent(paymentIntentId = 'pi_1') {
   }
 }
 
-function setup({ event = succeededEvent(), answerValue, constructEvent }: Options = {}) {
+function setup({
+  event = succeededEvent(),
+  answerValue,
+  constructEvent,
+  submission
+}: Options = {}) {
   const updates: Record<string, any>[] = []
   const chargeLookups: string[][] = []
   const controller = new PaymentIntentWebhookController(
@@ -40,19 +46,22 @@ function setup({ event = succeededEvent(), answerValue, constructEvent }: Option
       }
     } as any,
     {
-      findById: async () => ({
-        answers: [
-          {
-            id: 'payment_1',
-            value: answerValue ?? {
-              amount: 4999,
-              currency: 'usd',
-              billingDetails: { name: 'Typed name' },
-              pendingPaymentIntentId: 'pi_1'
-            }
-          }
-        ]
-      }),
+      findById: async () =>
+        submission === null
+          ? null
+          : {
+              answers: [
+                {
+                  id: 'payment_1',
+                  value: answerValue ?? {
+                    amount: 4999,
+                    currency: 'usd',
+                    billingDetails: { name: 'Typed name' },
+                    pendingPaymentIntentId: 'pi_1'
+                  }
+                }
+              ]
+            },
       updateAnswer: async (_submissionId: string, answer: Record<string, any>) => {
         updates.push(answer)
         return true
@@ -82,21 +91,38 @@ async function testRecordsPaymentFromLatestCharge() {
   assert.strictEqual(updates[0].value.amount, 4999)
 }
 
-async function testRejectsPaymentIntentNotCreatedForAnswer() {
-  const { updates, send } = setup({ event: succeededEvent('pi_other') })
+// A non-2xx makes Stripe retry for days, so an event that can never apply is acknowledged instead
+async function testIgnoresPaymentIntentNotCreatedForAnswer() {
+  const { updates, chargeLookups, send } = setup({ event: succeededEvent('pi_other') })
 
-  await assert.rejects(send, (error: any) => {
-    assert.ok(error instanceof BadRequestException)
-    assert.strictEqual(error.message, 'Invalid payment intent')
-    return true
-  })
+  assert.strictEqual(await send(), 'success')
+  assert.strictEqual(updates.length, 0)
+  assert.deepStrictEqual(chargeLookups, [])
+}
+
+async function testIgnoresAnswerWithoutPendingPaymentIntent() {
+  const { updates, send } = setup({ answerValue: { amount: 4999, currency: 'usd' } })
+
+  assert.strictEqual(await send(), 'success')
   assert.strictEqual(updates.length, 0)
 }
 
-async function testRejectsAnswerWithoutPendingPaymentIntent() {
-  const { updates, send } = setup({ answerValue: { amount: 4999, currency: 'usd' } })
+async function testIgnoresEventWithoutSubmissionMetadata() {
+  const { updates, send } = setup({
+    event: { type: 'payment_intent.succeeded', data: { object: { id: 'pi_1', metadata: {} } } }
+  })
 
-  await assert.rejects(send, BadRequestException)
+  assert.strictEqual(await send(), 'success')
+  assert.strictEqual(updates.length, 0)
+}
+
+async function testIgnoresEventForAMissingSubmission() {
+  const { updates, send } = setup({
+    event: succeededEvent(),
+    submission: null
+  })
+
+  assert.strictEqual(await send(), 'success')
   assert.strictEqual(updates.length, 0)
 }
 
@@ -133,8 +159,10 @@ async function testIgnoresOtherEvents() {
 
 async function run() {
   await testRecordsPaymentFromLatestCharge()
-  await testRejectsPaymentIntentNotCreatedForAnswer()
-  await testRejectsAnswerWithoutPendingPaymentIntent()
+  await testIgnoresPaymentIntentNotCreatedForAnswer()
+  await testIgnoresAnswerWithoutPendingPaymentIntent()
+  await testIgnoresEventWithoutSubmissionMetadata()
+  await testIgnoresEventForAMissingSubmission()
   await testRepeatedEventSucceedsWithoutUpdating()
   await testInvalidSignatureIsBadRequest()
   await testIgnoresOtherEvents()

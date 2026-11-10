@@ -39,12 +39,12 @@ export function build(baseUrl: string) {
   }
 
   test('POST /payment/intent/webhook verifies a correctly signed event', async () => {
-    // No metadata, so the handler stops after the signature check with its own error
+    // No metadata, so the handler acknowledges the event without applying it
     const body = event('payment_intent.succeeded', { id: 'pi_e2e', metadata: {} })
     const res = await post(body, sign(body))
 
-    assert.strictEqual(res.status, 400, `body: ${res.text.slice(0, 200)}`)
-    assert.match(res.text, /Invalid payment metadata/)
+    assert.strictEqual(res.status, 201, `body: ${res.text.slice(0, 200)}`)
+    assert.match(res.text, /success/)
   })
 
   test('POST /payment/intent/webhook rejects a wrong signature with 400', async () => {
