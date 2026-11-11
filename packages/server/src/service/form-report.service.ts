@@ -1,4 +1,4 @@
-import { FieldKindEnum } from '@heyform-inc/shared-types-enums'
+import { AnswerValue, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import { InjectQueue } from '@nestjs/bull'
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
@@ -13,6 +13,16 @@ import { OTHER_CHOICE_ID, flattenFields } from '@heyform-inc/answer-utils'
 import { helper } from '@heyform-inc/utils'
 import { FormReportModel, FormReportResponse } from '@model'
 import { OTHER_REPORT_FIELD_KINDS } from '@utils'
+
+// An optional question the respondent skipped is stored as '' (or no choices), not left out.
+// It isn't an answer, so it mustn't count as a response or as a rating of 0.
+function isAnswered(value: AnswerValue): boolean {
+  if (helper.isPlainObject(value) && helper.isArray(value.value)) {
+    return value.value.length > 0 || helper.isString(value.other)
+  }
+
+  return helper.isValid(value)
+}
 
 @Injectable()
 export class FormReportService {
@@ -65,7 +75,7 @@ export class FormReportService {
     for (const field of fields) {
       const answers = submissions
         .map(submission => submission.answers.find(answer => answer.id === field.id))
-        .filter(Boolean)
+        .filter(answer => answer && isAnswered(answer.value))
       const count = answers.length
 
       if (count < 1) {
@@ -83,10 +93,6 @@ export class FormReportService {
       let otherCount = 0
 
       for (const answer of answers) {
-        if (helper.isNil(answer.value)) {
-          continue
-        }
-
         switch (field.kind as any) {
           case FieldKindEnum.YES_NO:
           case FieldKindEnum.MULTIPLE_CHOICE:
