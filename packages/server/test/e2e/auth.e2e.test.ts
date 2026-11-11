@@ -67,6 +67,28 @@ export function build(baseUrl: string) {
     assert.match(result.errors[0].message, /already exist/i)
   })
 
+  test('gives an email address to only one of several sign-ups at the same moment', async () => {
+    const email = uniqueEmail()
+    // Each sign-up checks the address is free before creating the user, so without the unique
+    // index on users.email several of these can pass the check together
+    const results = await Promise.all(
+      Array.from({ length: 6 }, () =>
+        new E2EClient({ baseUrl }).gql('signUp', SIGN_UP_GQL, {
+          input: { name: uniqueName(), email, password: strongPassword() }
+        })
+      )
+    )
+
+    const created = results.filter(result => result.errors.length === 0)
+    const rejected = results.filter(result => result.errors.length > 0)
+
+    assert.strictEqual(created.length, 1, 'exactly one sign-up should create the account')
+
+    for (const result of rejected) {
+      assert.match(result.errors[0].message, /already exist/i)
+    }
+  })
+
   test('rejects weak password at sign-up', async () => {
     const client = new E2EClient({ baseUrl })
     const result = await client.gql('signUp', SIGN_UP_GQL, {

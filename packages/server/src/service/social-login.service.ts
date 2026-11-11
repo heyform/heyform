@@ -31,7 +31,8 @@ import {
   appleLoginUrl,
   appleUserInfo,
   googleLoginUrl,
-  googleUserInfo
+  googleUserInfo,
+  isDuplicateEmailError
 } from '@utils'
 
 export type SocialLoginKind = SocialLoginTypeEnum | typeof OIDC_LOGIN_KIND
@@ -216,20 +217,10 @@ export class SocialLoginService {
         throw new BadRequestException('Social login provider must return a verified email address')
       }
 
+      const email = userInfo.user.email!
+
       // Check if user exists
-      if (userInfo.user.email) {
-        const existUser = await this.userService.findByEmail(userInfo.user.email)
-
-        if (existUser) {
-          userId = existUser.id
-
-          if (!existUser.isEmailVerified) {
-            await this.userService.update(existUser.id, {
-              isEmailVerified: true
-            })
-          }
-        }
-      }
+      userId = await this.linkUserByEmail(email)
 
       // Create new user
       if (!userId) {
@@ -240,9 +231,18 @@ export class SocialLoginService {
         // @ts-ignore
         userInfo.user.isEmailVerified = true
 
-        // Create new user
-        userId = await this.userService.create(userInfo.user)
-        isNewUser = true
+        try {
+          userId = await this.userService.create(userInfo.user)
+          isNewUser = true
+        } catch (error) {
+          // Another sign-up or login took the address after the check above: use that account,
+          // as if it had been there first
+          userId = isDuplicateEmailError(error) ? await this.linkUserByEmail(email) : undefined
+
+          if (!userId) {
+            throw error
+          }
+        }
       }
 
       await this.create({
@@ -257,6 +257,23 @@ export class SocialLoginService {
     }
 
     return userId
+  }
+
+  // The ID of the user with this email, marked verified now that the provider has verified it
+  private async linkUserByEmail(email: string): Promise<string | undefined> {
+    const existUser = await this.userService.findByEmail(email)
+
+    if (!existUser) {
+      return
+    }
+
+    if (!existUser.isEmailVerified) {
+      await this.userService.update(existUser.id, {
+        isEmailVerified: true
+      })
+    }
+
+    return existUser.id
   }
 
   private async syncOidcName(userId: string, providerName?: string): Promise<void> {

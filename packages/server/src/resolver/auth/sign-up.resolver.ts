@@ -14,8 +14,10 @@ import { helper } from '@heyform-inc/utils'
 import { TeamModel, TeamRoleEnum, UserActivityKindEnum } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { AuthService, MailService, ProjectService, TeamService, UserService } from '@service'
-import { ClientInfo, GqlClient, gravatar, passwordHash } from '@utils'
+import { ClientInfo, GqlClient, gravatar, isDuplicateEmailError, passwordHash } from '@utils'
 import { isDisposableEmail } from '@utils'
+
+const EMAIL_TAKEN = 'The email address already exist'
 
 @Resolver()
 @UseGuards(DeviceIdGuard)
@@ -53,17 +55,28 @@ export class SignUpResolver {
     const existUser = await this.userService.findByEmail(input.email)
 
     if (helper.isValid(existUser)) {
-      throw new BadRequestException('The email address already exist')
+      throw new BadRequestException(EMAIL_TAKEN)
     }
 
-    const userId = await this.userService.create({
-      name: input.name,
-      email: input.email,
-      password: await passwordHash(input.password, BCRYPT_SALT),
-      avatar: gravatar(input.email),
-      lang: client.lang,
-      isEmailVerified: !VERIFY_USER_EMAIL
-    })
+    let userId: string | undefined
+
+    try {
+      userId = await this.userService.create({
+        name: input.name,
+        email: input.email,
+        password: await passwordHash(input.password, BCRYPT_SALT),
+        avatar: gravatar(input.email),
+        lang: client.lang,
+        isEmailVerified: !VERIFY_USER_EMAIL
+      })
+    } catch (error) {
+      // Another sign-up or login took the address after the check above
+      if (isDuplicateEmailError(error)) {
+        throw new BadRequestException(EMAIL_TAKEN)
+      }
+
+      throw error
+    }
 
     if (invitation) {
       try {

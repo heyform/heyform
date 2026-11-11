@@ -43,6 +43,18 @@ export const UPDATE_USER_PASSWORD_GQL = /* GraphQL */ `
   }
 `
 
+export const CHANGE_EMAIL_CODE_GQL = /* GraphQL */ `
+  query changeEmailCode($input: ChangeEmailCodeInput!) {
+    changeEmailCode(input: $input)
+  }
+`
+
+export const UPDATE_EMAIL_GQL = /* GraphQL */ `
+  mutation updateEmail($input: UpdateEmailInput!) {
+    updateEmail(input: $input)
+  }
+`
+
 export const SEND_RESET_EMAIL_GQL = /* GraphQL */ `
   mutation sendResetPasswordEmail($input: SendResetPasswordEmailInput!) {
     sendResetPasswordEmail(input: $input)

@@ -69,6 +69,12 @@ export class UserModel extends Document {
 
 export const UserSchema = SchemaFactory.createForClass(UserModel)
 
+// One account per email address. Sign-up, email change and social login each check that the
+// address is free before writing it, so only the index stops two requests at once both taking
+// it. `$gt: ''` leaves out users with no address and, unlike `$type`, lets findByEmail's
+// equality query use the index.
+UserSchema.index({ email: 1 }, { unique: true, partialFilterExpression: { email: { $gt: '' } } })
+
 UserSchema.virtual('hasPublishedForm').get(function () {
   return this.publishedFormAt && this.publishedFormAt > 0
 })
