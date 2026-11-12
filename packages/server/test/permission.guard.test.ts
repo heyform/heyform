@@ -209,7 +209,80 @@ async function testHttpFormGuardReadsRequestQuery() {
   assert.strictEqual(req.team.id, 'team_1')
 }
 
+async function testSignedOutRequestIsRejectedBeforeAnythingIsLoaded() {
+  const handler = () => {}
+  Reflect.defineMetadata('scope', PermissionScopeEnum.form, handler)
+
+  const loaded: string[] = []
+  const load = (name: string) => async () => {
+    loaded.push(name)
+    return null
+  }
+  const guard = new PermissionGuard(
+    new Reflector(),
+    { findById: load('team'), findMemberById: load('team member') } as any,
+    { findById: load('project'), findMemberById: load('project member') } as any,
+    { findById: load('form') } as any
+  )
+
+  for (const user of [undefined, null, {}]) {
+    await assert.rejects(
+      guard.canActivate(
+        createGraphqlExecutionContext({ handler, req: { user }, input: { formId: 'form_1' } })
+      ),
+      (error: any) => error?.getStatus?.() === 401
+    )
+  }
+  assert.deepStrictEqual(loaded, [])
+}
+
+async function testOwnerIsRecognisedAndSeenInTheWorkspace() {
+  const handler = () => {}
+  Reflect.defineMetadata('scope', PermissionScopeEnum.team, handler)
+
+  const seen: any[] = []
+  const guard = new PermissionGuard(
+    new Reflector(),
+    {
+      findById: async () => ({
+        id: 'team_1',
+        ownerId: 'owner_1',
+        name: 'Workspace A',
+        storageQuota: 5,
+        inviteCode: 'invite_1'
+      }),
+      findMemberById: async () => ({ role: 1 }),
+      updateMember: async (...args: any[]) => {
+        seen.push(args)
+        return true
+      }
+    } as any,
+    {} as any,
+    {} as any
+  )
+  const req: Record<string, any> = { user: { id: 'owner_1' } }
+
+  await guard.canActivate(
+    createGraphqlExecutionContext({ handler, req, input: { teamId: 'team_1' } })
+  )
+
+  assert.deepStrictEqual(req.team, {
+    id: 'team_1',
+    ownerId: 'owner_1',
+    isOwner: true,
+    name: 'Workspace A',
+    role: 1,
+    storageQuota: 5,
+    inviteCode: 'invite_1'
+  })
+  assert.strictEqual(seen.length, 1)
+  assert.deepStrictEqual(seen[0].slice(0, 2), ['team_1', 'owner_1'])
+  assert.ok(seen[0][2].lastSeenAt > 0)
+}
+
 async function run() {
+  await testSignedOutRequestIsRejectedBeforeAnythingIsLoaded()
+  await testOwnerIsRecognisedAndSeenInTheWorkspace()
   await testCollaboratorCanPassTeamGuard()
   await testNonMemberIsRejected()
   await testHttpFormGuardReadsRequestQuery()
