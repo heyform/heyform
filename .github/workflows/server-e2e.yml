@@ -3,32 +3,9 @@ name: Server E2E
 on:
   push:
     branches: [next, main]
-    paths:
-      - 'packages/server/**'
-      - 'packages/shared-types-enums/**'
-      - 'packages/utils/**'
-      - 'packages/answer-utils/**'
-      - 'packages/form-renderer/**'
-      - 'packages/webapp/**'
-      - 'package.json'
-      - 'pnpm-workspace.yaml'
-      - 'scripts/build-shared.js'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/server-e2e.yml'
   pull_request:
     branches: [next, main]
-    paths:
-      - 'packages/server/**'
-      - 'packages/shared-types-enums/**'
-      - 'packages/utils/**'
-      - 'packages/answer-utils/**'
-      - 'packages/form-renderer/**'
-      - 'packages/webapp/**'
-      - 'package.json'
-      - 'pnpm-workspace.yaml'
-      - 'scripts/build-shared.js'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/server-e2e.yml'
+  merge_group:
   workflow_dispatch:
 
 concurrency:
@@ -82,7 +59,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies

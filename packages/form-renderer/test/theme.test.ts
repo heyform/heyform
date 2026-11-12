@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { test } from 'vitest'
 
 import { SYSTEM_FONTS, getTheme, getThemeStyle, getWebFontURL, insertWebFont } from '../src/theme'
 
@@ -91,20 +92,14 @@ function testReplacesUnsafeThemeColorValues() {
   }
 }
 
-function run() {
-  testPreservesSystemFontsWithoutLoadingGoogleFonts()
-  testRemovesExistingWebFontWhenUsingSystemFonts()
-  testRendersSupportedBackgroundImages()
-  testOmitsBackgroundImageRuleInjection()
-  testReplacesUnsafeThemeColorValues()
-}
-
-if (require.main === module) {
-  try {
-    run()
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error)
-    process.exitCode = 1
-  }
-}
+test(
+  'preserves system fonts without loading google fonts',
+  testPreservesSystemFontsWithoutLoadingGoogleFonts
+)
+test(
+  'removes existing web font when using system fonts',
+  testRemovesExistingWebFontWhenUsingSystemFonts
+)
+test('renders supported background images', testRendersSupportedBackgroundImages)
+test('omits background image rule injection', testOmitsBackgroundImageRuleInjection)
+test('replaces unsafe theme color values', testReplacesUnsafeThemeColorValues)

@@ -17,6 +17,7 @@ import {
   REMOVE_TEAM_MEMBER_GQL,
   RESET_TEAM_INVITE_CODE_GQL,
   RESTORE_FORM_GQL,
+  SUBMISSIONS_GQL,
   TEAMS_GQL,
   TRANSFER_TEAM_GQL,
   UPDATE_FORM_SCHEMAS_GQL
@@ -40,6 +41,7 @@ export function build(baseUrl: string) {
     formId: string
     fieldId: string
     version: number
+    drafts: any[]
   }> {
     const owner = await signUpUser(baseUrl, { name: uniqueName('Edges') })
     const teamId = await owner.client.gqlOk<string>('createTeam', CREATE_TEAM_GQL, {
@@ -67,7 +69,7 @@ export function build(baseUrl: string) {
     const updated = await owner.client.gqlOk<any>('updateFormSchemas', UPDATE_FORM_SCHEMAS_GQL, {
       input: { formId, drafts, version: detail.version }
     })
-    return { owner, teamId, projectId, formId, fieldId, version: updated.version }
+    return { owner, teamId, projectId, formId, fieldId, version: updated.version, drafts }
   }
 
   // ── Optimistic-locking / version edges ───────────────────────────────────
@@ -119,12 +121,24 @@ export function build(baseUrl: string) {
     assert.ok(list.some(x => x.id === f.formId))
   })
 
-  test('deleteForm against a NORMAL form leaves it in place but server still returns true', async () => {
-    // Documents the live server behaviour: `formService.delete` only removes
-    // rows where status=TRASH, but `deleteForm` returns `true` regardless.
-    // Treat this as a regression lock until the resolver propagates the
-    // service's deletedCount.
+  test('deleteForm against a NORMAL form preserves the form and its submissions', async () => {
     const f = await provisionForm()
+    await f.owner.client.gqlOk('publishForm', PUBLISH_FORM_GQL, {
+      input: { formId: f.formId, version: f.version, drafts: f.drafts }
+    })
+    const respondent = new E2EClient({ baseUrl })
+    const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+      input: { formId: f.formId }
+    })
+    await respondent.gqlOk('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+      input: { formId: f.formId, answers: {}, hiddenFields: [], openToken }
+    })
+    const inbox = () =>
+      f.owner.client.gqlOk<any>('submissions', SUBMISSIONS_GQL, {
+        input: { formId: f.formId, category: 'inbox', page: 1, limit: 30 }
+      })
+    const before = await inbox()
+    assert.strictEqual(before.total, 1)
     const claimed = await f.owner.client.gqlOk<boolean>('deleteForm', DELETE_FORM_GQL, {
       input: { formId: f.formId }
     })
@@ -137,6 +151,7 @@ export function build(baseUrl: string) {
       list.some(form => form.id === f.formId),
       'form is still around'
     )
+    assert.deepStrictEqual(await inbox(), before, 'a live form must keep its responses')
   })
 
   // ── Cross-team data leakage ──────────────────────────────────────────────

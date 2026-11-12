@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { test } from 'vitest'
 
 import {
   getFileUploadValue,
@@ -113,19 +114,10 @@ function testOnlyTrustedStripeReceiptsAreClickable() {
   )
 }
 
-function run() {
-  testNormalizesCurrentAndLegacyFileValues()
-  testSupportsSelfHostedUrlsAndRejectsUnsafeProtocols()
-  testDashboardOnlyLinksToTrustedUploadOrigins()
-  testOnlyTrustedStripeReceiptsAreClickable()
-}
-
-if (require.main === module) {
-  try {
-    run()
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error)
-    process.exitCode = 1
-  }
-}
+test('normalizes current and legacy file values', testNormalizesCurrentAndLegacyFileValues)
+test(
+  'supports self hosted urls and rejects unsafe protocols',
+  testSupportsSelfHostedUrlsAndRejectsUnsafeProtocols
+)
+test('dashboard only links to trusted upload origins', testDashboardOnlyLinksToTrustedUploadOrigins)
+test('only trusted stripe receipts are clickable', testOnlyTrustedStripeReceiptsAreClickable)

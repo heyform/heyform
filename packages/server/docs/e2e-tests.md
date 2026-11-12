@@ -66,8 +66,44 @@ Pass `E2E_KEEP_UP=1` to keep the stack running afterwards.
 
 ### Option C — CI (GitHub Actions)
 
-`.github/workflows/server-e2e.yml` runs the suite on push/PR touching
-`packages/server` or its workspace deps. Server logs are uploaded on failure.
+`.github/workflows/server-e2e.yml` runs on every pull request and push targeting
+`next` or `main`, and on merge-queue events. It uses Node 22 and pnpm 9 and runs
+shared-library, renderer, webapp and server unit tests, server type-checking,
+the production build, and HTTP/GraphQL E2E tests. Server logs are printed on failure.
+There are no path filters, so documentation-only PRs also produce the check.
+
+The active [Required regression tests ruleset](https://github.com/heyform/heyform/rules/27085044)
+requires the GitHub Actions check `HTTP/GraphQL e2e suite` for `next` and `main`,
+with branches required to be up to date and no bypass actors. A workflow alone
+does not prevent merging failed checks; forks need to configure this requirement
+in their own GitHub repository settings.
+
+### Unit regression coverage
+
+The server unit runner automatically discovers every `test/*.test.ts` file and
+runs each in a separate process. New files need no manual registration. Nested
+`test/e2e` suites remain in the E2E runner because they require a live server.
+The frontend upload, form-presentation, and theme regression files are registered
+Vitest suites and are no longer excluded from discovery.
+
+The management suites cover workspace ownership transfer, invitations, member
+removal and leaving, project membership and cross-workspace isolation, form
+publishing and stale versions, duplication, trash/restore, submission deletion
+and filtering, and input-validation boundaries. The workspace fixture replaces
+persistence and external services while exercising the real resolvers and
+permission guard; it does not substitute for the HTTP/database suites.
+
+Deletion regressions explicitly check that live or concurrently restored forms
+keep their responses, expired forms lose their responses, and failed deletions
+never trigger response cleanup. The HTTP suite also submits a real response
+before attempting to delete a live form.
+
+Run these tests after building shared dependencies:
+
+```bash
+pnpm build:shared
+pnpm --filter ./packages/server test:unit
+```
 
 Before the first run, populate `.env` in the repo root:
 

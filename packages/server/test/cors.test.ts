@@ -7,7 +7,11 @@ import {
   normalizeCorsOrigin
 } from '../src/config/cors'
 
-const cors = require('cors')
+// The middleware app.enableCors() runs. It comes with the Express platform, not as a dependency
+// of the server itself.
+const cors = require(
+  require.resolve('cors', { paths: [require.resolve('@nestjs/platform-express')] })
+)
 
 function runCorsMiddleware(origin: string): Promise<Record<string, string>> {
   const headers: Record<string, string> = {}
