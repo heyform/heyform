@@ -1,52 +1,22 @@
 import { spawnSync } from 'child_process'
+import { readdirSync } from 'fs'
 import path from 'path'
 
-const tests = [
-  'form-branding.test.ts',
-  'templates.test.ts',
-  'changelog.test.ts',
-  'password-login.test.ts',
-  'ai-json.test.ts',
-  'ai-fields.test.ts',
-  'ai-rich-text.test.ts',
-  'ai-form-flow.test.ts',
-  'form-schema.test.ts',
-  'ai-resolver.test.ts',
-  'redis-config.test.ts',
-  'oauth-state.test.ts',
-  'oidc-security.test.ts',
-  'oidc-provisioning.test.ts',
-  'user-name-managed.test.ts',
-  'user-email-unique.test.ts',
-  'notification-recipients.test.ts',
-  'notification-options.test.ts',
-  'export-file.service.test.ts',
-  'form-report.service.test.ts',
-  'form-report-blank-answers.test.ts',
-  'webhook.test.ts',
-  'submission-ip.test.ts',
-  'submission-ip-disabled.test.ts',
-  'submission-ip-limit.test.ts',
-  'submission-discard.test.ts',
-  'submission-time-limit.test.ts',
-  'form-flow-outcomes.test.ts',
-  'app-config.test.ts',
-  'integration-auth.test.ts',
-  'integration-records.test.ts',
-  'integration-secrets.test.ts',
-  'googlesheets.test.ts',
-  'page-apps.test.ts',
-  'form-analytic-cache.test.ts',
-  'form-team-scope.test.ts',
-  'join-team-project.test.ts',
-  'submission-choice-limit.test.ts',
-  'complete-submission-security.test.ts',
-  'payment-webhook.test.ts',
-  'public-form-stripe.test.ts'
-]
+// Each suite runs in a separate process so mocks and environment changes cannot leak.
+// Discover new suites automatically; E2E suites have their own runner and dependencies.
+const tests = readdirSync(__dirname)
+  .filter(file => file.endsWith('.test.ts'))
+  .sort()
+
+if (tests.length === 0) {
+  throw new Error('No server unit tests found')
+}
+
 const serverRoot = path.resolve(__dirname, '..')
 
 for (const test of tests) {
+  // eslint-disable-next-line no-console
+  console.log(`Running ${test}`)
   const result = spawnSync(
     process.execPath,
     [
