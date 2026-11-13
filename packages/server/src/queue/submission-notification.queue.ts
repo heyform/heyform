@@ -2,7 +2,7 @@ import { Process, Processor } from '@nestjs/bull'
 import { Job } from 'bull'
 
 import { APP_HOMEPAGE_URL } from '@environments'
-import { answersToHtml } from '@heyform-inc/answer-utils'
+import { answersToHtml, hiddenFieldsToHtml } from '@heyform-inc/answer-utils'
 import { FormService, MailService, SubmissionService, UserService } from '@service'
 import { readNotificationRecipients, readRespondentEmail, readRespondentName } from '@utils'
 
@@ -34,7 +34,10 @@ export class SubmissionNotificationQueue extends BaseQueue {
     ])
 
     const user = await this.userService.findById(form.memberId)
-    const html = answersToHtml(submission.answers)
+    const html = [
+      answersToHtml(submission.answers),
+      hiddenFieldsToHtml(submission.hiddenFields ?? [])
+    ].join('')
 
     // The settings typings ship from the published shared-types package, hence the loose access.
     const settings = (form.settings || {}) as Record<string, any>
