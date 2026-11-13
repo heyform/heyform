@@ -2,8 +2,8 @@ import type { FC } from 'react'
 import { startTransition, useState } from 'react'
 
 import { useTranslation } from '../utils'
+import { parseStoredDate } from '../utils/parse-stored-date'
 import { getDateFormat } from '@heyform-inc/answer-utils'
-import { helper, date as vdate } from '@heyform-inc/utils'
 
 import { Input } from '../components'
 import { DATE_FORMATS, DATE_MAPS, FILTER_NUMBER_REGEX, NUMERIC_REGEX, TIME_FORMAT } from '../consts'
@@ -71,29 +71,6 @@ function padding(value: string | number, maxLength: number) {
   return String(value).padStart(maxLength, '0')
 }
 
-function parseDate(value?: string, allowTime?: boolean): AnyMap<string> {
-  if (helper.isValid(value)) {
-    const date = vdate(value)
-
-    if (date.isValid()) {
-      const result: AnyMap<string> = {
-        YYYY: padding(date.year(), DATE_MAPS.YYYY.maxLength),
-        MM: padding(date.month() + 1, DATE_MAPS.MM.maxLength),
-        DD: padding(date.date(), DATE_MAPS.DD.maxLength)
-      }
-
-      if (allowTime) {
-        result.HH = padding(date.hour(), DATE_MAPS.HH.maxLength)
-        result.mm = padding(date.minute(), DATE_MAPS.mm.maxLength)
-      }
-
-      return result
-    }
-  }
-
-  return {}
-}
-
 function formatDate(value: AnyMap<number>, format: string, allowTime?: boolean): string {
   let result = getDateFormat(format, allowTime)
 
@@ -113,7 +90,7 @@ export const DateInput: FC<DateInputProps> = ({
 }) => {
   const [year, month, day, divider] = DATE_FORMATS[format]
   const [hour, minute, timeDivider] = DATE_FORMATS[TIME_FORMAT]
-  const [value, setValue] = useState<AnyMap<string>>(parseDate(rawValue, allowTime))
+  const [value, setValue] = useState<AnyMap<string>>(parseStoredDate(rawValue, format, allowTime))
 
   function handleChange(f: string, v?: number) {
     const newValue: any = { ...value, [f]: v }
