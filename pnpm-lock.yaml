@@ -261,7 +261,7 @@ importers:
         version: 12.2.2(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(bufferutil@4.0.9)(class-transformer@0.5.1)(class-validator@0.14.0)(graphql@16.11.0)(reflect-metadata@0.2.2)(utf-8-validate@5.0.10)
       '@nestjs/mongoose':
         specifier: 10.1.0
-        version: 10.1.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(mongoose@7.8.7(supports-color@8.1.1))(rxjs@7.8.1)
+        version: 10.1.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(mongoose@7.8.13(supports-color@8.1.1))(rxjs@7.8.1)
       '@nestjs/platform-express':
         specifier: 10.4.20
         version: 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(supports-color@8.1.1)
@@ -347,8 +347,8 @@ importers:
         specifier: 8.5.1
         version: 8.5.1
       mongoose:
-        specifier: 7.8.7
-        version: 7.8.7(supports-color@8.1.1)
+        specifier: 7.8.13
+        version: 7.8.13(supports-color@8.1.1)
       multer:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
@@ -7012,16 +7012,16 @@ packages:
       snappy:
         optional: true
 
-  mongoose@7.8.7:
-    resolution: {integrity: sha512-5Bo4CrUxrPITrhMKsqUTOkXXo2CoRC5tXxVQhnddCzqDMwRXfyStrxj1oY865g8gaekSBhxAeNkYyUSJvGm9Hw==}
+  mongoose@7.8.13:
+    resolution: {integrity: sha512-Fd3yPwXQElXRmclX8ypcGcCT/JZtoLcn0GOj6g7FKIw6qngr1vz+QTBCTC4GuwQT9aKxE4SD24nIeujRbWjWNA==}
     engines: {node: '>=14.20.1'}
 
   mpath@0.9.0:
     resolution: {integrity: sha512-ikJRQTk8hw5DEoFVxHG1Gn9T/xcjtdnOKIU1JTmGjZZlg9LST2mBLmcX3/ICIbgJydT2GOc15RnNy5mHmzfSew==}
     engines: {node: '>=4.0.0'}
 
-  mquery@5.0.0:
-    resolution: {integrity: sha512-iQMncpmEK8R8ncT8HJGsGc9Dsp8xcgYMVSbs5jgnm1lFHTZqMJTUWTDx1LBO8+mK3tPNZWFLBghQEIOULSTHZg==}
+  mquery@5.0.1:
+    resolution: {integrity: sha512-C99lWV0TFI34pS008jBsi3JrE2xZPnTgUw5yApQR71nRP0hxLy8D5m1Lbbk83c8AQWJwdJ0329HzFtZ1MRTUIw==}
     engines: {node: '>=14.0.0'}
 
   ms@2.0.0:
@@ -10873,11 +10873,11 @@ snapshots:
       class-transformer: 0.5.1
       class-validator: 0.14.0
 
-  '@nestjs/mongoose@10.1.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(mongoose@7.8.7(supports-color@8.1.1))(rxjs@7.8.1)':
+  '@nestjs/mongoose@10.1.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(mongoose@7.8.13(supports-color@8.1.1))(rxjs@7.8.1)':
     dependencies:
       '@nestjs/common': 10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1)
       '@nestjs/core': 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/platform-express@10.4.20)(encoding@0.1.13)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      mongoose: 7.8.7(supports-color@8.1.1)
+      mongoose: 7.8.13(supports-color@8.1.1)
       rxjs: 7.8.1
 
   '@nestjs/platform-express@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.8.1)(supports-color@8.1.1))(@nestjs/core@10.4.20)(supports-color@8.1.1)':
@@ -16600,13 +16600,13 @@ snapshots:
     optionalDependencies:
       '@mongodb-js/saslprep': 1.4.6
 
-  mongoose@7.8.7(supports-color@8.1.1):
+  mongoose@7.8.13(supports-color@8.1.1):
     dependencies:
       bson: 5.5.1
       kareem: 2.5.1
       mongodb: 5.9.2
       mpath: 0.9.0
-      mquery: 5.0.0(supports-color@8.1.1)
+      mquery: 5.0.1(supports-color@8.1.1)
       ms: 2.1.3
       sift: 16.0.1
     transitivePeerDependencies:
@@ -16619,7 +16619,7 @@ snapshots:
 
   mpath@0.9.0: {}
 
-  mquery@5.0.0(supports-color@8.1.1):
+  mquery@5.0.1(supports-color@8.1.1):
     dependencies:
       debug: 4.4.0(supports-color@8.1.1)
     transitivePeerDependencies:

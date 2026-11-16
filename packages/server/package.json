@@ -67,7 +67,7 @@
     "json2csv": "5.0.6",
     "jsonrepair": "^3.14.0",
     "jsonwebtoken": "8.5.1",
-    "mongoose": "7.8.7",
+    "mongoose": "7.8.13",
     "multer": "1.4.5-lts.1",
     "multer-s3": "3.0.1",
     "nodemailer": "6.9.9",
