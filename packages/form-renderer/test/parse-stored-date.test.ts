@@ -72,4 +72,11 @@ describe('parseStoredDate', () => {
   it('returns empty object for empty input', () => {
     expect(parseStoredDate('', 'DD/MM/YYYY')).toEqual({})
   })
+
+  it.each([undefined, null, 42, true, [], ['25/03/2024'], { date: '25/03/2024' }])(
+    'returns empty object for non-string input %j',
+    value => {
+      expect(parseStoredDate(value, 'DD/MM/YYYY')).toEqual({})
+    }
+  )
 })

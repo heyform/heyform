@@ -55,13 +55,17 @@ function parseDateParts(value: string, format: string): DateParts | null {
 }
 
 export function parseStoredDate(
-  value?: string,
+  value?: unknown,
   format = 'MM/DD/YYYY',
   allowTime?: boolean
 ): AnyMap<string> {
+  if (typeof value !== 'string') {
+    return {}
+  }
+
   if (helper.isValid(value)) {
     const parseFormat = getDateFormat(format, allowTime)
-    const parts = parseDateParts(value as string, parseFormat)
+    const parts = parseDateParts(value, parseFormat)
 
     if (parts) {
       const result: AnyMap<string> = {
