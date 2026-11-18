@@ -60,7 +60,7 @@ export class RestApiController {
     const workspaceId = identifier(body?.workspaceId)
     if (!await this.teams.findById(workspaceId)) throw new NotFoundException()
     if (typeof body.name !== 'string' || !body.name.trim() || body.name.length > 100 ||
-        !Array.isArray(body.scopes) || !body.scopes.length || !body.scopes.every(s => scopes.includes(s))) {
+        !Array.isArray(body.scopes) || !body.scopes.length || !body.scopes.every((s: unknown) => typeof s === 'string' && scopes.includes(s))) {
       throw new BadRequestException('Invalid name or scopes')
     }
     const token = 'hf_' + randomBytes(32).toString('hex')
@@ -113,7 +113,7 @@ export class RestApiController {
       try {
         await this.teams.createMember({ teamId: id, memberId, role: TeamRoleEnum.COLLABORATOR })
       } catch (error) {
-        if (error?.code !== 11000) throw error
+        if ((error as { code?: number })?.code !== 11000) throw error
       }
     }
     await this.projects.addMemberToDefaultProject(id, memberId)
