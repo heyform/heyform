@@ -1,4 +1,4 @@
-import { BadRequestException, Body, CanActivate, Controller, Delete, ExecutionContext, ForbiddenException, Get, Injectable, Module, NotFoundException, Param, Post, Query, Req, UnauthorizedException, UseGuards, DynamicModule, Type } from '@nestjs/common'
+import { BadRequestException, Body, CanActivate, Controller, ConflictException, Patch, Delete, ExecutionContext, ForbiddenException, Get, Injectable, Module, NotFoundException, Param, Post, Query, Req, UnauthorizedException, UseGuards, DynamicModule, Type } from '@nestjs/common'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Connection } from 'mongoose'
 import { createHash, randomBytes, timingSafeEqual } from 'crypto'
@@ -6,7 +6,7 @@ import { Request } from 'express'
 import { TeamService, UserService, ProjectService, FormService } from '../service'
 import { TeamRoleEnum } from '../model/team-member.model'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write']
 const hash = (value: string) => createHash('sha256').update(value).digest('hex')
 type Principal = { admin: boolean; workspaceId?: string; scopes: string[] }
 type ApiRequest = Request & { apiPrincipal?: Principal }
@@ -22,6 +22,14 @@ function requireAdmin(req: ApiRequest) {
 function identifier(value: unknown): string {
   if (typeof value !== 'string' || !/^[a-zA-Z0-9_-]{1,128}$/.test(value)) throw new BadRequestException('Invalid identifier')
   return value
+}
+function validName(value: unknown): string {
+  if (typeof value !== 'string' || !value.trim() || value.trim().length > 100) throw new BadRequestException('Invalid name')
+  return value.trim()
+}
+function validEmail(value: unknown): string {
+  if (typeof value !== 'string' || value.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) throw new BadRequestException('Invalid email')
+  return value.trim().toLowerCase()
 }
 @Injectable()
 export class RestApiKeyGuard implements CanActivate {
@@ -118,6 +126,122 @@ export class RestApiController {
     }
     await this.projects.addMemberToDefaultProject(id, memberId)
     return { userId: memberId, workspaceId: id }
+  }
+  @Post('workspaces')
+  async createWorkspace(@Req() req: ApiRequest, @Body() body: any) {
+    requireAdmin(req)
+    const ownerId = identifier(body?.ownerId)
+    const owner = await this.users.findById(ownerId)
+    if (!owner || owner.isBlocked || owner.isDeletionScheduled) throw new NotFoundException('Owner not found')
+    const name = validName(body?.name)
+    const projectName = validName(body?.projectName ?? 'Default')
+    const id = await this.teams.create({ name, ownerId, allowJoinByInviteLink: false })
+    try {
+      await this.teams.createMember({ teamId: id, memberId: ownerId, role: TeamRoleEnum.OWNER })
+      await this.projects.createByNewTeam(id, ownerId, projectName)
+    } catch (error) {
+      // Best-effort cleanup on standalone MongoDB, which does not support transactions.
+      for (const project of await this.projects.findAllInTeam(id)) {
+        await this.projects.deleteAllMemberInProject(project.id)
+        await this.projects.delete(project.id)
+      }
+      await this.teams.deleteAllMemberInTeam(id)
+      await this.teams.delete(id)
+      throw error
+    }
+    return { id, name, ownerId, projectId: (await this.projects.findDefaultInTeam(id))?.id }
+  }
+  @Get('workspaces/:id')
+  async getWorkspace(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireScope(req, 'workspaces:read', id)
+    const team = await this.teams.findById(identifier(id))
+    if (!team) throw new NotFoundException()
+    return { id: team.id, name: team.name, ownerId: team.ownerId }
+  }
+  @Patch('workspaces/:id')
+  async updateWorkspace(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    requireScope(req, 'workspaces:write', id)
+    const team = await this.teams.findById(identifier(id))
+    if (!team) throw new NotFoundException()
+    const name = validName(body?.name)
+    await this.teams.update(id, { name })
+    return { id, name, ownerId: team.ownerId }
+  }
+  @Post('users')
+  async provisionUser(@Req() req: ApiRequest, @Body() body: any) {
+    requireAdmin(req)
+    const email = validEmail(body?.email)
+    const name = validName(body?.name)
+    let user = await this.users.findByEmail(email)
+    let created = false
+    if (!user) {
+      try {
+        const id = await this.users.create({ email, name, isEmailVerified: false })
+        user = await this.users.findById(id)
+        created = true
+      } catch (error) {
+        if ((error as { code?: number })?.code !== 11000) throw error
+        user = await this.users.findByEmail(email)
+      }
+    }
+    if (!user || user.isBlocked || user.isDeletionScheduled) throw new ForbiddenException()
+    return { id: user.id, email: user.email, name: user.name, created }
+  }
+  @Get('users/:id')
+  async getUser(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireScope(req, 'users:read')
+    const user = await this.users.findById(identifier(id))
+    if (!user || (!req.apiPrincipal.admin && !await this.teams.findMemberById(req.apiPrincipal.workspaceId, id))) throw new NotFoundException()
+    return { id: user.id, name: user.name, email: user.email }
+  }
+  @Post('workspaces/:id/projects')
+  async createProject(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    requireScope(req, 'projects:write', id)
+    const team = await this.teams.findById(identifier(id))
+    if (!team) throw new NotFoundException()
+    const name = validName(body?.name)
+    const projectId = await this.projects.create({ teamId: id, name, ownerId: team.ownerId })
+    try {
+      await this.projects.createMember({ projectId, memberId: team.ownerId })
+    } catch (error) {
+      await this.projects.delete(projectId)
+      throw error
+    }
+    return { id: projectId, name, workspaceId: id, ownerId: team.ownerId }
+  }
+  @Get('workspaces/:id/members')
+  async listMembers(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireScope(req, 'members:read', id)
+    if (!await this.teams.findById(identifier(id))) throw new NotFoundException()
+    return (await this.teams.findMembersInTeam(id)).map(m => ({ userId: m.memberId, role: m.role }))
+  }
+  @Patch('workspaces/:id/members/:userId')
+  async updateMember(@Req() req: ApiRequest, @Param('id') id: string, @Param('userId') userId: string, @Body() body: any) {
+    // Role elevation is reserved for the bootstrap administrator.
+    requireAdmin(req)
+    const team = await this.teams.findById(identifier(id))
+    const member = await this.teams.findMemberById(id, identifier(userId))
+    if (!team || !member) throw new NotFoundException()
+    if (team.ownerId === userId || member.role === TeamRoleEnum.OWNER) throw new ForbiddenException('Cannot change owner')
+    const role = body?.role
+    if (![TeamRoleEnum.ADMIN, TeamRoleEnum.COLLABORATOR, TeamRoleEnum.MEMBER].includes(role)) throw new BadRequestException('Invalid role')
+    await this.teams.updateMember(id, userId, { role })
+    return { workspaceId: id, userId, role }
+  }
+  @Delete('workspaces/:id/members/:userId')
+  async removeMember(@Req() req: ApiRequest, @Param('id') id: string, @Param('userId') userId: string) {
+    requireScope(req, 'members:write', id)
+    const team = await this.teams.findById(identifier(id))
+    const member = await this.teams.findMemberById(id, identifier(userId))
+    if (!team) throw new NotFoundException()
+    if (team.ownerId === userId || member?.role === TeamRoleEnum.OWNER ||
+        (!req.apiPrincipal.admin && member?.role === TeamRoleEnum.ADMIN)) throw new ForbiddenException()
+    const projects = await this.projects.findAllInTeam(id)
+    // Project ownership must be transferred before removing its owner.
+    if (projects.some(p => p.ownerId === userId)) throw new ConflictException('Transfer project ownership first')
+    await this.projects.deleteMemberInProjects(projects.map(p => p.id), userId)
+    await this.teams.deleteMember(id, userId)
+    return { removed: true, workspaceId: id, userId }
   }
   @Get('forms/:id')
   async getForm(@Req() req: ApiRequest, @Param('id') id: string) {
