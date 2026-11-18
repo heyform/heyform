@@ -76,7 +76,7 @@ class ResolverModule {}
     }),
     ServiceModule,
     ResolverModule,
-    RestApiModule
+    RestApiModule.register(ServiceModule)
   ],
   providers: []
 })
