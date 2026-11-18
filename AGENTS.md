@@ -49,6 +49,7 @@ pnpm dev
 ```bash
 pnpm --filter ./packages/server test:unit
 pnpm --filter ./packages/webapp test:unit
+pnpm --filter ./packages/mcp test:unit
 pnpm lint
 ```
 

@@ -5,6 +5,7 @@ packages:
   - 'packages/utils'
   - 'packages/shared-types-enums'
   - 'packages/answer-utils'
+  - 'packages/mcp'
 allowBuilds:
   '@apollo/protobufjs': true
   '@nestjs/core': true

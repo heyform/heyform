@@ -1,0 +1,39 @@
+{
+  "name": "@heyform-inc/mcp-server",
+  "description": "HeyForm MCP server",
+  "version": "0.1.0",
+  "homepage": "https://heyform.net",
+  "author": "Heyooo, Inc.",
+  "license": "AGPL-3.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "bin": {
+    "heyform-mcp": "./dist/index.js"
+  },
+  "files": [
+    "./dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "start": "node ./dist/index.js",
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "type-check": "tsc --pretty --noEmit",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.2",
+    "rimraf": "^5.0.7",
+    "tsup": "^8.0.2",
+    "typescript": "5.5.3",
+    "vitest": "^1.6.0"
+  }
+}
