@@ -1,3 +1,4 @@
+import { RestApiDocsController } from './rest-api-docs.controller'
 import { BadRequestException, Body, CanActivate, Controller, ConflictException, Patch, Delete, ExecutionContext, ForbiddenException, Get, Injectable, Module, NotFoundException, Param, Post, Query, Req, UnauthorizedException, UseGuards, DynamicModule, Type } from '@nestjs/common'
 import { InjectConnection } from '@nestjs/mongoose'
 import { Connection } from 'mongoose'
@@ -399,6 +400,6 @@ export class RestApiController {
 @Module({})
 export class RestApiModule {
   static register(serviceModule: Type<any>): DynamicModule {
-    return { module: RestApiModule, imports: [serviceModule], controllers: [RestApiController], providers: [RestApiKeyGuard] }
+    return { module: RestApiModule, imports: [serviceModule], controllers: [RestApiController, RestApiDocsController], providers: [RestApiKeyGuard] }
   }
 }
