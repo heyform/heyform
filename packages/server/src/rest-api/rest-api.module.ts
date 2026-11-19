@@ -1,3 +1,4 @@
+import { RestApiKeyGuard } from './rest-api-key.guard'
 import { RestApiDocsController } from './rest-api-docs.controller'
 import { BadRequestException, Body, CanActivate, Controller, ConflictException, Patch, Delete, ExecutionContext, ForbiddenException, Get, Injectable, Module, NotFoundException, Param, Post, Query, Req, UnauthorizedException, UseGuards, DynamicModule, Type } from '@nestjs/common'
 import { InjectConnection } from '@nestjs/mongoose'
@@ -34,24 +35,6 @@ function validName(value: unknown): string {
 function validEmail(value: unknown): string {
   if (typeof value !== 'string' || value.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) throw new BadRequestException('Invalid email')
   return value.trim().toLowerCase()
-}
-@Injectable()
-export class RestApiKeyGuard implements CanActivate {
-  constructor(@InjectConnection() private readonly connection: Connection) {}
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest<ApiRequest>()
-    const token = req.headers.authorization?.match(/^Bearer ([^\s]+)$/i)?.[1]
-    if (!token || token.length > 512) throw new UnauthorizedException()
-    const configured = process.env.HEYFORM_REST_API_KEY
-    if (configured && configured.length >= 32 && timingSafeEqual(Buffer.from(hash(configured)), Buffer.from(hash(token)))) {
-      req.apiPrincipal = { admin: true, scopes: [] }
-      return true
-    }
-    const key = await this.connection.collection('rest_api_keys').findOne({ _id: hash(token) as any, revokedAt: null })
-    if (!key) throw new UnauthorizedException()
-    req.apiPrincipal = { admin: false, workspaceId: key.workspaceId, scopes: key.scopes }
-    return true
-  }
 }
 @Controller('api/v1')
 @UseGuards(RestApiKeyGuard)
