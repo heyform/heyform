@@ -1022,7 +1022,10 @@ export class RestApiDocsController {
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       },
       "post": {
         "operationId": "createForm",
@@ -1080,7 +1083,10 @@ export class RestApiDocsController {
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       }
     },
     "/api/v1/forms/{id}": {
@@ -1140,7 +1146,10 @@ export class RestApiDocsController {
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       },
       "delete": {
         "operationId": "deleteForm",
@@ -1180,7 +1189,10 @@ export class RestApiDocsController {
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       },
       "get": {
         "operationId": "getForm",
@@ -1220,7 +1232,10 @@ export class RestApiDocsController {
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       }
     },
     "/api/v1/forms/{id}/drafts": {
@@ -1293,7 +1308,10 @@ export class RestApiDocsController {
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       }
     },
     "/api/v1/forms/{id}/publish": {
@@ -1366,7 +1384,10 @@ export class RestApiDocsController {
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       }
     },
     "/api/v1/forms/{id}/unpublish": {
@@ -1408,7 +1429,10 @@ export class RestApiDocsController {
           "409": {
             "description": "Conflict"
           }
-        }
+        },
+        "tags": [
+          "Forms"
+        ]
       }
     },
     "/api/v1/forms/{id}/submissions": {
@@ -1467,6 +1491,717 @@ export class RestApiDocsController {
           },
           "409": {
             "description": "Conflict"
+          }
+        },
+        "tags": [
+          "Forms"
+        ]
+      }
+    },
+    "/api/v1/forms/{id}/duplicate": {
+      "post": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "duplicate form",
+        "description": "Requires forms:write in the form workspace. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "name": "Survey copy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/move": {
+      "post": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "move form",
+        "description": "Requires forms:write in the form workspace. Target project must be in the same workspace.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "targetProjectId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "targetProjectId"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "targetProjectId": "PROJECT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/hidden-fields": {
+      "patch": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "hidden fields form",
+        "description": "Requires forms:write in the form workspace. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "hiddenFields": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "hiddenFields"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "hiddenFields": [
+                  {
+                    "id": "assignment",
+                    "name": "assignment_id"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/variables": {
+      "patch": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "variables form",
+        "description": "Requires forms:write in the form workspace. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "variables": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "string",
+                            "number"
+                          ]
+                        },
+                        "value": {
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "kind",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "variables"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "variables": [
+                  {
+                    "id": "score",
+                    "name": "score",
+                    "kind": "number",
+                    "value": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/settings": {
+      "patch": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "settings form",
+        "description": "Requires forms:write in the form workspace. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enableExpirationDate": {
+                    "type": "boolean"
+                  },
+                  "enableTimeLimit": {
+                    "type": "boolean"
+                  },
+                  "filterSpam": {
+                    "type": "boolean"
+                  },
+                  "generatePseudonymId": {
+                    "type": "boolean"
+                  },
+                  "enableQuotaLimit": {
+                    "type": "boolean"
+                  },
+                  "enableIpLimit": {
+                    "type": "boolean"
+                  },
+                  "displayIpAddress": {
+                    "type": "boolean"
+                  },
+                  "enableProgress": {
+                    "type": "boolean"
+                  },
+                  "enableQuestionList": {
+                    "type": "boolean"
+                  },
+                  "enableNavigationArrows": {
+                    "type": "boolean"
+                  },
+                  "openLinksInNewTab": {
+                    "type": "boolean"
+                  },
+                  "enableClosedMessage": {
+                    "type": "boolean"
+                  },
+                  "allowArchive": {
+                    "type": "boolean"
+                  },
+                  "requirePassword": {
+                    "type": "boolean"
+                  },
+                  "enableEmailNotification": {
+                    "type": "boolean"
+                  },
+                  "redirectOnCompletion": {
+                    "type": "boolean"
+                  },
+                  "enabledAt": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "closedAt": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "timeLimit": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "quotaLimit": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "ipLimitCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "ipLimitTime": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "redirectDelay": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "expirationTimeZone": {
+                    "type": "string"
+                  },
+                  "locale": {
+                    "type": "string"
+                  },
+                  "closedFormTitle": {
+                    "type": "string"
+                  },
+                  "closedFormDescription": {
+                    "type": "string"
+                  },
+                  "metaTitle": {
+                    "type": "string"
+                  },
+                  "metaDescription": {
+                    "type": "string"
+                  },
+                  "redirectUrl": {
+                    "type": "string"
+                  },
+                  "metaOGImageUrl": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "writeOnly": true,
+                    "minLength": 1,
+                    "maxLength": 72
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "example": {
+                "enableProgress": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/theme": {
+      "patch": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "theme form",
+        "description": "Requires forms:write in the form workspace. ",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "logo": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "favicon": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "theme": {
+                    "type": "object",
+                    "properties": {
+                      "fontFamily": {
+                        "type": "string"
+                      },
+                      "questionTextColor": {
+                        "type": "string"
+                      },
+                      "answerTextColor": {
+                        "type": "string"
+                      },
+                      "buttonBackground": {
+                        "type": "string"
+                      },
+                      "buttonTextColor": {
+                        "type": "string"
+                      },
+                      "backgroundColor": {
+                        "type": "string"
+                      },
+                      "backgroundImage": {
+                        "type": "string"
+                      },
+                      "customCSS": {
+                        "type": "string"
+                      },
+                      "backgroundBrightness": {
+                        "type": "number",
+                        "minimum": -100,
+                        "maximum": 100
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "theme"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "theme": {
+                  "backgroundColor": "#ffffff",
+                  "buttonBackground": "#222222"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/trash": {
+      "post": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "trash form",
+        "description": "Requires forms:write in the form workspace. Deactivates form; 30-day retention.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/restore": {
+      "post": {
+        "tags": [
+          "Forms"
+        ],
+        "summary": "restore form",
+        "description": "Requires forms:write in the form workspace. Restores an inactive draft or published form without activating it.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Invalid form status"
           }
         }
       }
