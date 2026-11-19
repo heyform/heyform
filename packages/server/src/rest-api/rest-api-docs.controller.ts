@@ -2412,7 +2412,7 @@ export class RestApiDocsController {
           "Webhooks"
         ],
         "summary": "Configure and enable webhook",
-        "description": "Requires webhooks:write in the form workspace (or bootstrap administrator). Uses native HeyForm submission delivery. Requires safe public HTTPS URL. Existing destination is replaced.",
+        "description": "Requires webhooks:write in the form workspace (or bootstrap administrator). Uses native HeyForm submission delivery. Requires safe public HTTPS URL. Existing destination is replaced. Optional signingSecret (32–256 characters) is encrypted using INTEGRATION_ENCRYPTION_KEY. Omission preserves existing REST-configured signing secret. Signature is HMAC-SHA256 over timestamp + '.' + exact raw JSON body; headers X-HeyForm-Timestamp and X-HeyForm-Signature (sha256=hex).",
         "parameters": [
           {
             "name": "id",
@@ -2456,6 +2456,12 @@ export class RestApiDocsController {
                   "endpointUrl": {
                     "type": "string",
                     "format": "uri"
+                  },
+                  "signingSecret": {
+                    "type": "string",
+                    "minLength": 32,
+                    "maxLength": 256,
+                    "writeOnly": true
                   }
                 }
               },
@@ -2500,6 +2506,110 @@ export class RestApiDocsController {
           },
           "409": {
             "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/webhook/deliveries": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List recent webhook deliveries",
+        "description": "Requires webhooks:read. Latest 100 records; error text omitted to avoid leaking sensitive URLs.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/submissions/{submissionId}/answer": {
+      "patch": {
+        "tags": [
+          "Submissions"
+        ],
+        "summary": "Edit submission answer",
+        "description": "Requires submissions:write. Validates against current published form field schema.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "fieldId",
+                  "value"
+                ],
+                "properties": {
+                  "fieldId": {
+                    "type": "string"
+                  },
+                  "value": {}
+                }
+              },
+              "example": {
+                "fieldId": "QUESTION_ID",
+                "value": "Corrected answer"
+              }
+            }
           }
         }
       }
