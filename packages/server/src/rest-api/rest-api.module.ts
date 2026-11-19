@@ -5,7 +5,8 @@ import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
 import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum } from '@heyform-inc/shared-types-enums'
-import { nanoid } from '@heyform-inc/utils'
+import { nanoid, timestamp, helper } from '@heyform-inc/utils'
+import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts } from '@utils'
 import { TeamRoleEnum } from '../model/team-member.model'
 
 const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
@@ -322,6 +323,43 @@ export class RestApiController {
     const name = validName(body?.name)
     await this.forms.update(id, { name })
     return { id, name }
+  }
+  @Patch('forms/:id/drafts')
+  async updateDrafts(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL || !Number.isSafeInteger(body?.version) || body.version !== form.version) throw new ConflictException('Invalid draft version or form status')
+    if (!Array.isArray(body.drafts) || (body.logics != null && !Array.isArray(body.logics))) throw new BadRequestException('Invalid drafts or logics')
+    const drafts = sanitizeFormDrafts(body.drafts)
+    assertValidFormNavigation(drafts)
+    const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
+    assertValidChoiceBranching(drafts, logics)
+    await this.forms.update(id, { _drafts: JSON.stringify(drafts), draftLogics: logics, fieldsUpdatedAt: timestamp(), version: body.version + 1 })
+    return { id, drafts, version: body.version + 1 }
+  }
+  @Post('forms/:id/publish')
+  async publishForm(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL || !Number.isSafeInteger(body?.version) || body.version !== form.version) throw new ConflictException('Invalid draft version or form status')
+    if (!Array.isArray(body.drafts) || (body.logics != null && !Array.isArray(body.logics))) throw new BadRequestException('Invalid drafts or logics')
+    const drafts = sanitizeFormDrafts(body.drafts)
+    assertValidFormNavigation(drafts)
+    const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
+    assertValidChoiceBranching(drafts, logics)
+    const now = timestamp()
+    const updates: Record<string, any> = { fields: drafts, logics, draftLogics: logics, _drafts: JSON.stringify(drafts), fieldsUpdatedAt: now, version: body.version, 'settings.active': true }
+    if (!form.publishedAt) updates.publishedAt = now
+    const user = await this.users.findById(form.memberId)
+    if (!user) throw new ConflictException('Form creator not found')
+    if (helper.isValidArray(form.settings?.languages)) {
+      await this.forms.addTranslateQueue(id, form.teamId, user.id, form.settings!.languages)
+    }
+    if (!user.hasPublishedForm) await this.users.update(user.id, { publishedFormAt: now })
+    await this.forms.update(id, updates)
+    return { id, active: true, version: body.version, publishedAt: updates.publishedAt ?? form.publishedAt }
   }
   @Post('forms/:id/unpublish')
   async unpublishForm(@Req() req: ApiRequest, @Param('id') id: string) {
