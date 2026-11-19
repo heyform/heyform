@@ -9,21 +9,23 @@ const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 
 
 @Controller('api/v1/workspaces/:workspaceId/api')
 @UseGuards(WorkspaceApiUiGuard)
-@Header('Cache-Control', 'no-store')
 export class WorkspaceApiUiController {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
   @Get('documentation')
+  @Header('Cache-Control', 'no-store')
   documentation() {
     return new RestApiDocsController().specification()
   }
 
   @Get('keys')
+  @Header('Cache-Control', 'no-store')
   async list(@Param('workspaceId') workspaceId: string) {
     return this.connection.collection('rest_api_keys').find({ workspaceId }, { projection: { _id: 0 } }).limit(500).toArray()
   }
 
   @Post('keys')
+  @Header('Cache-Control', 'no-store')
   async create(@Param('workspaceId') workspaceId: string, @Body() body: any) {
     if (typeof body?.name !== 'string' || !body.name.trim() || body.name.length > 100 ||
         !Array.isArray(body.scopes) || !body.scopes.length ||
@@ -38,6 +40,7 @@ export class WorkspaceApiUiController {
   }
 
   @Delete('keys/:id')
+  @Header('Cache-Control', 'no-store')
   async revoke(@Param('workspaceId') workspaceId: string, @Param('id') id: string) {
     if (!/^[a-f0-9]{64}$/.test(id)) throw new NotFoundException()
     const result = await this.connection.collection('rest_api_keys').updateOne(
