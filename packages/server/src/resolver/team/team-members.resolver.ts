@@ -2,7 +2,7 @@ import { Auth, Team, TeamGuard, User } from '@decorator'
 import { TeamDetailInput, TeamMemberType } from '@graphql'
 import { helper } from '@heyform-inc/utils'
 import { TeamModel, UserModel } from '@model'
-import { Logger } from '@utils'
+import { Logger, gravatar } from '@utils'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { TeamService, UserService } from '@service'
 
@@ -47,6 +47,10 @@ export class TeamMembersResolver {
       user.lastSeenAt = member.lastSeenAt
       //@ts-ignore
       user.isOwner = user.id === team.ownerId
+
+      if (!user.avatar && user.email) {
+        user.avatar = gravatar(user.email)
+      }
 
       return user
     })
