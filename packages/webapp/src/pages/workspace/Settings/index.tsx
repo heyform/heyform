@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AnchorNavigation } from '@/components'
 
+import WorkspaceApiKeys from './ApiKeys'
 import BrandKitModal from './BrandKitModal'
 import WorkspaceBranding from './Branding'
 import WorkspaceConnectedAccounts from './ConnectedAccounts'
@@ -48,6 +49,7 @@ export default function WorkspaceSettings() {
               <WorkspaceGeneral />
               <WorkspaceBranding />
               <WorkspaceConnectedAccounts />
+              <WorkspaceApiKeys key={location.pathname} />
               <WorkspaceDeletion />
             </div>
           </div>
