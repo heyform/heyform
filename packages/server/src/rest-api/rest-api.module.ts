@@ -11,7 +11,8 @@ import { Request } from 'express'
 import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
 import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import { nanoid, timestamp, helper } from '@heyform-inc/utils'
-import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar } from '@utils'
+import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar, isSafeCSSValue, isSafeCustomCSS, passwordHash } from '@utils'
+import { BCRYPT_SALT } from '@environments'
 import { TeamRoleEnum } from '../model/team-member.model'
 
 const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
@@ -347,6 +348,92 @@ export class RestApiController {
     await this.forms.update(id, { projectId: project.id })
     return { id, projectId: project.id, workspaceId: form.teamId }
   }
+  private async editableForm(req: ApiRequest, id: string) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL) throw new ConflictException('Invalid form status')
+    return form
+  }
+  @Patch('forms/:id/hidden-fields')
+  async updateHiddenFields(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    await this.editableForm(req, id)
+    if (!Array.isArray(body?.hiddenFields) || body.hiddenFields.length > 200) throw new BadRequestException('Invalid hidden fields')
+    const hiddenFields = body.hiddenFields.map((f: any) => ({ id: identifier(f?.id), name: validName(f?.name) }))
+    if (new Set(hiddenFields.map(f => f.id)).size !== hiddenFields.length || new Set(hiddenFields.map(f => f.name)).size !== hiddenFields.length) throw new BadRequestException('Duplicate hidden fields')
+    await this.forms.update(id, { hiddenFields })
+    return { id, hiddenFields }
+  }
+  @Patch('forms/:id/variables')
+  async updateVariables(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    await this.editableForm(req, id)
+    if (!Array.isArray(body?.variables) || body.variables.length > 200) throw new BadRequestException('Invalid variables')
+    const variables = body.variables.map((v: any) => {
+      if (!v || !['string', 'number'].includes(v.kind) || typeof v.value !== v.kind || (v.kind === 'number' && !Number.isFinite(v.value))) throw new BadRequestException('Invalid variable')
+      return { id: identifier(v.id), name: validName(v.name), kind: v.kind, value: v.value }
+    })
+    if (new Set(variables.map(v => v.id)).size !== variables.length) throw new BadRequestException('Duplicate variables')
+    await this.forms.update(id, { variables })
+    return { id, variables }
+  }
+  @Patch('forms/:id/settings')
+  async updateSettings(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.editableForm(req, id)
+    const booleans = ['enableExpirationDate','enableTimeLimit','filterSpam','generatePseudonymId','enableQuotaLimit','enableIpLimit','displayIpAddress','enableProgress','enableQuestionList','enableNavigationArrows','openLinksInNewTab','enableClosedMessage','allowArchive','requirePassword','enableEmailNotification','redirectOnCompletion']
+    const numbers = ['enabledAt','closedAt','timeLimit','quotaLimit','ipLimitCount','ipLimitTime','redirectDelay']
+    const strings = ['expirationTimeZone','locale','closedFormTitle','closedFormDescription','metaTitle','metaDescription','redirectUrl','metaOGImageUrl']
+    if (!body || typeof body !== 'object' || Array.isArray(body) || !Object.keys(body).length) throw new BadRequestException('Settings required')
+    const updates: Record<string, any> = {}
+    for (const [key, value] of Object.entries(body)) {
+      if (booleans.includes(key) && typeof value === 'boolean') updates['settings.' + key] = value
+      else if (numbers.includes(key) && typeof value === 'number' && Number.isSafeInteger(value) && value >= (['quotaLimit','ipLimitCount'].includes(key) ? 1 : 0)) updates['settings.' + key] = value
+      else if (strings.includes(key) && typeof value === 'string') {
+        if (['redirectUrl','metaOGImageUrl'].includes(key)) {
+          try { if (!['http:', 'https:'].includes(new URL(value).protocol)) throw new Error() } catch { throw new BadRequestException('Invalid URL') }
+        }
+        updates['settings.' + key] = value
+      } else if (key === 'password' && typeof value === 'string' && value.length >= 1 && value.length <= 72) updates['settings.password'] = await passwordHash(value, BCRYPT_SALT)
+      else throw new BadRequestException('Invalid or unsupported setting: ' + key)
+    }
+    if (body.requirePassword === true && !updates['settings.password'] && !form.settings?.password) throw new BadRequestException('Password required')
+    await this.forms.update(id, updates)
+    return { id, updated: true }
+  }
+  @Patch('forms/:id/theme')
+  async updateTheme(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    await this.editableForm(req, id)
+    const theme = body?.theme
+    if (!theme || typeof theme !== 'object' || Array.isArray(theme)) throw new BadRequestException('Theme required')
+    const allowed = ['fontFamily','questionTextColor','answerTextColor','buttonBackground','buttonTextColor','backgroundColor','backgroundImage','backgroundBrightness','customCSS']
+    for (const [key,value] of Object.entries(theme)) {
+      if (!allowed.includes(key) || (key === 'backgroundBrightness' ? typeof value !== 'number' || !Number.isFinite(value) || value < -100 || value > 100 : typeof value !== 'string' || !(key === 'customCSS' ? isSafeCustomCSS(value) : isSafeCSSValue(value)))) throw new BadRequestException('Invalid theme property: ' + key)
+    }
+    const updates: Record<string, any> = { 'themeSettings.theme': theme }
+    for (const key of ['logo','favicon']) {
+      if (body[key] === undefined) continue
+      if (body[key] !== null) {
+        try { if (typeof body[key] !== 'string' || !['http:', 'https:'].includes(new URL(body[key]).protocol)) throw new Error() } catch { throw new BadRequestException('Invalid image URL') }
+      }
+      updates['themeSettings.' + key] = body[key]
+    }
+    await this.forms.update(id, updates)
+    return { id, updated: true }
+  }
+  @Post('forms/:id/trash')
+  async trashForm(@Req() req: ApiRequest, @Param('id') id: string) {
+    await this.editableForm(req, id)
+    await this.forms.update(id, { retentionAt: timestamp() + 30 * 86400, 'settings.active': false, status: FormStatusEnum.TRASH })
+    return { id, trashed: true }
+  }
+  @Post('forms/:id/restore')
+  async restoreForm(@Req() req: ApiRequest, @Param('id') id: string) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.TRASH) throw new ConflictException('Form is not in trash')
+    await this.forms.update(id, { retentionAt: -1, status: FormStatusEnum.NORMAL, 'settings.active': false })
+    return { id, restored: true }
+  }
   @Patch('forms/:id/drafts')
   async updateDrafts(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
     const form = await this.forms.findById(identifier(id))
@@ -416,7 +503,7 @@ export class RestApiController {
     const form = await this.forms.findById(identifier(id))
     if (!form) throw new NotFoundException()
     requireScope(req, 'forms:read', form.teamId)
-    return { id: form.id, name: form.name, workspaceId: form.teamId, projectId: form.projectId, fields: form.fields, drafts: form.get('drafts'), version: form.version, publishedAt: form.publishedAt }
+    return { id: form.id, name: form.name, workspaceId: form.teamId, projectId: form.projectId, fields: form.fields, drafts: form.get('drafts'), hiddenFields: form.hiddenFields, variables: form.variables, logics: form.logics, draftLogics: form.draftLogics, themeSettings: form.themeSettings, status: form.status, active: form.settings?.active, version: form.version, publishedAt: form.publishedAt }
   }
 }
 @Module({})
