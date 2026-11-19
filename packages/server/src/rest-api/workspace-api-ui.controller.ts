@@ -5,7 +5,7 @@ import { createHash, randomBytes } from 'crypto'
 import { WorkspaceApiUiGuard } from './workspace-api-ui.guard'
 import { RestApiDocsController } from './rest-api-docs.controller'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read', 'submissions:write']
 
 @Controller('api/v1/workspaces/:workspaceId/api')
 @UseGuards(WorkspaceApiUiGuard)
