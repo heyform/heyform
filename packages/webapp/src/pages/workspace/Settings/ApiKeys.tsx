@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParam } from '@/utils'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read', 'submissions:write']
 type Key = { id: string; name: string; scopes: string[]; revokedAt: string | null }
 
 export default function WorkspaceApiKeys() {
