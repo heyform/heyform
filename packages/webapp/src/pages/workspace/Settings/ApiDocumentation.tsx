@@ -24,7 +24,8 @@ export default function WorkspaceApiDocumentation() {
         const spec = await response.json()
         if (abort.signal.aborted) return
         const swagger = (window as any).SwaggerUIBundle
-        swagger({ spec, domNode: node, persistAuthorization: false, validatorUrl: null,
+        swagger({ spec, domNode: node, persistAuthorization: false,
+          docExpansion: 'none', validatorUrl: null,
           supportedSubmitMethods: ['get', 'post', 'patch', 'delete'],
           requestInterceptor: (request: any) => {
             const target = new URL(request.url, window.location.origin)
