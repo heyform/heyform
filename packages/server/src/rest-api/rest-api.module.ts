@@ -9,13 +9,13 @@ import { Connection } from 'mongoose'
 import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
-import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum } from '@heyform-inc/shared-types-enums'
+import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum, SubmissionStatusEnum, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
 import { nanoid, timestamp, helper } from '@heyform-inc/utils'
 import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar, isSafeCSSValue, isSafeCustomCSS, passwordHash } from '@utils'
 import { BCRYPT_SALT } from '@environments'
 import { TeamRoleEnum } from '../model/team-member.model'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read', 'submissions:write']
 const hash = (value: string) => createHash('sha256').update(value).digest('hex')
 type Principal = { admin: boolean; workspaceId?: string; scopes: string[] }
 type ApiRequest = Request & { apiPrincipal?: Principal }
@@ -485,6 +485,37 @@ export class RestApiController {
     if (!await this.forms.findById(identifier(id))) throw new NotFoundException()
     await this.purgeForms([id])
     return { id, deleted: true }
+  }
+  private async submissionForm(req: ApiRequest, id: string, scope: string) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, scope, form.teamId)
+    return form
+  }
+  @Get('forms/:id/submissions/:submissionId')
+  async getSubmission(@Req() req: ApiRequest, @Param('id') id: string, @Param('submissionId') submissionId: string) {
+    await this.submissionForm(req, id, 'submissions:read')
+    if (!/^[a-fA-F0-9]{24}$/.test(submissionId)) throw new BadRequestException('Invalid submission ID')
+    const row = await this.submissions.findByFormId(id, submissionId)
+    if (!row || row.status !== SubmissionStatusEnum.PUBLIC) throw new NotFoundException()
+    return { id: row.id, formId: row.formId, category: row.category, title: row.title, answers: row.answers, hiddenFields: row.hiddenFields, variables: row.variables, startAt: row.startAt, endAt: row.endAt, pseudonymId: row.pseudonymId }
+  }
+  @Patch('forms/:id/submissions/:submissionId/category')
+  async updateSubmissionCategory(@Req() req: ApiRequest, @Param('id') id: string, @Param('submissionId') submissionId: string, @Body() body: any) {
+    await this.submissionForm(req, id, 'submissions:write')
+    if (!/^[a-fA-F0-9]{24}$/.test(submissionId) || !Object.values(SubmissionCategoryEnum).includes(body?.category)) throw new BadRequestException('Invalid submission ID or category')
+    const row = await this.submissions.findByFormId(id, submissionId)
+    if (!row || row.status !== SubmissionStatusEnum.PUBLIC) throw new NotFoundException()
+    if (!await this.submissions.updateCategory({ formId: id, submissionIds: [submissionId], category: body.category })) throw new NotFoundException()
+    return { id: submissionId, category: body.category }
+  }
+  @Delete('forms/:id/submissions/:submissionId')
+  async deleteSubmission(@Req() req: ApiRequest, @Param('id') id: string, @Param('submissionId') submissionId: string) {
+    requireAdmin(req)
+    await this.submissionForm(req, id, 'submissions:read')
+    if (!/^[a-fA-F0-9]{24}$/.test(submissionId)) throw new BadRequestException('Invalid submission ID')
+    if (!await this.submissions.deleteByIds(id, [submissionId])) throw new NotFoundException()
+    return { id: submissionId, deleted: true }
   }
   @Get('forms/:id/submissions')
   async listSubmissions(@Req() req: ApiRequest, @Param('id') id: string, @Query('page') page = '1', @Query('limit') limit = '30') {
