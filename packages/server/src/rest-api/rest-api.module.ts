@@ -311,6 +311,42 @@ export class RestApiController {
     await this.forms.update(id, { name })
     return { id, name }
   }
+  @Post('forms/:id/duplicate')
+  async duplicateForm(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL) throw new ConflictException('Invalid form status')
+    const name = validName(body?.name)
+    const project = await this.projects.findById(form.projectId)
+    if (!project || project.teamId !== form.teamId) throw new ConflictException('Invalid source project')
+    const copy: any = {}
+    for (const field of ['variables', 'logics', 'draftLogics', 'translations', 'hiddenFields', '_drafts', 'kind', 'interactiveMode', 'themeSettings']) {
+      const value = form.get(field)
+      if (value !== undefined) copy[field] = value
+    }
+    const settings = form.settings ? JSON.parse(JSON.stringify(form.settings)) : {}
+    delete settings.password
+    const formId = await this.forms.create({
+      ...copy, name, teamId: form.teamId, projectId: project.id, memberId: project.ownerId,
+      fields: [], _drafts: copy._drafts || JSON.stringify(form.fields || []),
+      fieldsUpdatedAt: 0, version: 0, status: FormStatusEnum.NORMAL,
+      settings: { ...settings, active: false, requirePassword: false }
+    })
+    return { id: formId, name, projectId: project.id, workspaceId: form.teamId, active: false }
+  }
+  @Post('forms/:id/move')
+  async moveForm(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL) throw new ConflictException('Invalid form status')
+    const project = await this.projects.findById(identifier(body?.targetProjectId))
+    if (!project) throw new NotFoundException()
+    if (project.teamId !== form.teamId) throw new ForbiddenException('Cross-workspace movement is not permitted')
+    await this.forms.update(id, { projectId: project.id })
+    return { id, projectId: project.id, workspaceId: form.teamId }
+  }
   @Patch('forms/:id/drafts')
   async updateDrafts(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
     const form = await this.forms.findById(identifier(id))
