@@ -8,10 +8,12 @@ import { InjectConnection } from '@nestjs/mongoose'
 import { Connection } from 'mongoose'
 import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
-import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
+import { TeamService, UserService, ProjectService, FormService, SubmissionService, IntegrationService, AppService } from '../service'
 import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum, SubmissionStatusEnum, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
 import { nanoid, timestamp, helper } from '@heyform-inc/utils'
 import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar, isSafeCSSValue, isSafeCustomCSS, passwordHash } from '@utils'
+import { IntegrationStatusEnum } from '@model'
+import { assertSafeOutboundUrl, mapToObject } from '@utils'
 import { BCRYPT_SALT } from '@environments'
 import { TeamRoleEnum } from '../model/team-member.model'
 
@@ -49,7 +51,9 @@ export class RestApiController {
     private readonly users: UserService,
     private readonly projects: ProjectService,
     private readonly forms: FormService,
-    private readonly submissions: SubmissionService
+    private readonly submissions: SubmissionService,
+    private readonly integrations: IntegrationService,
+    private readonly apps: AppService
   ) {}
   @Get('health')
   health() { return { status: 'ok', version: 'v1' } }
@@ -516,6 +520,39 @@ export class RestApiController {
     if (!/^[a-fA-F0-9]{24}$/.test(submissionId)) throw new BadRequestException('Invalid submission ID')
     if (!await this.submissions.deleteByIds(id, [submissionId])) throw new NotFoundException()
     return { id: submissionId, deleted: true }
+  }
+  @Get('forms/:id/webhook')
+  async getWebhook(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireAdmin(req)
+    await this.submissionForm(req, id, 'forms:read')
+    const integration = await this.integrations.findOne(id, 'webhook')
+    if (!integration) throw new NotFoundException()
+    return { formId: id, status: integration.status, endpointUrl: mapToObject(integration.config).endpointUrl }
+  }
+  @Post('forms/:id/webhook')
+  async configureWebhook(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    requireAdmin(req)
+    await this.editableForm(req, id)
+    const app = this.apps.findById('webhook')
+    if (!app || !this.apps.isAvailable(app)) throw new BadRequestException('Webhook unavailable')
+    const endpointUrl = body?.endpointUrl
+    if (typeof endpointUrl !== 'string' || endpointUrl.length > 2048) throw new BadRequestException('Invalid endpoint URL')
+    try {
+      const url = new URL(endpointUrl)
+      if (url.protocol !== 'https:' || url.username || url.password || url.hash) throw new Error()
+      await assertSafeOutboundUrl(endpointUrl)
+    } catch { throw new BadRequestException('Webhook requires a safe public HTTPS endpoint') }
+    await this.integrations.createOrUpdate(id, 'webhook', { config: { endpointUrl }, status: IntegrationStatusEnum.ACTIVE })
+    return { formId: id, status: IntegrationStatusEnum.ACTIVE }
+  }
+  @Delete('forms/:id/webhook')
+  async disableWebhook(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireAdmin(req)
+    await this.submissionForm(req, id, 'forms:read')
+    const integration = await this.integrations.findOne(id, 'webhook')
+    if (!integration) throw new NotFoundException()
+    await this.integrations.update(integration.id, { status: IntegrationStatusEnum.DISABLED })
+    return { formId: id, status: IntegrationStatusEnum.DISABLED }
   }
   @Get('forms/:id/submissions')
   async listSubmissions(@Req() req: ApiRequest, @Param('id') id: string, @Query('page') page = '1', @Query('limit') limit = '30') {
