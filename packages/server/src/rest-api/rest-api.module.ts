@@ -12,6 +12,9 @@ import { TeamService, UserService, ProjectService, FormService, SubmissionServic
 import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum, SubmissionStatusEnum, SubmissionCategoryEnum } from '@heyform-inc/shared-types-enums'
 import { nanoid, timestamp, helper } from '@heyform-inc/utils'
 import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar, isSafeCSSValue, isSafeCustomCSS, passwordHash } from '@utils'
+import { integrationSecrets } from '../service/integration-secrets'
+import { ValidateError, fieldsToValidateRules, flattenFields, validate } from '@heyform-inc/answer-utils'
+import { assertSafeSpecialFieldAnswers } from '@utils'
 import { IntegrationStatusEnum } from '@model'
 import { assertSafeOutboundUrl, mapToObject } from '@utils'
 import { BCRYPT_SALT } from '@environments'
@@ -526,7 +529,7 @@ export class RestApiController {
     await this.submissionForm(req, id, 'webhooks:read')
     const integration = await this.integrations.findOne(id, 'webhook')
     if (!integration) throw new NotFoundException()
-    return { formId: id, status: integration.status, endpointUrl: mapToObject(integration.config).endpointUrl }
+    return { formId: id, status: integration.status, endpointUrl: mapToObject(integration.config).endpointUrl, signed: !!mapToObject(integration.config).signingSecretEncrypted }
   }
   @Post('forms/:id/webhook')
   async configureWebhook(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
@@ -541,8 +544,17 @@ export class RestApiController {
       if (url.protocol !== 'https:' || url.username || url.password || url.hash) throw new Error()
       await assertSafeOutboundUrl(endpointUrl)
     } catch { throw new BadRequestException('Webhook requires a safe public HTTPS endpoint') }
-    await this.integrations.createOrUpdate(id, 'webhook', { config: { endpointUrl }, status: IntegrationStatusEnum.ACTIVE })
-    return { formId: id, status: IntegrationStatusEnum.ACTIVE }
+    const existing = await this.integrations.findOne(id, 'webhook')
+    const config: Record<string, any> = { endpointUrl }
+    const previous = existing ? mapToObject(existing.config).signingSecretEncrypted : undefined
+    if (previous) config.signingSecretEncrypted = previous
+    if (body.signingSecret !== undefined) {
+      if (typeof body.signingSecret !== 'string' || body.signingSecret.length < 32 || body.signingSecret.length > 256) throw new BadRequestException('Signing secret must be 32–256 characters')
+      if (!integrationSecrets.isConfigured) throw new BadRequestException('Integration encryption key is not configured')
+      config.signingSecretEncrypted = integrationSecrets.encrypt(body.signingSecret)
+    }
+    await this.integrations.createOrUpdate(id, 'webhook', { config, status: IntegrationStatusEnum.ACTIVE })
+    return { formId: id, status: IntegrationStatusEnum.ACTIVE, signed: !!config.signingSecretEncrypted }
   }
   @Delete('forms/:id/webhook')
   async disableWebhook(@Req() req: ApiRequest, @Param('id') id: string) {
@@ -551,6 +563,33 @@ export class RestApiController {
     if (!integration) throw new NotFoundException()
     await this.integrations.update(integration.id, { status: IntegrationStatusEnum.DISABLED })
     return { formId: id, status: IntegrationStatusEnum.DISABLED }
+  }
+  @Get('forms/:id/webhook/deliveries')
+  async webhookDeliveries(@Req() req: ApiRequest, @Param('id') id: string) {
+    await this.submissionForm(req, id, 'webhooks:read')
+    const records = await this.integrations.findRecords(id, 'webhook', 100)
+    return records.map(row => ({ id: row.id, submissionId: row.submissionId, status: row.status, attempt: row.attempt, maxAttempts: row.maxAttempts, willRetry: !!row.willRetry, createdAt: row.createdAt }))
+  }
+  @Patch('forms/:id/submissions/:submissionId/answer')
+  async editSubmissionAnswer(@Req() req: ApiRequest, @Param('id') id: string, @Param('submissionId') submissionId: string, @Body() body: any) {
+    const form = await this.submissionForm(req, id, 'submissions:write')
+    if (!/^[a-fA-F0-9]{24}$/.test(submissionId)) throw new BadRequestException('Invalid submission ID')
+    const row = await this.submissions.findByFormId(id, submissionId)
+    if (!row || row.status !== SubmissionStatusEnum.PUBLIC) throw new NotFoundException()
+    const rule = fieldsToValidateRules(flattenFields(form.fields, true)).find(r => r.id === body?.fieldId)
+    if (!rule || !Object.prototype.hasOwnProperty.call(body, 'value')) throw new BadRequestException('Invalid field or missing value')
+    try {
+      assertSafeSpecialFieldAnswers([rule], { [rule.id]: body.value })
+      validate(rule, body.value)
+    } catch (error) {
+      if (error instanceof BadRequestException) throw error
+      if (error instanceof ValidateError) throw new BadRequestException(error.response)
+      throw error
+    }
+    const answer = { id: rule.id, kind: rule.kind, properties: rule.properties || {}, title: rule.title, value: body.value }
+    const updated = row.answers.some(a => a.id === rule.id) ? await this.submissions.updateAnswer(submissionId, answer) : await this.submissions.createAnswer(submissionId, answer)
+    if (!updated) throw new ConflictException('Answer update failed')
+    return { id: submissionId, updated: true }
   }
   @Get('forms/:id/submissions')
   async listSubmissions(@Req() req: ApiRequest, @Param('id') id: string, @Query('page') page = '1', @Query('limit') limit = '30') {
