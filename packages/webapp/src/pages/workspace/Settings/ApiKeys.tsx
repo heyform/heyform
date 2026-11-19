@@ -35,7 +35,7 @@ export default function WorkspaceApiKeys() {
     try {
       const response = await fetch(id ? url + '/' + encodeURIComponent(id) : url, {
         method, credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-HeyForm-API-UI': '1' },
         ...(method === 'POST' ? { body: JSON.stringify({ name, scopes: selected }) } : {})
       })
       if (!response.ok) throw new Error('Request failed (' + response.status + ')')
