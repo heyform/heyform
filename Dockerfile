@@ -54,6 +54,13 @@ RUN mkdir -p $APP_PATH/packages/server/static && \
     cp -R $APP_PATH/packages/webapp/dist/static/. $APP_PATH/packages/server/static/ && \
     cp $APP_PATH/packages/webapp/dist/index.html $APP_PATH/packages/server/view/index.html
 
+# Pin the standalone Swagger distribution; no runtime CDN or dependency install.
+RUN mkdir -p /tmp/swagger-assets $APP_PATH/packages/server/static/swagger && \
+    cd /tmp/swagger-assets && npm pack swagger-ui-dist@5.31.0 --ignore-scripts && \
+    tar -xzf swagger-ui-dist-5.31.0.tgz && \
+    cp package/swagger-ui-bundle.js package/swagger-ui.css package/LICENSE $APP_PATH/packages/server/static/swagger/ && \
+    rm -rf /tmp/swagger-assets
+
 FROM fetched AS prod-deps
 
 ARG APP_PATH=/app
