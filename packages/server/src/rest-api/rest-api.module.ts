@@ -17,7 +17,7 @@ import { assertSafeOutboundUrl, mapToObject } from '@utils'
 import { BCRYPT_SALT } from '@environments'
 import { TeamRoleEnum } from '../model/team-member.model'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read', 'submissions:write']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read', 'submissions:write', 'webhooks:read', 'webhooks:write']
 const hash = (value: string) => createHash('sha256').update(value).digest('hex')
 type Principal = { admin: boolean; workspaceId?: string; scopes: string[] }
 type ApiRequest = Request & { apiPrincipal?: Principal }
@@ -523,16 +523,15 @@ export class RestApiController {
   }
   @Get('forms/:id/webhook')
   async getWebhook(@Req() req: ApiRequest, @Param('id') id: string) {
-    requireAdmin(req)
-    await this.submissionForm(req, id, 'forms:read')
+    await this.submissionForm(req, id, 'webhooks:read')
     const integration = await this.integrations.findOne(id, 'webhook')
     if (!integration) throw new NotFoundException()
     return { formId: id, status: integration.status, endpointUrl: mapToObject(integration.config).endpointUrl }
   }
   @Post('forms/:id/webhook')
   async configureWebhook(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
-    requireAdmin(req)
-    await this.editableForm(req, id)
+    const form = await this.submissionForm(req, id, 'webhooks:write')
+    if (form.status !== FormStatusEnum.NORMAL) throw new ConflictException('Invalid form status')
     const app = this.apps.findById('webhook')
     if (!app || !this.apps.isAvailable(app)) throw new BadRequestException('Webhook unavailable')
     const endpointUrl = body?.endpointUrl
@@ -547,8 +546,7 @@ export class RestApiController {
   }
   @Delete('forms/:id/webhook')
   async disableWebhook(@Req() req: ApiRequest, @Param('id') id: string) {
-    requireAdmin(req)
-    await this.submissionForm(req, id, 'forms:read')
+    await this.submissionForm(req, id, 'webhooks:write')
     const integration = await this.integrations.findOne(id, 'webhook')
     if (!integration) throw new NotFoundException()
     await this.integrations.update(integration.id, { status: IntegrationStatusEnum.DISABLED })
