@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AnchorNavigation } from '@/components'
 
+import WorkspaceApiDocumentation from './ApiDocumentation'
 import WorkspaceApiKeys from './ApiKeys'
 import BrandKitModal from './BrandKitModal'
 import WorkspaceBranding from './Branding'
@@ -67,10 +68,7 @@ export default function WorkspaceSettings() {
               <WorkspaceBranding />
               <WorkspaceConnectedAccounts />
               {keysEnabled && <WorkspaceApiKeys key={workspaceId} />}
-              {docsEnabled && <section id="api-documentation" className="border-accent-light border-b py-10">
-                <h2 className="hf-section-title">API Documentation</h2>
-                <a className="underline" href={'/api/v1/workspaces/' + encodeURIComponent(workspaceId) + '/api/documentation'} target="_blank" rel="noreferrer">Open OpenAPI specification (JSON)</a>
-              </section>}
+              {docsEnabled && <WorkspaceApiDocumentation key={workspaceId} />}
               <WorkspaceDeletion />
             </div>
           </div>
