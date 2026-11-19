@@ -135,9 +135,9 @@ export class RestApiController {
     if (!owner || owner.isBlocked || owner.isDeletionScheduled) throw new NotFoundException('Owner not found')
     const name = validName(body?.name)
     const projectName = validName(body?.projectName ?? 'Default')
-    const id = await this.teams.create({ name, ownerId, allowJoinByInviteLink: false })
+    const id = await this.teams.create({ name, ownerId, storageQuota: 0, allowJoinByInviteLink: false })
     try {
-      await this.teams.createMember({ teamId: id, memberId: ownerId, role: TeamRoleEnum.OWNER })
+      await this.teams.createMember({ teamId: id, memberId: ownerId, role: TeamRoleEnum.ADMIN })
       await this.projects.createByNewTeam(id, ownerId, projectName)
     } catch (error) {
       // Best-effort cleanup on standalone MongoDB, which does not support transactions.
