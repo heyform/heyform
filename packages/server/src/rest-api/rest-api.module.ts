@@ -6,7 +6,7 @@ import { Request } from 'express'
 import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
 import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import { nanoid, timestamp, helper } from '@heyform-inc/utils'
-import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts } from '@utils'
+import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts, gravatar } from '@utils'
 import { TeamRoleEnum } from '../model/team-member.model'
 
 const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
@@ -180,7 +180,7 @@ export class RestApiController {
     let created = false
     if (!user) {
       try {
-        const id = await this.users.create({ email, name, isEmailVerified: false })
+        const id = await this.users.create({ email, name, avatar: gravatar(email), isEmailVerified: false })
         user = await this.users.findById(id)
         created = true
       } catch (error) {
