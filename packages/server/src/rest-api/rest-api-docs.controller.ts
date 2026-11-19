@@ -1494,7 +1494,7 @@ export class RestApiDocsController {
           }
         },
         "tags": [
-          "Forms"
+          "Submissions"
         ]
       }
     },
@@ -1640,7 +1640,7 @@ export class RestApiDocsController {
           "Forms"
         ],
         "summary": "hidden fields form",
-        "description": "Requires forms:write in the form workspace. ",
+        "description": "Requires forms:write in the form workspace.  Each entry defines an internal id and a URL parameter name; neither is the submitted value. For example name location_id is populated by ?location_id=56 on the public form URL.",
         "parameters": [
           {
             "name": "id",
@@ -1686,8 +1686,16 @@ export class RestApiDocsController {
               "example": {
                 "hiddenFields": [
                   {
-                    "id": "assignment",
+                    "id": "location_id",
+                    "name": "location_id"
+                  },
+                  {
+                    "id": "assignment_id",
                     "name": "assignment_id"
+                  },
+                  {
+                    "id": "submission_token",
+                    "name": "submission_token"
                   }
                 ]
               }
@@ -2202,6 +2210,161 @@ export class RestApiDocsController {
           },
           "409": {
             "description": "Invalid form status"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/submissions/{submissionId}": {
+      "get": {
+        "tags": [
+          "Submissions"
+        ],
+        "summary": "Retrieve submission",
+        "description": "Requires submissions:read. Returns completed public submission including hidden fields and variables, without IP address.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "24-character MongoDB submission ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Submissions"
+        ],
+        "summary": "Permanently delete submission",
+        "description": "Bootstrap administrator only. Irreversible.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "24-character MongoDB submission ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{id}/submissions/{submissionId}/category": {
+      "patch": {
+        "tags": [
+          "Submissions"
+        ],
+        "summary": "Change submission category",
+        "description": "Requires submissions:write in the form workspace.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "24-character MongoDB submission ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "category"
+                ],
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "example": {
+                "category": "inbox"
+              }
+            }
           }
         }
       }
