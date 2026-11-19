@@ -1,7 +1,9 @@
-import { Controller, Get } from '@nestjs/common'
+import { RestApiKeyGuard } from './rest-api-key.guard'
+import { Controller, Get, UseGuards } from '@nestjs/common'
 
-// Public specification contains no credentials or workspace data.
+// Documentation requires a valid REST bearer key.
 @Controller('api')
+@UseGuards(RestApiKeyGuard)
 export class RestApiDocsController {
   @Get('docs-json')
   specification() {
