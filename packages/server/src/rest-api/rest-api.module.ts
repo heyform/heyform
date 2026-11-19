@@ -3,10 +3,12 @@ import { InjectConnection } from '@nestjs/mongoose'
 import { Connection } from 'mongoose'
 import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
-import { TeamService, UserService, ProjectService, FormService } from '../service'
+import { TeamService, UserService, ProjectService, FormService, SubmissionService } from '../service'
+import { FormStatusEnum, CaptchaKindEnum, FieldKindEnum } from '@heyform-inc/shared-types-enums'
+import { nanoid } from '@heyform-inc/utils'
 import { TeamRoleEnum } from '../model/team-member.model'
 
-const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write']
+const scopes = ['workspaces:read', 'users:read', 'projects:read', 'forms:read', 'members:write', 'members:read', 'workspaces:write', 'projects:write', 'forms:write', 'submissions:read']
 const hash = (value: string) => createHash('sha256').update(value).digest('hex')
 type Principal = { admin: boolean; workspaceId?: string; scopes: string[] }
 type ApiRequest = Request & { apiPrincipal?: Principal }
@@ -57,7 +59,8 @@ export class RestApiController {
     private readonly teams: TeamService,
     private readonly users: UserService,
     private readonly projects: ProjectService,
-    private readonly forms: FormService
+    private readonly forms: FormService,
+    private readonly submissions: SubmissionService
   ) {}
   @Get('health')
   health() { return { status: 'ok', version: 'v1' } }
@@ -242,6 +245,109 @@ export class RestApiController {
     await this.projects.deleteMemberInProjects(projects.map(p => p.id), userId)
     await this.teams.deleteMember(id, userId)
     return { removed: true, workspaceId: id, userId }
+  }
+
+  private async purgeForms(ids: string[]) {
+    if (!ids.length) return
+    await this.forms.updateMany(ids, { 'settings.active': false, status: FormStatusEnum.TRASH })
+    await this.submissions.deleteAll(ids)
+    await this.forms.delete(ids)
+  }
+  @Delete('workspaces/:id')
+  async deleteWorkspace(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireAdmin(req)
+    if (!await this.teams.findById(identifier(id))) throw new NotFoundException()
+    await this.connection.collection('rest_api_keys').updateMany({ workspaceId: id, revokedAt: null }, { $set: { revokedAt: new Date() } })
+    await this.purgeForms((await this.forms.findAllInTeam(id)).map(f => f.id))
+    for (const project of await this.projects.findAllInTeam(id)) {
+      await this.projects.deleteAllMemberInProject(project.id)
+      await this.projects.delete(project.id)
+    }
+    for (const invitation of await this.teams.findInvitations(id)) {
+      await this.teams.deleteInvitation(invitation.id)
+    }
+    await this.teams.deleteAllMemberInTeam(id)
+    await this.teams.delete(id)
+    return { deleted: true, workspaceId: id }
+  }
+  @Patch('projects/:id')
+  async renameProject(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const project = await this.projects.findById(identifier(id))
+    if (!project) throw new NotFoundException()
+    requireScope(req, 'projects:write', project.teamId)
+    const name = validName(body?.name)
+    await this.projects.update(id, { name })
+    return { id, name }
+  }
+  @Delete('projects/:id')
+  async deleteProject(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireAdmin(req)
+    const project = await this.projects.findById(identifier(id))
+    if (!project) throw new NotFoundException()
+    await this.purgeForms((await this.forms.findAllInProject(id)).map(f => f.id))
+    await this.projects.deleteAllMemberInProject(id)
+    await this.projects.delete(id)
+    return { deleted: true, projectId: id }
+  }
+  @Get('projects/:id/forms')
+  async listForms(@Req() req: ApiRequest, @Param('id') id: string) {
+    const project = await this.projects.findById(identifier(id))
+    if (!project) throw new NotFoundException()
+    requireScope(req, 'forms:read', project.teamId)
+    return (await this.forms.findAll(id, FormStatusEnum.NORMAL)).map(f => ({ id: f.id, name: f.name, version: f.version, publishedAt: f.publishedAt }))
+  }
+  @Post('projects/:id/forms')
+  async createForm(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const project = await this.projects.findById(identifier(id))
+    if (!project) throw new NotFoundException()
+    requireScope(req, 'forms:write', project.teamId)
+    const name = validName(body?.name)
+    const drafts = [
+      { id: nanoid(12), title: null, description: null, kind: FieldKindEnum.SHORT_TEXT, validations: { required: false } },
+      { id: nanoid(12), title: ['Thank you!'], kind: FieldKindEnum.THANK_YOU }
+    ]
+    const formId = await this.forms.create({
+      name, teamId: project.teamId, projectId: id, memberId: project.ownerId,
+      fields: [], _drafts: JSON.stringify(drafts), fieldsUpdatedAt: 0,
+      hiddenFields: [], version: 0, status: FormStatusEnum.NORMAL,
+      settings: { active: false, captchaKind: CaptchaKindEnum.NONE, filterSpam: false, allowArchive: true, requirePassword: false, locale: 'en', enableQuestionList: true, enableNavigationArrows: true, enableEmailNotification: true }
+    })
+    return { id: formId, name, projectId: id, workspaceId: project.teamId }
+  }
+  @Patch('forms/:id')
+  async renameForm(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    const name = validName(body?.name)
+    await this.forms.update(id, { name })
+    return { id, name }
+  }
+  @Post('forms/:id/unpublish')
+  async unpublishForm(@Req() req: ApiRequest, @Param('id') id: string) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    await this.forms.update(id, { 'settings.active': false })
+    return { id, active: false }
+  }
+  @Delete('forms/:id')
+  async deleteForm(@Req() req: ApiRequest, @Param('id') id: string) {
+    requireAdmin(req)
+    if (!await this.forms.findById(identifier(id))) throw new NotFoundException()
+    await this.purgeForms([id])
+    return { id, deleted: true }
+  }
+  @Get('forms/:id/submissions')
+  async listSubmissions(@Req() req: ApiRequest, @Param('id') id: string, @Query('page') page = '1', @Query('limit') limit = '30') {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'submissions:read', form.teamId)
+    const p = Number(page), l = Number(limit)
+    if (!Number.isSafeInteger(p) || p < 1 || p > 1000000 || !Number.isSafeInteger(l) || l < 1 || l > 100) throw new BadRequestException('Invalid pagination')
+    const total = await this.submissions.count({ formId: id })
+    const submissions = await this.submissions.findAll({ formId: id, page: p, limit: l, withIp: false })
+    return { total, page: p, limit: l, submissions }
   }
   @Get('forms/:id')
   async getForm(@Req() req: ApiRequest, @Param('id') id: string) {
