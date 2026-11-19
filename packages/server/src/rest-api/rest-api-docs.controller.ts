@@ -2375,7 +2375,7 @@ export class RestApiDocsController {
           "Webhooks"
         ],
         "summary": "Read webhook configuration",
-        "description": "Bootstrap administrator only. Returns the configured endpoint and status.",
+        "description": "Requires webhooks:read in the form workspace (or bootstrap administrator). Returns the configured endpoint and status.",
         "parameters": [
           {
             "name": "id",
@@ -2412,7 +2412,7 @@ export class RestApiDocsController {
           "Webhooks"
         ],
         "summary": "Configure and enable webhook",
-        "description": "Bootstrap administrator only. Uses native HeyForm submission delivery. Requires safe public HTTPS URL. Existing destination is replaced.",
+        "description": "Requires webhooks:write in the form workspace (or bootstrap administrator). Uses native HeyForm submission delivery. Requires safe public HTTPS URL. Existing destination is replaced.",
         "parameters": [
           {
             "name": "id",
@@ -2471,7 +2471,7 @@ export class RestApiDocsController {
           "Webhooks"
         ],
         "summary": "Disable webhook",
-        "description": "Bootstrap administrator only. Disables future delivery without deleting configuration or delivery history.",
+        "description": "Requires webhooks:write in the form workspace (or bootstrap administrator). Disables future delivery without deleting configuration or delivery history.",
         "parameters": [
           {
             "name": "id",
