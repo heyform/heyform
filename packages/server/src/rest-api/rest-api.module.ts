@@ -1,3 +1,6 @@
+import { WorkspaceApiUiController } from './workspace-api-ui.controller'
+import { WorkspaceApiUiGuard } from './workspace-api-ui.guard'
+import { AuthGuard } from '../common/guard/auth.guard'
 import { RestApiKeyGuard } from './rest-api-key.guard'
 import { RestApiDocsController } from './rest-api-docs.controller'
 import { BadRequestException, Body, CanActivate, Controller, ConflictException, Patch, Delete, ExecutionContext, ForbiddenException, Get, Injectable, Module, NotFoundException, Param, Post, Query, Req, UnauthorizedException, UseGuards, DynamicModule, Type } from '@nestjs/common'
@@ -383,6 +386,6 @@ export class RestApiController {
 @Module({})
 export class RestApiModule {
   static register(serviceModule: Type<any>): DynamicModule {
-    return { module: RestApiModule, imports: [serviceModule], controllers: [RestApiController, RestApiDocsController], providers: [RestApiKeyGuard] }
+    return { module: RestApiModule, imports: [serviceModule], controllers: [RestApiController, RestApiDocsController, WorkspaceApiUiController], providers: [RestApiKeyGuard, WorkspaceApiUiGuard, AuthGuard] }
   }
 }
