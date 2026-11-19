@@ -16,6 +16,13 @@ export const SUBMISSION_ID = 'Submission ID'
 const MAX_CELL_LENGTH = 50_000
 const REQUEST_TIMEOUT = 10_000
 
+// Questions whose answers are written as numbers
+const NUMERIC_KINDS: string[] = [
+  FieldKindEnum.NUMBER,
+  FieldKindEnum.RATING,
+  FieldKindEnum.OPINION_SCALE
+]
+
 type CellValue = string | number
 
 interface Cell {
@@ -92,7 +99,7 @@ function cellValue(answer?: Answer): CellValue {
 
   // Numbers stay numbers, so the sheet can add them up
   if (
-    answer.kind === FieldKindEnum.NUMBER &&
+    NUMERIC_KINDS.includes(answer.kind) &&
     typeof answer.value === 'number' &&
     Number.isFinite(answer.value)
   ) {
