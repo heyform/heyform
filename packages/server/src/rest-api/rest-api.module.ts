@@ -665,9 +665,11 @@ export class RestApiController {
     @Body() body: any
   ) {
     await this.submissionForm(req, id, 'submissions:write')
+    const category = body?.category
     if (
       !/^[a-fA-F0-9]{24}$/.test(submissionId) ||
-      !Object.values(SubmissionCategoryEnum).includes(body?.category)
+      typeof category !== 'string' ||
+      !Object.values(SubmissionCategoryEnum).includes(category as SubmissionCategoryEnum)
     )
       throw new BadRequestException('Invalid submission ID or category')
     const row = await this.submissions.findByFormId(id, submissionId)
@@ -676,11 +678,11 @@ export class RestApiController {
       !(await this.submissions.updateCategory({
         formId: id,
         submissionIds: [submissionId],
-        category: body.category
+        category: category as SubmissionCategoryEnum
       }))
     )
       throw new NotFoundException()
-    return { id: submissionId, category: body.category }
+    return { id: submissionId, category }
   }
   @Patch('forms/:id/submissions/:submissionId/answer')
   async editSubmissionAnswer(
