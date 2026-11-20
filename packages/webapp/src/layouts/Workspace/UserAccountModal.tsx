@@ -1,3 +1,4 @@
+import * as Tabs from '@radix-ui/react-tabs'
 import { useRequest } from 'ahooks'
 import { useTranslation } from 'react-i18next'
 
@@ -6,6 +7,8 @@ import { UserService } from '@/services'
 import { Button, ImageFormPicker, Input, Modal, usePrompt } from '@/components'
 import { OIDC_DISPLAY_NAME } from '@/consts'
 import { useAppStore, useModal, useUserStore } from '@/store'
+
+import AccountApiAccess from './AccountApiAccess'
 
 const UserAccount = () => {
   const { t } = useTranslation()
@@ -229,10 +232,46 @@ export default function UserAccountModal() {
     <Modal.Simple
       open={isOpen}
       title={t('user.headline')}
-      description={t('user.subHeadline')}
+      contentProps={{ className: 'sm:max-w-[min(48rem,calc(100vw-2rem))]' }}
       onOpenChange={onOpenChange}
     >
-      <UserAccount />
+      <Tabs.Root
+        defaultValue="account"
+        orientation="vertical"
+        className="flex flex-col gap-4 sm:flex-row"
+      >
+        <Tabs.List
+          aria-label={String(t('user.headline'))}
+          className="border-accent-light flex gap-1 border-b pb-2 sm:w-36 sm:shrink-0 sm:flex-col sm:border-b-0 sm:pb-0"
+        >
+          {[
+            { value: 'account', label: String(t('apiAccess.account')) },
+            { value: 'api-keys', label: String(t('apiAccess.keys')) }
+          ].map(({ value, label }) => (
+            <Tabs.Trigger key={value} value={value} className="hf-anchor-item">
+              {label}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
+        <div className="relative min-w-0 flex-1">
+          {/* Account stays in flow so both panels share its height. */}
+          <Tabs.Content value="account" forceMount className="data-[state=inactive]:invisible">
+            <h3 className="flex min-h-9 items-center text-base font-semibold">
+              {String(t('apiAccess.account'))}
+            </h3>
+            <p className="text-secondary text-sm">{String(t('user.subHeadline'))}</p>
+            <UserAccount />
+          </Tabs.Content>
+          {/* Stays mounted so a new key's one-time secret survives tab switches. */}
+          <Tabs.Content
+            value="api-keys"
+            forceMount
+            className="scrollbar absolute inset-0 overflow-y-auto data-[state=inactive]:hidden"
+          >
+            <AccountApiAccess />
+          </Tabs.Content>
+        </div>
+      </Tabs.Root>
     </Modal.Simple>
   )
 }

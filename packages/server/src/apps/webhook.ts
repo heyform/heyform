@@ -1,4 +1,6 @@
 import got from 'got'
+import { createHmac } from 'crypto'
+import { integrationSecrets } from '../service/integration-secrets'
 
 import type { FormModel, SubmissionModel } from '@model'
 import { assertSafeOutboundRequest, assertSafeOutboundUrl, isSubmissionIpVisible } from '@utils'
@@ -70,6 +72,14 @@ export default defineApp({
   run: async ({ config, submission, form }) => {
     const { lookup, url: endpointUrl } = await assertSafeOutboundRequest(config.endpointUrl)
 
+    const body = JSON.stringify(webhookPayload(submission, form))
+    const headers: Record<string, string> = { 'content-type': 'application/json' }
+    if (config.signingSecretEncrypted) {
+      const timestamp = String(Math.floor(Date.now() / 1000))
+      const secret = integrationSecrets.decrypt(config.signingSecretEncrypted)
+      headers['x-heyform-timestamp'] = timestamp
+      headers['x-heyform-signature'] = 'sha256=' + createHmac('sha256', secret).update(timestamp + '.' + body).digest('hex')
+    }
     const response = got.stream.post(endpointUrl.toString(), {
       followRedirect: false,
       lookup,
@@ -82,7 +92,8 @@ export default defineApp({
         socket: 10_000,
         request: 15_000
       },
-      json: webhookPayload(submission, form)
+      body,
+      headers
     })
 
     return readLimitedWebhookResponse(response)

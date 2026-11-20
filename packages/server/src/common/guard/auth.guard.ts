@@ -20,12 +20,10 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = GqlExecutionContext.create(context)
-    let { req } = ctx.getContext()
-
-    if (helper.isEmpty(req)) {
-      req = context.switchToHttp().getRequest()
-    }
+    const req =
+      context.getType() === 'http'
+        ? context.switchToHttp().getRequest()
+        : GqlExecutionContext.create(context).getContext().req
 
     const deviceId = req.get('x-device-id') || req.cookies[COOKIE_DEVICE_ID_NAME]
     const user = this.authService.getSession(req)

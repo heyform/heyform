@@ -538,7 +538,7 @@
       "noProjects": "Sie können den Arbeitsbereichsbesitzer kontaktieren, um Sie zu einem Projekt hinzuzufügen, oder Sie können ein neues erstellen.",
       "search": "Suche",
       "viewProfile": "Profil anzeigen",
-      "accountSettings": "Kontoeinstellungen",
+      "accountSettings": "Einstellungen",
       "language": "Sprache",
       "version": "Version {{version}}",
       "logout": "Abmelden",
@@ -1564,7 +1564,7 @@
     }
   },
   "user": {
-    "headline": "Kontoeinstellungen",
+    "headline": "Einstellungen",
     "subHeadline": "Änderungen an den Kontoeinstellungen gelten für alle Ihre Arbeitsbereiche.",
     "avatar": {
       "headline": "Avatar",

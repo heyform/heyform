@@ -538,7 +538,7 @@
       "noProjects": "Você pode entrar em contato com o proprietário do espaço de trabalho para adicioná-lo a um projeto ou pode criar um novo.",
       "search": "Buscar",
       "viewProfile": "Ver perfil",
-      "accountSettings": "Configurações de Conta",
+      "accountSettings": "Configurações",
       "language": "Idioma",
       "version": "Versão {{version}}",
       "logout": "Sair",
@@ -1566,7 +1566,7 @@
     }
   },
   "user": {
-    "headline": "Configurações da conta",
+    "headline": "Configurações",
     "subHeadline": "As alterações nas configurações da conta serão aplicadas a todos os seus espaços de trabalho.",
     "avatar": {
       "headline": "avatar",

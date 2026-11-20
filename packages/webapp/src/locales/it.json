@@ -538,7 +538,7 @@
       "noProjects": "Puoi contattare il proprietario del workspace per farti aggiungere a un progetto, oppure crearne uno nuovo.",
       "search": "Cerca",
       "viewProfile": "Visualizza Profilo",
-      "accountSettings": "Impostazioni Account",
+      "accountSettings": "Impostazioni",
       "language": "Lingua",
       "version": "Versione {{version}}",
       "logout": "Esci",
@@ -1566,7 +1566,7 @@
     }
   },
   "user": {
-    "headline": "Impostazioni account",
+    "headline": "Impostazioni",
     "subHeadline": "Le modifiche alle impostazioni dell'account si applicheranno a tutti i tuoi workspace.",
     "avatar": {
       "headline": "Avatar",
