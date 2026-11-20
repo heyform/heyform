@@ -22,6 +22,7 @@ import {
 import { uniqueEmail, uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
 import {
+  deleteStoredUser,
   readStoredApiKey,
   seedProjectMember,
   seedTeamMember,
@@ -362,6 +363,33 @@ export function build(baseUrl: string) {
     assert.strictEqual(detail.active, publicForm.settings.active)
     assert.strictEqual(detail.version, version)
     assert.strictEqual(detail.publishedAt, published.publishedAt)
+  })
+
+  test('publishes a form whose creator has left and deleted their account', async () => {
+    const creator = await signUpUser(baseUrl)
+    await seedTeamMember({ teamId: workspaceId, memberId: creator.id, role: 3 })
+    await seedProjectMember({ projectId, memberId: creator.id })
+    const key = await account(creator.client, 'POST', 201, {
+      name: 'Creator E2E',
+      workspaceAccess: 'selected',
+      workspaceIds: [workspaceId],
+      scopes: ['forms:write']
+    })
+    const form = await rest('POST', `/projects/${projectId}/forms`, key.token, 201, {
+      name: uniqueName('Creator Form')
+    })
+    await rest('DELETE', `/workspaces/${workspaceId}/members/${creator.id}`, workspaceKey, 200)
+    assert.strictEqual(await deleteStoredUser(creator.id), 1)
+
+    const path = `/forms/${form.id}`
+    const { version: formVersion } = await rest('GET', path, workspaceKey, 200)
+    const published = await rest('POST', `${path}/publish`, workspaceKey, 201, {
+      drafts,
+      version: formVersion
+    })
+    assert.strictEqual(published.active, true)
+    // Keep the project's form list to the shared form for later tests.
+    await rest('POST', `${path}/trash`, workspaceKey, 201)
   })
 
   test('reads a real submission with the same ID, category and answer', async () => {

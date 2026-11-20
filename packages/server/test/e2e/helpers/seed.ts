@@ -78,6 +78,18 @@ export async function setStoredApiKeyExpiry(id: string, expiresAt: number, opts:
   }
 }
 
+export async function deleteStoredUser(id: string, opts: ConnectOpts = {}) {
+  const connection = await mongoose.createConnection(resolveUri(opts)).asPromise()
+  try {
+    const result = await connection
+      .collection('usermodels')
+      .deleteOne({ _id: new mongoose.Types.ObjectId(id) })
+    return result.deletedCount
+  } finally {
+    await connection.close()
+  }
+}
+
 export async function setStoredUserStatus(
   id: string,
   status: { isBlocked: boolean; isDeletionScheduled: boolean },

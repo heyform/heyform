@@ -586,8 +586,8 @@ export class RestApiController {
       'settings.active': true
     }
     if (!form.publishedAt) updates.publishedAt = now
-    const user = await this.users.findById(form.memberId)
-    if (!user) throw new ConflictException('Form creator not found')
+    const user = await this.users.findById(req.apiPrincipal.userId)
+    if (!user) throw new NotFoundException()
     if (helper.isValidArray(form.settings?.languages)) {
       await this.forms.addTranslateQueue(id, form.teamId, user.id, form.settings!.languages)
     }
