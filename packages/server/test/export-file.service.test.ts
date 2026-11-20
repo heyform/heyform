@@ -1,7 +1,7 @@
 import { FieldKindEnum, FormField } from '@heyform-inc/shared-types-enums'
 import assert from 'assert'
 
-import { ExportFileService } from '../src/service/export-file.service'
+import { ExportFileService, answerToText } from '../src/service/export-file.service'
 
 function parseCsvRow(value: string): string[] {
   const cells: string[] = []
@@ -314,7 +314,15 @@ async function testMalformedLegacyInputTableDoesNotBreakExport() {
   assert.deepStrictEqual(parseCsvRow(row), ['submission-1', '', '', ''])
 }
 
+function testScaleAnswersBecomeText() {
+  for (const kind of [FieldKindEnum.OPINION_SCALE, FieldKindEnum.RATING]) {
+    assert.strictEqual(answerToText({ id: 'score', kind, title: 'Score', value: 7 } as any), '7')
+    assert.strictEqual(answerToText({ id: 'score', kind, title: 'Score', value: 0 } as any), '0')
+  }
+}
+
 async function run() {
+  testScaleAnswersBecomeText()
   await testExportsRepeatedQuestionTitlesByFieldId()
   await testExportsMultipleChoiceOtherText()
   await testExportsBlankOtherAsOther()
