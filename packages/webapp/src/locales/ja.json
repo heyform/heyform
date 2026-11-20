@@ -1560,7 +1560,7 @@
     }
   },
   "user": {
-    "headline": "アカウント設定",
+    "headline": "設定",
     "subHeadline": "アカウント設定の変更はすべてのワークスペースに適用されます。",
     "avatar": {
       "headline": "アバター",

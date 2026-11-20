@@ -23,7 +23,6 @@ async function main() {
   const baseUrl = process.env.E2E_BASE_URL?.replace(/\/+$/, '') || 'http://localhost:9157'
   const skipWait = process.env.E2E_SKIP_WAIT === '1'
   const onlyFilter = process.env.E2E_ONLY // e.g. "auth,health"
-  const restApiKey = process.env.HEYFORM_REST_API_KEY
 
   console.log(`HeyForm server e2e — target: ${baseUrl}`)
 
@@ -58,7 +57,7 @@ async function main() {
     buildChoiceLimits(baseUrl),
     buildPseudonymIds(baseUrl),
     buildPaymentWebhook(baseUrl),
-    ...(restApiKey ? [buildRestApi(baseUrl, restApiKey)] : []),
+    buildRestApi(baseUrl),
     // Rate-limit suite intentionally last — it burns per-user attempt counters.
     buildRateLimit(baseUrl)
   ]

@@ -80,9 +80,16 @@ in their own GitHub repository settings.
 
 ### REST API regression tests
 
-Against a REST-enabled test server, set the same `HEYFORM_REST_API_KEY` for the
-server and the test runner. Use a disposable database because the suite creates
-and deletes test workspaces, forms, submissions, and keys.
+The standard E2E run compares 15 GraphQL operations with their corresponding
+REST authorization checks across seven callers. It issues scoped account keys
+through the account API. Run the matrix on its own with the following command.
+
+```bash
+E2E_ONLY='permission matrix' pnpm --filter ./packages/server test:e2e
+```
+
+The REST lifecycle tests use account API keys. Use a disposable database
+because these tests create workspaces and delete submissions and keys.
 
 ```bash
 E2E_ONLY='rest api' pnpm --filter ./packages/server test:e2e
@@ -91,8 +98,10 @@ E2E_ONLY='rest api' pnpm --filter ./packages/server test:e2e
 The suite reuses the GraphQL E2E fixtures to compare workspace and project
 lists, member roles, published fields, submission data, and persisted state.
 It also verifies HTTP status codes for validation, stale drafts, workspace
-isolation, key scopes, and key revocation. The runner includes the suite when
-`HEYFORM_REST_API_KEY` is set.
+isolation, and account key management. It checks that removed routes return
+404 and user lookup stays within accessible workspaces. It also checks that
+existing keys follow project membership and account status changes, and that
+cross-origin requests cannot create, edit, rotate, or delete a key.
 
 ### Unit regression coverage
 
@@ -156,20 +165,19 @@ APP_HOMEPAGE_URL=http://localhost:9157
 | 5     | `auth flows`         | 7             | `updateUserPassword` rotation + wrong-currentPassword + weak-newPassword, `sendResetPasswordEmail`+`resetPassword` end-to-end (code read from Redis), session retained after `removeTeamMember` but team scope lost. |
 | 6     | `stateful edges`     | 13            | Stale-version rejection on `updateFormSchemas`/`publishForm`, idempotent double-trash, `restoreForm` on NORMAL form is a no-op, **`deleteForm` returns true even on NORMAL form (server bug)**, cross-team `formDetail`/`forms` leakage forbidden, `joinTeam` failures (wrong code / already joined / rotated code), `leaveTeam` blocks the owner, `removeTeamMember` refuses the owner, `transferTeam` to non-member rejected, `openForm` on unpublished form, `completeSubmission` with bad `openToken`. |
 | 7     | `team flow`          | 15            | Stateful admin → COLLABORATOR (joins by invite) → MEMBER (seeded) → workspace → project → form → publish → submit → archive → delete form → delete project → dissolve team. Cookies reused; no re-auth. |
-| 8     | `permission matrix`  | 205           | Programmatic table: each GraphQL op × six callers (admin/collaborator/member/teamOnly/outsider/anonymous). Asserts pass/fail against actual resolver behaviour. ~34 operations covered. |
+| 8     | `permission matrix`  | 337           | 34 GraphQL operations across six callers. The 15 REST pairs also cover a seventh caller, a non-owner workspace admin. Includes scoped key setup and cleanup. |
 | 9     | `rate limit`         | 3             | Login locks the user out after 5 wrong passwords (15-min window); `sendResetPasswordEmail` 60s per-user cooldown. Runs **last** because it burns per-user attempt counters. |
-
-**Total: ~276 cases, completes in ≈ 6s** against a warm dockerised stack.
 
 ### Caller identities in `permission matrix`
 
 | Caller         | In team?     | Team role        | In project?  |
 | -------------- | ------------ | ---------------- | ------------ |
-| `admin`        | yes          | `ADMIN`          | yes (owner)  |
+| `admin`        | yes          | Workspace owner  | yes (owner)  |
+| `workspaceAdmin` | yes (seeded) | `ADMIN` without workspace ownership | yes (added) |
 | `collaborator` | yes (joined) | `COLLABORATOR`   | yes (added)  |
 | `member`       | yes (seeded) | `MEMBER`         | yes (added)  |
 | `teamOnly`     | yes (seeded) | `COLLABORATOR`   | **no**       |
-| `outsider`     | no           | _n/a_            | no           |
+| `outsider`     | other workspace only | Owner of the other workspace | no |
 | `anonymous`    | no session   | _n/a_            | no           |
 
 #### Ops probed by the matrix
@@ -178,7 +186,7 @@ APP_HOMEPAGE_URL=http://localhost:9157
 - **Auth-only** (any signed-in user, no team context): `userDetail`, `updateUser`, `teams`, `templates`.
 - **Team-scoped reads** (any team member, no role check): `teamMembers`, `teamOverview`, `teamRecentForms`, `searchTeam`, `createBrandKit`.
 - **Project/form-scoped** (any project member; `teamOnly` explicitly fails because it's in the team but not the project): `forms`, `formDetail`, `formAnalytic`, `formIntegrations`, `formReport`, `updateForm`, `renameProject`, `updateFormLogics`, `updateFormVariables`, `updateFormHiddenFields`, `updateFormArchive`, `updateFormTheme`, `duplicateForm`, `submissions`.
-- **Owner-only** (admin only; every other authenticated caller errors): `updateTeam`, `inviteMember`, `dissolveTeamCode`, `deleteProjectCode`, `resetTeamInviteCode`.
+- **Owner-only** (the workspace owner, represented by the `admin` fixture): `updateTeam`, `inviteMember`, `dissolveTeamCode`, `deleteProjectCode`, `resetTeamInviteCode`.
 - **Documented-bug probes** (locked at `error` for every caller):
   - `searchForms` — resolver has `@TeamGuard()` but `SearchFormInput` has no `teamId` field; the guard rejects unconditionally. Drop the row once the decorator is removed.
   - `templateDetail` — server returns `{}`, but `TemplateType.id` is non-nullable so GraphQL errors before the schema is exercised. Drop the row once the resolver is implemented.
@@ -246,8 +254,11 @@ These are not test bugs — the suite intentionally documents the live behaviour
    its peers, export `build(baseUrl)`, register it inside `run.ts`. Mirror the
    webapp operation in `helpers/gql.ts` if it isn't already there.
 2. **For permission boundaries**: add a `MatrixSpec` to `SPECS` in
-   `permission-matrix.e2e.test.ts`. Each spec is one operation; the matrix
-   handles iterating callers. The `ok(...)` DSL:
+   `permission-matrix.e2e.test.ts`. Add a `rest` mapping when a REST route exercises
+   the same permission boundary. The matrix compares the observed GraphQL
+   outcome with HTTP `200` or `201` for allowed REST requests, `403` for denied
+   requests with a bearer key, and `401` for anonymous requests. Set GraphQL
+   expectations with the following patterns.
    - `ok({ all: 'ok' })` — everyone passes (truly public).
    - `ok({ all: 'ok', anonymous: 'error' })` — auth required, no team context.
    - `ok({ admin: 'ok', otherwise: 'error' })` — owner-only.

@@ -1569,7 +1569,7 @@
     }
   },
   "user": {
-    "headline": "Paramètres du compte",
+    "headline": "Paramètres",
     "subHeadline": "Les modifications apportées aux paramètres du compte s'appliqueront à tous vos espaces de travail.",
     "avatar": {
       "headline": "Avatar",

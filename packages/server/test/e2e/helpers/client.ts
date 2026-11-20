@@ -102,6 +102,13 @@ export class E2EClient {
     return this.restJson<T>('POST', path, payload)
   }
 
+  accountKeys<T = any>(method: 'GET' | 'POST' | 'PATCH' | 'DELETE', path = '', payload?: unknown) {
+    return this.restJson<T>(method, '/api/v1/account/api-keys' + path, payload, {
+      origin: this.baseUrl,
+      'sec-fetch-site': 'same-origin'
+    })
+  }
+
   async restJson<T = any>(
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     path: string,

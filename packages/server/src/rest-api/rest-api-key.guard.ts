@@ -1,26 +1,40 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
-import { InjectConnection } from '@nestjs/mongoose'
-import { Connection } from 'mongoose'
-import { createHash, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 
-const hash = (value: string) => createHash('sha256').update(value).digest('hex')
-export type ApiRequest = Request & { apiPrincipal?: { admin: boolean; workspaceId?: string; scopes: string[] } }
+import { ApiKeyScope, ApiKeyService, WorkspaceApiAccess } from './api-key.service'
+import { UserService } from '@service'
+
+type Principal = {
+  userId: string
+  workspaces: Map<string, WorkspaceApiAccess>
+  scopes: ApiKeyScope[]
+}
+export type ApiRequest = Request & { apiPrincipal?: Principal }
+
 @Injectable()
 export class RestApiKeyGuard implements CanActivate {
-  constructor(@InjectConnection() private readonly connection: Connection) {}
+  constructor(
+    private readonly keys: ApiKeyService,
+    private readonly users: UserService
+  ) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<ApiRequest>()
     const token = req.headers.authorization?.match(/^Bearer ([^\s]+)$/i)?.[1]
     if (!token || token.length > 512) throw new UnauthorizedException()
-    const configured = process.env.HEYFORM_REST_API_KEY
-    if (configured && configured.length >= 32 && timingSafeEqual(Buffer.from(hash(configured)), Buffer.from(hash(token)))) {
-      req.apiPrincipal = { admin: true, scopes: [] }
-      return true
-    }
-    const key = await this.connection.collection('rest_api_keys').findOne({ _id: hash(token) as any, revokedAt: null })
+
+    if (!/^ak-heyform-[a-zA-Z0-9]{64}$/.test(token)) throw new UnauthorizedException()
+    const key = await this.keys.findActive(token)
     if (!key) throw new UnauthorizedException()
-    req.apiPrincipal = { admin: false, workspaceId: key.workspaceId, scopes: key.scopes }
+
+    const owner = await this.users.findById(key.ownerId)
+    if (!owner || owner.isBlocked || owner.isDeletionScheduled) throw new UnauthorizedException()
+
+    req.apiPrincipal = {
+      userId: owner.id,
+      scopes: key.scopes,
+      workspaces: await this.keys.allowedWorkspaces(key)
+    }
     return true
   }
 }
