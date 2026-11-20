@@ -486,6 +486,20 @@ export class RestApiController {
     await this.forms.update(id, { 'settings.active': false })
     return { id, active: false }
   }
+  @Patch('forms/:id/availability')
+  async setFormAvailability(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
+    const form = await this.forms.findById(identifier(id))
+    if (!form) throw new NotFoundException()
+    requireScope(req, 'forms:write', form.teamId)
+    if (form.status !== FormStatusEnum.NORMAL) throw new ConflictException('Invalid form status')
+    if (!body || typeof body !== 'object' || Array.isArray(body) ||
+        Object.keys(body).length !== 1 || typeof body.active !== 'boolean') {
+      throw new BadRequestException('active must be a boolean')
+    }
+    if (body.active && !form.publishedAt) throw new ConflictException('Form has not been published')
+    await this.forms.update(id, { 'settings.active': body.active })
+    return { id, active: body.active }
+  }
   @Delete('forms/:id')
   async deleteForm(@Req() req: ApiRequest, @Param('id') id: string) {
     requireAdmin(req)
