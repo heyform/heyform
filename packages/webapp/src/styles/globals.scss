@@ -282,7 +282,8 @@ body {
   }
 
   a {
-    @apply underline;
+    @apply text-blue-700 underline underline-offset-2 dark:text-blue-400;
+    overflow-wrap: anywhere;
 
     &:hover {
       @apply text-primary;

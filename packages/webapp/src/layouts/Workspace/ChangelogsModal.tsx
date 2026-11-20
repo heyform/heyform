@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import { formatDay } from '@/utils'
 
@@ -32,7 +33,7 @@ export default function ChangelogsModal() {
             </a>
           </h2>
           <div className="changelog">
-            <Markdown>{payload.changelog}</Markdown>
+            <Markdown remarkPlugins={[remarkGfm]}>{payload.changelog}</Markdown>
           </div>
         </div>
       )}
