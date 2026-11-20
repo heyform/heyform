@@ -15,6 +15,7 @@ import { build as buildPaymentWebhook } from './payment-webhook.e2e.test'
 import { build as buildPermissionMatrix } from './permission-matrix.e2e.test'
 import { build as buildPseudonymIds } from './pseudonym-ids.e2e.test'
 import { build as buildRateLimit } from './rate-limit.e2e.test'
+import { build as buildRestApi } from './rest-api.e2e.test'
 import { build as buildStatefulEdges } from './stateful-edges.e2e.test'
 import { build as buildTeamFlow } from './team-flow.e2e.test'
 
@@ -22,6 +23,7 @@ async function main() {
   const baseUrl = process.env.E2E_BASE_URL?.replace(/\/+$/, '') || 'http://localhost:9157'
   const skipWait = process.env.E2E_SKIP_WAIT === '1'
   const onlyFilter = process.env.E2E_ONLY // e.g. "auth,health"
+  const restApiKey = process.env.HEYFORM_REST_API_KEY
 
   console.log(`HeyForm server e2e — target: ${baseUrl}`)
 
@@ -56,6 +58,7 @@ async function main() {
     buildChoiceLimits(baseUrl),
     buildPseudonymIds(baseUrl),
     buildPaymentWebhook(baseUrl),
+    ...(restApiKey ? [buildRestApi(baseUrl, restApiKey)] : []),
     // Rate-limit suite intentionally last — it burns per-user attempt counters.
     buildRateLimit(baseUrl)
   ]

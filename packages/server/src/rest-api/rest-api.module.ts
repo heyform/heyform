@@ -614,7 +614,12 @@ export class RestApiController {
     if (!Number.isSafeInteger(p) || p < 1 || p > 1000000 || !Number.isSafeInteger(l) || l < 1 || l > 100) throw new BadRequestException('Invalid pagination')
     const total = await this.submissions.count({ formId: id })
     const submissions = await this.submissions.findAll({ formId: id, page: p, limit: l, withIp: false })
-    return { total, page: p, limit: l, submissions }
+    return {
+      total,
+      page: p,
+      limit: l,
+      submissions: submissions.map(submission => ({ ...submission.toJSON(), id: submission.id }))
+    }
   }
   @Get('forms/:id')
   async getForm(@Req() req: ApiRequest, @Param('id') id: string) {

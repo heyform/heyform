@@ -78,6 +78,22 @@ with branches required to be up to date and no bypass actors. A workflow alone
 does not prevent merging failed checks; forks need to configure this requirement
 in their own GitHub repository settings.
 
+### REST API regression tests
+
+Against a REST-enabled test server, set the same `HEYFORM_REST_API_KEY` for the
+server and the test runner. Use a disposable database because the suite creates
+and deletes test workspaces, forms, submissions, and keys.
+
+```bash
+E2E_ONLY='rest api' pnpm --filter ./packages/server test:e2e
+```
+
+The suite reuses the GraphQL E2E fixtures to compare workspace and project
+lists, member roles, published fields, submission data, and persisted state.
+It also verifies HTTP status codes for validation, stale drafts, workspace
+isolation, key scopes, and key revocation. The runner includes the suite when
+`HEYFORM_REST_API_KEY` is set.
+
 ### Unit regression coverage
 
 The server unit runner automatically discovers every `test/*.test.ts` file and
