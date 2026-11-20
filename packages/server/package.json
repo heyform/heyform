@@ -33,6 +33,7 @@
     "@heyform-inc/shared-types-enums": "workspace:*",
     "@heyform-inc/utils": "workspace:*",
     "@heyooo-inc/env": "^0.0.1",
+    "@modelcontextprotocol/sdk": "1.32.2",
     "@nestjs/apollo": "12.2.2",
     "@nestjs/bull": "10.2.3",
     "@nestjs/common": "10.4.20",
