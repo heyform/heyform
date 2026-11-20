@@ -46,6 +46,10 @@ export const Input: FC<InputProps> = ({
      * If min or max is not empty, limit the input range
      */
     if (type === 'number') {
+      if (newValue === '') {
+        return undefined
+      }
+
       newValue = Number(newValue)
 
       if (helper.isNan(value)) {
@@ -114,7 +118,7 @@ export const Input: FC<InputProps> = ({
       ref={inputRef}
       className="input heyform-input"
       type={type}
-      value={value as string}
+      value={value ?? ''}
       disabled={disabled}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
