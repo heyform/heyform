@@ -8,6 +8,7 @@ import { ChangelogService } from '../src/services'
 
 import i18n from '../src/i18n'
 import ChangelogButton from '../src/layouts/Workspace/ChangelogButton'
+import ChangelogsModal from '../src/layouts/Workspace/ChangelogsModal'
 import { useAppStore } from '../src/store'
 
 vi.mock('@/consts', async importOriginal => ({
@@ -61,6 +62,25 @@ test('the badge stays after opening the changelog of a newer version', async () 
 
   expect(useAppStore.getState().modals.get('ChangelogsModal')).toEqual(latest)
   expect(badge()).not.toBeNull()
+})
+
+test('the changelog renders bare URLs and Markdown links while preserving inline code', async () => {
+  const pullRequest = 'https://github.com/heyform/heyform/pull/385'
+  const compare = 'https://github.com/heyform/heyform/compare/v3.0.6...v3.0.7'
+  await act(async () => {
+    useAppStore.getState().openModal('ChangelogsModal', {
+      ...release('v3.0.10'),
+      changelog: `- Fixed notifications in ${pullRequest}.\n- [Full changelog](${compare})\n- \`${pullRequest}\``
+    })
+    root.render(<ChangelogsModal />)
+  })
+
+  const changelog = document.querySelector('.changelog')!
+  expect(Array.from(changelog.querySelectorAll('a'), a => [a.textContent, a.href])).toEqual([
+    [pullRequest, pullRequest],
+    ['Full changelog', compare]
+  ])
+  expect(changelog.querySelector('code')?.textContent).toBe(pullRequest)
 })
 
 test.each(['v3.0.9', 'v3.0.8'])('no badge when the latest release is %s', async version => {
