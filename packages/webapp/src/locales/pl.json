@@ -538,7 +538,7 @@
       "noProjects": "Możesz skontaktować się z właścicielem przestrzeni roboczej, aby dodał Cię do projektu, lub możesz utworzyć nowy.",
       "search": "Szukaj",
       "viewProfile": "Zobacz profil",
-      "accountSettings": "Ustawienia konta",
+      "accountSettings": "Ustawienia",
       "language": "Język",
       "version": "Wersja {{version}}",
       "logout": "Wyloguj się",
@@ -1560,7 +1560,7 @@
     }
   },
   "user": {
-    "headline": "Ustawienia konta",
+    "headline": "Ustawienia",
     "subHeadline": "Zmiany w ustawieniach konta będą dotyczyć wszystkich Twoich przestrzeni roboczych.",
     "avatar": {
       "headline": "Awatar",

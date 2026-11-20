@@ -31,6 +31,9 @@ async function bootstrap() {
   // Apollo Server 4 expects req.body to be populated before the GraphQL middleware runs.
   app.use('/graphql', bodyParser.json({ limit: '1mb' }))
 
+  // REST controllers require JSON parsing before Nest resolves @Body().
+  app.use('/api/v1', bodyParser.json({ limit: '1mb' }))
+
   // Verify all params
   app.useGlobalPipes(
     new ValidationPipe({

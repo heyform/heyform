@@ -15,6 +15,7 @@ import { build as buildPaymentWebhook } from './payment-webhook.e2e.test'
 import { build as buildPermissionMatrix } from './permission-matrix.e2e.test'
 import { build as buildPseudonymIds } from './pseudonym-ids.e2e.test'
 import { build as buildRateLimit } from './rate-limit.e2e.test'
+import { build as buildRestApi } from './rest-api.e2e.test'
 import { build as buildStatefulEdges } from './stateful-edges.e2e.test'
 import { build as buildTeamFlow } from './team-flow.e2e.test'
 
@@ -56,6 +57,7 @@ async function main() {
     buildChoiceLimits(baseUrl),
     buildPseudonymIds(baseUrl),
     buildPaymentWebhook(baseUrl),
+    buildRestApi(baseUrl),
     // Rate-limit suite intentionally last — it burns per-user attempt counters.
     buildRateLimit(baseUrl)
   ]

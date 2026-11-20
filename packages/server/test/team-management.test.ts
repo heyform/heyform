@@ -13,6 +13,7 @@ import { TeamOverviewResolver } from '../src/resolver/team/team-overview.resolve
 import { TeamsResolver } from '../src/resolver/team/teams.resolver'
 import { TransferTeamResolver } from '../src/resolver/team/transfer-team.resolver'
 import { UpdateTeamResolver } from '../src/resolver/team/update-team.resolver'
+import { TeamMemberService } from '../src/service/team-member.service'
 
 import { WorkspaceStore, createWorkspaceStore } from './helpers/workspace'
 
@@ -218,7 +219,7 @@ async function testRemovedMemberLosesTheWorkspaceAndItsProjects() {
   const own = await store.addTeam(collaborator, 'Carl’s')
   const resolver = new RemoveTeamMemberResolver(
     store.teamService as any,
-    store.projectService as any
+    new TeamMemberService(null, store.teamService as any, store.projectService as any, null, null)
   )
 
   assert.strictEqual(
@@ -243,7 +244,7 @@ async function testOnlyTheOwnerRemovesMembersAndNeverThemself() {
   const { store, owner, collaborator, bystander, outsider, teamId } = await setup()
   const resolver = new RemoveTeamMemberResolver(
     store.teamService as any,
-    store.projectService as any
+    new TeamMemberService(null, store.teamService as any, store.projectService as any, null, null)
   )
   const before = snapshot(store)
 
@@ -304,9 +305,10 @@ async function testOwnerCannotLeaveTheWorkspace() {
 function inviteSetup(store: WorkspaceStore, throttle?: (key: string) => void) {
   const sent: Record<string, any>[] = []
   const throttled: Record<string, any>[] = []
-  const resolver = new InviteMemberResolver(
+  const teamMemberService = new TeamMemberService(
     store.userService as any,
     store.teamService as any,
+    store.projectService as any,
     {
       teamInvitation: async (email: string, options: Record<string, any>, lang: string) => {
         sent.push({ email, ...options, lang })
@@ -319,6 +321,7 @@ function inviteSetup(store: WorkspaceStore, throttle?: (key: string) => void) {
       }
     } as any
   )
+  const resolver = new InviteMemberResolver(teamMemberService)
 
   return { resolver, sent, throttled }
 }

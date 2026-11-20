@@ -95,26 +95,30 @@ export class E2EClient {
   }
 
   async restGet<T = any>(path: string): Promise<RestResponse<T>> {
-    const res = await fetch(`${this.baseUrl}${path}`, {
-      method: 'GET',
-      headers: this.buildHeaders(),
-      redirect: 'manual'
-    })
-    this.jar.ingestSetCookie(res.headers)
-    const text = await res.text()
-    let body: any = text
-    try {
-      body = text ? JSON.parse(text) : null
-    } catch {
-      /* keep raw text */
-    }
-    return { status: res.status, headers: res.headers, body, text }
+    return this.restJson<T>('GET', path)
   }
 
   async restPostJson<T = any>(path: string, payload: any): Promise<RestResponse<T>> {
+    return this.restJson<T>('POST', path, payload)
+  }
+
+  accountKeys<T = any>(method: 'GET' | 'POST' | 'PATCH' | 'DELETE', path = '', payload?: unknown) {
+    return this.restJson<T>(method, '/api/v1/account/api-keys' + path, payload, {
+      origin: this.baseUrl,
+      'sec-fetch-site': 'same-origin'
+    })
+  }
+
+  async restJson<T = any>(
+    method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+    path: string,
+    payload?: unknown,
+    headers: Record<string, string> = {}
+  ): Promise<RestResponse<T>> {
+    if (payload !== undefined) headers = { 'content-type': 'application/json', ...headers }
     const res = await fetch(`${this.baseUrl}${path}`, {
-      method: 'POST',
-      headers: this.buildHeaders({ 'content-type': 'application/json' }),
+      method,
+      headers: this.buildHeaders(headers),
       body: JSON.stringify(payload),
       redirect: 'manual'
     })

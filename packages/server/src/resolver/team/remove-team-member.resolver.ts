@@ -4,14 +4,14 @@ import { Auth, Team, TeamGuard } from '@decorator'
 import { TransferTeamInput } from '@graphql'
 import { TeamModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
-import { ProjectService, TeamService } from '@service'
+import { TeamMemberService, TeamService } from '@service'
 
 @Resolver()
 @Auth()
 export class RemoveTeamMemberResolver {
   constructor(
     private readonly teamService: TeamService,
-    private readonly projectService: ProjectService
+    private readonly teamMemberService: TeamMemberService
   ) {}
 
   @Mutation(returns => Boolean)
@@ -34,15 +34,7 @@ export class RemoveTeamMemberResolver {
       throw new BadRequestException('This operation is not allowed in the workspace')
     }
 
-    await this.teamService.deleteMember(input.teamId, input.memberId)
-
-    const projects = await this.projectService.findAllInTeam(input.teamId)
-    if (projects.length > 0) {
-      await this.projectService.deleteMemberInProjects(
-        projects.map(row => row.id),
-        input.memberId
-      )
-    }
+    await this.teamMemberService.remove(input.teamId, input.memberId)
 
     return true
   }
