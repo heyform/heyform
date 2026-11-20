@@ -5,6 +5,7 @@ import { ThrottlerModule } from '@nestjs/throttler'
 import { RedisModule } from '@svtslv/nestjs-ioredis'
 
 import * as Controllers from './controller'
+import { RestApiModule } from './rest-api/rest-api.module'
 import { ModelModule } from './model/module'
 import * as Resolvers from './resolver'
 import { ScheduleModules, ScheduleProviders } from './schedule'
@@ -74,7 +75,8 @@ class ResolverModule {}
       useClass: GraphqlService
     }),
     ServiceModule,
-    ResolverModule
+    ResolverModule,
+    RestApiModule.register(ServiceModule)
   ],
   providers: []
 })

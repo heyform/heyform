@@ -150,6 +150,24 @@ test('a DD/MM/YYYY date range with time is ordered by the field format', () => {
   )
 })
 
+test('date and date range validation reject invalid minutes at midnight', () => {
+  const properties = { format: 'YYYY-MM-DD', allowTime: true }
+  const [dateRule, rangeRule] = fieldsToValidateRules([
+    { id: 'date', title: 'Date', kind: FieldKindEnum.DATE, properties },
+    { id: 'range', title: 'Range', kind: FieldKindEnum.DATE_RANGE, properties }
+  ])
+  const valid = '2024-01-31 00:59'
+  const invalid = '2024-01-31 00:60'
+
+  expect(validate(dateRule, valid)).toBeUndefined()
+  expect(() => validate(dateRule, invalid)).toThrow('Please enter a valid date')
+  expect(validate(rangeRule, { start: '2024-01-31 00:00', end: valid })).toBeUndefined()
+  expect(() => validate(rangeRule, { start: invalid, end: valid })).toThrow(
+    "Start date isn't valid"
+  )
+  expect(() => validate(rangeRule, { start: valid, end: invalid })).toThrow("End date isn't valid")
+})
+
 test('a condition date saved in another shape still matches', () => {
   const field = dateField('DD/MM/YYYY')
 

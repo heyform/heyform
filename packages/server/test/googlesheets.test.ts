@@ -401,6 +401,26 @@ async function testFirstDeliveryWritesTheHeaderRow() {
   assert.strictEqual(sheets.requests.filter(r => r.method === 'PUT').length, 1)
 }
 
+async function testScaleAnswersAreWrittenAsNumbers() {
+  sheets.reset()
+  sheets.add([{ title: 'Sheet1' }])
+  const fields = [
+    { id: 'score', kind: FieldKindEnum.OPINION_SCALE, title: 'Score', properties: { total: 10 } },
+    { id: 'stars', kind: FieldKindEnum.RATING, title: 'Stars', properties: { total: 5 } }
+  ]
+  const form = { ...FORM, fields }
+
+  // Forms submit them as numbers; validation also accepts numeric strings
+  await deliver(createSubmission('sub_1', { score: 7, stars: 4 }, fields), undefined, form)
+  await deliver(createSubmission('sub_2', { score: '3' }, fields), undefined, form)
+
+  assert.deepStrictEqual(sheets.tab().rows, [
+    ['Submitted at', 'Submission ID', 'Score', 'Stars'],
+    ['2026-10-23 14:05:09 UTC', 'sub_1', 7, 4],
+    ['2026-10-23 14:05:09 UTC', 'sub_2', '3', '']
+  ])
+}
+
 async function testAnswersGoUnderTheirHeaderWhateverTheOrder() {
   sheets.reset()
   sheets.add([{ title: 'Sheet1' }])
@@ -606,6 +626,7 @@ async function run() {
     await testValidationErrorsAreClear()
     await testListsTabsForTheSpreadsheet()
     await testFirstDeliveryWritesTheHeaderRow()
+    await testScaleAnswersAreWrittenAsNumbers()
     await testAnswersGoUnderTheirHeaderWhateverTheOrder()
     await testNewAndRenamedQuestionsGetNewColumns()
     await testRepeatedTitlesAndWideFormsFit()

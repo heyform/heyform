@@ -32,6 +32,18 @@ test('invalid date', () => {
   })
 })
 
+test('validates times with zero hours or minutes', () => {
+  const format = 'YYYY-MM-DD HH:mm'
+
+  for (const time of ['00:00', '00:59', '12:00', '23:59']) {
+    expect(isDate(`2024-01-31 ${time}`, format)).toBe(true)
+  }
+
+  for (const time of ['00:60', '00:99', '24:00', '12:60']) {
+    expect(isDate(`2024-01-31 ${time}`, format)).toBe(false)
+  }
+})
+
 test('a format full of unclosed brackets is checked in linear time', () => {
   const started = Date.now()
 

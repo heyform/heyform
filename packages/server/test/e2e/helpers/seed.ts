@@ -1,10 +1,7 @@
 import mongoose from 'mongoose'
 
 /**
- * Direct mongo writes used to bootstrap state the server has no public API
- * for. Right now that's just "join this user to the team with a specific
- * role" — the role mutation referenced by the webapp isn't wired up on the
- * server, so seeding is the only way to test MEMBER role permissions.
+ * Direct Mongo access for setting up and inspecting E2E fixtures.
  */
 
 interface ConnectOpts {
@@ -55,6 +52,55 @@ export async function seedProjectMember(
         { $set: { projectId: input.projectId, memberId: input.memberId } },
         { upsert: true }
       )
+  } finally {
+    await connection.close()
+  }
+}
+
+export async function readStoredApiKey(id: string, opts: ConnectOpts = {}) {
+  const connection = await mongoose.createConnection(resolveUri(opts)).asPromise()
+  try {
+    return await connection.collection('apikeys').findOne({ _id: new mongoose.Types.ObjectId(id) })
+  } finally {
+    await connection.close()
+  }
+}
+
+export async function setStoredApiKeyExpiry(id: string, expiresAt: number, opts: ConnectOpts = {}) {
+  const connection = await mongoose.createConnection(resolveUri(opts)).asPromise()
+  try {
+    const result = await connection
+      .collection('apikeys')
+      .updateOne({ _id: new mongoose.Types.ObjectId(id) }, { $set: { expiresAt } })
+    return result.matchedCount
+  } finally {
+    await connection.close()
+  }
+}
+
+export async function deleteStoredUser(id: string, opts: ConnectOpts = {}) {
+  const connection = await mongoose.createConnection(resolveUri(opts)).asPromise()
+  try {
+    const result = await connection
+      .collection('usermodels')
+      .deleteOne({ _id: new mongoose.Types.ObjectId(id) })
+    return result.deletedCount
+  } finally {
+    await connection.close()
+  }
+}
+
+export async function setStoredUserStatus(
+  id: string,
+  status: { isBlocked: boolean; isDeletionScheduled: boolean },
+  opts: ConnectOpts = {}
+) {
+  const connection = await mongoose.createConnection(resolveUri(opts)).asPromise()
+  try {
+    const result = await connection
+      .collection('usermodels')
+      .updateOne({ _id: new mongoose.Types.ObjectId(id) }, { $set: status })
+    return result.matchedCount
   } finally {
     await connection.close()
   }

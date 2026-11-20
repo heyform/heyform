@@ -4,6 +4,7 @@ import { validateAppConfig } from '../../apps/validate-config'
 import { Auth, Form, FormGuard } from '@decorator'
 import { UpdateIntegrationInput } from '@graphql'
 import { helper } from '@heyform-inc/utils'
+import { mapToObject } from '@utils'
 import {
   FormModel,
   IntegrationConnectionModel,
@@ -99,6 +100,15 @@ export class UpdateIntegrationSettingsResolver {
               )
     })
 
+    // Preserve REST-managed signing credentials, but never return them to the UI.
+    const publicConfig = updates.config
+    if (app.id === 'webhook' && integration) {
+      const stored = mapToObject(integration.config)
+      if (stored.signingSecretEncrypted) {
+        updates.config = { ...publicConfig, signingSecretEncrypted: stored.signingSecretEncrypted }
+      }
+    }
+
     const integrationId = await this.integrationService.createOrUpdate(
       input.formId,
       app.id,
@@ -114,6 +124,6 @@ export class UpdateIntegrationSettingsResolver {
       })
     }
 
-    return updates.config
+    return publicConfig
   }
 }

@@ -71,7 +71,8 @@ export function answerToText(answer: Answer): string {
 
     default:
       try {
-        result = parsePlainAnswer(answer)
+        // Rating and opinion scale answers come back as numbers, whatever the declared type
+        result = String(parsePlainAnswer(answer) ?? '')
       } catch {
         // Historical submissions may predate current validation. Treat a malformed answer as
         // an empty cell so one poisoned record cannot make the entire form unexportable.

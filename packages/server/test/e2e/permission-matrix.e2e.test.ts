@@ -48,33 +48,49 @@ import { randomString, uniqueEmail, uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
 import { seedProjectMember, seedTeamMember } from './helpers/seed'
 
+const ROLE_ADMIN = 1
 const ROLE_COLLABORATOR = 2
 const ROLE_MEMBER = 3
 
 const CALLERS = [
-  'admin', // ADMIN, in team, in project
+  'admin', // workspace owner, in project
+  'workspaceAdmin', // ADMIN, not the owner, in project
   'collaborator', // COLLABORATOR (joined via invite), in team, in project
   'member', // MEMBER (seeded), in team, in project
   'teamOnly', // COLLABORATOR (seeded), in team, NOT in project
-  'outsider', // signed-up user, not in any team
+  'outsider', // belongs to a different workspace
   'anonymous' // no session at all
 ] as const
 type Caller = (typeof CALLERS)[number]
 
 type Outcome = 'ok' | 'error'
 type ExpectedMap = Record<Caller, Outcome>
+type Variables = Record<string, any>
+
+interface RestRequest {
+  method: 'GET' | 'POST' | 'PATCH'
+  path: string
+  body?: unknown
+}
+
+interface AccountKey {
+  id: string
+  token: string
+}
 
 interface MatrixSpec {
   /** GraphQL operationName — also used as the test title prefix */
   op: string
   query: string
   /** Build variables from the shared setup context. */
-  buildVars: (ctx: MatrixContext) => Record<string, any>
+  buildVars: (ctx: MatrixContext) => Variables
   expected: ExpectedMap
+  rest?: (ctx: MatrixContext, variables: Variables) => RestRequest
 }
 
 interface MatrixContext {
   admin: SignedUpUser
+  workspaceAdmin: SignedUpUser
   collaborator: SignedUpUser
   member: SignedUpUser
   teamOnly: SignedUpUser
@@ -88,39 +104,25 @@ interface MatrixContext {
 }
 
 function clientFor(ctx: MatrixContext, caller: Caller): E2EClient {
-  switch (caller) {
-    case 'admin':
-      return ctx.admin.client
-    case 'collaborator':
-      return ctx.collaborator.client
-    case 'member':
-      return ctx.member.client
-    case 'teamOnly':
-      return ctx.teamOnly.client
-    case 'outsider':
-      return ctx.outsider.client
-    case 'anonymous':
-      return ctx.anonymous
-  }
+  return caller === 'anonymous' ? ctx.anonymous : ctx[caller].client
 }
 
 /**
  * Programmatic permission matrix.
  *
- * One setup phase signs up four named roles (admin/collab/member/teamOnly)
- * plus an outsider, builds a workspace+project+published form, and shares the
- * context with every probe. Each probe is one GraphQL operation; the matrix
- * runs that operation as every caller and asserts pass/fail per
- * `spec.expected`. The expected map is built from reading the resolvers — when
- * a resolver checks `team.isOwner`, only admin gets `ok`; otherwise any
- * team/project member gets through.
+ * Fixtures share a workspace, project and published form. Each GraphQL probe
+ * checks the expected role outcome. Paired REST probes use the same caller's
+ * account key and compare the observed GraphQL outcome with the REST status.
  */
 export function build(baseUrl: string) {
   const { suite, test } = defineSuite('permission matrix')
+  const restClient = new E2EClient({ baseUrl })
+  const keys = new Map<Caller, AccountKey>()
   let ctx: MatrixContext
 
-  test('setup: provision admin/collab/member/teamOnly/outsider + workspace+project+form', async () => {
+  test('setup: provision workspace roles, an outsider, a project and a published form', async () => {
     const admin = await signUpUser(baseUrl, { name: uniqueName('Admin') })
+    const workspaceAdmin = await signUpUser(baseUrl, { name: uniqueName('Workspace Admin') })
     const collaborator = await signUpUser(baseUrl, { name: uniqueName('Collab') })
     const member = await signUpUser(baseUrl, { name: uniqueName('Member') })
     const teamOnly = await signUpUser(baseUrl, { name: uniqueName('TeamOnly') })
@@ -140,7 +142,8 @@ export function build(baseUrl: string) {
       input: { teamId, inviteCode }
     })
 
-    // member + teamOnly are seeded directly (no public role mutation exists)
+    // Seed non-owner roles directly so they exercise the real production guards.
+    await seedTeamMember({ teamId, memberId: workspaceAdmin.id, role: ROLE_ADMIN })
     await seedTeamMember({ teamId, memberId: member.id, role: ROLE_MEMBER })
     await seedTeamMember({ teamId, memberId: teamOnly.id, role: ROLE_COLLABORATOR })
 
@@ -149,7 +152,7 @@ export function build(baseUrl: string) {
       input: {
         teamId,
         name: uniqueName('Matrix Project'),
-        memberIds: [collaborator.id, member.id]
+        memberIds: [workspaceAdmin.id, collaborator.id, member.id]
       }
     })
     await seedProjectMember({ projectId, memberId: collaborator.id })
@@ -181,6 +184,7 @@ export function build(baseUrl: string) {
 
     ctx = {
       admin,
+      workspaceAdmin,
       collaborator,
       member,
       teamOnly,
@@ -193,6 +197,35 @@ export function build(baseUrl: string) {
       fieldId
     }
   })
+
+  const keyCallers = CALLERS.filter(caller => caller !== 'anonymous')
+  for (const caller of keyCallers) {
+    test(`REST setup — issue an account key for ${caller}`, async () => {
+      assert.ok(ctx, 'matrix setup did not run')
+      const session = clientFor(ctx, caller)
+      const workspaceId =
+        caller === 'outsider'
+          ? await session.gqlOk<string>('createTeam', CREATE_TEAM_GQL, {
+              input: { name: uniqueName('Matrix Outsider'), projectName: 'Default' }
+            })
+          : ctx.teamId
+      const access = await session.accountKeys<{
+        workspaces: Array<{ id: string; scopes: string[] }>
+      }>('GET')
+      assert.strictEqual(access.status, 200, 'account key settings should be available')
+      const workspace = access.body.workspaces.find(workspace => workspace.id === workspaceId)
+      assert.ok(workspace?.scopes.length, 'the caller needs at least one permitted scope')
+      const issued = await session.accountKeys<AccountKey>('POST', '', {
+        name: 'Permission matrix',
+        workspaceAccess: 'selected',
+        workspaceIds: [workspaceId],
+        scopes: workspace.scopes
+      })
+      assert.strictEqual(issued.status, 201, 'scoped key should be issued')
+      assert.ok(issued.body.id && issued.body.token, 'account key credentials are required')
+      keys.set(caller, issued.body)
+    })
+  }
 
   // ─── Probe order is intentional: read-only first, then ops that change ───
   // shared state (e.g. resetTeamInviteCode rotates the invite code; we only
@@ -241,6 +274,7 @@ export function build(baseUrl: string) {
       op: 'teams',
       query: TEAMS_GQL,
       buildVars: () => ({}),
+      rest: () => ({ method: 'GET', path: '/workspaces' }),
       expected: ok({ all: 'ok', anonymous: 'error' })
     },
     {
@@ -272,6 +306,7 @@ export function build(baseUrl: string) {
       op: 'teamMembers',
       query: TEAM_MEMBERS_GQL,
       buildVars: c => ({ input: { teamId: c.teamId } }),
+      rest: c => ({ method: 'GET', path: `/workspaces/${c.teamId}/members` }),
       expected: ok({ all: 'ok', outsider: 'error', anonymous: 'error' })
     },
     {
@@ -311,6 +346,7 @@ export function build(baseUrl: string) {
       op: 'forms',
       query: FORMS_GQL,
       buildVars: c => ({ input: { projectId: c.projectId, status: 1 } }),
+      rest: c => ({ method: 'GET', path: `/projects/${c.projectId}/forms` }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -322,6 +358,7 @@ export function build(baseUrl: string) {
       op: 'formDetail',
       query: FORM_DETAIL_GQL,
       buildVars: c => ({ input: { formId: c.formId } }),
+      rest: c => ({ method: 'GET', path: `/forms/${c.formId}` }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -357,6 +394,11 @@ export function build(baseUrl: string) {
       buildVars: c => ({
         input: { formId: c.formId, filterSpam: true, enableProgress: true, locale: 'en' }
       }),
+      rest: (c, { input: { filterSpam, enableProgress, locale } }) => ({
+        method: 'PATCH',
+        path: `/forms/${c.formId}/settings`,
+        body: { filterSpam, enableProgress, locale }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -369,6 +411,10 @@ export function build(baseUrl: string) {
       query: SUBMISSIONS_GQL,
       buildVars: c => ({
         input: { formId: c.formId, category: 'inbox', page: 1, limit: 30 }
+      }),
+      rest: (c, { input: { page, limit } }) => ({
+        method: 'GET',
+        path: `/forms/${c.formId}/submissions?page=${page}&limit=${limit}`
       }),
       expected: ok({
         all: 'ok',
@@ -394,6 +440,11 @@ export function build(baseUrl: string) {
       buildVars: c => ({
         input: { projectId: c.projectId, name: uniqueName('Matrix Project') }
       }),
+      rest: (c, { input: { name } }) => ({
+        method: 'PATCH',
+        path: `/projects/${c.projectId}`,
+        body: { name }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -417,6 +468,11 @@ export function build(baseUrl: string) {
       op: 'updateFormVariables',
       query: UPDATE_FORM_VARIABLES_GQL,
       buildVars: c => ({ input: { formId: c.formId, variables: [] } }),
+      rest: (c, { input: { variables } }) => ({
+        method: 'PATCH',
+        path: `/forms/${c.formId}/variables`,
+        body: { variables }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -428,6 +484,11 @@ export function build(baseUrl: string) {
       op: 'updateFormHiddenFields',
       query: UPDATE_FORM_HIDDEN_FIELDS_GQL,
       buildVars: c => ({ input: { formId: c.formId, hiddenFields: [] } }),
+      rest: (c, { input: { hiddenFields } }) => ({
+        method: 'PATCH',
+        path: `/forms/${c.formId}/hidden-fields`,
+        body: { hiddenFields }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -439,6 +500,11 @@ export function build(baseUrl: string) {
       op: 'updateFormArchive',
       query: UPDATE_FORM_ARCHIVE_GQL,
       buildVars: c => ({ input: { formId: c.formId, allowArchive: true } }),
+      rest: (c, { input: { allowArchive } }) => ({
+        method: 'PATCH',
+        path: `/forms/${c.formId}/settings`,
+        body: { allowArchive }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -451,6 +517,11 @@ export function build(baseUrl: string) {
       query: UPDATE_FORM_THEME_GQL,
       buildVars: c => ({
         input: { formId: c.formId, theme: { fontFamily: 'sans-serif' } }
+      }),
+      rest: (c, { input: { theme } }) => ({
+        method: 'PATCH',
+        path: `/forms/${c.formId}/theme`,
+        body: { theme }
       }),
       expected: ok({
         all: 'ok',
@@ -467,6 +538,11 @@ export function build(baseUrl: string) {
       buildVars: c => ({
         input: { formId: c.formId, name: uniqueName('Matrix Clone') }
       }),
+      rest: (c, { input: { name } }) => ({
+        method: 'POST',
+        path: `/forms/${c.formId}/duplicate`,
+        body: { name }
+      }),
       expected: ok({
         all: 'ok',
         teamOnly: 'error',
@@ -480,12 +556,22 @@ export function build(baseUrl: string) {
       op: 'updateTeam',
       query: UPDATE_TEAM_GQL,
       buildVars: c => ({ input: { teamId: c.teamId, name: uniqueName('Renamed') } }),
+      rest: (c, { input: { name } }) => ({
+        method: 'PATCH',
+        path: `/workspaces/${c.teamId}`,
+        body: { name }
+      }),
       expected: ok({ admin: 'ok', otherwise: 'error' })
     },
     {
       op: 'inviteMember',
       query: INVITE_MEMBER_GQL,
       buildVars: c => ({ input: { teamId: c.teamId, emails: [uniqueEmail('invitee-')] } }),
+      rest: (c, { input: { emails } }) => ({
+        method: 'POST',
+        path: `/workspaces/${c.teamId}/invitations`,
+        body: { emails }
+      }),
       expected: ok({ admin: 'ok', otherwise: 'error' })
     },
     {
@@ -511,13 +597,18 @@ export function build(baseUrl: string) {
   ]
 
   for (const spec of SPECS) {
-    for (const caller of CALLERS) {
+    // Keep the original role matrix for GraphQL-only operations. The extra
+    // non-owner ADMIN case checks authorization parity where a REST route exists.
+    const callers = spec.rest ? CALLERS : CALLERS.filter(caller => caller !== 'workspaceAdmin')
+    for (const caller of callers) {
       const expected = spec.expected[caller]
+      let observed: { variables: Variables; allowed: boolean }
       test(`${spec.op} — ${caller} (${expected})`, async () => {
         if (!ctx) throw new Error('matrix setup did not run')
         const client = clientFor(ctx, caller)
         const variables = spec.buildVars(ctx)
         const result = await client.gql(spec.op, spec.query, variables)
+        observed = { variables, allowed: result.errors.length === 0 && result.status < 400 }
         if (expected === 'ok') {
           assert.strictEqual(
             result.errors.length,
@@ -531,7 +622,40 @@ export function build(baseUrl: string) {
           )
         }
       })
+
+      if (spec.rest) {
+        test(`REST parity — ${spec.op} — ${caller}`, async () => {
+          assert.ok(observed, 'GraphQL probe did not return an outcome')
+          const key = keys.get(caller)
+          if (caller !== 'anonymous') assert.ok(key, 'REST setup did not issue a key')
+
+          const { method, path, body } = spec.rest(ctx, observed.variables)
+          const response = await restClient.restJson(
+            method,
+            '/api/v1' + path,
+            body,
+            key ? { authorization: `Bearer ${key.token}` } : {}
+          )
+          const status = observed.allowed ? (method === 'POST' ? 201 : 200) : key ? 403 : 401
+          assert.strictEqual(
+            response.status,
+            status,
+            `${method} ${path} disagrees with GraphQL authorization for ${caller}: ${response.body?.message ?? ''}`
+          )
+          assert.match(response.headers.get('content-type') ?? '', /^application\/json\b/)
+        })
+      }
     }
+  }
+
+  for (const caller of keyCallers) {
+    test(`REST cleanup — delete the account key for ${caller}`, async () => {
+      const key = keys.get(caller)
+      if (key) {
+        const response = await clientFor(ctx, caller).accountKeys('DELETE', '/' + key.id)
+        assert.strictEqual(response.status, 200, 'matrix key should be deleted')
+      }
+    })
   }
 
   return suite

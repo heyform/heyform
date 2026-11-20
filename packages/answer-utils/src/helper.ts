@@ -58,7 +58,7 @@ export function isDate(input: string, format = 'MM/DD/YYYY'): boolean {
     dateObject.mm || 0
   )
 
-  if (dateObject.HH && dateObject.mm) {
+  if (dateObject.HH !== undefined && dateObject.mm !== undefined) {
     return (
       date.getFullYear() === +dateObject.YYYY &&
       date.getMonth() === dateObject.MM - 1 &&
