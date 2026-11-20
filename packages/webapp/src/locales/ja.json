@@ -538,7 +538,7 @@
       "noProjects": "ワークスペースオーナーに連絡してプロジェクトに追加してもらうか、新しいプロジェクトを作成できます。",
       "search": "検索",
       "viewProfile": "プロフィールを見る",
-      "accountSettings": "アカウント設定",
+      "accountSettings": "設定",
       "language": "言語",
       "version": "バージョン {{version}}",
       "logout": "ログアウト",

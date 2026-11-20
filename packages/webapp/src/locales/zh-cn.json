@@ -538,7 +538,7 @@
       "noProjects": "您可以联系工作区所有者将您添加到项目中，或者您可以创建一个新项目。",
       "search": "搜索",
       "viewProfile": "查看资料",
-      "accountSettings": "账户设置",
+      "accountSettings": "设置",
       "language": "语言",
       "version": "版本 {{version}}",
       "logout": "退出登录",
