@@ -1435,6 +1435,34 @@ export class RestApiDocsController {
         ]
       }
     },
+    "/api/v1/forms/{id}/availability": {
+      "patch": {
+        "operationId": "setFormAvailability",
+        "tags": ["Forms"],
+        "summary": "Pause or resume a published form",
+        "description": "Requires forms:write in the form workspace. Resuming does not publish draft edits.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": {
+            "type": "object", "required": ["active"], "additionalProperties": false,
+            "properties": { "active": { "type": "boolean" } }
+          } } }
+        },
+        "responses": {
+          "200": { "description": "Form availability changed", "content": { "application/json": { "schema": {
+            "type": "object", "properties": { "id": { "type": "string" }, "active": { "type": "boolean" } }
+          } } } },
+          "400": { "description": "Invalid request" },
+          "401": { "description": "Unauthorized" },
+          "403": { "description": "Forbidden" },
+          "404": { "description": "Not found" },
+          "409": { "description": "Form is not published or is unavailable" }
+        }
+      }
+    },
     "/api/v1/forms/{id}/submissions": {
       "get": {
         "operationId": "listSubmissions",
