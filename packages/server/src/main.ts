@@ -33,6 +33,7 @@ async function bootstrap() {
 
   // REST controllers require JSON parsing before Nest resolves @Body().
   app.use('/api/v1', bodyParser.json({ limit: '1mb' }))
+  app.use('/mcp', bodyParser.json({ limit: '1mb' }))
 
   // Verify all params
   app.useGlobalPipes(

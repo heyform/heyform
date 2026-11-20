@@ -37,6 +37,7 @@ import {
 } from '../service'
 import { AccountApiKeysController, AccountApiKeysGuard } from './account-api-keys.controller'
 import { ApiKey, ApiKeySchema, ApiKeyScope, ApiKeyService } from './api-key.service'
+import { McpController, REST_API } from './mcp.controller'
 import { ApiRequest, RestApiKeyGuard } from './rest-api-key.guard'
 import { BCRYPT_SALT } from '@environments'
 import { AuthGuard } from '@guard'
@@ -791,8 +792,14 @@ export class RestApiModule {
         serviceModule,
         MongooseModule.forFeature([{ name: ApiKey.name, schema: ApiKeySchema }])
       ],
-      controllers: [RestApiController, AccountApiKeysController],
-      providers: [ApiKeyService, RestApiKeyGuard, AccountApiKeysGuard, AuthGuard]
+      controllers: [RestApiController, AccountApiKeysController, McpController],
+      providers: [
+        { provide: REST_API, useClass: RestApiController },
+        ApiKeyService,
+        RestApiKeyGuard,
+        AccountApiKeysGuard,
+        AuthGuard
+      ]
     }
   }
 }
