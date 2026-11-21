@@ -394,7 +394,7 @@ export default function AccountApiAccess() {
               components={{
                 a: (
                   <a
-                    href="https://docs.heyform.net/open-source/rest-api"
+                    href="https://docs.heyform.net/rest-api"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-primary underline underline-offset-4"
