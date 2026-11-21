@@ -10,6 +10,7 @@ import { build as buildHealth } from './health.e2e.test'
 import { runSuites } from './helpers/runner'
 import { waitForReady } from './helpers/wait'
 import { build as buildInputValidation } from './input-validation.e2e.test'
+import { build as buildMcp } from './mcp.e2e.test'
 import { build as buildNavigation } from './navigation.e2e.test'
 import { build as buildPaymentWebhook } from './payment-webhook.e2e.test'
 import { build as buildPermissionMatrix } from './permission-matrix.e2e.test'
@@ -58,6 +59,7 @@ async function main() {
     buildPseudonymIds(baseUrl),
     buildPaymentWebhook(baseUrl),
     buildRestApi(baseUrl),
+    buildMcp(baseUrl),
     // Rate-limit suite intentionally last — it burns per-user attempt counters.
     buildRateLimit(baseUrl)
   ]

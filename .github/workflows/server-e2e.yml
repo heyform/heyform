@@ -46,6 +46,8 @@ jobs:
       REDIS_PORT: '6379'
       E2E_BASE_URL: http://127.0.0.1:9157
       E2E_WAIT_MS: '120000'
+      # The whole suite runs from one IP in ~10s and exceeds the default 1000 req/min.
+      APP_RATE_LIMIT: '10000'
 
     steps:
       - name: Checkout

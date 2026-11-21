@@ -23,6 +23,8 @@ export const APP_LISTEN_HOSTNAME: string = process.env.APP_LISTEN_HOSTNAME || '0
 export const APP_HOMEPAGE_URL: string =
   process.env.APP_HOMEPAGE_URL || `http://${APP_LISTEN_HOSTNAME}:${APP_LISTEN_PORT}`
 export const TRUST_PROXY: boolean | number | string = parseTrustProxy(process.env.TRUST_PROXY)
+// Global requests per minute per IP
+export const APP_RATE_LIMIT: number = +process.env.APP_RATE_LIMIT || 1000
 export const CORS_ALLOWED_ORIGINS: string[] = (process.env.CORS_ALLOWED_ORIGINS || APP_HOMEPAGE_URL)
   .split(',')
   .map(origin => origin.trim())

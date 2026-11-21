@@ -12,6 +12,7 @@ import { corsOrigin, getUploadContentDisposition, sanitizeUploadFilename } from 
 import {
   APP_LISTEN_HOSTNAME,
   APP_LISTEN_PORT,
+  APP_RATE_LIMIT,
   STATIC_DIR,
   TRUST_PROXY,
   UPLOAD_DIR,
@@ -33,6 +34,7 @@ async function bootstrap() {
 
   // REST controllers require JSON parsing before Nest resolves @Body().
   app.use('/api/v1', bodyParser.json({ limit: '1mb' }))
+  app.use('/mcp', bodyParser.json({ limit: '1mb' }))
 
   // Verify all params
   app.useGlobalPipes(
@@ -115,7 +117,7 @@ async function bootstrap() {
 
   /**
    * Limit the number of user's requests
-   * 1000 requests per minute
+   * APP_RATE_LIMIT (default 1000) requests per minute
    */
   app.use(
     '/api/upload',
@@ -139,7 +141,7 @@ async function bootstrap() {
     rateLimit({
       headers: false,
       windowMs: ms('1m'),
-      max: 1000
+      max: APP_RATE_LIMIT
     })
   )
 
