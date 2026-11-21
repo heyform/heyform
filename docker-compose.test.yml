@@ -30,6 +30,8 @@ services:
       FORM_ENCRYPTION_KEY: ${FORM_ENCRYPTION_KEY:?FORM_ENCRYPTION_KEY is required}
       # Resolved like the e2e signer's secret, so both sides agree
       STRIPE_CONNECT_SECRET_KEY: ${STRIPE_CONNECT_SECRET_KEY:-${STRIPE_WEBHOOK_SECRET_KEY:-whsec_e2e}}
+      # The whole e2e suite runs from one IP and exceeds the default 1000 req/min
+      APP_RATE_LIMIT: ${APP_RATE_LIMIT:-10000}
       MONGO_URI: mongodb://mongo:27017/heyform
       REDIS_HOST: keydb
       REDIS_PORT: 6379
