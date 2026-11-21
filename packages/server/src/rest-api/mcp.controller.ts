@@ -11,7 +11,7 @@ import {
   Res,
   UseGuards
 } from '@nestjs/common'
-import { Response } from 'express'
+import type { Response } from 'express'
 import { z } from 'zod'
 
 import { ApiRequest, RestApiKeyGuard } from './rest-api-key.guard'
