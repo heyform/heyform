@@ -25,7 +25,7 @@ export class DissolveTeamCodeResolver {
       throw new BadRequestException("You don't have permission to dissolve workspace")
     }
 
-    const key = `verify_dissolve_team:${team.id}`
+    const key = `verify_dissolve_team:${team.id}:${user.id}`
     const code = await this.authService.getVerificationCodeWithRateLimit(key)
 
     this.mailService.teamDeletionRequest(

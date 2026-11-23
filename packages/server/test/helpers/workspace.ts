@@ -70,7 +70,34 @@ export function createWorkspaceStore() {
 
   const nextId = (prefix: string) => `${prefix}_${++sequence}`
 
+  const membershipLocks = new Map<string, Promise<unknown>>()
   const teamService = {
+    changeOwnership: TeamService.prototype.changeOwnership,
+    removeAccountFromTeam: TeamService.prototype.removeAccountFromTeam,
+    deleteMember: TeamService.prototype.deleteMember,
+    updateOwners: TeamService.prototype['updateOwners'],
+    withMembershipLock: async (teamId: string, callback: () => Promise<unknown>) => {
+      const previous = membershipLocks.get(teamId)
+      const current = (previous?.catch(() => undefined) ?? Promise.resolve()).then(callback)
+      membershipLocks.set(teamId, current)
+      try {
+        return await current
+      } finally {
+        if (membershipLocks.get(teamId) === current) membershipLocks.delete(teamId)
+      }
+    },
+    teamModel: {
+      updateOne: async (filter: Row, updates: Row) => {
+        const team = teams.find(
+          row =>
+            row.id === filter._id &&
+            row.ownerId === filter.ownerId &&
+            JSON.stringify(row.ownerIds ?? null) === JSON.stringify(filter.ownerIds)
+        )
+        if (team) applyUpdates(team, updates.$set)
+        return { matchedCount: team ? 1 : 0 }
+      }
+    },
     resetInviteCode: TeamService.prototype.resetInviteCode,
     findById: async (id: string) => toDocument(teams.find(row => row.id === id)),
     findJoinableByInvite: async (teamId: string, inviteCode: string) =>
@@ -147,7 +174,7 @@ export function createWorkspaceStore() {
 
       return true
     },
-    deleteMember: async (teamId: string, memberId: string) => {
+    deleteMemberRecord: async (teamId: string, memberId: string) => {
       const index = teamMembers.findIndex(row => row.teamId === teamId && row.memberId === memberId)
 
       if (index > -1) {
@@ -160,6 +187,22 @@ export function createWorkspaceStore() {
 
   const projectService = {
     createByNewTeam: ProjectService.prototype.createByNewTeam,
+    findAccessibleInTeams: ProjectService.prototype.findAccessibleInTeams,
+    projectModel: {
+      find: (conditions: Row) => ({
+        sort: async () =>
+          projects
+            .filter(row =>
+              conditions.$or.some(
+                filter =>
+                  filter.teamId.$in.includes(row.teamId) &&
+                  (!filter._id || filter._id.$in.includes(row.id))
+              )
+            )
+            .reverse()
+            .map(toDocument)
+      })
+    },
     addMemberToDefaultProject: ProjectService.prototype.addMemberToDefaultProject,
     // Newest first, as every listing in the real service sorts
     findAllInTeam: async (teamId: string) =>

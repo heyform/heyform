@@ -19,7 +19,8 @@ export class SearchTeamResolver {
     @Team() team: TeamModel,
     @Args('input') input: SearchTeamInput
   ) {
-    const projectIds = await this.projectService.findProjectsByMemberId(user.id)
+    const projects = await this.projectService.findAccessibleInTeams(user.id, [team])
+    const projectIds = projects.map(project => project.id)
     const forms = await this.formService.searchInTeam(team.id, projectIds, input.query)
 
     return {

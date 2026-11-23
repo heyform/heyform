@@ -157,6 +157,12 @@ export class TransferTeamInput extends TeamDetailInput {
 }
 
 @InputType()
+export class SetTeamMemberOwnerInput extends TransferTeamInput {
+  @Field()
+  isOwner: boolean
+}
+
+@InputType()
 export class UpdateTeamMemberInput extends TransferTeamInput {
   @Field(type => Number)
   @IsEnum([TeamRoleEnum.ADMIN, TeamRoleEnum.COLLABORATOR, TeamRoleEnum.MEMBER])

@@ -48,6 +48,7 @@ import {
   validate
 } from '@heyform-inc/answer-utils'
 import { helper, nanoid, timestamp } from '@heyform-inc/utils'
+import { isTeamOwner } from '@model'
 import {
   assertValidChoiceBranching,
   assertValidFormNavigation,
@@ -169,11 +170,7 @@ export class RestApiController {
     const ownerId = req.apiPrincipal.userId
     const projectId = await this.projects.create({ teamId: id, name, ownerId })
     try {
-      const members = [...new Set([team.ownerId, ownerId])].map(memberId => ({
-        projectId,
-        memberId
-      }))
-      await this.projects.addMembers(members)
+      await this.projects.createMember({ projectId, memberId: ownerId })
     } catch (error) {
       await this.projects.deleteAllMemberInProject(projectId)
       await this.projects.delete(projectId)
@@ -184,8 +181,13 @@ export class RestApiController {
   @Get('workspaces/:id/members')
   async listMembers(@Req() req: ApiRequest, @Param('id') id: string) {
     requireScope(req, 'members:read', id)
-    if (!(await this.teams.findById(identifier(id)))) throw new NotFoundException()
-    return (await this.teams.findMembersInTeam(id)).map(m => ({ userId: m.memberId, role: m.role }))
+    const team = await this.teams.findById(identifier(id))
+    if (!team) throw new NotFoundException()
+    return (await this.teams.findMembersInTeam(id)).map(m => ({
+      userId: m.memberId,
+      role: m.role,
+      isOwner: isTeamOwner(team, m.memberId)
+    }))
   }
   @Post('workspaces/:id/invitations')
   async inviteMembers(@Req() req: ApiRequest, @Param('id') id: string, @Body() body: any) {
@@ -213,8 +215,8 @@ export class RestApiController {
     const team = await this.teams.findById(identifier(id))
     const member = await this.teams.findMemberById(id, identifier(userId))
     if (!team || !member) throw new NotFoundException()
-    if (userId === team.ownerId) throw new ForbiddenException('Cannot remove the workspace owner')
-    await this.teamMembers.remove(id, userId)
+    if (isTeamOwner(team, userId)) throw new ForbiddenException('Cannot remove a workspace owner')
+    await this.teamMembers.remove(id, userId, req.apiPrincipal.userId)
     return { removed: true, workspaceId: id, userId }
   }
   @Patch('projects/:id')

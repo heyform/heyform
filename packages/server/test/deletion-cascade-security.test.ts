@@ -8,6 +8,7 @@ import { DissolveTeamResolver } from '../src/resolver/team/dissolve-team.resolve
 import { UserDeletionCodeResolver } from '../src/resolver/user/user-deletion-code.resolver'
 import { DeleteUserAccountSchedule } from '../src/schedule/delete-user-account.schedule'
 import { FormService } from '../src/service/form.service'
+import { TeamService } from '../src/service/team.service'
 
 const DISABLE_FORM_UPDATE = {
   'settings.active': false,
@@ -62,8 +63,8 @@ async function testDeletionCodeEmailsUseRateLimitedGeneration() {
   assert.strictEqual(isEmailConfirmation, true)
   assert.deepStrictEqual(keys, [
     'user_deletion:user_1',
-    'verify_dissolve_team:team_1',
-    'verify_delete_project:project_1'
+    'verify_dissolve_team:team_1:user_1',
+    'verify_delete_project:project_1:user_1'
   ])
   assert.deepStrictEqual(emails, ['account', 'workspace', 'project'])
 }
@@ -237,6 +238,8 @@ async function testWorkspaceDeletionDisablesAndPurgesFormsBeforeWorkspace() {
       }
     } as any,
     {
+      findById: async () => ({ id: 'team_1', ownerId: 'user_1' }),
+      withMembershipLock: async (_teamId: string, run: () => Promise<void>) => run(),
       deleteAllMemberInTeam: async () => {
         events.push('delete workspace members')
       },
@@ -271,7 +274,7 @@ async function testWorkspaceDeletionDisablesAndPurgesFormsBeforeWorkspace() {
 
   await resolver.dissolveTeam(
     { id: 'team_1', isOwner: true, name: 'Workspace' } as any,
-    { email: 'owner@example.com', lang: 'en', name: 'Owner' } as any,
+    { id: 'user_1', email: 'owner@example.com', lang: 'en', name: 'Owner' } as any,
     { teamId: 'team_1', code: '123456' }
   )
 
@@ -304,7 +307,7 @@ async function testAccountDeletionCleansOwnedWorkspaceBeforeUser() {
       }
     } as any,
     {
-      findAll: async () => [
+      findAllForAccountDeletion: async () => [
         { id: 'owned_team', ownerId: 'user_1' },
         { id: 'joined_team', ownerId: 'another_user' }
       ],
@@ -314,7 +317,13 @@ async function testAccountDeletionCleansOwnedWorkspaceBeforeUser() {
       delete: async () => {
         events.push('delete workspace')
       },
-      deleteMember: async () => {
+      removeAccountFromTeam: TeamService.prototype.removeAccountFromTeam,
+      withMembershipLock: async (_teamId: string, run: () => Promise<void>) => run(),
+      findById: async (id: string) => ({
+        id,
+        ownerId: id === 'owned_team' ? 'user_1' : 'another_user'
+      }),
+      deleteMemberRecord: async () => {
         events.push('leave joined workspace')
       }
     } as any,

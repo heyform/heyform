@@ -30,7 +30,7 @@ export class DeleteProjectCodeResolver {
       return false
     }
 
-    const key = `verify_delete_project:${project.id}`
+    const key = `verify_delete_project:${project.id}:${user.id}`
     const code = await this.authService.getVerificationCodeWithRateLimit(key)
 
     await this.mailService.projectDeletionRequest(

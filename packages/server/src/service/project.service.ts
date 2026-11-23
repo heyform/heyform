@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 
 import { helper } from '@heyform-inc/utils'
-import { ProjectMemberModel, ProjectModel } from '@model'
+import { ProjectMemberModel, ProjectModel, TeamModel, isTeamOwner } from '@model'
 
 @Injectable()
 export class ProjectService {
@@ -104,18 +104,28 @@ export class ProjectService {
     })
   }
 
-  public async findProjectByMemberId(memberId: string, projectId: string) {
-    return this.projectMemberModel.findOne({
-      memberId,
-      projectId
-    })
-  }
-
   public async findProjectsByMemberId(memberId: string): Promise<string[]> {
     const members = await this.projectMemberModel.find({
       memberId
     })
     return members.map(row => row.projectId)
+  }
+
+  async findAccessibleInTeams(memberId: string, teams: TeamModel[]): Promise<ProjectModel[]> {
+    if (teams.length === 0) return []
+
+    const ownedTeamIds = teams.filter(team => isTeamOwner(team, memberId)).map(team => team.id)
+    const joinedTeamIds = teams.filter(team => !isTeamOwner(team, memberId)).map(team => team.id)
+    const projectIds = joinedTeamIds.length > 0 ? await this.findProjectsByMemberId(memberId) : []
+
+    return this.projectModel
+      .find({
+        $or: [
+          { teamId: { $in: ownedTeamIds } },
+          { teamId: { $in: joinedTeamIds }, _id: { $in: projectIds } }
+        ]
+      })
+      .sort({ createdAt: -1 })
   }
 
   public async findMembers(projectId: string | string[]): Promise<ProjectMemberModel[]> {

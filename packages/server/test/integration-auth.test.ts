@@ -2298,8 +2298,14 @@ function createCallbackController(
       findById: async (id: string) =>
         id === 'form_1' ? { id: 'form_1', teamId: 'team_1', projectId: 'project_1' } : null
     },
-    { findMemberById: async () => (members ? { id: 'member' } : null) },
-    { findMemberById: async () => (members ? { id: 'member' } : null) },
+    {
+      findById: async () => ({ id: 'project_1', teamId: 'team_1' }),
+      findMemberById: async () => (members ? { id: 'member' } : null)
+    },
+    {
+      findById: async () => ({ id: 'team_1', ownerId: 'another_user' }),
+      findMemberById: async () => (members ? { id: 'member' } : null)
+    },
     ctx.service
   )
 }

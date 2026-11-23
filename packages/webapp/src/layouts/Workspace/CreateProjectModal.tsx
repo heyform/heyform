@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ProjectService, WorkspaceService } from '@/services'
-import { uniqueArray, useParam, useRouter } from '@/utils'
+import { useParam, useRouter } from '@/utils'
 
 import { Async, Checkbox, Form, Input, Modal, Repeat, SimpleFormProps } from '@/components'
 import { useAppStore, useModal, useUserStore, useWorkspaceStore } from '@/store'
@@ -17,12 +17,11 @@ const AddMembers: FC<{ value?: string[]; onChange?: (value: string[]) => void }>
 }) => {
   const { workspaceId } = useParam()
   const { user } = useUserStore()
-  const { workspace, members, setMembers } = useWorkspaceStore()
+  const { members, setMembers } = useWorkspaceStore()
 
   async function fetch() {
     const result = (await WorkspaceService.members(workspaceId)).map((m: MemberType) => ({
       ...m,
-      isOwner: workspace.ownerId === m.id,
       isYou: user.id === m.id
     }))
 
@@ -63,7 +62,7 @@ const AddMembers: FC<{ value?: string[]; onChange?: (value: string[]) => void }>
           {members.map(m => (
             <ProjectMemberItem key={m.id} member={m}>
               <Checkbox
-                value={value.includes(m.id)}
+                value={m.isOwner || value.includes(m.id)}
                 disabled={m.isOwner || m.isYou}
                 onChange={isChecked => handleChange(isChecked, m.id)}
               />
@@ -82,7 +81,7 @@ const CreateProjectForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> = ({ onLoa
   const { workspaceId } = useParam()
   const { closeModal } = useAppStore()
   const { user } = useUserStore()
-  const { workspace, addProject } = useWorkspaceStore()
+  const { addProject } = useWorkspaceStore()
   const { payload } = useModal('CreateProjectModal')
 
   async function fetch(values: ProjectType) {
@@ -107,7 +106,7 @@ const CreateProjectForm: FC<Pick<SimpleFormProps, 'onLoadingChange'>> = ({ onLoa
       className="space-y-4"
       fetch={fetch}
       initialValues={{
-        members: uniqueArray([workspace.ownerId, user.id])
+        members: [user.id]
       }}
       submitProps={{
         className: 'px-5 min-w-24',

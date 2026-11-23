@@ -42,7 +42,7 @@ export class DeleteProjectResolver {
       const attemptsKey = `limit:delete_project:${project.id}`
 
       await this.authService.attemptsCheck(attemptsKey, async () => {
-        const key = `verify_delete_project:${project.id}`
+        const key = `verify_delete_project:${project.id}:${user.id}`
         await this.authService.checkVerificationCode(key, code)
       })
     } else if (input.name !== project.name) {

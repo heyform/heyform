@@ -2,8 +2,7 @@ import { BadRequestException } from '@nestjs/common'
 
 import { Auth, Project, ProjectGuard, Team } from '@decorator'
 import { ProjectMemberInput } from '@graphql'
-import { TeamRoleEnum } from '@model'
-import { ProjectModel, TeamModel } from '@model'
+import { ProjectModel, TeamModel, TeamRoleEnum, isTeamOwner } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService, TeamService } from '@service'
 
@@ -38,9 +37,10 @@ export class AddProjectMemberResolver {
       throw new BadRequestException('The member does not belong to this workspace')
     }
 
-    const member = await this.projectService.findMemberById(input.projectId, input.memberId)
-
-    if (member) {
+    if (
+      isTeamOwner(team, input.memberId) ||
+      (await this.projectService.findMemberById(input.projectId, input.memberId))
+    ) {
       throw new BadRequestException('The member already exists in this project')
     }
 

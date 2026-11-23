@@ -8,6 +8,7 @@ import {
 import { Reflector } from '@nestjs/core'
 
 import { helper, timestamp } from '@heyform-inc/utils'
+import { ProjectModel, getTeamOwnerIds, isTeamOwner } from '@model'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { FormService, ProjectService, TeamService } from '@service'
 import { requestParser } from '@utils'
@@ -69,22 +70,12 @@ export class PermissionGuard implements CanActivate {
       projectId = form.projectId
     }
 
+    let project: ProjectModel | undefined
     if (scope >= PermissionScopeEnum.project) {
-      const project = await this.projectService.findById(projectId)
+      project = await this.projectService.findById(projectId)
 
       if (!project) {
         throw new BadRequestException('Please make sure you have permission to access this project')
-      }
-
-      const member = await this.projectService.findMemberById(projectId, user.id)
-      if (!member) {
-        throw new BadRequestException("You don't have permission to access the workspace")
-      }
-
-      req.project = {
-        id: projectId,
-        ...project.toObject(),
-        isOwner: project.ownerId === user.id
       }
 
       teamId = project.teamId
@@ -101,11 +92,23 @@ export class PermissionGuard implements CanActivate {
       throw new BadRequestException("You don't have permission to access the workspace")
     }
 
-    const isOwner = team.ownerId === user.id
+    const isOwner = isTeamOwner(team, user.id)
+
+    if (project) {
+      if (!isOwner && !(await this.projectService.findMemberById(projectId, user.id))) {
+        throw new BadRequestException("You don't have permission to access the workspace")
+      }
+      req.project = {
+        id: projectId,
+        ...project.toObject(),
+        isOwner: project.ownerId === user.id
+      }
+    }
 
     req.team = {
       id: teamId,
       ownerId: team.ownerId,
+      ownerIds: getTeamOwnerIds(team),
       isOwner,
       name: team.name,
       role: member?.role,

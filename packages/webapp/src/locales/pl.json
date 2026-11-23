@@ -1585,8 +1585,8 @@
     },
     "deletion": {
       "headline": "Usuń konto",
-      "subHeadline": "To trwale usunie całe Twoje konto. Wszystkie Twoje formularze, zgłoszenia i przestrzenie robocze zostaną usunięte.",
-      "tip": "Tej akcji nie można cofnąć. To trwale usunie całe Twoje konto. Wszystkie utworzone przez Ciebie przestrzenie robocze zostaną usunięte, a Ty zostaniesz usunięty ze wszystkich współdzielonych przestrzeni roboczych.\nJeśli jesteś pewien, że chcesz kontynuować proces usuwania konta, proszę przejdź dalej poniżej.",
+      "subHeadline": "Twoje konto i przestrzenie robocze, których jesteś jedynym właścicielem, zostaną trwale usunięte.",
+      "tip": "Tej czynności nie można cofnąć. Przestrzenie robocze, których jesteś jedynym właścicielem, zostaną usunięte wraz z formularzami i zgłoszeniami. Utracisz członkostwo w pozostałych przestrzeniach.",
       "code": {
         "label": "Wprowadź kod do usunięcia wysłany na <strong>{{email}}</strong>.",
         "required": "Kod weryfikacyjny nie może być pusty"
