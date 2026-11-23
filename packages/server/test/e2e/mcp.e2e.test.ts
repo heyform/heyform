@@ -86,5 +86,20 @@ export function build(baseUrl: string) {
     assert.strictEqual(denied.data.statusCode, 403)
   })
 
+  test('marks write tools as destructive unless they only add data', async () => {
+    const list = await mcp('tools/list', {})
+    const hints = Object.fromEntries(
+      list.body.result.tools.map((t: any) => [t.name, t.annotations])
+    )
+    assert.deepStrictEqual(hints.get_form, { readOnlyHint: true, destructiveHint: false })
+    assert.deepStrictEqual(hints.create_form, { readOnlyHint: false, destructiveHint: false })
+    for (const name of ['publish_form', 'unpublish_form', 'update_form_drafts', 'trash_form'])
+      assert.deepStrictEqual(
+        hints[name],
+        { readOnlyHint: false, destructiveHint: true },
+        `${name} is destructive`
+      )
+  })
+
   return suite
 }

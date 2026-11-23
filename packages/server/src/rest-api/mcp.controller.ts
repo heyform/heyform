@@ -29,7 +29,8 @@ type McpTool = {
   description: string
   input?: z.ZodRawShape
   readOnly?: boolean
-  destructive?: boolean
+  // Only adds or restores data; every other write is treated as destructive.
+  additive?: boolean
   run: (api: RestApiController, req: ApiRequest, args: any) => Promise<unknown>
 }
 
@@ -83,6 +84,7 @@ const TOOLS: McpTool[] = [
     name: 'create_project',
     description: 'Create a project in a workspace.',
     input: { workspaceId, name },
+    additive: true,
     run: (api, req, args) => api.createProject(req, args.workspaceId, { name: args.name })
   },
   {
@@ -108,7 +110,6 @@ const TOOLS: McpTool[] = [
     name: 'remove_member',
     description: 'Remove a member from a workspace.',
     input: { workspaceId, userId: z.string().describe('User ID of the member') },
-    destructive: true,
     run: (api, req, args) => api.removeMember(req, args.workspaceId, args.userId)
   },
   {
@@ -130,6 +131,7 @@ const TOOLS: McpTool[] = [
     name: 'create_form',
     description: 'Create an unpublished form in a project.',
     input: { projectId, name },
+    additive: true,
     run: (api, req, args) => api.createForm(req, args.projectId, { name: args.name })
   },
   {
@@ -142,6 +144,7 @@ const TOOLS: McpTool[] = [
     name: 'duplicate_form',
     description: 'Duplicate a form into the same project. The copy is unpublished.',
     input: { formId, name },
+    additive: true,
     run: (api, req, args) => api.duplicateForm(req, args.formId, { name: args.name })
   },
   {
@@ -240,13 +243,13 @@ const TOOLS: McpTool[] = [
     name: 'trash_form',
     description: 'Move a form to trash. It can be restored within 30 days.',
     input: { formId },
-    destructive: true,
     run: (api, req, args) => api.trashForm(req, args.formId)
   },
   {
     name: 'restore_form',
     description: 'Restore a form from trash.',
     input: { formId },
+    additive: true,
     run: (api, req, args) => api.restoreForm(req, args.formId)
   },
   {
@@ -333,7 +336,7 @@ export class McpController {
           inputSchema: tool.input ?? {},
           annotations: {
             readOnlyHint: !!tool.readOnly,
-            destructiveHint: !!tool.destructive
+            destructiveHint: !tool.readOnly && !tool.additive
           }
         },
         async (args: any) => {
