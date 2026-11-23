@@ -15,6 +15,8 @@ import {
 import {
   CURRENCY_SYMBOLS,
   OTHER_CHOICE_ID,
+  choiceMatrixAnswerText,
+  choiceMatrixAnswers,
   htmlUtils,
   otherChoiceText
 } from '@heyform-inc/answer-utils'
@@ -163,6 +165,23 @@ const FullNameItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) =
     >
       {[answer.value.firstName, answer.value.lastName].map(toText).filter(Boolean).join(' ')}
     </div>
+  )
+}
+
+const ChoiceMatrixItem: FC<SubmissionCellProps> = ({ answer, field, isTableCell }) => {
+  if (answer.kind !== field.kind) return null
+
+  if (isTableCell) return <span>{choiceMatrixAnswerText(answer)}</span>
+
+  return (
+    <dl className="grid grid-cols-[1fr_1fr] gap-2">
+      {choiceMatrixAnswers(answer).map(row => (
+        <Fragment key={row.rowId}>
+          <dt className="text-secondary">{row.rowLabel}</dt>
+          <dd>{row.columnLabel || '—'}</dd>
+        </Fragment>
+      ))}
+    </dl>
   )
 }
 
@@ -474,6 +493,9 @@ export default function SubmissionCell(props: SubmissionCellProps) {
 
     case FieldKindEnum.DATE_RANGE:
       return <DateRangeItem {...props} />
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      return <ChoiceMatrixItem {...props} />
 
     case FieldKindEnum.INPUT_TABLE:
       return <InputTableItem {...props} />

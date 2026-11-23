@@ -50,6 +50,7 @@ import {
 import { helper, nanoid, timestamp } from '@heyform-inc/utils'
 import {
   assertValidChoiceBranching,
+  assertValidChoiceMatrices,
   assertValidFormNavigation,
   isSafeCSSValue,
   isSafeCustomCSS,
@@ -549,6 +550,7 @@ export class RestApiController {
       throw new BadRequestException('Invalid drafts or logics')
     const drafts = sanitizeFormDrafts(body.drafts)
     assertValidFormNavigation(drafts)
+    assertValidChoiceMatrices(drafts)
     const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
     assertValidChoiceBranching(drafts, logics)
     await this.forms.update(id, {
@@ -574,6 +576,7 @@ export class RestApiController {
       throw new BadRequestException('Invalid drafts or logics')
     const drafts = sanitizeFormDrafts(body.drafts)
     assertValidFormNavigation(drafts)
+    assertValidChoiceMatrices(drafts, true)
     const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
     assertValidChoiceBranching(drafts, logics)
     const now = timestamp()

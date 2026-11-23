@@ -1285,6 +1285,7 @@
         "legalTerms": "法律條款",
         "signature": "簽名",
         "website": "網站",
+        "choiceMatrix": "矩陣單選",
         "inputTable": "輸入表",
         "submitDate": "提交日期",
         "ipAddress": "IP 地址",
@@ -1321,6 +1322,9 @@
         "otherChoice": "其他",
         "addChoice": "新增選項",
         "dateRangeTo": "至",
+        "addRow": "新增列",
+        "rowPlaceholder": "第 {{index}} 列",
+        "removeMatrixLabel": "移除{{label}}",
         "addColumn": "新增欄位",
         "columnPlaceholder": "欄 {{index}}"
       },

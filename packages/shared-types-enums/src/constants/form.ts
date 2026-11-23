@@ -32,6 +32,7 @@ export const QUESTION_FIELD_KINDS = [
 
   // Data
   FieldKindEnum.INPUT_TABLE,
+  FieldKindEnum.CHOICE_MATRIX,
 
   // Fieldset
   FieldKindEnum.PAYMENT,

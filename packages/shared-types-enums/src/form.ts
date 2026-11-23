@@ -162,6 +162,8 @@ export interface Property {
 
   // Data
   tableColumns?: Column[]
+  matrixRows?: Column[]
+  matrixColumns?: Column[]
 
   // Score
   score?: number
@@ -335,6 +337,13 @@ export interface ClientSidePaymentValue {
 
 export type InputTableValue = Array<Record<string, string>>
 
+export interface MatrixSelection {
+  rowId: string
+  columnId: string
+}
+
+export type ChoiceMatrixValue = MatrixSelection[]
+
 export type AnswerValue =
   | ChoiceValue
   | FileUploadValue
@@ -342,6 +351,7 @@ export type AnswerValue =
   | FullNameValue
   | DateRangeValue
   | InputTableValue
+  | ChoiceMatrixValue
   | ServerSidePaymentValue
   | ClientSidePaymentValue
   | any

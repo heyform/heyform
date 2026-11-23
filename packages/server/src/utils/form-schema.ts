@@ -201,7 +201,42 @@ export function assertValidFormNavigation(drafts: FormField[]): void {
   }
 }
 
-// Drafts may be mid-edit, so this only runs when publishing.
+// Draft labels can be empty while the author is editing them.
+export function assertValidChoiceMatrices(drafts: FormField[], publishing = false): void {
+  function validAxis(axis: unknown, minimum: number): boolean {
+    if (!Array.isArray(axis) || axis.length < minimum) return false
+
+    const ids = new Set<string>()
+    for (const item of axis) {
+      if (
+        typeof item?.id !== 'string' ||
+        !item.id.trim() ||
+        ids.has(item.id) ||
+        typeof item.label !== 'string' ||
+        (publishing && !item.label.trim())
+      )
+        return false
+
+      ids.add(item.id)
+    }
+
+    return true
+  }
+
+  for (const field of flattenFields(drafts, true)) {
+    if (
+      field.kind === FieldKindEnum.CHOICE_MATRIX &&
+      (!validAxis(field.properties?.matrixRows, 1) ||
+        !validAxis(field.properties?.matrixColumns, 2))
+    ) {
+      throw new BadRequestException(
+        'A choice matrix needs at least one row and two columns with valid labels'
+      )
+    }
+  }
+}
+
+// Drafts may be mid-edit, so this runs when publishing.
 export function assertValidChoiceBranching(drafts: FormField[], logics?: Logic[]): void {
   const fields = flattenFields(drafts, true)
   const [error] = getChoiceBranchingErrors(fields, logics)

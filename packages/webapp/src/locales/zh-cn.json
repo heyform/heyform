@@ -1420,6 +1420,7 @@
         "legalTerms": "法律条款",
         "signature": "签名",
         "website": "网站",
+        "choiceMatrix": "矩阵单选",
         "inputTable": "输入表",
         "submitDate": "提交日期",
         "ipAddress": "IP 地址",
@@ -1460,6 +1461,9 @@
         "otherChoice": "其他",
         "addChoice": "添加选项",
         "dateRangeTo": "至",
+        "addRow": "添加行",
+        "rowPlaceholder": "第 {{index}} 行",
+        "removeMatrixLabel": "删除{{label}}",
         "addColumn": "添加列",
         "columnPlaceholder": "列 {{index}}"
       },

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '../utils'
 
 import { Address } from '../blocks/Address'
+import { ChoiceMatrix } from '../blocks/ChoiceMatrix'
 import { Country } from '../blocks/Country'
 import { Date } from '../blocks/Date'
 import { DateRange } from '../blocks/DateRange'
@@ -94,6 +95,9 @@ function getBlock(
 
     case FieldKindEnum.LEGAL_TERMS:
       return <LegalTerms key={field.id} field={field} transitionState={transitionState} />
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      return <ChoiceMatrix key={field.id} field={field} transitionState={transitionState} />
 
     case FieldKindEnum.INPUT_TABLE:
       return <InputTable key={field.id} field={field} transitionState={transitionState} />

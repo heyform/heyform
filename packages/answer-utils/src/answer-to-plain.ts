@@ -3,6 +3,7 @@ import { Answer, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 import { helper } from '@heyform-inc/utils'
 
 import parser from './answer-parser'
+import { choiceMatrixAnswerText } from './choice-matrix'
 
 export function answersToPlain(answers: Answer[]): string {
   return answers
@@ -51,6 +52,10 @@ export function parsePlainAnswer(answer: Answer, livePreview = false): string {
 
     case FieldKindEnum.DATE_RANGE:
       value = parser.dateRange(answer)
+      break
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      value = choiceMatrixAnswerText(answer)
       break
 
     case FieldKindEnum.INPUT_TABLE:
