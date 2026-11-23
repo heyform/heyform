@@ -4,12 +4,12 @@ import { Request } from 'express'
 import { ApiKeyScope, ApiKeyService, WorkspaceApiAccess } from './api-key.service'
 import { UserService } from '@service'
 
-type Principal = {
+export type ApiPrincipal = {
   userId: string
   workspaces: Map<string, WorkspaceApiAccess>
   scopes: ApiKeyScope[]
 }
-export type ApiRequest = Request & { apiPrincipal?: Principal }
+export type ApiRequest = Request & { apiPrincipal?: ApiPrincipal }
 
 @Injectable()
 export class RestApiKeyGuard implements CanActivate {

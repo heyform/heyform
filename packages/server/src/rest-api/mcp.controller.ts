@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   MethodNotAllowedException,
   Post,
   Req,
@@ -13,16 +12,13 @@ import {
 import type { Response } from 'express'
 import { z } from 'zod'
 
-import { ApiRequest, RestApiKeyGuard } from './rest-api-key.guard'
+import { ApiPrincipal, ApiRequest, RestApiKeyGuard } from './rest-api-key.guard'
+import { RestApiService } from './rest-api.service'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { Logger } from '@utils'
 
 import { toClientException } from '../common/filter'
-import type { RestApiController } from './rest-api.module'
-
-// Type-only import above avoids a runtime cycle with rest-api.module; the module binds this token.
-export const REST_API = Symbol('REST_API')
 
 type McpTool = {
   name: string
@@ -31,7 +27,7 @@ type McpTool = {
   readOnly?: boolean
   // Only adds or restores data; every other write is treated as destructive.
   additive?: boolean
-  run: (api: RestApiController, req: ApiRequest, args: any) => Promise<unknown>
+  run: (api: RestApiService, principal: ApiPrincipal, args: any) => Promise<unknown>
 }
 
 const workspaceId = z.string().describe('Workspace ID')
@@ -45,79 +41,82 @@ const TOOLS: McpTool[] = [
     name: 'get_current_user',
     description: 'Get the user who owns the API key.',
     readOnly: true,
-    run: (api, req) => api.getCurrentUser(req)
+    run: (api, principal) => api.getCurrentUser(principal)
   },
   {
     name: 'get_user',
     description: 'Get a user who shares a workspace with the API key owner.',
     input: { userId: z.string().describe('User ID') },
     readOnly: true,
-    run: (api, req, { userId }) => api.getUser(req, userId)
+    run: (api, principal, { userId }) => api.getUser(principal, userId)
   },
   {
     name: 'list_workspaces',
     description: 'List workspaces the API key can access.',
     readOnly: true,
-    run: (api, req) => api.workspaces(req)
+    run: (api, principal) => api.workspaces(principal)
   },
   {
     name: 'get_workspace',
     description: 'Get a workspace.',
     input: { workspaceId },
     readOnly: true,
-    run: (api, req, args) => api.getWorkspace(req, args.workspaceId)
+    run: (api, principal, args) => api.getWorkspace(principal, args.workspaceId)
   },
   {
     name: 'rename_workspace',
     description: 'Rename a workspace.',
     input: { workspaceId, name },
-    run: (api, req, args) => api.updateWorkspace(req, args.workspaceId, { name: args.name })
+    run: (api, principal, args) =>
+      api.updateWorkspace(principal, args.workspaceId, { name: args.name })
   },
   {
     name: 'list_projects',
     description: 'List projects in a workspace.',
     input: { workspaceId },
     readOnly: true,
-    run: (api, req, args) => api.listProjects(req, args.workspaceId)
+    run: (api, principal, args) => api.listProjects(principal, args.workspaceId)
   },
   {
     name: 'create_project',
     description: 'Create a project in a workspace.',
     input: { workspaceId, name },
     additive: true,
-    run: (api, req, args) => api.createProject(req, args.workspaceId, { name: args.name })
+    run: (api, principal, args) =>
+      api.createProject(principal, args.workspaceId, { name: args.name })
   },
   {
     name: 'rename_project',
     description: 'Rename a project.',
     input: { projectId, name },
-    run: (api, req, args) => api.renameProject(req, args.projectId, { name: args.name })
+    run: (api, principal, args) => api.renameProject(principal, args.projectId, { name: args.name })
   },
   {
     name: 'list_members',
     description: 'List members of a workspace.',
     input: { workspaceId },
     readOnly: true,
-    run: (api, req, args) => api.listMembers(req, args.workspaceId)
+    run: (api, principal, args) => api.listMembers(principal, args.workspaceId)
   },
   {
     name: 'invite_members',
     description: 'Invite people to a workspace by email.',
     input: { workspaceId, emails: z.array(z.string()).describe('1-20 email addresses') },
-    run: (api, req, args) => api.inviteMembers(req, args.workspaceId, { emails: args.emails })
+    run: (api, principal, args) =>
+      api.inviteMembers(principal, args.workspaceId, { emails: args.emails })
   },
   {
     name: 'remove_member',
     description: 'Remove a member from a workspace.',
     input: { workspaceId, userId: z.string().describe('User ID of the member') },
-    run: (api, req, args) => api.removeMember(req, args.workspaceId, args.userId)
+    run: (api, principal, args) => api.removeMember(principal, args.workspaceId, args.userId)
   },
   {
     name: 'list_forms',
     description: 'List forms in a project.',
     input: { projectId },
     readOnly: true,
-    run: (api, req, args) => api.listForms(req, args.projectId)
+    run: (api, principal, args) => api.listForms(principal, args.projectId)
   },
   {
     name: 'get_form',
@@ -125,34 +124,34 @@ const TOOLS: McpTool[] = [
       'Get a form, including published fields, drafts, logics, theme and version. Read it before editing drafts.',
     input: { formId },
     readOnly: true,
-    run: (api, req, args) => api.getForm(req, args.formId)
+    run: (api, principal, args) => api.getForm(principal, args.formId)
   },
   {
     name: 'create_form',
     description: 'Create an unpublished form in a project.',
     input: { projectId, name },
     additive: true,
-    run: (api, req, args) => api.createForm(req, args.projectId, { name: args.name })
+    run: (api, principal, args) => api.createForm(principal, args.projectId, { name: args.name })
   },
   {
     name: 'rename_form',
     description: 'Rename a form.',
     input: { formId, name },
-    run: (api, req, args) => api.renameForm(req, args.formId, { name: args.name })
+    run: (api, principal, args) => api.renameForm(principal, args.formId, { name: args.name })
   },
   {
     name: 'duplicate_form',
     description: 'Duplicate a form into the same project. The copy is unpublished.',
     input: { formId, name },
     additive: true,
-    run: (api, req, args) => api.duplicateForm(req, args.formId, { name: args.name })
+    run: (api, principal, args) => api.duplicateForm(principal, args.formId, { name: args.name })
   },
   {
     name: 'move_form',
     description: 'Move a form to another project in the same workspace.',
     input: { formId, targetProjectId: projectId },
-    run: (api, req, args) =>
-      api.moveForm(req, args.formId, { targetProjectId: args.targetProjectId })
+    run: (api, principal, args) =>
+      api.moveForm(principal, args.formId, { targetProjectId: args.targetProjectId })
   },
   {
     name: 'update_form_drafts',
@@ -166,7 +165,7 @@ const TOOLS: McpTool[] = [
         .describe('Draft fields, same shape as get_form drafts'),
       logics: z.array(z.record(z.string(), z.any())).optional().describe('Draft logics')
     },
-    run: (api, req, { formId, ...body }) => api.updateDrafts(req, formId, body)
+    run: (api, principal, { formId, ...body }) => api.updateDrafts(principal, formId, body)
   },
   {
     name: 'publish_form',
@@ -180,26 +179,27 @@ const TOOLS: McpTool[] = [
         .describe('Fields to publish, same shape as get_form drafts'),
       logics: z.array(z.record(z.string(), z.any())).optional().describe('Logics to publish')
     },
-    run: (api, req, { formId, ...body }) => api.publishForm(req, formId, body)
+    run: (api, principal, { formId, ...body }) => api.publishForm(principal, formId, body)
   },
   {
     name: 'unpublish_form',
     description: 'Stop a form from accepting submissions.',
     input: { formId },
-    run: (api, req, args) => api.unpublishForm(req, args.formId)
+    run: (api, principal, args) => api.unpublishForm(principal, args.formId)
   },
   {
     name: 'set_form_availability',
     description: 'Open or close a published form for submissions.',
     input: { formId, active: z.boolean() },
-    run: (api, req, args) => api.setFormAvailability(req, args.formId, { active: args.active })
+    run: (api, principal, args) =>
+      api.setFormAvailability(principal, args.formId, { active: args.active })
   },
   {
     name: 'update_form_settings',
     description:
       'Update form settings, e.g. locale, enableProgress, closedAt, quotaLimit, redirectUrl, requirePassword, password.',
     input: { formId, settings: z.record(z.string(), z.any()).describe('Settings to change') },
-    run: (api, req, args) => api.updateSettings(req, args.formId, args.settings)
+    run: (api, principal, args) => api.updateSettings(principal, args.formId, args.settings)
   },
   {
     name: 'update_form_theme',
@@ -211,7 +211,7 @@ const TOOLS: McpTool[] = [
       logo: z.string().nullable().optional().describe('Logo image URL'),
       favicon: z.string().nullable().optional().describe('Favicon image URL')
     },
-    run: (api, req, { formId, ...body }) => api.updateTheme(req, formId, body)
+    run: (api, principal, { formId, ...body }) => api.updateTheme(principal, formId, body)
   },
   {
     name: 'update_form_hidden_fields',
@@ -220,8 +220,8 @@ const TOOLS: McpTool[] = [
       formId,
       hiddenFields: z.array(z.object({ id: z.string(), name: z.string() }))
     },
-    run: (api, req, args) =>
-      api.updateHiddenFields(req, args.formId, { hiddenFields: args.hiddenFields })
+    run: (api, principal, args) =>
+      api.updateHiddenFields(principal, args.formId, { hiddenFields: args.hiddenFields })
   },
   {
     name: 'update_form_variables',
@@ -237,20 +237,21 @@ const TOOLS: McpTool[] = [
         })
       )
     },
-    run: (api, req, args) => api.updateVariables(req, args.formId, { variables: args.variables })
+    run: (api, principal, args) =>
+      api.updateVariables(principal, args.formId, { variables: args.variables })
   },
   {
     name: 'trash_form',
     description: 'Move a form to trash. It can be restored within 30 days.',
     input: { formId },
-    run: (api, req, args) => api.trashForm(req, args.formId)
+    run: (api, principal, args) => api.trashForm(principal, args.formId)
   },
   {
     name: 'restore_form',
     description: 'Restore a form from trash.',
     input: { formId },
     additive: true,
-    run: (api, req, args) => api.restoreForm(req, args.formId)
+    run: (api, principal, args) => api.restoreForm(principal, args.formId)
   },
   {
     name: 'list_submissions',
@@ -261,22 +262,22 @@ const TOOLS: McpTool[] = [
       limit: z.number().int().min(1).max(100).optional()
     },
     readOnly: true,
-    run: (api, req, args) =>
-      api.listSubmissions(req, args.formId, String(args.page ?? 1), String(args.limit ?? 30))
+    run: (api, principal, args) =>
+      api.listSubmissions(principal, args.formId, args.page, args.limit)
   },
   {
     name: 'get_submission',
     description: 'Get a submission.',
     input: { formId, submissionId },
     readOnly: true,
-    run: (api, req, args) => api.getSubmission(req, args.formId, args.submissionId)
+    run: (api, principal, args) => api.getSubmission(principal, args.formId, args.submissionId)
   },
   {
     name: 'update_submission_category',
     description: 'Move a submission to inbox, starred, archive or spam.',
     input: { formId, submissionId, category: z.enum(SubmissionCategoryEnum) },
-    run: (api, req, args) =>
-      api.updateSubmissionCategory(req, args.formId, args.submissionId, {
+    run: (api, principal, args) =>
+      api.updateSubmissionCategory(principal, args.formId, args.submissionId, {
         category: args.category
       })
   },
@@ -284,8 +285,8 @@ const TOOLS: McpTool[] = [
     name: 'update_submission_answer',
     description: 'Edit one answer of a submission.',
     input: { formId, submissionId, fieldId: z.string(), value: z.any() },
-    run: (api, req, args) =>
-      api.editSubmissionAnswer(req, args.formId, args.submissionId, {
+    run: (api, principal, args) =>
+      api.editSubmissionAnswer(principal, args.formId, args.submissionId, {
         fieldId: args.fieldId,
         value: args.value
       })
@@ -297,7 +298,7 @@ const TOOLS: McpTool[] = [
 export class McpController {
   private readonly logger = new Logger(McpController.name)
 
-  constructor(@Inject(REST_API) private readonly api: RestApiController) {}
+  constructor(private readonly api: RestApiService) {}
 
   @Post()
   async handle(@Req() req: ApiRequest, @Res() res: Response) {
@@ -341,7 +342,7 @@ export class McpController {
         },
         async (args: any) => {
           try {
-            const result = await tool.run(this.api, req, args)
+            const result = await tool.run(this.api, req.apiPrincipal, args)
             return { content: [{ type: 'text', text: JSON.stringify(result) }] }
           } catch (error) {
             this.logger.error(error, error?.stack)
