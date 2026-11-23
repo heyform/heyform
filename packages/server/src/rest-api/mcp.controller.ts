@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   Inject,
   MethodNotAllowedException,
   Post,
@@ -19,6 +18,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import { Logger } from '@utils'
 
+import { toClientException } from '../common/filter'
 import type { RestApiController } from './rest-api.module'
 
 // Type-only import above avoids a runtime cycle with rest-api.module; the module binds this token.
@@ -344,11 +344,8 @@ export class McpController {
             const result = await tool.run(this.api, req, args)
             return { content: [{ type: 'text', text: JSON.stringify(result) }] }
           } catch (error) {
-            if (!(error instanceof HttpException)) this.logger.error(error)
-            const text =
-              error instanceof HttpException
-                ? JSON.stringify(error.getResponse())
-                : 'Internal server error'
+            this.logger.error(error, error?.stack)
+            const text = JSON.stringify(toClientException(error).getResponse())
             return { isError: true, content: [{ type: 'text', text }] }
           }
         }

@@ -10,6 +10,14 @@ import { helper } from '@heyform-inc/utils'
 import { GqlContextType } from '@nestjs/graphql'
 import { Logger } from '@utils'
 
+// Keeps 4xx details and hides everything else behind a generic 500.
+export function toClientException(exception: unknown): HttpException {
+  const status = exception instanceof HttpException ? exception.getStatus() : 500
+  return exception instanceof HttpException && status >= 400 && status < 500
+    ? exception
+    : new InternalServerErrorException('Internal server error')
+}
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name)
@@ -17,11 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): any {
     this.logger.error(exception, (exception as any).stack)
 
-    const status = exception instanceof HttpException ? exception.getStatus() : 500
-    const httpException =
-      exception instanceof HttpException && status >= 400 && status < 500
-        ? exception
-        : new InternalServerErrorException('Internal server error')
+    const httpException = toClientException(exception)
 
     if (host.getType<GqlContextType>() === 'graphql') {
       return httpException
