@@ -19,19 +19,18 @@ export class MoveFormResolver {
     @User() user: UserModel,
     @Args('input') input: MoveFormInput
   ): Promise<boolean> {
-    const member = await this.projectService.findProjectByMemberId(user.id, input.targetProjectId)
+    const project = await this.projectService.findOne({
+      _id: input.targetProjectId,
+      teamId: team.id
+    })
 
-    if (member) {
-      const project = await this.projectService.findOne({
-        _id: input.targetProjectId,
-        teamId: team.id
+    if (
+      project &&
+      (team.isOwner || (await this.projectService.findMemberById(project.id, user.id)))
+    ) {
+      return this.formService.update(input.formId, {
+        projectId: input.targetProjectId
       })
-
-      if (project) {
-        return this.formService.update(input.formId, {
-          projectId: input.targetProjectId
-        })
-      }
     }
 
     return false

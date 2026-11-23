@@ -1,5 +1,5 @@
 import { IconDots } from '@tabler/icons-react'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WorkspaceService } from '@/services'
@@ -14,41 +14,52 @@ const MemberItem: FC<{ member: MemberType }> = ({ member }) => {
 
   const alert = useAlert()
   const router = useRouter()
-  const { workspace, setWorkspaces, setMembers, removeMember, deleteWorkspace } =
+  const { workspace, members, setWorkspaces, setMembers, removeMember, deleteWorkspace } =
     useWorkspaceStore()
   const { user } = useUserStore()
 
-  const isYou = useMemo(() => member.id === user.id, [member.id, user.id])
+  const isYou = member.id === user.id
 
-  const Action = useMemo(() => {
-    if (workspace?.isOwner) {
-      if (isYou) {
-        return null
-      }
+  function renderActions() {
+    if (!workspace || (!workspace.isOwner && !isYou)) return null
+
+    let options: { label: string; value: string }[]
+
+    if (!workspace.isOwner) {
+      options = [{ label: 'members.leave.title', value: 'leave' }]
+    } else if (member.isOwner) {
+      if (members.filter(row => row.isOwner).length < 2) return null
+      options = [{ label: 'members.revokeOwner.title', value: 'revoke' }]
     } else {
-      if (!isYou) {
-        return null
-      }
+      options = [
+        { label: 'members.grantOwner.title', value: 'grant' },
+        { label: 'members.transfer.title', value: 'transfer' },
+        { label: 'members.remove.title', value: 'remove' }
+      ]
     }
 
-    let options = [
-      {
-        label: 'members.leave.title',
-        value: 'leave'
-      }
-    ]
+    async function refreshOwnership() {
+      const [workspaces, members] = await Promise.all([
+        WorkspaceService.workspaces(),
+        WorkspaceService.members(workspace.id)
+      ])
 
-    if (workspace?.isOwner) {
-      options = [
-        {
-          label: 'members.transfer.title',
-          value: 'transfer'
-        },
-        {
-          label: 'members.remove.title',
-          value: 'remove'
+      setWorkspaces(workspaces)
+      setMembers(workspace.id, members)
+    }
+
+    function handleSetOwner(isOwner: boolean) {
+      const key = isOwner ? 'members.grantOwner' : 'members.revokeOwner'
+      alert({
+        title: String(t(`${key}.headline`, { name: member.name })),
+        description: String(t(`${key}.subHeadline`)),
+        cancelProps: { label: t('components.cancel') },
+        confirmProps: { label: t(`${key}.title`) },
+        fetch: async () => {
+          await WorkspaceService.setMemberOwner(workspace.id, member.id, isOwner)
+          await refreshOwnership()
         }
-      ]
+      })
     }
 
     function handleTransfer() {
@@ -64,14 +75,7 @@ const MemberItem: FC<{ member: MemberType }> = ({ member }) => {
         },
         fetch: async () => {
           await WorkspaceService.transfer(workspace.id, member.id)
-
-          const [res1, res2] = await Promise.all([
-            WorkspaceService.workspaces(),
-            WorkspaceService.members(workspace.id)
-          ])
-
-          setWorkspaces(res1)
-          setMembers(workspace.id, res2)
+          await refreshOwnership()
         }
       })
     }
@@ -115,6 +119,10 @@ const MemberItem: FC<{ member: MemberType }> = ({ member }) => {
 
     function handleClick(value: string) {
       switch (value) {
+        case 'grant':
+        case 'revoke':
+          return handleSetOwner(value === 'grant')
+
         case 'transfer':
           return handleTransfer()
 
@@ -143,7 +151,7 @@ const MemberItem: FC<{ member: MemberType }> = ({ member }) => {
         </Button.Link>
       </Dropdown>
     )
-  }, [workspace?.isOwner, t, isYou])
+  }
 
   return (
     <tr className="hover:bg-primary/[2.5%]">
@@ -175,7 +183,7 @@ const MemberItem: FC<{ member: MemberType }> = ({ member }) => {
         {member.lastSeenAt ? timeFromNow(member.lastSeenAt, i18n.language) : ''}
       </td>
 
-      <td className="p-4 sm:first:pl-1 sm:last:pr-1">{Action}</td>
+      <td className="p-4 sm:first:pl-1 sm:last:pr-1">{renderActions()}</td>
     </tr>
   )
 }

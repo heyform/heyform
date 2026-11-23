@@ -19,6 +19,7 @@ export class CreateTeamResolver {
   ): Promise<string> {
     const teamId = await this.teamService.create({
       ownerId: user.id,
+      ownerIds: [user.id],
       name: input.name,
       avatar: input.avatar,
       storageQuota: 0

@@ -1,6 +1,6 @@
-import { Auth, Project, ProjectGuard } from '@decorator'
+import { Auth, Project, ProjectGuard, Team } from '@decorator'
 import { ProjectDetailInput, UserDetailType } from '@graphql'
-import { ProjectModel, UserModel } from '@model'
+import { ProjectModel, TeamModel, UserModel, getTeamOwnerIds } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { ProjectService, UserService } from '@service'
 
@@ -16,10 +16,11 @@ export class ProjectMembersResolver {
   @Query(returns => [UserDetailType])
   async projectMembers(
     @Project() project: ProjectModel,
+    @Team() team: TeamModel,
     @Args('input') input: ProjectDetailInput
   ): Promise<UserModel[]> {
     const members = await this.projectService.findMembers(input.projectId)
-    const memberIds = members.map(row => row.memberId)
+    const memberIds = [...new Set([...getTeamOwnerIds(team), ...members.map(row => row.memberId)])]
     return this.userService.findAll(memberIds)
   }
 }

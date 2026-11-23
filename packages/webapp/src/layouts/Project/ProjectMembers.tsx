@@ -16,7 +16,7 @@ export default function ProjectMembers() {
   const { project, members, setMembers } = useWorkspaceStore()
 
   const exists = useMemo(
-    () => members.filter(m => project?.members.includes(m.id)),
+    () => members.filter(m => m.isOwner || project?.members.includes(m.id)),
     [members, project?.members]
   )
 

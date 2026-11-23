@@ -184,6 +184,12 @@ export const TRANSFER_WORKSPACE_GQL = gql`
   }
 `
 
+export const SET_WORKSPACE_MEMBER_OWNER_GQL = gql`
+  mutation setTeamMemberOwner($input: SetTeamMemberOwnerInput!) {
+    setTeamMemberOwner(input: $input)
+  }
+`
+
 export const LEAVE_WORKSPACE_GQL = gql`
   mutation leaveTeam($input: TeamDetailInput!) {
     leaveTeam(input: $input)

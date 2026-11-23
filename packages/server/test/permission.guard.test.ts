@@ -269,6 +269,7 @@ async function testOwnerIsRecognisedAndSeenInTheWorkspace() {
   assert.deepStrictEqual(req.team, {
     id: 'team_1',
     ownerId: 'owner_1',
+    ownerIds: ['owner_1'],
     isOwner: true,
     name: 'Workspace A',
     role: 1,

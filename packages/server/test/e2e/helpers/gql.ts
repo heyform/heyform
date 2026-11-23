@@ -103,6 +103,12 @@ export const TEAM_MEMBERS_GQL = /* GraphQL */ `
   }
 `
 
+export const SET_TEAM_MEMBER_OWNER_GQL = /* GraphQL */ `
+  mutation setTeamMemberOwner($input: SetTeamMemberOwnerInput!) {
+    setTeamMemberOwner(input: $input)
+  }
+`
+
 export const TEAM_OVERVIEW_GQL = /* GraphQL */ `
   query teamOverview($input: TeamDetailInput!) {
     teamOverview(input: $input) {
