@@ -2,7 +2,7 @@ import assert from 'assert'
 
 import { E2EClient } from './helpers/client'
 import { signUpUser } from './helpers/fixtures'
-import { CREATE_TEAM_GQL, TEAMS_GQL } from './helpers/gql'
+import { COMPLETE_SUBMISSION_GQL, CREATE_TEAM_GQL, OPEN_FORM_GQL, TEAMS_GQL } from './helpers/gql'
 import { uniqueName } from './helpers/random'
 import { defineSuite } from './helpers/runner'
 
@@ -99,6 +99,78 @@ export function build(baseUrl: string) {
         { readOnlyHint: false, destructiveHint: true },
         `${name} is destructive`
       )
+  })
+
+  test('maps write tool arguments to the REST API', async () => {
+    const owner = await signUpUser(baseUrl)
+    const wsId = await owner.client.gqlOk<string>('createTeam', CREATE_TEAM_GQL, {
+      input: { name: uniqueName('MCP Write'), projectName: 'Default' }
+    })
+    const key = await owner.client.accountKeys('POST', '', {
+      name: 'MCP E2E Write',
+      workspaceAccess: 'selected',
+      workspaceIds: [wsId],
+      scopes: [
+        'projects:read',
+        'projects:write',
+        'forms:read',
+        'forms:write',
+        'submissions:read',
+        'submissions:write'
+      ]
+    })
+    assert.strictEqual(key.status, 201)
+    token = key.body.token
+
+    const ok = async (name: string, args: Record<string, unknown>) => {
+      const result = await callTool(name, args)
+      assert.strictEqual(result.isError, false, `${name}: ${JSON.stringify(result.data)}`)
+      return result.data
+    }
+
+    const fieldId = 'mcpQuestion'
+    const drafts = [
+      { id: fieldId, kind: 'short_text', title: ['Name?'], validations: { required: false } },
+      { id: 'mcpThanks', kind: 'thank_you', title: ['Thanks!'] }
+    ]
+    const [project] = await ok('list_projects', { workspaceId: wsId })
+    const { id: formId } = await ok('create_form', {
+      projectId: project.id,
+      name: uniqueName('MCP Form')
+    })
+
+    const saved = await ok('update_form_drafts', { formId, version: 0, drafts })
+    assert.strictEqual(saved.version, 1)
+    const published = await ok('publish_form', { formId, version: 1, drafts })
+    assert.strictEqual(published.active, true)
+
+    await ok('update_form_theme', {
+      formId,
+      theme: { buttonBackground: '#000000' },
+      logo: 'https://example.com/logo.png'
+    })
+    const form = await ok('get_form', { formId })
+    assert.strictEqual(form.themeSettings.theme.buttonBackground, '#000000')
+    assert.strictEqual(form.themeSettings.logo, 'https://example.com/logo.png')
+
+    const respondent = new E2EClient({ baseUrl })
+    const openToken = await respondent.gqlOk<string>('openForm', OPEN_FORM_GQL, {
+      input: { formId }
+    })
+    await respondent.gqlOk('completeSubmission', COMPLETE_SUBMISSION_GQL, {
+      input: { formId, answers: { [fieldId]: 'Ada' }, hiddenFields: [], openToken }
+    })
+    const list = await ok('list_submissions', { formId, page: 1, limit: 1 })
+    assert.strictEqual(list.total, 1)
+    const submissionId = list.submissions[0].id
+    await ok('update_submission_answer', { formId, submissionId, fieldId, value: 'Grace' })
+    const submission = await ok('get_submission', { formId, submissionId })
+    assert.strictEqual(submission.answers.find((a: any) => a.id === fieldId)?.value, 'Grace')
+
+    const target = await ok('create_project', { workspaceId: wsId, name: uniqueName('Target') })
+    const moved = await ok('move_form', { formId, targetProjectId: target.id })
+    assert.strictEqual(moved.projectId, target.id)
+    assert.strictEqual((await ok('get_form', { formId })).projectId, target.id)
   })
 
   return suite
