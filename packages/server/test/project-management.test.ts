@@ -44,10 +44,7 @@ async function testNewProjectIncludesItsCreatorAndTheWorkspaceOwner() {
   assert.strictEqual(project.name, 'Launch')
   assert.strictEqual(project.ownerId, collaborator.id)
   // The owner of the workspace is in every project, whoever creates it
-  assert.deepStrictEqual(store.projectMemberIds(projectId), [
-    collaborator.id,
-    bystander.id
-  ])
+  assert.deepStrictEqual(store.projectMemberIds(projectId), [collaborator.id, bystander.id])
 
   const access = await store.inProject(collaborator, projectId)
 
@@ -87,10 +84,7 @@ async function testNewProjectOnlyTakesWorkspaceMembers() {
     { teamId, name: 'Launch', memberIds: [outsider.id, bystander.id, 'missing'] }
   )
 
-  assert.deepStrictEqual(store.projectMemberIds(projectId), [
-    collaborator.id,
-    bystander.id
-  ])
+  assert.deepStrictEqual(store.projectMemberIds(projectId), [collaborator.id, bystander.id])
 
   const access = await store.inProject(collaborator, projectId)
   const members = await new ProjectMembersResolver(

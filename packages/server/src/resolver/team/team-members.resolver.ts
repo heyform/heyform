@@ -2,9 +2,9 @@ import { Auth, Team, TeamGuard, User } from '@decorator'
 import { TeamDetailInput, TeamMemberType } from '@graphql'
 import { helper } from '@heyform-inc/utils'
 import { TeamModel, UserModel, isTeamOwner } from '@model'
-import { Logger, gravatar } from '@utils'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { TeamService, UserService } from '@service'
+import { Logger, gravatar } from '@utils'
 
 @Resolver()
 @Auth()
@@ -39,7 +39,14 @@ export class TeamMembersResolver {
     const result = users.map(user => {
       const member = members.find(member => member.memberId === user.id)
 
-      this.logger.log('teamMembers: matched membership=' + Boolean(member) + ', role=' + member?.role + ', lastSeenAt=' + member?.lastSeenAt)
+      this.logger.log(
+        'teamMembers: matched membership=' +
+          Boolean(member) +
+          ', role=' +
+          member?.role +
+          ', lastSeenAt=' +
+          member?.lastSeenAt
+      )
 
       //@ts-ignore
       user.role = member.role

@@ -117,7 +117,6 @@ async function bootstrap() {
 
   /**
    * Limit the number of user's requests
-   * APP_RATE_LIMIT (default 1000) requests per minute
    */
   app.use(
     '/api/upload',
@@ -137,6 +136,7 @@ async function bootstrap() {
     })
   )
 
+  // APP_RATE_LIMIT (default 1000) requests per minute
   app.use(
     rateLimit({
       headers: false,
