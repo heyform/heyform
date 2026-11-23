@@ -70,8 +70,8 @@ export class TeamMemberService {
   }
 
   // Removes the member from the workspace and all of its projects.
-  async remove(teamId: string, memberId: string): Promise<void> {
-    await this.teamService.deleteMember(teamId, memberId)
+  async remove(teamId: string, memberId: string, actorId: string): Promise<void> {
+    await this.teamService.deleteMember(teamId, memberId, actorId)
 
     const projects = await this.projectService.findAllInTeam(teamId)
     if (projects.length > 0) {

@@ -6,7 +6,12 @@ import {
   QUESTION_FIELD_KINDS
 } from '@heyform-inc/shared-types-enums'
 
-import { htmlUtils, parsePlainAnswer, validateRequiredField } from '@heyform-inc/answer-utils'
+import {
+  escapeHtmlText,
+  htmlUtils,
+  parsePlainAnswer,
+  validateRequiredField
+} from '@heyform-inc/answer-utils'
 import { helper, type } from '@heyform-inc/utils'
 
 import { CHAR_A_KEY_CODE } from '../consts'
@@ -104,7 +109,8 @@ export function replaceHTML(
       true
     )
 
-    return `<span class="mention" data-mention="${fieldId}">${text}</span>`
+    const content = field.kind === FieldKindEnum.CHOICE_MATRIX ? escapeHtmlText(text) : text
+    return `<span class="mention" data-mention="${fieldId}">${content}</span>`
   })
 
   // Replace hidden fields

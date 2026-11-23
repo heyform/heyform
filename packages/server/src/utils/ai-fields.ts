@@ -93,6 +93,8 @@ const propertiesSchema = z.preprocess(
       tableColumns: identifiedItems(
         identifiedItemSchema.extend({ type: optionalString, required: optionalBoolean })
       ).nullish(),
+      matrixRows: identifiedItems(identifiedItemSchema).nullish(),
+      matrixColumns: identifiedItems(identifiedItemSchema).nullish(),
       price: z
         .preprocess(
           object,

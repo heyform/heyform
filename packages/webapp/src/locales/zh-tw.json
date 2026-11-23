@@ -606,6 +606,16 @@
       "subHeadline": "一旦確認，該成員將無法訪問此工作區的數據。",
       "confirm": "移除"
     },
+    "grantOwner": {
+      "title": "設為擁有者",
+      "headline": "將 {{name}} 設為工作空間擁有者？",
+      "subHeadline": "此成員將獲得工作空間的完整權限，包括存取所有專案和管理擁有權。"
+    },
+    "revokeOwner": {
+      "title": "撤銷擁有者權限",
+      "headline": "撤銷 {{name}} 的擁有者權限？",
+      "subHeadline": "此成員將保留工作空間成員身分和直接授予的專案存取權限。"
+    },
     "transfer": {
       "title": "轉移所有權",
       "headline": "您確定要將此工作區轉移給 {{name}} 嗎？",
@@ -1285,6 +1295,7 @@
         "legalTerms": "法律條款",
         "signature": "簽名",
         "website": "網站",
+        "choiceMatrix": "矩陣單選",
         "inputTable": "輸入表",
         "submitDate": "提交日期",
         "ipAddress": "IP 地址",
@@ -1321,6 +1332,9 @@
         "otherChoice": "其他",
         "addChoice": "新增選項",
         "dateRangeTo": "至",
+        "addRow": "新增列",
+        "rowPlaceholder": "第 {{index}} 列",
+        "removeMatrixLabel": "移除{{label}}",
         "addColumn": "新增欄位",
         "columnPlaceholder": "欄 {{index}}"
       },
@@ -1585,8 +1599,8 @@
     },
     "deletion": {
       "headline": "刪除帳戶",
-      "subHeadline": "這將永久刪除您的整個帳戶。您的所有表單、提交和工作區都將被刪除。",
-      "tip": "此操作無法撤銷。這將永久刪除您的整個帳戶。您創建的所有工作區將被刪除，您也將從所有共享工作區中移除。\n如果您確定要繼續刪除您的帳戶，請在下方繼續。",
+      "subHeadline": "您的帳戶和由您獨自擁有的工作區將被永久刪除。",
+      "tip": "此操作無法復原。由您獨自擁有的工作區及其中的表單和提交資料將被刪除。您將退出其他所有工作區。",
       "code": {
         "label": "請輸入發送到<strong>{{email}}</strong>的刪除碼。",
         "required": "驗證碼不能為空"

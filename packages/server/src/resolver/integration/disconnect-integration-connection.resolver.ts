@@ -27,10 +27,7 @@ export class DisconnectIntegrationConnectionResolver {
       throw new BadRequestException('The account does not exist')
     }
 
-    await this.integrationAuthService.disconnectConnection(connection, user.id, {
-      id: team.id,
-      ownerId: team.ownerId
-    })
+    await this.integrationAuthService.disconnectConnection(connection, user.id, team)
 
     return true
   }

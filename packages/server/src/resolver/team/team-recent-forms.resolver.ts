@@ -23,7 +23,8 @@ export class TeamRecentFormsResolver {
     @User() user: UserModel,
     @Args('input') input: RecentFormsInput
   ): Promise<FormModel[]> {
-    const projectIds = await this.projectService.findProjectsByMemberId(user.id)
+    const projects = await this.projectService.findAccessibleInTeams(user.id, [team])
+    const projectIds = projects.map(project => project.id)
     const forms = await this.formService.findRecentInTeam(team.id, projectIds, input.limit)
 
     if (helper.isEmpty(forms)) {

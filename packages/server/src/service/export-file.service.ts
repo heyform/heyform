@@ -8,7 +8,7 @@ import {
 import { Injectable } from '@nestjs/common'
 import { FieldInfo, parseAsync } from 'json2csv'
 
-import { htmlUtils, parsePlainAnswer } from '@heyform-inc/answer-utils'
+import { choiceMatrixAnswers, htmlUtils, parsePlainAnswer } from '@heyform-inc/answer-utils'
 import { helper, unixDate } from '@heyform-inc/utils'
 import { SubmissionModel } from '@model'
 
@@ -117,14 +117,34 @@ export class ExportFileService {
             }
           ]
         : []),
-      ...selectedFormFields.map(field => ({
-        label: field.title,
-        value: (submission: SubmissionModel) => {
-          const answer = submission.answers.find(answer => answer.id === field.id)
-
-          return helper.isEmpty(answer) ? '' : neutralizeSpreadsheetFormula(answerToText(answer))
+      ...selectedFormFields.flatMap(field => {
+        if (field.kind === FieldKindEnum.CHOICE_MATRIX) {
+          return (field.properties?.matrixRows ?? []).map(row => ({
+            label: neutralizeSpreadsheetFormula(`${field.title} — ${row.label}`),
+            value: (submission: SubmissionModel) => {
+              const answer = submission.answers.find(answer => answer.id === field.id)
+              return answer
+                ? neutralizeSpreadsheetFormula(
+                    choiceMatrixAnswers(answer).find(value => value.rowId === row.id)
+                      ?.columnLabel ?? ''
+                  )
+                : ''
+            }
+          }))
         }
-      })),
+
+        return [
+          {
+            label: field.title,
+            value: (submission: SubmissionModel) => {
+              const answer = submission.answers.find(answer => answer.id === field.id)
+              return helper.isEmpty(answer)
+                ? ''
+                : neutralizeSpreadsheetFormula(answerToText(answer))
+            }
+          }
+        ]
+      }),
       ...selectedHiddenFields.map(hiddenField => ({
         label: neutralizeSpreadsheetFormula(hiddenField.name),
         value: (submission: SubmissionModel) => {

@@ -6,6 +6,7 @@ import { build as buildAuthFlows } from './auth-flows.e2e.test'
 import { build as buildAuth } from './auth.e2e.test'
 import { build as buildCatalog } from './catalog.e2e.test'
 import { build as buildChoiceLimits } from './choice-limits.e2e.test'
+import { build as buildChoiceMatrix } from './choice-matrix.e2e.test'
 import { build as buildHealth } from './health.e2e.test'
 import { runSuites } from './helpers/runner'
 import { waitForReady } from './helpers/wait'
@@ -56,6 +57,7 @@ async function main() {
     buildTeamFlow(baseUrl),
     buildPermissionMatrix(baseUrl),
     buildChoiceLimits(baseUrl),
+    buildChoiceMatrix(baseUrl),
     buildPseudonymIds(baseUrl),
     buildPaymentWebhook(baseUrl),
     buildRestApi(baseUrl),

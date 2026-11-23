@@ -13,7 +13,7 @@ const ProjectMembers = () => {
   const { t } = useTranslation()
 
   const { workspaceId } = useParam()
-  const { workspace, project, members, setMembers } = useWorkspaceStore()
+  const { project, members, setMembers } = useWorkspaceStore()
 
   async function fetch() {
     setMembers(workspaceId, await WorkspaceService.members(workspaceId))
@@ -23,16 +23,15 @@ const ProjectMembers = () => {
 
   const joined = useMemo(() => {
     return members
-      .filter(m => project?.members.includes(m.id))
+      .filter(m => m.isOwner || project?.members.includes(m.id))
       .map(m => ({
         ...m,
-        isOwner: workspace.ownerId === m.id,
         isYou: user.id === m.id
       }))
-  }, [members, project?.members, user.id, workspace.ownerId])
+  }, [members, project?.members, user.id])
 
   const remaining = useMemo(
-    () => members.filter(m => !project?.members.includes(m.id)),
+    () => members.filter(m => !m.isOwner && !project?.members.includes(m.id)),
     [members, project?.members]
   )
 

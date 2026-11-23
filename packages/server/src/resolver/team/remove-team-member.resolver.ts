@@ -1,8 +1,8 @@
 import { BadRequestException } from '@nestjs/common'
 
-import { Auth, Team, TeamGuard } from '@decorator'
+import { Auth, Team, TeamGuard, User } from '@decorator'
 import { TransferTeamInput } from '@graphql'
-import { TeamModel } from '@model'
+import { TeamModel, UserModel, isTeamOwner } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { TeamMemberService, TeamService } from '@service'
 
@@ -18,6 +18,7 @@ export class RemoveTeamMemberResolver {
   @TeamGuard()
   async removeTeamMember(
     @Team() team: TeamModel,
+    @User() user: UserModel,
     @Args('input') input: TransferTeamInput
   ): Promise<boolean> {
     if (!team.isOwner) {
@@ -30,11 +31,11 @@ export class RemoveTeamMemberResolver {
       throw new BadRequestException('The member in the workspace does not exist')
     }
 
-    if (input.memberId === team.ownerId) {
+    if (isTeamOwner(team, input.memberId)) {
       throw new BadRequestException('This operation is not allowed in the workspace')
     }
 
-    await this.teamMemberService.remove(input.teamId, input.memberId)
+    await this.teamMemberService.remove(input.teamId, input.memberId, user.id)
 
     return true
   }

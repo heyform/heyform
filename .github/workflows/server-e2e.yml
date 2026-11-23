@@ -15,7 +15,8 @@ concurrency:
 jobs:
   e2e:
     name: HTTP/GraphQL e2e suite
-    runs-on: ubuntu-latest
+    # Playwright 1.58.2 supports Ubuntu 24.04 for Chromium headless shell.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     services:
@@ -95,6 +96,12 @@ jobs:
 
       - name: Run e2e tests
         run: pnpm --filter ./packages/server test:e2e
+
+      - name: Install Chromium for browser tests
+        run: pnpm --filter ./packages/webapp exec playwright install --with-deps --only-shell chromium
+
+      - name: Run browser e2e tests
+        run: pnpm --filter ./packages/webapp test:browser
 
       - name: Server logs (on failure)
         if: failure()

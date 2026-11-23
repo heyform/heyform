@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common'
 
 import { Auth, Project, ProjectGuard, Team } from '@decorator'
 import { ProjectMemberInput } from '@graphql'
-import { ProjectModel, TeamModel, TeamRoleEnum } from '@model'
+import { ProjectModel, TeamModel, TeamRoleEnum, isTeamOwner } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { ProjectService } from '@service'
 
@@ -28,7 +28,7 @@ export class DeleteProjectMemberResolver {
       throw new BadRequestException("You don't have permission to manage project members")
     }
 
-    if (input.memberId === team.ownerId || input.memberId === project.ownerId) {
+    if (isTeamOwner(team, input.memberId) || input.memberId === project.ownerId) {
       throw new BadRequestException("You don't have permission to remove member from the project")
     }
 
