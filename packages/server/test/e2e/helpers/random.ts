@@ -1,9 +1,11 @@
+import { randomInt } from 'node:crypto'
+
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 export function randomString(length = 10, alphabet = ALPHABET): string {
   let out = ''
   for (let i = 0; i < length; i++) {
-    out += alphabet[Math.floor(Math.random() * alphabet.length)]
+    out += alphabet[randomInt(alphabet.length)]
   }
   return out
 }
