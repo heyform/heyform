@@ -1598,8 +1598,8 @@
     },
     "deletion": {
       "headline": "Eliminar cuenta",
-      "subHeadline": "Esto eliminará permanentemente toda tu cuenta. Se eliminarán todos tus formularios, respuestas y espacios de trabajo.",
-      "tip": "Esta acción no se puede deshacer. Se eliminará permanentemente toda tu cuenta. Se eliminarán todos los espacios de trabajo que creaste y serás removido de todos los espacios de trabajo compartidos. \nSi estás seguro de que quieres eliminar tu cuenta, continúa a continuación.",
+      "subHeadline": "Tu cuenta y los espacios de trabajo de los que eres el único propietario se eliminarán permanentemente.",
+      "tip": "Esta acción no se puede deshacer. Se eliminarán los espacios de trabajo de los que eres el único propietario, junto con sus formularios y respuestas. Se te quitará el acceso a los demás espacios de trabajo.",
       "code": {
         "label": "Introduce el código de eliminación enviado a <strong>{{email}}</strong>.",
         "required": "El código de verificación no puede estar vacío"

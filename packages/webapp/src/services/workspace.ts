@@ -15,6 +15,7 @@ import {
   REMOVE_WORKSPACE_MEMBER_GQL,
   RESET_WORKSPACE_INVITE_CODE_GQL,
   SEARCH_WORKSPACE_GQL,
+  SET_WORKSPACE_MEMBER_OWNER_GQL,
   TEAM_INTEGRATION_CONNECTIONS_GQL,
   TRANSFER_WORKSPACE_GQL,
   UPDATE_BRAND_KIT_GQL,
@@ -173,6 +174,13 @@ export class WorkspaceService {
           memberId
         }
       }
+    })
+  }
+
+  static setMemberOwner(teamId: string, memberId: string, isOwner: boolean) {
+    return apollo.mutate({
+      mutation: SET_WORKSPACE_MEMBER_OWNER_GQL,
+      variables: { input: { teamId, memberId, isOwner } }
     })
   }
 

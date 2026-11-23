@@ -27,7 +27,6 @@ export class CreateProjectResolver {
       (await this.teamService.findMembersInTeam(team.id)).map(member => member.memberId)
     )
     const memberIds: string[] = uniqueArray([
-      team.ownerId,
       user.id,
       ...(helper.isValidArray(input.memberIds) ? input.memberIds : [])
     ]).filter(memberId => teamMemberIds.has(memberId))

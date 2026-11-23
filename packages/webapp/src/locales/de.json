@@ -1589,8 +1589,8 @@
     },
     "deletion": {
       "headline": "Konto löschen",
-      "subHeadline": "Dies wird Ihr gesamtes Konto dauerhaft löschen. Alle Ihre Formulare, Einreichungen und Arbeitsbereiche werden gelöscht.",
-      "tip": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird Ihr gesamtes Konto dauerhaft löschen. Alle von Ihnen erstellten Arbeitsbereiche werden gelöscht und Sie werden aus allen geteilten Arbeitsbereichen entfernt.\nWenn Sie sicher sind, dass Sie mit der Löschung Ihres Kontos fortfahren möchten, fahren Sie bitte unten fort.",
+      "subHeadline": "Ihr Konto und alle Arbeitsbereiche, deren alleiniger Inhaber Sie sind, werden dauerhaft gelöscht.",
+      "tip": "Dieser Vorgang kann nicht rückgängig gemacht werden. Arbeitsbereiche, deren alleiniger Inhaber Sie sind, werden samt Formularen und Einsendungen gelöscht. Aus allen anderen Arbeitsbereichen werden Sie entfernt.",
       "code": {
         "label": "Geben Sie den Löschcode ein, der an <strong>{{email}}</strong> gesendet wurde.",
         "required": "Der Bestätigungscode darf nicht leer sein"

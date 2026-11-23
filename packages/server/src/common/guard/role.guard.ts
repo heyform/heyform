@@ -2,7 +2,7 @@ import { BadRequestException, CanActivate, ExecutionContext, Injectable } from '
 import { Reflector } from '@nestjs/core'
 
 import { helper } from '@heyform-inc/utils'
-import { TeamModel, TeamRoleEnum } from '@model'
+import { TeamModel, TeamRoleEnum, getTeamOwnerIds, isTeamOwner } from '@model'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { FormService, TeamService } from '@service'
 
@@ -82,23 +82,18 @@ export class RoleGuard implements CanActivate {
       throw new BadRequestException('The workspace does not exist')
     }
 
-    const isOwner = team.ownerId === user.id
+    const isOwner = isTeamOwner(team, user.id)
     const member = await this.teamService.findMemberById(teamId, user.id)
     const ownerRequired = roles.includes(TeamRoleEnum.OWNER)
 
-    if (ownerRequired) {
-      if (!isOwner) {
-        throw new BadRequestException('This operation is not allowed in the workspace')
-      }
-    } else {
-      if (!member || !roles.includes(member.role)) {
-        throw new BadRequestException('This operation is not allowed in the workspace')
-      }
+    if (!member || !(ownerRequired ? isOwner : roles.includes(member.role))) {
+      throw new BadRequestException('This operation is not allowed in the workspace')
     }
 
     req.team = {
       id: team.id,
       ownerId: team.ownerId,
+      ownerIds: getTeamOwnerIds(team),
       isOwner,
       role: member.role,
       storageQuota: team.storageQuota

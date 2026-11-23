@@ -10,6 +10,7 @@ import { createHash } from 'crypto'
 import { Document, Model } from 'mongoose'
 
 import { nanoid, timestamp } from '@heyform-inc/utils'
+import { isTeamOwner } from '@model'
 import { ProjectService, TeamService } from '@service'
 
 export const API_KEY_SCOPES = [
@@ -184,13 +185,8 @@ export class ApiKeyService {
   ) {}
 
   private async workspaceAccess(ownerId: string): Promise<WorkspaceApiAccess[]> {
-    const [workspaces, projectIds] = await Promise.all([
-      this.teams.findAll(ownerId),
-      this.projects.findProjectsByMemberId(ownerId)
-    ])
-    const projects = await this.projects.findByIds(projectIds, {
-      teamId: { $in: workspaces.map(workspace => workspace.id) }
-    })
+    const workspaces = await this.teams.findAll(ownerId)
+    const projects = await this.projects.findAccessibleInTeams(ownerId, workspaces)
     const projectsByWorkspace = new Map<string, Set<string>>()
     for (const project of projects) {
       const ids = projectsByWorkspace.get(project.teamId) ?? new Set<string>()
@@ -203,7 +199,7 @@ export class ApiKeyService {
       const scopes = API_KEY_SCOPES.filter(
         scope =>
           workspaceScopes.has(scope) ||
-          (workspace.ownerId === ownerId && ownerScopes.has(scope)) ||
+          (isTeamOwner(workspace, ownerId) && ownerScopes.has(scope)) ||
           (projectIds.size > 0 && projectScopes.has(scope))
       )
       return { id: workspace.id, name: workspace.name, scopes, projectIds }

@@ -606,6 +606,16 @@
       "subHeadline": "Once you confirm, the member will no longer have access to this workspace's data.",
       "confirm": "Remove"
     },
+    "grantOwner": {
+      "title": "Make owner",
+      "headline": "Make {{name}} a workspace owner?",
+      "subHeadline": "This gives them full access to the workspace, including all projects and ownership settings."
+    },
+    "revokeOwner": {
+      "title": "Revoke ownership",
+      "headline": "Revoke ownership for {{name}}?",
+      "subHeadline": "They will remain a workspace member and keep any project access granted to them directly."
+    },
     "transfer": {
       "title": "Transfer ownership",
       "headline": "Are you sure you want to transfer this workspace to {{name}}?",
@@ -1768,8 +1778,8 @@
     },
     "deletion": {
       "headline": "Delete account",
-      "subHeadline": "This will permanently delete your entire account. All your forms, submissions and workspaces will be deleted.",
-      "tip": "This action cannot be undone. This will permanently delete your entire account. All workspaces you created will be deleted, and you will be removed from all shared workspaces. \nIf you are sure you want to proceed with the deletion of your account, please continue below.",
+      "subHeadline": "Your account and any workspaces you solely own will be permanently deleted.",
+      "tip": "This action cannot be undone. Workspaces you solely own will be deleted along with their forms and submissions. You will be removed from all other workspaces.",
       "code": {
         "label": "Enter deletion code sent to <strong>{{email}}</strong>.",
         "required": "The verification code is not allow to be empty"

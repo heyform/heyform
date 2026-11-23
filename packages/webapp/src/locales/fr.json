@@ -1594,8 +1594,8 @@
     },
     "deletion": {
       "headline": "Supprimer le compte",
-      "subHeadline": "Cela supprimera définitivement l'intégralité de votre compte. Tous vos formulaires, soumissions et espaces de travail seront supprimés.",
-      "tip": "Cette action est irréversible. Cela supprimera définitivement l'intégralité de votre compte. Tous les espaces de travail que vous avez créés seront supprimés, et vous serez retiré de tous les espaces de travail partagés.\nSi vous êtes sûr(e) de vouloir procéder à la suppression de votre compte, veuillez continuer ci-dessous.",
+      "subHeadline": "Votre compte et les espaces de travail dont vous êtes l’unique propriétaire seront définitivement supprimés.",
+      "tip": "Cette action est irréversible. Les espaces de travail dont vous êtes l’unique propriétaire seront supprimés avec leurs formulaires et réponses. Vous serez retiré de tous les autres espaces de travail.",
       "code": {
         "label": "Entrez le code de suppression envoyé à <strong>{{email}}</strong>.",
         "required": "Le code de vérification ne peut pas être vide"

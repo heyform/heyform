@@ -33,12 +33,12 @@ export class DeleteUserAccountSchedule extends BaseQueue {
       for (const user of users) {
         const userId = user.id
 
-        const teams = await this.teamService.findAll(userId)
+        const teams = await this.teamService.findAllForAccountDeletion(userId)
 
         for (const team of teams) {
           const teamId = team.id
 
-          if (team.ownerId === userId) {
+          await this.teamService.removeAccountFromTeam(teamId, userId, async () => {
             const forms = await this.formService.findAllInTeam(teamId)
             const formIds = forms.map(form => form.id)
 
@@ -53,10 +53,7 @@ export class DeleteUserAccountSchedule extends BaseQueue {
 
             await this.teamService.deleteAllMemberInTeam(teamId)
             await this.teamService.delete(teamId)
-          } else {
-            // Leave from team
-            await this.teamService.deleteMember(teamId, userId)
-          }
+          })
         }
 
         // Delete user's social login accounts before deleting the user itself.
