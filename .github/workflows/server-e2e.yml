@@ -15,7 +15,8 @@ concurrency:
 jobs:
   e2e:
     name: HTTP/GraphQL e2e suite
-    runs-on: ubuntu-latest
+    # Playwright 1.58.2 supports Ubuntu 24.04 for Chromium headless shell.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     services:
