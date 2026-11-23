@@ -1,6 +1,7 @@
 import assert from 'assert'
 
 import { TeamRoleEnum } from '../src/model'
+import { CreateProjectResolver } from '../src/resolver/project/create-project.resolver'
 import { CreateBrandKitResolver } from '../src/resolver/team/create-brand-kit.resolver'
 import { CreateTeamResolver } from '../src/resolver/team/create-team.resolver'
 import { InviteMemberResolver } from '../src/resolver/team/invite-member.resolver'
@@ -138,55 +139,52 @@ async function testOnlyTheOwnerResetsTheInviteCode() {
 async function testOwnershipMovesToAnotherMember() {
   const { store, owner, collaborator, bystander, teamId, projectId } = await setup()
   const privateProjectId = await store.addProject(teamId, owner, 'Private')
-  const resolver = new TransferTeamResolver(store.teamService as any, store.projectService as any)
+  const resolver = new TransferTeamResolver(store.teamService as any)
 
   // Bystander belongs to none of the two projects
-  await resolver.transferTeam((await store.inTeam(owner, teamId)).team, {
+  await resolver.transferTeam((await store.inTeam(owner, teamId)).team, owner as any, {
     teamId,
     memberId: bystander.id
   })
 
   assert.strictEqual(store.teams[0].ownerId, bystander.id)
-  assert.strictEqual(
-    (await store.teamService.findMemberById(teamId, bystander.id)).role,
-    TeamRoleEnum.ADMIN
-  )
+  assert.deepStrictEqual(store.teams[0].ownerIds, [bystander.id])
 
   // The new owner can reach every project of the workspace
-  assert.ok(store.projectMemberIds(projectId).includes(bystander.id))
-  assert.ok(store.projectMemberIds(privateProjectId).includes(bystander.id))
+  assert.strictEqual((await store.inProject(bystander, projectId)).team.isOwner, true)
   assert.strictEqual((await store.inProject(bystander, privateProjectId)).team.isOwner, true)
 
   // The previous owner stays in the workspace, without the owner's rights
   assert.ok(store.teamMemberIds(teamId).includes(owner.id))
   assert.strictEqual((await store.inTeam(owner, teamId)).team.isOwner, false)
   await assert.rejects(
-    resolver.transferTeam((await store.inTeam(owner, teamId)).team, {
+    resolver.transferTeam((await store.inTeam(owner, teamId)).team, owner as any, {
       teamId,
       memberId: collaborator.id
     }),
-    /permission to transfer workspace/
+    /permission to change workspace ownership/
   )
 }
 
-async function testOwnershipTransferSkipsProjectsAlreadyJoined() {
+async function testOwnershipTransferPreservesExistingProjectMemberships() {
   const { store, owner, collaborator, teamId, projectId } = await setup()
   const privateProjectId = await store.addProject(teamId, owner, 'Private')
-  const resolver = new TransferTeamResolver(store.teamService as any, store.projectService as any)
+  const resolver = new TransferTeamResolver(store.teamService as any)
 
-  // Carl is already in the first project: adding him twice would break the unique index
-  await resolver.transferTeam((await store.inTeam(owner, teamId)).team, {
+  // Carl already has direct access to the first project.
+  await resolver.transferTeam((await store.inTeam(owner, teamId)).team, owner as any, {
     teamId,
     memberId: collaborator.id
   })
 
   assert.deepStrictEqual(store.projectMemberIds(projectId), [owner.id, collaborator.id])
-  assert.deepStrictEqual(store.projectMemberIds(privateProjectId), [owner.id, collaborator.id])
+  assert.deepStrictEqual(store.projectMemberIds(privateProjectId), [owner.id])
+  assert.strictEqual((await store.inProject(collaborator, privateProjectId)).team.isOwner, true)
 }
 
 async function testOwnershipOnlyMovesFromTheOwnerToAMember() {
   const { store, owner, collaborator, outsider, teamId } = await setup()
-  const resolver = new TransferTeamResolver(store.teamService as any, store.projectService as any)
+  const resolver = new TransferTeamResolver(store.teamService as any)
   const stranger = store.addUser('Sam')
 
   // Otto owns another workspace, which makes him no member of this one
@@ -195,21 +193,121 @@ async function testOwnershipOnlyMovesFromTheOwnerToAMember() {
   const before = snapshot(store)
 
   await assert.rejects(
-    resolver.transferTeam((await store.inTeam(collaborator, teamId)).team, {
+    resolver.transferTeam((await store.inTeam(collaborator, teamId)).team, collaborator as any, {
       teamId,
       memberId: collaborator.id
     }),
-    /permission to transfer workspace/
+    /permission to change workspace ownership/
   )
 
   for (const memberId of [outsider.id, stranger.id, 'missing']) {
     await assert.rejects(
-      resolver.transferTeam((await store.inTeam(owner, teamId)).team, { teamId, memberId }),
+      resolver.transferTeam((await store.inTeam(owner, teamId)).team, owner as any, {
+        teamId,
+        memberId
+      }),
       /workspace member does not exist/
     )
   }
 
   assert.strictEqual(snapshot(store), before)
+}
+
+async function testOwnersShareWorkspaceAndProjectAccess() {
+  const { store, owner, collaborator, bystander, outsider, teamId } = await setup()
+  const resolver = new TransferTeamResolver(store.teamService as any)
+  const setOwner = async (actor: typeof owner, memberId: string, isOwner: boolean) =>
+    resolver.setTeamMemberOwner((await store.inTeam(actor, teamId)).team, actor as any, {
+      teamId,
+      memberId,
+      isOwner
+    })
+
+  const privateProjectId = await store.addProject(teamId, owner, 'Private')
+  await assert.rejects(setOwner(collaborator, collaborator.id, true), /permission/)
+  await assert.rejects(setOwner(owner, outsider.id, true), /workspace member does not exist/)
+  await setOwner(owner, bystander.id, true)
+  await setOwner(owner, bystander.id, true)
+
+  assert.deepStrictEqual(store.teams[0].ownerIds, [owner.id, bystander.id])
+  assert.strictEqual((await store.inProject(bystander, privateProjectId)).team.isOwner, true)
+  const update = new UpdateTeamResolver(store.teamService as any)
+  await update.updateTeam((await store.inTeam(bystander, teamId)).team, { teamId, name: 'Shared' })
+
+  const members = await new TeamMembersResolver(
+    store.userService as any,
+    store.teamService as any
+  ).teamMembers(owner as any, (await store.inTeam(owner, teamId)).team, { teamId })
+  assert.deepStrictEqual(
+    members
+      .filter(member => (member as unknown as { isOwner: boolean }).isOwner)
+      .map(member => member.id)
+      .sort(),
+    [owner.id, bystander.id].sort()
+  )
+
+  const teams = await new TeamsResolver(
+    store.teamService as any,
+    store.formService as any,
+    store.projectService as any,
+    { findAllInTeams: async () => [] } as any
+  ).teams(bystander as any)
+  assert.strictEqual(teams[0].isOwner, true)
+  assert.ok(teams[0].projects.some(project => project.id === privateProjectId))
+
+  const later = await new CreateProjectResolver(
+    store.projectService as any,
+    store.teamService as any
+  ).createProject(collaborator as any, (await store.inTeam(collaborator, teamId)).team, {
+    teamId,
+    name: 'Later'
+  })
+  assert.strictEqual((await store.inProject(bystander, later)).team.isOwner, true)
+  await assert.rejects(
+    store.teamService.deleteMember(teamId, bystander.id, owner.id),
+    /workspace owner/
+  )
+
+  // Transfer just the actor's position in the list.
+  await resolver.transferTeam((await store.inTeam(owner, teamId)).team, owner as any, {
+    teamId,
+    memberId: collaborator.id
+  })
+  assert.deepStrictEqual(store.teams[0].ownerIds, [collaborator.id, bystander.id])
+  assert.strictEqual(store.teams[0].ownerId, collaborator.id)
+  assert.strictEqual((await store.inTeam(owner, teamId)).team.isOwner, false)
+
+  await setOwner(collaborator, bystander.id, false)
+  await assert.rejects(store.inProject(bystander, privateProjectId), /permission/)
+  assert.strictEqual((await store.inTeam(bystander, teamId)).team.isOwner, false)
+  await assert.rejects(setOwner(collaborator, collaborator.id, false), /at least one owner/)
+}
+
+async function testConcurrentOwnerRevocationKeepsAnOwner() {
+  const { store, owner, bystander, teamId } = await setup()
+  await store.teamService.changeOwnership(teamId, owner.id, bystander.id, 'grant')
+  const results = await Promise.allSettled([
+    store.teamService.changeOwnership(teamId, owner.id, owner.id, 'revoke'),
+    store.teamService.changeOwnership(teamId, bystander.id, bystander.id, 'revoke')
+  ])
+
+  assert.strictEqual(results.filter(result => result.status === 'fulfilled').length, 1)
+  assert.strictEqual(store.teams[0].ownerIds.length, 1)
+  assert.strictEqual(store.teams[0].ownerId, store.teams[0].ownerIds[0])
+}
+
+async function testDeletingAnOwnerAccountPreservesSharedWorkspace() {
+  const { store, owner, bystander, teamId, projectId } = await setup()
+  const formId = await store.addForm({ teamId, projectId })
+  await store.teamService.changeOwnership(teamId, owner.id, bystander.id, 'grant')
+  await store.teamService.removeAccountFromTeam(teamId, owner.id, async () => {
+    assert.fail('The workspace still has another owner')
+  })
+  assert.deepStrictEqual(store.teams[0].ownerIds, [bystander.id])
+  assert.strictEqual(store.teams[0].ownerId, bystander.id)
+  assert.ok(!store.teamMemberIds(teamId).includes(owner.id))
+  assert.strictEqual((await store.inForm(bystander, formId)).team.isOwner, true)
+  await assert.rejects(store.inForm(owner, formId), /permission/)
 }
 
 async function testRemovedMemberLosesTheWorkspaceAndItsProjects() {
@@ -223,7 +321,7 @@ async function testRemovedMemberLosesTheWorkspaceAndItsProjects() {
   )
 
   assert.strictEqual(
-    await resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, {
+    await resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, owner as any, {
       teamId,
       memberId: collaborator.id
     }),
@@ -249,14 +347,18 @@ async function testOnlyTheOwnerRemovesMembersAndNeverThemself() {
   const before = snapshot(store)
 
   await assert.rejects(
-    resolver.removeTeamMember((await store.inTeam(collaborator, teamId)).team, {
-      teamId,
-      memberId: bystander.id
-    }),
+    resolver.removeTeamMember(
+      (await store.inTeam(collaborator, teamId)).team,
+      collaborator as any,
+      {
+        teamId,
+        memberId: bystander.id
+      }
+    ),
     /not allowed in the workspace/
   )
   await assert.rejects(
-    resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, {
+    resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, owner as any, {
       teamId,
       memberId: outsider.id
     }),
@@ -264,7 +366,7 @@ async function testOnlyTheOwnerRemovesMembersAndNeverThemself() {
   )
   // A workspace without its owner could no longer be managed by anyone
   await assert.rejects(
-    resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, {
+    resolver.removeTeamMember((await store.inTeam(owner, teamId)).team, owner as any, {
       teamId,
       memberId: owner.id
     }),
@@ -598,8 +700,11 @@ async function run() {
   await testWorkspaceUpdateKeepsWhatWasNotSent()
   await testOnlyTheOwnerResetsTheInviteCode()
   await testOwnershipMovesToAnotherMember()
-  await testOwnershipTransferSkipsProjectsAlreadyJoined()
+  await testOwnershipTransferPreservesExistingProjectMemberships()
   await testOwnershipOnlyMovesFromTheOwnerToAMember()
+  await testOwnersShareWorkspaceAndProjectAccess()
+  await testConcurrentOwnerRevocationKeepsAnOwner()
+  await testDeletingAnOwnerAccountPreservesSharedWorkspace()
   await testRemovedMemberLosesTheWorkspaceAndItsProjects()
   await testOnlyTheOwnerRemovesMembersAndNeverThemself()
   await testMemberLeavesTheWorkspaceAndItsProjects()

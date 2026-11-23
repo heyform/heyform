@@ -19,6 +19,7 @@ import {
   OPEN_FORM_GQL,
   PUBLIC_FORM_GQL,
   PUBLISH_FORM_GQL,
+  SET_TEAM_MEMBER_OWNER_GQL,
   SIGN_UP_GQL,
   SUBMISSIONS_GQL,
   TEAMS_GQL,
@@ -166,6 +167,61 @@ export function build(baseUrl: string) {
     assert.strictEqual(c.isOwner, false)
     assert.strictEqual(m.role, ROLE_MEMBER)
     assert.strictEqual(m.isOwner, false)
+  })
+
+  test('a workspace can grant and revoke a second owner', async () => {
+    const { admin, member, teamId, seedProjectId } = need(state, [
+      'admin',
+      'member',
+      'teamId',
+      'seedProjectId'
+    ])
+    const grant = { input: { teamId, memberId: member.id, isOwner: true } }
+    const denied = await member.client.gql('setTeamMemberOwner', SET_TEAM_MEMBER_OWNER_GQL, grant)
+    assert.match(denied.errors[0].message, /permission/)
+
+    const selfRevoke = { input: { teamId, memberId: admin.id, isOwner: false } }
+    const lastOwner = await admin.client.gql(
+      'setTeamMemberOwner',
+      SET_TEAM_MEMBER_OWNER_GQL,
+      selfRevoke
+    )
+    assert.match(lastOwner.errors[0].message, /at least one owner/)
+
+    assert.strictEqual(
+      await admin.client.gqlOk('setTeamMemberOwner', SET_TEAM_MEMBER_OWNER_GQL, grant),
+      true
+    )
+    const roster = await member.client.gqlOk<any[]>('teamMembers', TEAM_MEMBERS_GQL, {
+      input: { teamId }
+    })
+    assert.deepStrictEqual(
+      roster
+        .filter(row => row.isOwner)
+        .map(row => row.id)
+        .sort(),
+      [admin.id, member.id].sort()
+    )
+    const teams = await member.client.gqlOk<any[]>('teams', TEAMS_GQL)
+    const shared = teams.find(team => team.id === teamId)
+    assert.strictEqual(shared.isOwner, true)
+    assert.ok(shared.projects.some(project => project.id === seedProjectId))
+    await member.client.gqlOk('forms', FORMS_GQL, {
+      input: { projectId: seedProjectId, status: 1 }
+    })
+    await member.client.gqlOk('updateTeam', UPDATE_TEAM_GQL, {
+      input: { teamId, name: shared.name }
+    })
+
+    const revoke = { input: { teamId, memberId: member.id, isOwner: false } }
+    assert.strictEqual(
+      await admin.client.gqlOk('setTeamMemberOwner', SET_TEAM_MEMBER_OWNER_GQL, revoke),
+      true
+    )
+    const forms = await member.client.gql('forms', FORMS_GQL, {
+      input: { projectId: seedProjectId, status: 1 }
+    })
+    assert.match(forms.errors[0].message, /permission/)
   })
 
   // ── Project + form lifecycle ──────────────────────────────────────────────
@@ -432,7 +488,7 @@ export function build(baseUrl: string) {
       { input: { projectId } }
     )
     const confirmation = requested
-      ? { code: await readLatestVerificationCode(`verify_delete_project:${projectId}`) }
+      ? { code: await readLatestVerificationCode(`verify_delete_project:${projectId}:${admin.id}`) }
       : { name: projectName }
     const deleted = await admin.client.gqlOk<boolean>('deleteProject', DELETE_PROJECT_GQL, {
       input: { projectId, ...confirmation }
@@ -458,7 +514,7 @@ export function build(baseUrl: string) {
     )
     assert.strictEqual(requested, true)
 
-    const code = await readLatestVerificationCode(`verify_dissolve_team:${teamId}`)
+    const code = await readLatestVerificationCode(`verify_dissolve_team:${teamId}:${admin.id}`)
     const dissolved = await admin.client.gqlOk<boolean>('dissolveTeam', DISSOLVE_TEAM_GQL, {
       input: { teamId, code }
     })

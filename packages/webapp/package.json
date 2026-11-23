@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:form": "vite build --config vite.form.config.mts",
+    "test:browser": "playwright test",
     "test:unit": "vitest run --config vitest.config.mts",
     "type-check": "tsc --noEmit"
   },
@@ -77,6 +78,7 @@
     "zustand-computed": "^1.4.1"
   },
   "devDependencies": {
+    "@playwright/test": "1.58.2",
     "@tailwindcss/forms": "^0.5.9",
     "@types/big.js": "^6.2.2",
     "@types/color-rgba": "^2.1.3",

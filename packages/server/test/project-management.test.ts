@@ -44,11 +44,7 @@ async function testNewProjectIncludesItsCreatorAndTheWorkspaceOwner() {
   assert.strictEqual(project.name, 'Launch')
   assert.strictEqual(project.ownerId, collaborator.id)
   // The owner of the workspace is in every project, whoever creates it
-  assert.deepStrictEqual(store.projectMemberIds(projectId), [
-    owner.id,
-    collaborator.id,
-    bystander.id
-  ])
+  assert.deepStrictEqual(store.projectMemberIds(projectId), [collaborator.id, bystander.id])
 
   const access = await store.inProject(collaborator, projectId)
 
@@ -88,16 +84,14 @@ async function testNewProjectOnlyTakesWorkspaceMembers() {
     { teamId, name: 'Launch', memberIds: [outsider.id, bystander.id, 'missing'] }
   )
 
-  assert.deepStrictEqual(store.projectMemberIds(projectId), [
-    owner.id,
-    collaborator.id,
-    bystander.id
-  ])
+  assert.deepStrictEqual(store.projectMemberIds(projectId), [collaborator.id, bystander.id])
 
+  const access = await store.inProject(collaborator, projectId)
   const members = await new ProjectMembersResolver(
     store.projectService as any,
     store.userService as any
-  ).projectMembers((await store.inProject(collaborator, projectId)).project, { projectId })
+  ).projectMembers(access.project, access.team, { projectId })
+  assert.ok(members.some(member => member.id === owner.id))
 
   assert.strictEqual(
     members.some(member => member.id === outsider.id),
@@ -116,7 +110,9 @@ async function testProjectListStaysInsideTheWorkspaceAndTheMembership() {
   await store.projectService.createMember({ projectId: other.projectId, memberId: collaborator.id })
 
   const ids = async (user: Record<string, any>, id: string) =>
-    (await resolver.projects(user as any, { teamId: id })).map(project => project.id)
+    (await resolver.projects(user as any, (await store.inTeam(user, id)).team, { teamId: id })).map(
+      project => project.id
+    )
 
   assert.deepStrictEqual(await ids(collaborator, teamId), [projectId])
   assert.deepStrictEqual(await ids(collaborator, other.teamId), [other.projectId])
@@ -181,8 +177,8 @@ async function testLeavingAProjectOnlyRemovesTheCaller() {
   const otherProjectId = await store.addProject(teamId, owner, 'Other', [collaborator])
   const resolver = new LeaveProjectResolver(store.projectService as any)
 
-  await store.inProject(collaborator, projectId)
-  assert.strictEqual(await resolver.leaveProject(collaborator as any, { projectId }), true)
+  const { team } = await store.inProject(collaborator, projectId)
+  assert.strictEqual(await resolver.leaveProject(collaborator as any, team, { projectId }), true)
 
   assert.deepStrictEqual(store.projectMemberIds(projectId), [owner.id])
   assert.deepStrictEqual(store.projectMemberIds(otherProjectId), [owner.id, collaborator.id])

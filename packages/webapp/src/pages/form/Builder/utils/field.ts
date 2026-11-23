@@ -171,6 +171,14 @@ export function getPropertiesFromKind(properties: Property, newKind: FieldKindEn
       }
       break
 
+    case FieldKindEnum.CHOICE_MATRIX:
+      props.matrixRows ??= ['Row 1', 'Row 2'].map(label => ({ id: nanoid(12), label }))
+      props.matrixColumns ??= ['Disagree', 'Neutral', 'Agree'].map(label => ({
+        id: nanoid(12),
+        label
+      }))
+      break
+
     case FieldKindEnum.INPUT_TABLE:
       if (!helper.isArray(props.tableColumns)) {
         props.tableColumns = [
@@ -261,6 +269,10 @@ export function getFieldFromKind(kind: FieldKindEnum | string): FormFieldType {
 
     case FieldKindEnum.PHONE_NUMBER:
       field.properties!.defaultCountryCode = 'US'
+      break
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      field.properties = getPropertiesFromKind(field.properties!, kind)
       break
 
     case FieldKindEnum.INPUT_TABLE:

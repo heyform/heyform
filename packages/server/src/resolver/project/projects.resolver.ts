@@ -1,6 +1,6 @@
-import { Auth, TeamGuard, User } from '@decorator'
+import { Auth, Team, TeamGuard, User } from '@decorator'
 import { ProjectType, TeamDetailInput } from '@graphql'
-import { ProjectModel, UserModel } from '@model'
+import { ProjectModel, TeamModel, UserModel } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import { ProjectService } from '@service'
 
@@ -13,12 +13,9 @@ export class ProjectsResolver {
   @Query(returns => [ProjectType])
   async projects(
     @User() user: UserModel,
+    @Team() team: TeamModel,
     @Args('input') input: TeamDetailInput
   ): Promise<ProjectModel[]> {
-    const projectIds = await this.projectService.findProjectsByMemberId(user.id)
-
-    return this.projectService.findByIds(projectIds, {
-      teamId: input.teamId
-    })
+    return this.projectService.findAccessibleInTeams(user.id, [team])
   }
 }

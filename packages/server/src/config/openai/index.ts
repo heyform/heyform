@@ -4,7 +4,7 @@ Field kind values:
 - short_text, long_text, number, yes_no
 - multiple_choice, picture_choice, file_upload
 - opinion_scale, rating, date, date_range, time
-- input_table, payment, full_name, address, email, url
+- input_table, choice_matrix, payment, full_name, address, email, url
 - phone_number, country_selector, signature, legal_terms
 
 Field JSON shape:
@@ -33,6 +33,8 @@ Properties may contain only these keys, when relevant to the field kind:
 - choices: [{"id":"unique id","label":"Choice text"}], optionally image/color (string),
   score (number), isExpected (boolean)
 - tableColumns: [{"id":"unique id","label":"Column text","type":"text","required":false}]
+- choice_matrix requires matrixRows (at least one) and matrixColumns (at least two),
+  both arrays of {"id":"unique id","label":"Display text"}
 - price: {"type":"number","value":10} or {"type":"variable","ref":"variable id"}
 - fields: an array of child fields using the same field shape (for groups)
 Layout must be null or an object with mediaType (image/video), mediaUrl,

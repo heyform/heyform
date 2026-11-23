@@ -19,6 +19,9 @@ export class TeamModel extends Document {
   @Prop({ required: true })
   ownerId: string
 
+  @Prop({ type: [String], default: undefined })
+  ownerIds?: string[]
+
   @Prop()
   avatar?: string
 
@@ -63,3 +66,14 @@ export class TeamModel extends Document {
 }
 
 export const TeamSchema = SchemaFactory.createForClass(TeamModel)
+
+export function getTeamOwnerIds(team: Pick<TeamModel, 'ownerId' | 'ownerIds'>): string[] {
+  return team.ownerIds ?? [team.ownerId]
+}
+
+export function isTeamOwner(
+  team: Pick<TeamModel, 'ownerId' | 'ownerIds'>,
+  memberId: string
+): boolean {
+  return getTeamOwnerIds(team).includes(memberId)
+}

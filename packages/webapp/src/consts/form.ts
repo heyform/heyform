@@ -216,6 +216,13 @@ export const STANDARD_FIELD_CONFIGS = [
     label: 'form.builder.question.inputTable',
     textColor: '#c2410c',
     backgroundColor: '#ffedd5'
+  },
+  {
+    kind: FieldKindEnum.CHOICE_MATRIX,
+    icon: IconInputTable,
+    label: 'form.builder.question.choiceMatrix',
+    textColor: '#c2410c',
+    backgroundColor: '#ffedd5'
   }
 ]
 
@@ -326,7 +333,7 @@ export const BLOCK_GROUPS = [
     },
     {
       name: 'form.builder.question.data',
-      list: [FieldKindEnum.INPUT_TABLE]
+      list: [FieldKindEnum.INPUT_TABLE, FieldKindEnum.CHOICE_MATRIX]
     },
     {
       name: 'form.builder.question.legalConsent',

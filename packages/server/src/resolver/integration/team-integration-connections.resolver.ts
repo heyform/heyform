@@ -1,6 +1,6 @@
 import { Auth, Team, TeamGuard, User } from '@decorator'
 import { IntegrationConnectionType, TeamDetailInput } from '@graphql'
-import { TeamModel, UserModel } from '@model'
+import { TeamModel, UserModel, isTeamOwner } from '@model'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 import {
   AppService,
@@ -62,7 +62,7 @@ export class TeamIntegrationConnectionsResolver {
         forms: forms
           .filter(form => formIds.has(form.id) && form.teamId === team.id)
           .map(form => ({ id: form.id, name: form.name })),
-        canDisconnect: connection.createdBy === user.id || team.ownerId === user.id
+        canDisconnect: connection.createdBy === user.id || isTeamOwner(team, user.id)
       }
     })
   }

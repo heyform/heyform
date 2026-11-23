@@ -1591,8 +1591,8 @@
     },
     "deletion": {
       "headline": "Excluir conta",
-      "subHeadline": "Isso excluirá permanentemente toda a sua conta. Todos os seus formulários, envios e áreas de trabalho serão excluídos.",
-      "tip": "Esta ação não pode ser desfeita. Isso excluirá permanentemente toda a sua conta. Todos os espaços de trabalho criados serão excluídos e você será removido de todos os espaços de trabalho compartilhados. \nSe você tem certeza de que deseja prosseguir com a exclusão de sua conta, continue abaixo.",
+      "subHeadline": "Sua conta e os espaços de trabalho dos quais você é o único proprietário serão excluídos permanentemente.",
+      "tip": "Esta ação não pode ser desfeita. Os espaços de trabalho dos quais você é o único proprietário serão excluídos junto com seus formulários e envios. Você será removido dos demais espaços de trabalho.",
       "code": {
         "label": "Insira o código de exclusão enviado para <strong>{{email}}</strong>.",
         "required": "O código de verificação não pode ficar vazio"

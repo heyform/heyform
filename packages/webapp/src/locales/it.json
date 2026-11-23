@@ -1591,8 +1591,8 @@
     },
     "deletion": {
       "headline": "Elimina account",
-      "subHeadline": "Questo eliminerà permanentemente l'intero account. Tutti i tuoi moduli, invii e workspace saranno cancellati.",
-      "tip": "Questa azione non può essere annullata. Eliminerà permanentemente tutto il tuo account. Tutti i workspace che hai creato verranno eliminati e sarai rimosso da tutti i workspace condivisi. \nSe sei sicuro di voler procedere con l'eliminazione dell'account, continua qui sotto.",
+      "subHeadline": "Il tuo account e gli spazi di lavoro di cui sei l’unico proprietario verranno eliminati definitivamente.",
+      "tip": "Questa azione è irreversibile. Gli spazi di lavoro di cui sei l’unico proprietario saranno eliminati insieme a moduli e risposte. Verrai rimosso da tutti gli altri spazi di lavoro.",
       "code": {
         "label": "Inserisci il codice di eliminazione inviato a <strong>{{email}}</strong>.",
         "required": "Il codice di verifica non può essere vuoto"

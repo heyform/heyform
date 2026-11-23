@@ -32,8 +32,10 @@ import {
   validate
 } from '@heyform-inc/answer-utils'
 import { helper, nanoid, timestamp } from '@heyform-inc/utils'
+import { isTeamOwner } from '@model'
 import {
   assertValidChoiceBranching,
+  assertValidChoiceMatrices,
   assertValidFormNavigation,
   isSafeCSSValue,
   isSafeCustomCSS,
@@ -138,11 +140,7 @@ export class RestApiService {
     const ownerId = principal.userId
     const projectId = await this.projects.create({ teamId: id, name, ownerId })
     try {
-      const members = [...new Set([team.ownerId, ownerId])].map(memberId => ({
-        projectId,
-        memberId
-      }))
-      await this.projects.addMembers(members)
+      await this.projects.createMember({ projectId, memberId: ownerId })
     } catch (error) {
       await this.projects.deleteAllMemberInProject(projectId)
       await this.projects.delete(projectId)
@@ -152,8 +150,13 @@ export class RestApiService {
   }
   async listMembers(principal: ApiPrincipal, id: string) {
     requireScope(principal, 'members:read', id)
-    if (!(await this.teams.findById(identifier(id)))) throw new NotFoundException()
-    return (await this.teams.findMembersInTeam(id)).map(m => ({ userId: m.memberId, role: m.role }))
+    const team = await this.teams.findById(identifier(id))
+    if (!team) throw new NotFoundException()
+    return (await this.teams.findMembersInTeam(id)).map(m => ({
+      userId: m.memberId,
+      role: m.role,
+      isOwner: isTeamOwner(team, m.memberId)
+    }))
   }
   async inviteMembers(principal: ApiPrincipal, id: string, body: any) {
     requireScope(principal, 'members:write', id)
@@ -175,8 +178,8 @@ export class RestApiService {
     const team = await this.teams.findById(identifier(id))
     const member = await this.teams.findMemberById(id, identifier(userId))
     if (!team || !member) throw new NotFoundException()
-    if (userId === team.ownerId) throw new ForbiddenException('Cannot remove the workspace owner')
-    await this.teamMembers.remove(id, userId)
+    if (isTeamOwner(team, userId)) throw new ForbiddenException('Cannot remove a workspace owner')
+    await this.teamMembers.remove(id, userId, principal.userId)
     return { removed: true, workspaceId: id, userId }
   }
   async renameProject(principal: ApiPrincipal, id: string, body: any) {
@@ -498,6 +501,7 @@ export class RestApiService {
       throw new BadRequestException('Invalid drafts or logics')
     const drafts = sanitizeFormDrafts(body.drafts)
     assertValidFormNavigation(drafts)
+    assertValidChoiceMatrices(drafts)
     const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
     assertValidChoiceBranching(drafts, logics)
     await this.forms.update(id, {
@@ -522,6 +526,7 @@ export class RestApiService {
       throw new BadRequestException('Invalid drafts or logics')
     const drafts = sanitizeFormDrafts(body.drafts)
     assertValidFormNavigation(drafts)
+    assertValidChoiceMatrices(drafts, true)
     const logics = body.logics ?? form.draftLogics ?? form.logics ?? []
     assertValidChoiceBranching(drafts, logics)
     const now = timestamp()

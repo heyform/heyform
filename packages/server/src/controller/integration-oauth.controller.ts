@@ -11,7 +11,7 @@ import crypto from 'crypto'
 
 import { CookieOptionsFactory } from '@config'
 import { Auth, FormGuard, User } from '@decorator'
-import { UserModel } from '@model'
+import { UserModel, isTeamOwner } from '@model'
 import {
   AppService,
   AuthService,
@@ -141,14 +141,22 @@ export class IntegrationOAuthCallbackController {
 
     // The same access FormGuard requires, checked again in case it was
     // removed while the user was at the provider
-    const [projectMember, teamMember] = form
+    const [project, team, teamMember] = form
       ? await Promise.all([
-          this.projectService.findMemberById(form.projectId, user.id),
+          this.projectService.findById(form.projectId),
+          this.teamService.findById(form.teamId),
           this.teamService.findMemberById(form.teamId, user.id)
         ])
       : []
 
-    if (!form || !projectMember || !teamMember) {
+    if (
+      !form ||
+      !team ||
+      project?.teamId !== team.id ||
+      !teamMember ||
+      (!isTeamOwner(team, user.id) &&
+        !(await this.projectService.findMemberById(project.id, user.id)))
+    ) {
       throw new BadRequestException('Please make sure you have permission to access this form')
     }
 

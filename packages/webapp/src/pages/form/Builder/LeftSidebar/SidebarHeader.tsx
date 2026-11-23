@@ -23,7 +23,13 @@ export default function SidebarHeader({ action }: { action?: ReactNode }) {
       <div className="flex items-center">
         {action}
         <Tooltip label={t('form.builder.sidebar.addQuestion')}>
-          <Button.Link className="-mr-2" size="sm" iconOnly onClick={handleOpenModal}>
+          <Button.Link
+            className="-mr-2"
+            size="sm"
+            iconOnly
+            aria-label={String(t('form.builder.sidebar.addQuestion'))}
+            onClick={handleOpenModal}
+          >
             <IconPlus className="h-5 w-5" />
           </Button.Link>
         </Tooltip>

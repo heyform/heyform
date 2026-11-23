@@ -11,7 +11,9 @@ import {
   IntegrationConnectionModel,
   IntegrationConnectionStatusEnum,
   IntegrationModel,
-  IntegrationStatusEnum
+  IntegrationStatusEnum,
+  TeamModel,
+  isTeamOwner
 } from '@model'
 import { Logger, mapToObject } from '@utils'
 
@@ -445,13 +447,13 @@ export class IntegrationAuthService {
   async disconnectConnection(
     connection: IntegrationConnectionModel,
     userId: string,
-    team: { id: string; ownerId: string }
+    team: Pick<TeamModel, 'id' | 'ownerId' | 'ownerIds'>
   ): Promise<void> {
     if (connection.teamId !== team.id) {
       throw new BadRequestException('The account does not exist')
     }
 
-    if (connection.createdBy !== userId && team.ownerId !== userId) {
+    if (connection.createdBy !== userId && !isTeamOwner(team, userId)) {
       throw new ForbiddenException(
         'Only the member who connected the account or the workspace owner can disconnect it'
       )

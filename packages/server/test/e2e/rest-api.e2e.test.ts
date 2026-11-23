@@ -14,6 +14,7 @@ import {
   OPEN_FORM_GQL,
   PUBLIC_FORM_GQL,
   REMOVE_TEAM_MEMBER_GQL,
+  SET_TEAM_MEMBER_OWNER_GQL,
   SUBMISSIONS_GQL,
   TEAMS_GQL,
   TEAM_MEMBERS_GQL,
@@ -697,6 +698,25 @@ export function build(baseUrl: string) {
       }
       await account(user.client, 'DELETE', 200, undefined, '/' + id)
     }
+    await seedTeamMember({ teamId: workspaceId, memberId: outsider.id, role: 3 })
+    const setOwner = (isOwner: boolean) =>
+      owner.client.gqlOk('setTeamMemberOwner', SET_TEAM_MEMBER_OWNER_GQL, {
+        input: { teamId: workspaceId, memberId: outsider.id, isOwner }
+      })
+    await setOwner(true)
+    const coOwnerAccess = await account(outsider.client, 'GET', 200)
+    assert.deepStrictEqual(
+      coOwnerAccess.workspaces.find(workspace => workspace.id === workspaceId).scopes,
+      allScopes
+    )
+    const key = await account(outsider.client, 'POST', 201, { ...input, scopes: allScopes })
+    await rest('GET', '/forms/' + hiddenForm.id, key.token, 200)
+    await rest('DELETE', workspacePath + '/members/' + owner.id, key.token, 403)
+    await setOwner(false)
+    await rest('GET', '/forms/' + hiddenForm.id, key.token, 403)
+    await rest('DELETE', workspacePath + '/members/' + owner.id, key.token, 403)
+    await account(outsider.client, 'DELETE', 200, undefined, '/' + key.id)
+
     await rest('DELETE', `/forms/${hiddenForm.id}`, workspaceKey, 404)
     await rest('DELETE', '/projects/' + hiddenProject.id, workspaceKey, 404)
   })
