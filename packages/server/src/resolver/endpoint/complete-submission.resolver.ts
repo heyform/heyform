@@ -6,12 +6,17 @@ import {
   SubmissionStatusEnum,
   Variable
 } from '@heyform-inc/shared-types-enums'
-import { BadRequestException, Headers, UseGuards } from '@nestjs/common'
+import { BadRequestException, Headers, HttpStatus, UseGuards } from '@nestjs/common'
 
 import { DISABLE_SUBMISSION_IP } from '@environments'
 import { CompleteSubmissionInput, CompleteSubmissionType } from '@graphql'
 import { EndpointAnonymousIdGuard } from '@guard'
-import { applyLogicToFields, fieldValuesToAnswers, flattenFields } from '@heyform-inc/answer-utils'
+import {
+  ValidateError,
+  applyLogicToFields,
+  fieldValuesToAnswers,
+  flattenFields
+} from '@heyform-inc/answer-utils'
 import { helper, timestamp } from '@heyform-inc/utils'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import {
@@ -143,7 +148,10 @@ export class CompleteSubmissionResolver {
       }))
       isDiscarded = isSubmissionDiscarded(form, flattenedFields, input.answers, isPartialSubmission)
     } catch (err) {
-      throw new BadRequestException(err.response)
+      if (err instanceof ValidateError) {
+        throw new BadRequestException({ ...err.response, statusCode: HttpStatus.BAD_REQUEST })
+      }
+      throw err
     }
 
     // The respondent still sees the ending, but nothing is stored or sent on. Likewise when

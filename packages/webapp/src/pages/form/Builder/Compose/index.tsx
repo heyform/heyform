@@ -10,6 +10,7 @@ import { useFormStore } from '@/store'
 import { useStoreContext } from '../store'
 import {
   Address,
+  ChoiceMatrix,
   Country,
   Date,
   DateRange,
@@ -75,6 +76,16 @@ const Fields: FC = () => {
     case FieldKindEnum.FULL_NAME:
       return (
         <FullName key={field.id} field={field} locale={state.locale} parentField={parentField} />
+      )
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      return (
+        <ChoiceMatrix
+          key={field.id}
+          field={field}
+          locale={state.locale}
+          parentField={parentField}
+        />
       )
 
     case FieldKindEnum.INPUT_TABLE:

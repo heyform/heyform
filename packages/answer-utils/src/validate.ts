@@ -105,6 +105,10 @@ export function validate(rule: FieldsToValidateRules, value: AnswerValue): void 
       validateLegalTerms(rule, value)
       break
 
+    case FieldKindEnum.CHOICE_MATRIX:
+      validateChoiceMatrix(rule, value)
+      break
+
     case FieldKindEnum.INPUT_TABLE:
       validateInputTable(rule, value)
       break
@@ -632,6 +636,37 @@ function isTableCell(cell: unknown): boolean {
   return (
     helper.isNil(cell) || helper.isString(cell) || helper.isNumber(cell) || helper.isBoolean(cell)
   )
+}
+
+function validateChoiceMatrix(rule: FieldsToValidateRules, value: AnswerValue): void {
+  const rows = new Set(rule.properties?.matrixRows?.map(row => row.id))
+  const columns = new Set(rule.properties?.matrixColumns?.map(column => column.id))
+  const selectedRows = new Set<string>()
+  const valid =
+    Array.isArray(value) &&
+    value.every(selection => {
+      if (
+        !helper.isPlainObject(selection) ||
+        !rows.has(selection.rowId) ||
+        !columns.has(selection.columnId) ||
+        selectedRows.has(selection.rowId) ||
+        Object.keys(selection).length !== 2
+      ) {
+        return false
+      }
+
+      selectedRows.add(selection.rowId)
+      return true
+    })
+
+  if (!valid || (rule.required && selectedRows.size !== rows.size)) {
+    throw new ValidateError({
+      id: rule.id,
+      kind: rule.kind,
+      title: rule.title,
+      message: valid ? 'This field is required' : 'This field must contain valid matrix selections'
+    })
+  }
 }
 
 function validateInputTable(rule: FieldsToValidateRules, value: AnswerValue): void {

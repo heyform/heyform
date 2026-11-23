@@ -1433,6 +1433,7 @@
         "legalTerms": "Legal terms",
         "signature": "Signature",
         "website": "Website",
+        "choiceMatrix": "Choice matrix",
         "inputTable": "Input table",
         "submitDate": "Submit date",
         "ipAddress": "IP address",
@@ -1473,6 +1474,9 @@
         "otherChoice": "Other",
         "addChoice": "Add choice",
         "dateRangeTo": "to",
+        "addRow": "Add row",
+        "rowPlaceholder": "Row {{index}}",
+        "removeMatrixLabel": "Remove {{label}}",
         "addColumn": "Add column",
         "columnPlaceholder": "Col {{index}}"
       },

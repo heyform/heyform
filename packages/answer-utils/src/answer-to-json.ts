@@ -1,6 +1,7 @@
 import { Answer, FieldKindEnum } from '@heyform-inc/shared-types-enums'
 
 import parser from './answer-parser'
+import { choiceMatrixAnswerText } from './choice-matrix'
 
 interface AnswersToJsonOptions {
   plain?: boolean
@@ -67,6 +68,10 @@ function parseJsonAnswer(answer: Answer, plain = false): any {
       if (plain) {
         value = parser.dateRange(answer)
       }
+      break
+
+    case FieldKindEnum.CHOICE_MATRIX:
+      value = plain ? choiceMatrixAnswerText(answer) : answer.value
       break
 
     case FieldKindEnum.INPUT_TABLE:

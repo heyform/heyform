@@ -1,6 +1,7 @@
 import { Answer, FieldKindEnum, QUESTION_FIELD_KINDS } from '@heyform-inc/shared-types-enums'
 
 import parser from './answer-parser'
+import { choiceMatrixAnswerText } from './choice-matrix'
 import { escapeHtmlText } from './escape-html'
 import { htmlToText } from './helper'
 
@@ -64,6 +65,10 @@ function parseHtmlAnswer(answer: Answer): string {
 
       case FieldKindEnum.DATE_RANGE:
         value = parser.dateRange(answer)
+        break
+
+      case FieldKindEnum.CHOICE_MATRIX:
+        value = choiceMatrixAnswerText(answer)
         break
 
       case FieldKindEnum.INPUT_TABLE:

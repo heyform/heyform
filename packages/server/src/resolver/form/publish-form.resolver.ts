@@ -6,7 +6,12 @@ import { helper, timestamp } from '@heyform-inc/utils'
 import { TeamModel, UserModel } from '@model'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 import { FormService, UserService } from '@service'
-import { assertValidChoiceBranching, assertValidFormNavigation, sanitizeFormDrafts } from '@utils'
+import {
+  assertValidChoiceBranching,
+  assertValidChoiceMatrices,
+  assertValidFormNavigation,
+  sanitizeFormDrafts
+} from '@utils'
 
 @Resolver()
 @Auth()
@@ -35,6 +40,7 @@ export class PublishFormResolver {
 
     const drafts = sanitizeFormDrafts(input.drafts)
     assertValidFormNavigation(drafts)
+    assertValidChoiceMatrices(drafts, true)
     const logics = input.logics ?? form.draftLogics ?? form.logics ?? []
     assertValidChoiceBranching(drafts, logics)
 

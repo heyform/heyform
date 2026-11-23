@@ -177,6 +177,12 @@ class SharedPropertyInput {
   @Field(type => [ColumnInput], { nullable: true })
   tableColumns?: Column[]
 
+  @Field(type => [ColumnInput], { nullable: true })
+  matrixRows?: Column[]
+
+  @Field(type => [ColumnInput], { nullable: true })
+  matrixColumns?: Column[]
+
   @Field({ nullable: true })
   score?: number
 
