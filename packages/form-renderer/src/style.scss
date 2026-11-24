@@ -988,6 +988,10 @@ button.button-icon-only {
 .heyform-textarea-tip {
   @apply mt-1.5 text-xs;
   color: var(--heyform-answer-color);
+
+  @media (max-width: 800px), (hover: none) and (pointer: coarse) {
+    display: none !important;
+  }
 }
 
 .heyform-autoresize-textarea {
